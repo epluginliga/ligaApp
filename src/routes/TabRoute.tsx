@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
-import { Text, View } from 'react-native'
 import { IconCalendario, IconHome } from '../icons';
 import { Eventos } from '../screens/Eventos';
 import { Perfil } from '../screens/Perfil';
@@ -15,10 +14,19 @@ interface PropsTabs {
 
 export function TabRoute() {
    return (
-
       <Tab.Navigator
          screenOptions={({ route }) => ({
+            tabBarStyle: {
+               borderRadius: 30,
+               borderCurve: "circular",
+               borderTopWidth: 0,
 
+               shadowColor: "#868686",
+               shadowOffset: { width: 0, height: 2 },
+               shadowOpacity: 0.25,
+               shadowRadius: 20,
+               elevation: 5,
+            },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
                   case 'Eventos':

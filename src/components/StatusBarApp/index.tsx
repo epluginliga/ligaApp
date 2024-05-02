@@ -2,7 +2,7 @@ import { useTheme } from '@shopify/restyle'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { Theme } from '../../../theme/default'
+import { Theme } from '../../theme/default'
 
 export function StatusBarApp() {
    const { colors } = useTheme<Theme>();
