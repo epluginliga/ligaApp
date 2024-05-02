@@ -10,7 +10,7 @@ import {
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SignIn } from './screens/SignIn';
+import { Login } from './screens/Login';
 import { Eventos } from './screens/Eventos';
 
 const Stack = createNativeStackNavigator();
@@ -28,7 +28,7 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <SafeAreaView style={backgroundStyle}>
         <Stack.Navigator initialRouteName="Eventos">
-          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="SignIn" component={Login} />
           <Stack.Screen options={{
             headerShown: false,
           }}

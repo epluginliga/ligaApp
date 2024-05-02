@@ -2,8 +2,8 @@ import React from "react";
 import { Text } from "react-native";
 
 
-export function SignIn() {
+export function Login() {
    return (
-      <Text>SignIn</Text>
+      <Text>Login</Text>
    )
 }

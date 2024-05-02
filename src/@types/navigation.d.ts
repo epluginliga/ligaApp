@@ -1,8 +1,17 @@
 declare global {
    namespace ReactNavigation {
       interface RootParamList {
+         Cadastro: undefined;
          Eventos: undefined;
-         SignIn: undefined;
+         EventosDetalhe: {
+            id: string;
+         };
+         EventosIngressos: {};
+         EventosIngressosUtilizador: {};
+         EventosIngressosRevisao: {};
+         Ingressos: undefined;
+         Login: undefined;
+         Perfil: undefined;
       }
    }
 }

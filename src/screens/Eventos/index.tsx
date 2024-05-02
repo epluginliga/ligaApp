@@ -9,7 +9,7 @@ export function Eventos() {
    return (
       <View>
          <Text>Eventos</Text>
-         <Button title="SignIn" onPress={() => navigate.navigate("SignIn")} />
+         {/* <Button title="SignIn" onPress={() => navigate.navigate("Cadastro")} /> */}
       </View>
    )
 }
