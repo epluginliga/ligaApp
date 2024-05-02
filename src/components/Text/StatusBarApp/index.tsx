@@ -1,24 +1,22 @@
 import { useTheme } from '@shopify/restyle'
 import React from 'react'
-import { Text } from 'react-native'
+import { SafeAreaView } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-import { Theme } from '../../theme/default';
+import { Theme } from '../../../theme/default'
 
-export function Perfil() {
+export function StatusBarApp() {
    const { colors } = useTheme<Theme>();
 
    return (
       <LinearGradient
-         style={{ flex: 1 }}
          colors={[
             colors.primary,
             colors.purple,
             colors.azul,
          ]}
          start={{ x: 1, y: -0.4 }}
-         end={{ x: -1.9, y: 0.5 }}
-      >
-         <Text> Perfil </Text>
+         end={{ x: -1.9, y: 0.5 }}>
+         <SafeAreaView />
       </LinearGradient>
    )
 }

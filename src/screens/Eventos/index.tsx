@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Button, Text, View } from "react-native";
+import { View } from "react-native";
+import Text from "../../components/Text";
 
 
 export function Eventos() {
@@ -8,7 +9,7 @@ export function Eventos() {
 
    return (
       <View>
-         <Text>Eventos</Text>
+         <Text variant="header" color="black">Eventos</Text>
          {/* <Button title="SignIn" onPress={() => navigate.navigate("Cadastro")} /> */}
       </View>
    )

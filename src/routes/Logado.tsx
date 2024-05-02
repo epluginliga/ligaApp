@@ -1,7 +1,6 @@
 
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
 import { Perfil } from '../screens/Perfil';
 import { Carrinho } from '../screens/Carrinho';
 import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
@@ -14,7 +13,6 @@ const Stack = createNativeStackNavigator();
 
 export function RouteLogado() {
    return (
-
       <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
          headerShown: false,
       }}>
@@ -25,7 +23,6 @@ export function RouteLogado() {
          <Stack.Screen name="Ingressos" component={Ingressos} />
          <Stack.Screen name="Perfil" component={Perfil} />
          <Stack.Screen name="TabRoute" component={TabRoute} />
-
       </Stack.Navigator>
 
    );

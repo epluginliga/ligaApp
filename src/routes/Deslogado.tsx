@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 export function RouteDesLogado() {
    return (
       <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
-         headerShown: true,
+         headerShown: false,
       }}>
          <Stack.Screen name="TabRoute" component={TabRoute} />
          <Stack.Screen name="Cadastro" component={Cadastro} />

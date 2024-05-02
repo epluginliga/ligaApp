@@ -15,20 +15,22 @@ interface PropsTabs {
 
 export function TabRoute() {
    return (
+
       <Tab.Navigator
          screenOptions={({ route }) => ({
+
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
                   case 'Eventos':
                      return focused ? (
-                        <IconHome size={30} />
+                        <IconHome />
                      ) : (
                         <IconHome />
                      );
 
                   case 'Perfil':
                      return focused ? (
-                        <IconCalendario size={30} />
+                        <IconCalendario />
                      ) : (
                         <IconCalendario />
                      );
@@ -40,7 +42,6 @@ export function TabRoute() {
          initialRouteName="Eventos">
          <Tab.Screen name="Eventos" component={Eventos} />
          <Tab.Screen name="Perfil" component={Perfil} />
-
       </Tab.Navigator>
    )
 }

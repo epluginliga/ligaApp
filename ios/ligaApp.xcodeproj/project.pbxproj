@@ -11,8 +11,10 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		50DC50330B1D4A9D996840CF /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AF93EB85DB694A74A09EC66B /* Poppins-Regular.ttf */; };
 		823DFBF12BE1856400F8D45B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 823DFBF02BE1856400F8D45B /* LaunchScreen.storyboard */; };
 		ACAF7EC63B96F52F6DD488D8 /* libPods-ligaApp-ligaAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B008A00DE164D5045705E1 /* libPods-ligaApp-ligaAppTests.a */; };
+		AF737220DE40496BB8E9D2A2 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC37051C2FE34EFEB67A1057 /* Poppins-SemiBold.ttf */; };
 		D234EA61391523F912635C37 /* libPods-ligaApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F4421905D743BEACE0AAC9 /* libPods-ligaApp.a */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +44,9 @@
 		40F4421905D743BEACE0AAC9 /* libPods-ligaApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ligaApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		823DFBF02BE1856400F8D45B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		892D9A86281604C9AC6D93B1 /* Pods-ligaApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp.release.xcconfig"; path = "Target Support Files/Pods-ligaApp/Pods-ligaApp.release.xcconfig"; sourceTree = "<group>"; };
+		AF93EB85DB694A74A09EC66B /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		BE88410D67E08B0E40B2C81D /* Pods-ligaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp.debug.xcconfig"; path = "Target Support Files/Pods-ligaApp/Pods-ligaApp.debug.xcconfig"; sourceTree = "<group>"; };
+		CC37051C2FE34EFEB67A1057 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F70B0B0CAD397C2B8501B9BA /* Pods-ligaApp-ligaAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp-ligaAppTests.release.xcconfig"; path = "Target Support Files/Pods-ligaApp-ligaAppTests/Pods-ligaApp-ligaAppTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,6 +128,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				9CE8544996294A75B54E11FA /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -137,6 +142,15 @@
 				00E356EE1AD99517003FC87E /* ligaAppTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9CE8544996294A75B54E11FA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AF93EB85DB694A74A09EC66B /* Poppins-Regular.ttf */,
+				CC37051C2FE34EFEB67A1057 /* Poppins-SemiBold.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -245,6 +259,8 @@
 			files = (
 				823DFBF12BE1856400F8D45B /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				50DC50330B1D4A9D996840CF /* Poppins-Regular.ttf in Resources */,
+				AF737220DE40496BB8E9D2A2 /* Poppins-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,10 +612,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -671,10 +684,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
