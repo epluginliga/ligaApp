@@ -7,11 +7,14 @@ declare global {
             id: string;
          };
          EventosIngressos: {};
-         EventosIngressosUtilizador: {};
-         EventosIngressosRevisao: {};
-         Ingressos: undefined;
          Login: undefined;
+
+         // private
          Perfil: undefined;
+         Carrinho: {};
+         CarrinhoUtilizador: {};
+         Ingressos: undefined;
+
       }
    }
 }

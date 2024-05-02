@@ -1,11 +1,10 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-export function EventosIngressosUtilizador() {
-
+export function Carrinho() {
    return (
       <View>
-         <Text> EventosIngressosUtilizador </Text>
+         <Text>EventosIngressosRevisao</Text>
       </View>
    )
 }
