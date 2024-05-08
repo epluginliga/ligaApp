@@ -3,6 +3,7 @@ import React from 'react'
 import { IconCalendario, IconHome } from '../icons';
 import { Eventos } from '../screens/Eventos';
 import { Perfil } from '../screens/Perfil';
+import { RouteDesLogado } from './Deslogado';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +51,7 @@ export function TabRoute() {
          initialRouteName="Eventos">
          <Tab.Screen name="Eventos" component={Eventos} />
          <Tab.Screen name="Perfil" component={Perfil} />
+         <Tab.Screen name="Deslogado" component={RouteDesLogado} />
       </Tab.Navigator>
    )
 }
