@@ -1,26 +1,32 @@
 
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
 
-import { Login } from '../screens/Login';
-import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
+import { Perfil } from '../screens/Perfil';
+import { Carrinho } from '../screens/Carrinho';
+import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
+import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
-import { Cadastro } from '../screens/Cadastro';
-import { TabRoute } from './TabRoute';
+import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 
 const Stack = createNativeStackNavigator();
 
-export function RouteDesLogado() {
+export function RouteLogado() {
    return (
-      <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
+      <Stack.Navigator initialRouteName="Eventos" screenOptions={{
          headerShown: false,
+
+         contentStyle: {
+            backgroundColor: "#ebebeb",
+         }
+
       }}>
-         <Stack.Screen name="TabRoute" component={TabRoute} />
-         <Stack.Screen name="Cadastro" component={Cadastro} />
          <Stack.Screen name="Eventos" component={Eventos} />
          <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
-         <Stack.Screen name="Login" component={Login} />
+         <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
+         <Stack.Screen name="Carrinho" component={Carrinho} />
+         <Stack.Screen name="Ingressos" component={Ingressos} />
+         <Stack.Screen name="Perfil" component={Perfil} />
       </Stack.Navigator>
 
    );

@@ -10,7 +10,7 @@ export type VStack = BoxProps<Theme> & {
 
 function VStack({ children, ...props }: VStack) {
    return (
-      <Box m='xs' gap='sm' flex={1} {...props}>
+      <Box m='xs' gap='sm' flex={1}  {...props}>
          {children}
       </Box>
    );

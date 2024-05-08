@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useCallback } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 import Text from "../../components/Text";
 import { Card } from "../../components/Card";
@@ -23,7 +23,11 @@ export function Eventos() {
                flex={1}
                height={88}
                source={{ url: item.path_imagem }} />
-            <VStack flex={2} justifyContent="space-evenly" pb="sm">
+
+            <VStack
+               flex={2}
+               justifyContent="space-evenly"
+               pb="sm">
                <Card.Title mt="sm">{item.nome}</Card.Title>
                <HStack>
 
@@ -46,6 +50,7 @@ export function Eventos() {
                   </Card.Widget>
                </HStack>
             </VStack>
+
          </Card.Root>
       )
    }, []);

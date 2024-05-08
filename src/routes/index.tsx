@@ -1,16 +1,14 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import { SafeAreaView } from 'react-native';
-
-import { RouteDesLogado } from './Deslogado'
-import { RouteLogado } from './Logado';
+import { TabRoute } from './TabRoute';
+import { View } from 'react-native';
 
 export function Routes() {
-   const auth = false;
    return (
       <NavigationContainer>
-         <SafeAreaView />
-         {auth ? <RouteLogado /> : <RouteDesLogado />}
+         <View style={{ backgroundColor: "#ebebeb", flex: 1 }}>
+            <TabRoute />
+         </View>
       </NavigationContainer>
    );
 }

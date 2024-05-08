@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
 import { IconCalendario, IconHome } from '../icons';
-import { Eventos } from '../screens/Eventos';
 import { Perfil } from '../screens/Perfil';
+import { RouteLogado } from './Logado';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,11 +17,13 @@ export function TabRoute() {
       <Tab.Navigator
          screenOptions={({ route }) => ({
             tabBarStyle: {
-               borderRadius: 30,
+               borderTopRightRadius: 20,
+               borderTopLeftRadius: 20,
                borderCurve: "circular",
                borderTopWidth: 0,
+               backgroundColor: "#fff",
 
-               shadowColor: "#868686",
+               shadowColor: "#484848",
                shadowOffset: { width: 0, height: 2 },
                shadowOpacity: 0.25,
                shadowRadius: 20,
@@ -48,7 +50,7 @@ export function TabRoute() {
             tabBarShowLabel: false,
          })}
          initialRouteName="Eventos">
-         <Tab.Screen name="Eventos" component={Eventos} />
+         <Tab.Screen name="Eventos" component={RouteLogado} />
          <Tab.Screen name="Perfil" component={Perfil} />
       </Tab.Navigator>
    )

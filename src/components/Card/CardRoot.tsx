@@ -27,7 +27,7 @@ export function CardRoot({ children, onPress, ...rest }: CardRoot) {
          <Card
             flexDirection="row"
             flex={1}
-            borderRadius={10}
+            borderRadius={12}
             backgroundColor='white'
             shadowColor='bege_200'
             variant='shadow'
