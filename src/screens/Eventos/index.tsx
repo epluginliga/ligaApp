@@ -5,7 +5,7 @@ import Text from "../../components/Text";
 import { Card } from "../../components/Card";
 import VStack from "../../components/Views/Vstack";
 import { data } from "../../../store/eventos";
-import { FlatList } from "react-native";
+import { Dimensions, FlatList, ImageBackground, StyleSheet } from "react-native";
 import HStack from "../../components/Views/Hstack";
 import { IconPin } from "../../icons";
 
@@ -15,6 +15,26 @@ type ItemData = {
 
 export function Eventos() {
    const navigate = useNavigation();
+   const { height, width } = Dimensions.get("screen");
+
+   function SlideImage({ item }: any) {
+      const styles = StyleSheet.create({
+         image: {
+            width: 150,
+            height: "100%",
+            borderTopLeftRadius: 10,
+            borderBottomLeftRadius: 10,
+            overflow: "hidden"
+         }
+      });
+
+      return (
+         <ImageBackground resizeMode="cover"
+            source={{ uri: item.path_imagem }}
+            style={{ height: height / 3, width }}
+         />
+      )
+   }
 
    const renderItem = useCallback(({ item }: ItemData) => {
       return (
@@ -30,7 +50,6 @@ export function Eventos() {
                pb="sm">
                <Card.Title mt="sm">{item.nome}</Card.Title>
                <HStack>
-
                   <Card.SubTitle
                      leftIcon={<IconPin />}
                   >
@@ -56,13 +75,25 @@ export function Eventos() {
    }, []);
 
    return (
-      <VStack m="sm" gap="md">
-         <FlatList
-            ItemSeparatorComponent={() => <VStack height={20} />}
-            data={data.data}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-         />
-      </VStack>
+      <FlatList
+         ListHeaderComponent={(
+            <FlatList
+               nestedScrollEnabled
+               pagingEnabled
+               showsHorizontalScrollIndicator={false}
+               horizontal={true}
+               snapToAlignment="start"
+               scrollEventThrottle={16}
+               decelerationRate="fast"
+               data={data.data}
+               keyExtractor={(item) => item.id}
+               renderItem={SlideImage}
+            />
+         )}
+         ItemSeparatorComponent={() => <VStack height={20} />}
+         data={data.data}
+         keyExtractor={(item) => item.id}
+         renderItem={renderItem}
+      />
    )
 }

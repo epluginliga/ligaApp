@@ -11,7 +11,7 @@ import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 
 const Stack = createNativeStackNavigator();
 
-export function RouteLogado() {
+export function RouteDesLogado() {
    return (
       <Stack.Navigator initialRouteName="Eventos" screenOptions={{
          headerShown: false,
