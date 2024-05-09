@@ -29,11 +29,10 @@ export function CardRoot({ children, onPress, ...rest }: CardRoot) {
             flex={1}
             borderRadius={12}
             backgroundColor='white'
-            shadowColor='bege_200'
             variant='shadow'
             justifyContent="space-between"
             alignItems='center'
-            gap='md'
+            gap='sm'
             {...rest}
          >
             {children}

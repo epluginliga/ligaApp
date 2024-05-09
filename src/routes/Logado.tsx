@@ -18,7 +18,7 @@ export function RouteLogado() {
          screenOptions={{
             headerShown: false,
             contentStyle: {
-               backgroundColor: "#ebebeb",
+               backgroundColor: "#fff",
             }
          }}>
          <Stack.Screen name="Eventos" component={Eventos} />

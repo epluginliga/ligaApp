@@ -21,9 +21,9 @@ export function TabRoute() {
                borderTopLeftRadius: 20,
                borderCurve: "circular",
                borderTopWidth: 0,
-               backgroundColor: "#fff",
+               backgroundColor: "#f3f3f3",
 
-               shadowColor: "#484848",
+               shadowColor: "#070707",
                shadowOffset: { width: 0, height: 2 },
                shadowOpacity: 0.25,
                shadowRadius: 20,
@@ -31,7 +31,7 @@ export function TabRoute() {
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
-                  case 'Eventos':
+                  case 'RouteLogado':
                      return focused ? (
                         <IconHome />
                      ) : (
@@ -49,8 +49,8 @@ export function TabRoute() {
             headerShown: false,
             tabBarShowLabel: false,
          })}
-         initialRouteName="Eventos">
-         <Tab.Screen name="Eventos" component={RouteLogado} />
+         initialRouteName="RouteLogado">
+         <Tab.Screen name="RouteLogado" component={RouteLogado} />
          <Tab.Screen name="Perfil" component={Perfil} />
       </Tab.Navigator>
    )

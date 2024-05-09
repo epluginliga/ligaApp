@@ -1,8 +1,11 @@
 import { createTheme } from '@shopify/restyle';
+import { buttonVariants } from './buttonVariants';
 
 const palette = {
    primary: '#F23E17',
-   secondary: "#F2385A",
+   secondary: '#F2385A',
+   botao_default: 'rgba(242, 56, 90, 0.65)',
+
    azul: '#0001F8',
    purple: '#6400DD',
    purple_200: '#37007A',
@@ -15,6 +18,7 @@ const palette = {
    white: '#FFFFFF',
    bege: '#E0E0E0',
    bege_200: '#C2C2C2',
+   bege_900: '##868686',
 };
 
 const theme = createTheme({
@@ -25,18 +29,20 @@ const theme = createTheme({
       buttonPrimaryBackground: palette.primary,
    },
    spacing: {
+      0: 0,
       xs: 2,
       sm: 8,
       md: 16,
       lg: 24,
       xl: 40,
+      full: '100%',
    },
    textVariants: {
       header: {
          color: "black",
          fontWeight: 'medium',
-         lineHeight: 26,
-         fontSize: 24,
+         lineHeight: 24,
+         fontSize: 22,
          fontFamily: "Poppins-SemiBold",
       },
       header2: {
@@ -62,16 +68,23 @@ const theme = createTheme({
          fontFamily: "Poppins-Regular",
          fontSize: 20,
       },
+      botaoLink: {
+         fontSize: 14,
+         fontFamily: "Poppins-Regular",
+         margin: "0",
+      }
    },
    card: {
       shadow: {
-         shadowColor: "bege_200",
+         shadowColor: "bege_900",
          shadowOffset: { width: 0, height: 4 },
          shadowOpacity: 0.25,
          shadowRadius: 20,
          elevation: 5,
       }
-   }
+   },
+   buttonVariants,
+
 });
 
 export type Theme = typeof theme;
