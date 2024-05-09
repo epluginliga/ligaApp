@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Perfil } from '../screens/Perfil';
@@ -28,6 +28,5 @@ export function RouteLogado() {
          <Stack.Screen name="Ingressos" component={Ingressos} />
          <Stack.Screen name="Perfil" component={Perfil} />
       </Stack.Navigator>
-
    );
 }
