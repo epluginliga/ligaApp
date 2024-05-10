@@ -6,6 +6,7 @@ import { Perfil } from '../screens/Perfil';
 import { RouteLogado } from './Logado';
 import { Ingressos } from '../screens/Ingressos';
 import { RouteDesLogado } from './Deslogado';
+import { Eventos } from '../screens/Eventos';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +30,7 @@ export function TabRoute() {
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
-                  case 'RouteDeslogado':
+                  case 'Eventos':
                      return focused ? (
                         <IconHome />
                      ) : (
@@ -53,8 +54,8 @@ export function TabRoute() {
             headerShown: false,
             tabBarShowLabel: false,
          })}
-         initialRouteName="RouteDeslogado">
-         <Tab.Screen name="RouteDeslogado" component={RouteDesLogado} />
+         initialRouteName="Eventos">
+         <Tab.Screen name="Eventos" component={Eventos} />
          <Tab.Screen name="IngressosTab" component={Ingressos} />
          <Tab.Screen name="Perfil" component={Perfil} />
       </Tab.Navigator>

@@ -8,6 +8,7 @@ import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
+import { TabRoute } from './TabRoute';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,7 @@ export function RouteDesLogado() {
    };
 
    return (
-      <Stack.Navigator initialRouteName="Eventos" screenOptions={{
+      <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
          headerShown: false,
          contentStyle: {
             backgroundColor: "#FCFCFC",
@@ -43,6 +44,7 @@ export function RouteDesLogado() {
          <Stack.Screen name="Carrinho" component={Carrinho} />
          <Stack.Screen name="Ingressos" component={Ingressos} />
          <Stack.Screen name="Perfil" component={Perfil} />
+         <Stack.Screen name="TabRoute" component={TabRoute} />
       </Stack.Navigator>
 
    );
