@@ -47,14 +47,14 @@ const theme = createTheme({
       },
       header2: {
          color: "black",
-         fontWeight: 700,
+         fontWeight: "700",
          lineHeight: 15,
          fontSize: 14,
          fontFamily: "Poppins-Bold",
       },
       header3: {
          color: "black",
-         fontWeight: 300,
+         fontWeight: "300",
          fontSize: 12,
          fontFamily: "Poppins-Regular",
       },

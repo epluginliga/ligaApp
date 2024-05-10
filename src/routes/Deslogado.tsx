@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Perfil } from '../screens/Perfil';
 import { Carrinho } from '../screens/Carrinho';
@@ -12,17 +12,33 @@ import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 const Stack = createNativeStackNavigator();
 
 export function RouteDesLogado() {
+   const defaultHeader: NativeStackNavigationOptions = {
+      headerTitleStyle: {
+         fontWeight: "400",
+         fontSize: 14,
+         fontFamily: "Poppins-Regular",
+
+      },
+      headerShadowVisible: false,
+      headerShown: true,
+      headerStyle: {
+         backgroundColor: "#FCFCFC",
+      }
+   };
+
    return (
       <Stack.Navigator initialRouteName="Eventos" screenOptions={{
          headerShown: false,
-
          contentStyle: {
-            backgroundColor: "#ebebeb",
+            backgroundColor: "#FCFCFC",
          }
-
       }}>
-         <Stack.Screen name="Eventos" component={Eventos} />
-         <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
+         <Stack.Screen name="Eventos" component={Eventos} options={{
+         }} />
+         <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} options={{
+            title: "Detalhe do evento",
+            ...defaultHeader
+         }} />
          <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
          <Stack.Screen name="Carrinho" component={Carrinho} />
          <Stack.Screen name="Ingressos" component={Ingressos} />

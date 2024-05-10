@@ -9,9 +9,8 @@ import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
 import { IconPin } from "../../icons";
 import { Carrocel } from "../../components/Carrocel";
-import { Button } from "../../components/Button";
 
-type ItemData = {
+export type ItemData = {
    item: typeof data.data[0];
 }
 
@@ -60,27 +59,7 @@ export function Eventos() {
          ListHeaderComponent={(
             <VStack gap="md" justifyContent="space-evenly" mb="md">
 
-               <Carrocel>
-                  <VStack justifyContent="space-between" >
-                     <VStack>
-                        <Text color="white">qui - <Text fontWeight="900">30</Text> de maio</Text>
-                        <Text fontSize={26} fontWeight="900" color="white">Ressaca dos esquecidos</Text>
-                        <Text fontSize={16} color="white">
-                           <Text fontWeight="900" color="white">Goiânia - GO</Text> | Espaços dois ipês
-                        </Text>
-                     </VStack>
-
-                     <Button
-                        variant="link"
-                        onPress={(item: any) => navigate.navigate("EventosDetalhe", {
-                           id: item.id,
-                        })}
-                     >
-                        @Ver detalhes do evento
-                     </Button>
-
-                  </VStack>
-               </Carrocel>
+               <Carrocel />
 
                <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
                   <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>

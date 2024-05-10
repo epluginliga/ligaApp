@@ -3,12 +3,16 @@ import { Dimensions, FlatList, ImageBackground, StyleSheet, View } from 'react-n
 
 import { data } from '../../../store/eventos';
 import VStack from '../Views/Vstack';
+import Text from '../Text';
+import { Button } from '../Button';
+import { useNavigation } from '@react-navigation/native';
+import { ItemData } from '../../screens/Eventos';
+import { Imagem } from '../Imagem';
 
-export type Carrocel = {
-   children?: React.ReactNode | React.ReactNode[];
-}
-export function Carrocel({ children }: Carrocel) {
-   const { width: windowWidth, height: windowHeight } = Dimensions.get("window");
+export type Carrocel = {}
+export function Carrocel({ }: Carrocel) {
+   const { width: windowWidth } = Dimensions.get("window");
+   const navigate = useNavigation();
 
    const flatListOptimizationProps = {
       initialNumToRender: 0,
@@ -26,32 +30,30 @@ export function Carrocel({ children }: Carrocel) {
          []
       ),
    };
+   function SlideImage({ item }: ItemData) {
 
-   function SlideImage({ item }: any) {
-      const width = windowWidth - 12;
       return (
          <VStack position='relative' overflow='hidden' borderRadius={10}>
-            <ImageBackground
-               blurRadius={4}
-               resizeMode="cover"
-               source={{ uri: item.path_imagem }}
-               style={{
-                  height: windowHeight / 2.5,
-                  width,
-                  ...styles.image
-               }}
-            >
-               <VStack zIndex={999}>
-                  {children && children}
+            <Imagem source={{ uri: item.path_imagem }} >
+               <VStack zIndex={999} justifyContent="space-between" >
+                  <VStack>
+                     <Text color="white">qui - <Text fontWeight="900">{item.dia_evento}</Text> {item.mes_evento}</Text>
+                     <Text fontSize={26} fontWeight="900" color="white">{item.nome}</Text>
+                     <Text fontSize={16} color="white">
+                        <Text fontWeight="900" color="white">{item.cidade} - {item.estado}</Text> | {item.nome_local}
+                     </Text>
+                  </VStack>
+
+                  <Button
+                     variant="link"
+                     onPress={() => navigate.navigate("EventosDetalhe", {
+                        id: item.id,
+                     })}
+                  >
+                     @Ver detalhes do evento
+                  </Button>
                </VStack>
-
-               <View style={{
-                  width,
-                  height: windowHeight,
-                  ...styles.shadowBanner
-               }} />
-
-            </ImageBackground>
+            </Imagem>
 
          </VStack>
       )
@@ -74,17 +76,3 @@ export function Carrocel({ children }: Carrocel) {
    );
 }
 
-const styles = StyleSheet.create({
-   image: {
-      borderRadius: 10,
-      overflow: "hidden",
-      padding: 10,
-      position: "relative",
-   },
-   shadowBanner: {
-      backgroundColor: "#000",
-      position: "absolute",
-      top: 0,
-      opacity: 0.4,
-   }
-});

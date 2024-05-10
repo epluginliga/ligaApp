@@ -1,8 +1,11 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
-import { IconCalendario, IconHome } from '../icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import { IconCalendario, IconHome, IconUser } from '../icons';
 import { Perfil } from '../screens/Perfil';
 import { RouteLogado } from './Logado';
+import { Ingressos } from '../screens/Ingressos';
+import { RouteDesLogado } from './Deslogado';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,36 +24,38 @@ export function TabRoute() {
                borderTopLeftRadius: 20,
                borderCurve: "circular",
                borderTopWidth: 0,
-               backgroundColor: "#f3f3f3",
-
-               shadowColor: "#070707",
-               shadowOffset: { width: 0, height: 2 },
-               shadowOpacity: 0.25,
-               shadowRadius: 20,
-               elevation: 5,
+               backgroundColor: "#fff",
+               overflow: "hidden",
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
-                  case 'RouteLogado':
+                  case 'RouteDeslogado':
                      return focused ? (
                         <IconHome />
                      ) : (
                         <IconHome />
                      );
 
-                  case 'Perfil':
+                  case 'IngressosTab':
                      return focused ? (
                         <IconCalendario />
                      ) : (
                         <IconCalendario />
+                     );
+                  case 'Perfil':
+                     return focused ? (
+                        <IconUser />
+                     ) : (
+                        <IconUser />
                      );
                }
             },
             headerShown: false,
             tabBarShowLabel: false,
          })}
-         initialRouteName="RouteLogado">
-         <Tab.Screen name="RouteLogado" component={RouteLogado} />
+         initialRouteName="RouteDeslogado">
+         <Tab.Screen name="RouteDeslogado" component={RouteDesLogado} />
+         <Tab.Screen name="IngressosTab" component={Ingressos} />
          <Tab.Screen name="Perfil" component={Perfil} />
       </Tab.Navigator>
    )
