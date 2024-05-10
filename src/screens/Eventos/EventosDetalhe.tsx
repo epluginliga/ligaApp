@@ -10,6 +10,7 @@ import { IconCalendario, IconClock, IconPin } from '../../icons';
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
 import { Html } from '../../components/Html';
+import { formataData } from '../../utils/utils';
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
@@ -27,22 +28,20 @@ export function EventosDetalhe() {
                <Section.Title>{eventoDetalhe.nome}</Section.Title>
 
                <Section.SubTitle iconLeft={<IconCalendario />}>
-                  {eventoDetalhe.data_evento}
+                  {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
                </Section.SubTitle>
 
                <Section.SubTitle iconLeft={<IconClock />}>
-                  {eventoDetalhe.data_evento}
+                  {formataData(eventoDetalhe.data_evento).hora()}
                </Section.SubTitle>
 
                <VStack gap="lg">
                   <Section.SubTitle iconLeft={<IconPin />}>
-                     {eventoDetalhe.data_evento}
-                     {'\n'}
+                     {eventoDetalhe.nome_local + '\n'}
                      <Section.Span>
                         {eventoDetalhe.logradouro}
                      </Section.Span>
                   </Section.SubTitle>
-
 
                   <Html source={eventoDetalhe.descricao} />
                </VStack>

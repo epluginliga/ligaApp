@@ -32,7 +32,7 @@ export function Eventos() {
                <Card.Title marginVertical="md">{item.nome}</Card.Title>
                <HStack marginRight="sm">
                   <Card.SubTitle
-                     leftIcon={<IconPin />}
+                     leftIcon={<IconPin size={16} />}
                   >
                      {item.nome_local} {'\n'}
                      <Card.Span>
