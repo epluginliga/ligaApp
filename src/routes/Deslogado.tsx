@@ -9,9 +9,10 @@ import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 import { TabRoute } from './TabRoute';
-import { Login } from '../screens/Login';
+import { Login } from '../screens/Auth/Login';
 import { StatusBarApp } from '../components/StatusBarApp';
-import { EsqueciSenha } from '../screens/Login/EsqueciSenha';
+import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
+import { CriarConta } from '../screens/Auth/CriarConta';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,12 @@ export function RouteDesLogado() {
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha}
                options={{
                   title: "Recuperar Senha",
+                  ...defaultHeader
+               }}
+            />
+            <Stack.Screen name="CriarConta" component={CriarConta}
+               options={{
+                  title: "Cadastro",
                   ...defaultHeader
                }}
             />

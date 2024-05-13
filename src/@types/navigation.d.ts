@@ -7,6 +7,7 @@ type RouteApp = {
    EventosIngressos: {};
    Login: undefined;
    EsqueciSenha: undefined;
+   CriarConta: undefined;
 
    // private
    Perfil: undefined;

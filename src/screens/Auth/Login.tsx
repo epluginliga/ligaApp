@@ -84,7 +84,7 @@ export function Login() {
 
                      <VStack flex={0.2} >
 
-                        <Pressable onPress={() => navigate('EsqueciSenha')}>
+                        <Pressable onPress={() => navigate('CriarConta')}>
                            <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta{' '}
                               <Text fontSize={14} fontWeight="900">
                                  Cadastre-se
