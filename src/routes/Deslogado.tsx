@@ -11,6 +11,7 @@ import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 import { TabRoute } from './TabRoute';
 import { Login } from '../screens/Login';
 import { StatusBarApp } from '../components/StatusBarApp';
+import { EsqueciSenha } from '../screens/Login/EsqueciSenha';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,15 +19,15 @@ export function RouteDesLogado() {
    const defaultHeader: NativeStackNavigationOptions = {
       headerTitleStyle: {
          fontWeight: "400",
-         fontSize: 14,
-         fontFamily: "Poppins-Regular",
+         fontSize: 16,
+         fontFamily: "Poppins-SemiBold",
 
       },
       headerShadowVisible: false,
       headerShown: true,
       headerStyle: {
          backgroundColor: "#FCFCFC",
-      }
+      },
    };
 
    return (
@@ -51,7 +52,12 @@ export function RouteDesLogado() {
             <Stack.Screen name="Perfil" component={Perfil} />
             <Stack.Screen name="TabRoute" component={TabRoute} />
             <Stack.Screen name="Login" component={Login} />
-
+            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha}
+               options={{
+                  title: "Recuperar Senha",
+                  ...defaultHeader
+               }}
+            />
          </Stack.Navigator>
       </>
    );

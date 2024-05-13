@@ -1,9 +1,12 @@
 import { ClipPath, G, Path, Rect, Svg } from "react-native-svg";
 import { IconEye, IconEyeSlash } from "./Eye";
+import { IconArrowLeft, IconArrowRight } from "./Arrow";
 
 export const Icon = {
    Eye: IconEye,
-   EyeSlash: IconEyeSlash
+   EyeSlash: IconEyeSlash,
+   ArrowLeft: IconArrowLeft,
+   ArrowRight: IconArrowRight
 }
 
 export type Icon = {

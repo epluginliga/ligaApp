@@ -19,7 +19,10 @@ export function Eventos() {
 
    const renderItem = useCallback(({ item }: ItemData) => {
       return (
-         <Card.Root marginHorizontal="sm" pr="xs" onPress={() => navigate.navigate("EventosDetalhe", { id: item.id })}>
+         <Card.Root
+            marginHorizontal="sm"
+            pr="xs"
+            onPress={() => navigate.navigate("EventosDetalhe", { id: item.id })}>
             <Card.Image
                flex={1}
                height={88}

@@ -39,6 +39,7 @@ const theme = createTheme({
       md: 16,
       lg: 24,
       xl: 40,
+      xl5: 120,
       full: '100%',
    },
 
@@ -46,14 +47,20 @@ const theme = createTheme({
       header: {
          color: "black",
          fontWeight: 'medium',
-         lineHeight: 24,
          fontSize: 22,
          fontFamily: "Poppins-SemiBold",
+      },
+      labelInput: {
+         color: "primary",
+         fontWeight: 'regular',
+         fontSize: 16,
+         fontFamily: "Poppins-Regular",
+         margin: "0",
+         padding: "0",
       },
       header2: {
          color: "black",
          fontWeight: "700",
-         lineHeight: 15,
          fontSize: 14,
          fontFamily: "Poppins-Bold",
       },

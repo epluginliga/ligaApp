@@ -13,8 +13,8 @@ import { InputText } from '../../components/Inputs/Text';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Text from '../../components/Text';
-import { Dimensions, Image, Pressable, View } from 'react-native';
-import theme from '../../theme/default';
+import { Dimensions, Image, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 // Defina o schema de validação usando Zod
 const schema = z.object({
@@ -27,6 +27,7 @@ const schema = z.object({
 type LoginFormInputs = z.input<typeof schema>;
 
 export function Login() {
+   const { navigate } = useNavigation();
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
       resolver: zodResolver(schema)
@@ -51,6 +52,7 @@ export function Login() {
 
                      <VStack gap="lg">
                         <InputText
+                           variant='solid'
                            label="E-mail"
                            iconLeft={<IconEnvelope color='#fff' size={24} />}
                            name='email'
@@ -60,26 +62,36 @@ export function Login() {
                         />
 
                         <InputPassword
+                           variant='solid'
+                           label="Senha"
                            iconLeft={<IconFingerPrint color='#fff' size={24} />}
                            name='password'
                            placeholder='Digite sua senha'
-                           label="Senha"
                            control={control}
                            error={errors?.password?.message}
-
                         />
                      </VStack>
 
                      <VStack flex={1} gap="md">
-                        <Button onPress={handleSubmit(onSubmit)} >
+                        <Button onPress={handleSubmit(onSubmit)}>
                            ENTRAR
                         </Button>
 
-                        <Pressable>
+                        <Pressable onPress={() => navigate('EsqueciSenha')}>
                            <Text textAlign="center" fontSize={14} color='white'>Esqueceu a senha?</Text>
                         </Pressable>
                      </VStack>
 
+                     <VStack flex={0.2} >
+
+                        <Pressable onPress={() => navigate('EsqueciSenha')}>
+                           <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta{' '}
+                              <Text fontSize={14} fontWeight="900">
+                                 Cadastre-se
+                              </Text>
+                           </Text>
+                        </Pressable>
+                     </VStack>
                   </VStack>
                </Layout.Scroll>
             </Layout.Keyboard>

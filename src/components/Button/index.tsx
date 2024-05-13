@@ -2,11 +2,14 @@ import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { SpacingProps, VariantProps, createRestyleComponent, createText, createVariant, spacing } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
+import { Icon, IconCalendario } from '../../icons';
 
 const Text = createText<Theme>();
 
 type CustomButton = SpacingProps<Theme> & VariantProps<Theme, 'buttonVariants'> & TouchableOpacityProps & {
    children?: React.ReactNode | string;
+   iconLeft?: React.JSX.Element;
+   iconRight?: React.JSX.Element;
 }
 
 const Box = createRestyleComponent<CustomButton, Theme>([
@@ -14,11 +17,13 @@ const Box = createRestyleComponent<CustomButton, Theme>([
    createVariant({ themeKey: "buttonVariants" }),
 ]);
 
-export function Button({ children, onPress, ...props }: CustomButton) {
+export function Button({ children, onPress, iconLeft, iconRight, ...props }: CustomButton) {
 
    return (
       <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
          <Box  {...props}>
+            {iconRight && iconRight}
+
             {typeof children !== "string" ? (
                children
             ) : (
@@ -26,6 +31,8 @@ export function Button({ children, onPress, ...props }: CustomButton) {
                   {children}
                </Text>
             )}
+
+            {props.variant !== "link" ? iconLeft ? iconLeft : <Icon.ArrowRight size={24} color='#fff' /> : null}
          </Box>
       </TouchableOpacity>
 

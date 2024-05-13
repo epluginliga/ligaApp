@@ -15,6 +15,17 @@ type InputPassworld = InputDefault & {
 export function InputPassword({ name, ...rest }: InputPassworld) {
    const theme = useTheme<Theme>();
    const [hidde, setHidde] = useState(true);
+
+   const style: { solid: object; transparent: object } = {
+      solid: {
+         color: theme.colors.white,
+      },
+      transparent: {
+         color: theme.colors.bege_900,
+         borderColor: theme.colors.primary,
+      }
+   }
+
    return (
       <Input {...rest}
          iconRight={(
@@ -29,7 +40,7 @@ export function InputPassword({ name, ...rest }: InputPassworld) {
             render={({ field: { onBlur, onChange, value } }) => {
                return (
                   <TextInput
-                     placeholderTextColor={theme.colors.white}
+                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
                      secureTextEntry={hidde}
                      onChangeText={(text) => onChange(text)}
                      value={value}
@@ -38,6 +49,7 @@ export function InputPassword({ name, ...rest }: InputPassworld) {
                         fontSize: theme.spacing.md,
                         color: theme.colors.white,
                         fontFamily: theme.fonts.medium,
+                        ...style[rest.variant || "transparent"],
                         flex: 1
                      }}
                      {...rest}
