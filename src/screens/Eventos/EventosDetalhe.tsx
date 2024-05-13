@@ -1,7 +1,7 @@
 import React from 'react';
 
 import VStack from '../../components/Views/Vstack';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RouteApp } from '../../@types/navigation';
 import { data as eventoDetalhe } from '../../../store/eventoId';
 import { Imagem } from '../../components/Imagem';
@@ -17,6 +17,7 @@ type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 export function EventosDetalhe() {
    const { params } = useRoute<EventoDetalheRouteProp>();
    console.log(params.id);
+   const { navigate } = useNavigation();
 
    return (
       <Layout.Scroll>
@@ -47,7 +48,7 @@ export function EventosDetalhe() {
                </VStack>
 
             </Section.Root>
-            <Button>Comprar</Button>
+            <Button onPress={() => navigate('Login')}>Comprar</Button>
 
          </VStack>
       </Layout.Scroll>

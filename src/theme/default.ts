@@ -9,6 +9,7 @@ const palette = {
    azul: '#0001F8',
    purple: '#6400DD',
    purple_200: '#37007A',
+   purple_300: 'rgba(55, 0, 122, 0.65)',
 
    greenLight: '#56DCBA',
    greenPrimary: '#0ECD9D',
@@ -22,6 +23,9 @@ const palette = {
 };
 
 const theme = createTheme({
+   fonts: {
+      medium: 'Poppins-Regular'
+   },
    colors: {
       ...palette,
       mainBackground: palette.white,
@@ -37,6 +41,7 @@ const theme = createTheme({
       xl: 40,
       full: '100%',
    },
+
    textVariants: {
       header: {
          color: "black",

@@ -7,11 +7,12 @@ type LayoutScroll = {
 }
 
 export function LayoutScroll({ children, topFixed }: LayoutScroll) {
+
    return (
       <>
          {topFixed && topFixed}
          <ScrollView
-            style={{ flex: 1, marginHorizontal: 6 }}
+            style={{ marginHorizontal: 6 }}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
          >

@@ -9,6 +9,8 @@ import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 import { TabRoute } from './TabRoute';
+import { Login } from '../screens/Login';
+import { StatusBarApp } from '../components/StatusBarApp';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,24 +30,29 @@ export function RouteDesLogado() {
    };
 
    return (
-      <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
-         headerShown: false,
-         contentStyle: {
-            backgroundColor: "#FCFCFC",
-         }
-      }}>
-         <Stack.Screen name="Eventos" component={Eventos} options={{
-         }} />
-         <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} options={{
-            title: "Detalhe do evento",
-            ...defaultHeader
-         }} />
-         <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
-         <Stack.Screen name="Carrinho" component={Carrinho} />
-         <Stack.Screen name="Ingressos" component={Ingressos} />
-         <Stack.Screen name="Perfil" component={Perfil} />
-         <Stack.Screen name="TabRoute" component={TabRoute} />
-      </Stack.Navigator>
+      <>
+         <StatusBarApp />
 
+         <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
+            headerShown: false,
+            contentStyle: {
+               backgroundColor: "#FCFCFC",
+            }
+         }}>
+            <Stack.Screen name="Eventos" component={Eventos} options={{
+            }} />
+            <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} options={{
+               title: "Detalhe do evento",
+               ...defaultHeader
+            }} />
+            <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
+            <Stack.Screen name="Carrinho" component={Carrinho} />
+            <Stack.Screen name="Ingressos" component={Ingressos} />
+            <Stack.Screen name="Perfil" component={Perfil} />
+            <Stack.Screen name="TabRoute" component={TabRoute} />
+            <Stack.Screen name="Login" component={Login} />
+
+         </Stack.Navigator>
+      </>
    );
 }
