@@ -8,6 +8,7 @@ type RouteApp = {
    Login: undefined;
    EsqueciSenha: undefined;
    CriarConta: undefined;
+   CarrinhoUtilizador: undefined;
 
    // private
    Perfil: undefined;

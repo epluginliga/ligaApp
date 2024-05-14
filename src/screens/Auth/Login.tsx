@@ -21,7 +21,7 @@ const schema = z.object({
    email: z.string().email({
       message: "Email inválido",
    }),
-   password: z.string().min(8, "Mínimo 8 caracteres"),
+   password: z.string().min(4, "Mínimo 4 caracteres"),
 });
 
 type LoginFormInputs = z.input<typeof schema>;
@@ -33,7 +33,7 @@ export function Login() {
       resolver: zodResolver(schema)
    });
 
-   const onSubmit = (data: LoginFormInputs) => console.log(data);
+   const handleLogin = (data: LoginFormInputs) => navigate('CarrinhoUtilizador');
 
    return (
       <GradienteApp>
@@ -58,6 +58,7 @@ export function Login() {
                         control={control}
                         error={errors?.email?.message}
                         autoCapitalize='none'
+                        keyboardType='email-address'
                      />
 
                      <InputPassword
@@ -70,7 +71,7 @@ export function Login() {
                         error={errors?.password?.message}
                      />
 
-                     <Button onPress={handleSubmit(onSubmit)}>
+                     <Button onPress={handleSubmit(handleLogin)}>
                         ENTRAR
                      </Button>
 
