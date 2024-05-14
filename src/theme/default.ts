@@ -46,7 +46,8 @@ const theme = createTheme({
    textVariants: {
       header: {
          color: "black",
-         fontWeight: 'medium',
+         fontWeight: '600',
+         padding: "xs",
          fontSize: 22,
          fontFamily: "Poppins-SemiBold",
       },
@@ -88,7 +89,7 @@ const theme = createTheme({
    },
    card: {
       shadow: {
-         shadowColor: "bege_900",
+         shadowColor: "bege_200",
          shadowOffset: { width: 0, height: 4 },
          shadowOpacity: 0.25,
          shadowRadius: 20,

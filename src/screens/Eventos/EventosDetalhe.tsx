@@ -1,9 +1,10 @@
 import React from 'react';
+import { ScrollView } from 'react-native';
 
 import VStack from '../../components/Views/Vstack';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+
 import { RouteApp } from '../../@types/navigation';
-import { data as eventoDetalhe } from '../../../store/eventoId';
 import { Imagem } from '../../components/Imagem';
 import { Section } from '../../components/Section';
 import { IconCalendario, IconClock, IconPin } from '../../icons';
@@ -12,49 +13,59 @@ import { Button } from '../../components/Button';
 import { Html } from '../../components/Html';
 import { formataData } from '../../utils/utils';
 
+import { data as eventoDetalhe } from '../../../store/eventoId';
+
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export function EventosDetalhe() {
    const { params } = useRoute<EventoDetalheRouteProp>();
    console.log(params.id);
+
    const { navigate } = useNavigation();
 
    return (
-      <>
-         <Layout.Scroll>
-            <VStack mb="md" gap="sm" width="100%">
+      <Layout.Root>
+         <Layout.Header title={eventoDetalhe.nome} />
 
-               <Imagem source={{ uri: eventoDetalhe.path_imagem }} />
+         <ScrollView
+            style={{
+               marginHorizontal: 6,
+            }}
+            contentInsetAdjustmentBehavior='automatic'
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+         >
+            <Imagem source={{ uri: eventoDetalhe.path_imagem }} />
 
-               <Section.Root>
-                  <Section.Title>{eventoDetalhe.nome}</Section.Title>
+            <Section.Root>
+               <Section.Title>{eventoDetalhe.nome}</Section.Title>
 
-                  <Section.SubTitle iconLeft={<IconCalendario />}>
-                     {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
+               <Section.SubTitle iconLeft={<IconCalendario />}>
+                  {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
+               </Section.SubTitle>
+
+               <Section.SubTitle iconLeft={<IconClock />}>
+                  {formataData(eventoDetalhe.data_evento).hora()}
+               </Section.SubTitle>
+
+               <VStack gap="lg">
+                  <Section.SubTitle iconLeft={<IconPin />}>
+                     {eventoDetalhe.nome_local + '\n'}
+                     <Section.Span>
+                        {eventoDetalhe.logradouro}
+                     </Section.Span>
                   </Section.SubTitle>
 
-                  <Section.SubTitle iconLeft={<IconClock />}>
-                     {formataData(eventoDetalhe.data_evento).hora()}
-                  </Section.SubTitle>
+                  <Html source={eventoDetalhe.descricao} />
+               </VStack>
 
-                  <VStack gap="lg">
-                     <Section.SubTitle iconLeft={<IconPin />}>
-                        {eventoDetalhe.nome_local + '\n'}
-                        <Section.Span>
-                           {eventoDetalhe.logradouro}
-                        </Section.Span>
-                     </Section.SubTitle>
+            </Section.Root>
 
-                     <Html source={eventoDetalhe.descricao} />
-                  </VStack>
+         </ScrollView>
 
-               </Section.Root>
-
-            </VStack>
-         </Layout.Scroll>
          <VStack p="sm">
             <Button onPress={() => navigate('Login')}>Comprar</Button>
          </VStack>
-      </>
+      </Layout.Root>
    )
 }

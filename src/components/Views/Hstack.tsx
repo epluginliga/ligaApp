@@ -10,7 +10,7 @@ export type HStack = BoxProps<Theme> & {
 
 function HStack({ children, ...props }: HStack) {
    return (
-      <Box flex={1} flexDirection='row' gap='sm' {...props}>{children}</Box>
+      <Box flexDirection='row' gap='sm' {...props}>{children}</Box>
    );
 }
 export default HStack;

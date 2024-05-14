@@ -7,5 +7,5 @@ type Section = TextProps<Theme> & {
    children: string,
 }
 export function SectionTitle({ children, ...props }: Section) {
-   return <Text variant='header' {...props}>{children}</Text>
+   return <Text variant='header'  {...props}>{children}</Text>
 }

@@ -17,19 +17,6 @@ import { CriarConta } from '../screens/Auth/CriarConta';
 const Stack = createNativeStackNavigator();
 
 export function RouteDesLogado() {
-   const defaultHeader: NativeStackNavigationOptions = {
-      headerTitleStyle: {
-         fontWeight: "400",
-         fontSize: 16,
-         fontFamily: "Poppins-SemiBold",
-
-      },
-      headerShadowVisible: false,
-      headerShown: true,
-      headerStyle: {
-         backgroundColor: "#FCFCFC",
-      },
-   };
 
    return (
       <>
@@ -41,30 +28,16 @@ export function RouteDesLogado() {
                backgroundColor: "#FCFCFC",
             }
          }}>
-            <Stack.Screen name="Eventos" component={Eventos} options={{
-            }} />
-            <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} options={{
-               title: "Detalhe do evento",
-               ...defaultHeader
-            }} />
+            <Stack.Screen name="Eventos" component={Eventos} />
+            <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
             <Stack.Screen name="Carrinho" component={Carrinho} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="Perfil" component={Perfil} />
             <Stack.Screen name="TabRoute" component={TabRoute} />
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha}
-               options={{
-                  title: "Recuperar Senha",
-                  ...defaultHeader
-               }}
-            />
-            <Stack.Screen name="CriarConta" component={CriarConta}
-               options={{
-                  title: "Cadastro",
-                  ...defaultHeader
-               }}
-            />
+            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+            <Stack.Screen name="CriarConta" component={CriarConta} />
          </Stack.Navigator>
       </>
    );

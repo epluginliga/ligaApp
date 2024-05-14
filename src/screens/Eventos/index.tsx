@@ -32,8 +32,8 @@ export function Eventos() {
                flex={2}
                justifyContent="space-evenly"
                pb="sm">
-               <Card.Title marginVertical="md">{item.nome}</Card.Title>
-               <HStack marginRight="sm">
+               <Card.Title marginVertical="sm">{item.nome}</Card.Title>
+               <HStack gap="xl">
                   <Card.SubTitle
                      leftIcon={<IconPin size={16} />}
                   >
@@ -76,6 +76,6 @@ export function Eventos() {
          ListFooterComponent={<VStack height={20} />}
          showsVerticalScrollIndicator={false}
       />
-   )
+   );
 }
 

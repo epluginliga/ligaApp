@@ -12,11 +12,11 @@ export const buttonVariants = {
       backgroundColor: "secondary",
       borderRadius: 10,
       alignItems: "center",
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       paddingHorizontal: "lg",
       padding: 'sm',
       flexDirection: "row",
-      gap: "xl5",
+      gap: "lg",
    },
 
 }

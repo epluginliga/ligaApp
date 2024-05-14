@@ -12,9 +12,15 @@ export function LayoutScroll({ children, topFixed }: LayoutScroll) {
       <>
          {topFixed && topFixed}
          <ScrollView
-            style={{ marginHorizontal: 6 }}
+            style={{
+               marginHorizontal: 6,
+            }}
+            contentInsetAdjustmentBehavior='automatic'
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+               minHeight: "100%"
+            }}
          >
             {children}
          </ScrollView>

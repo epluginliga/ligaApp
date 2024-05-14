@@ -10,7 +10,6 @@ import { InputText } from '../../components/Inputs/Text';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Text from '../../components/Text';
 import { IconFingerPrint } from '../../icons/FingerPrint';
 
 const schema = z.object({
@@ -35,18 +34,16 @@ export function CriarConta() {
    });
 
    const onSubmit = (data: LoginFormInputs) => console.log(data);
-   const window = Dimensions.get("window");
 
    return (
       <Layout.Root>
          <Layout.Keyboard>
+
+            <Layout.Header title='Criar Conta' />
+
             <Layout.Scroll>
-               <VStack gap="lg" p="sm" minHeight={window.height}>
-
-
-
-                  <VStack gap="lg">
-
+               <VStack gap="lg" p="sm">
+                  <VStack gap="lg" flex={1}>
                      <InputText
                         label="Nome"
                         iconLeft={<IconEnvelope size={24} />}
@@ -118,9 +115,9 @@ export function CriarConta() {
                      />
                   </VStack>
 
-                  <VStack flex={1} gap="md">
+                  <VStack gap="md">
                      <Button onPress={handleSubmit(onSubmit)} >
-                        RECUPERAR
+                        CRIAR CONTA
                      </Button>
                   </VStack>
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, StatusBar, StyleSheet } from 'react-native';
 
 export type LayoutKeyboard = {
    children: React.ReactNode;
@@ -10,7 +10,7 @@ export function LayoutKeyboard({ children }: LayoutKeyboard) {
       <KeyboardAvoidingView
          behavior={Platform.OS === "ios" ? "padding" : "height"}
          style={styles.container}
-         keyboardVerticalOffset={40}
+         keyboardVerticalOffset={Platform.OS === "ios" ? 60 : StatusBar.currentHeight}
       >
          {children}
       </KeyboardAvoidingView>

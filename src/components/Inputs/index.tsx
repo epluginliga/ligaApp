@@ -22,10 +22,19 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
    if (variant === "solid") {
       return (
 
-         <VStack paddingVertical="sm" gap="sm" flex={1} >
+         <VStack paddingVertical="xs" gap="sm" >
             {label && <Text variant="header2" color='white'>{label}</Text>}
 
-            <HStack alignItems="center" paddingVertical="sm" paddingHorizontal="md" backgroundColor='purple_300' width="100%" overflow='hidden' borderRadius={12}>
+            <HStack
+               alignItems="center"
+               paddingVertical="sm"
+               paddingHorizontal="md"
+               backgroundColor='purple_300'
+               width="100%"
+               overflow='hidden'
+               borderRadius={12}
+               minHeight={55}
+            >
                {iconLeft && iconLeft}
 
                {children}
@@ -40,7 +49,7 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
    }
 
    return (
-      <VStack gap="xs" flex={1} >
+      <VStack gap="xs" flex={1}>
          {label && <Text variant="labelInput">{label}</Text>}
 
          <HStack
@@ -52,6 +61,7 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
             borderRadius={12}
             borderWidth={1}
             borderColor='primary'
+            minHeight={55}
          >
             {iconLeft && iconLeft}
 

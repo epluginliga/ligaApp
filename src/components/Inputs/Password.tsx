@@ -45,6 +45,7 @@ export function InputPassword({ name, ...rest }: InputPassworld) {
                      onChangeText={(text) => onChange(text)}
                      value={value}
                      onBlur={onBlur}
+                     autoCapitalize='none'
                      style={{
                         fontSize: theme.spacing.md,
                         color: theme.colors.white,
