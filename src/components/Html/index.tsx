@@ -18,10 +18,12 @@ export function Html({ source, size }: Html) {
             h3: {
                marginBottom: 0,
                fontSize: "18px",
+               color: "#1F1F1F",
             },
             h5: {
                fontSize: "15px",
                marginBottom: 0,
+               color: "#1F1F1F",
             }
          }}
          contentWidth={size || width}

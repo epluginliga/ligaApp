@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dimensions, SafeAreaView } from 'react-native'
 import HStack from '../Hstack'
-import { IconArrowLeft } from '../../../icons/Arrow'
+import { IconArrowLeft } from '../../../icons/IconArrow'
 import VStack from '../Vstack'
 
 type Layout = {

@@ -5,18 +5,17 @@ export const buttonVariants = {
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: "center",
-      padding: "sm",
-      maxWidth: '60%',
+      maxWidth: '75%',
    },
    defaults: {
       backgroundColor: "secondary",
       borderRadius: 10,
       alignItems: "center",
-      justifyContent: 'center',
+      justifyContent: 'flex-end',
       paddingHorizontal: "lg",
       padding: 'sm',
       flexDirection: "row",
-      gap: "lg",
+      gap: "xl5",
    },
 
 }

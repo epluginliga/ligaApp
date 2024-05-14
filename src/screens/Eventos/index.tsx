@@ -7,8 +7,8 @@ import { Card } from "../../components/Card";
 import VStack from "../../components/Views/Vstack";
 import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
-import { IconPin } from "../../icons";
 import { Carrocel } from "../../components/Carrocel";
+import { Icon } from "../../icons";
 
 export type ItemData = {
    item: typeof data.data[0];
@@ -23,6 +23,7 @@ export function Eventos() {
             marginHorizontal="sm"
             pr="xs"
             onPress={() => navigate.navigate("EventosDetalhe", { id: item.id })}>
+
             <Card.Image
                flex={1}
                height={88}
@@ -32,11 +33,12 @@ export function Eventos() {
                flex={2}
                justifyContent="space-evenly"
                pb="sm">
+
                <Card.Title marginVertical="sm">{item.nome}</Card.Title>
-               <HStack gap="xl">
-                  <Card.SubTitle
-                     leftIcon={<IconPin size={16} />}
-                  >
+
+               <HStack justifyContent="space-around">
+
+                  <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
                      {item.nome_local} {'\n'}
                      <Card.Span>
                         {item.cidade} | {item.estado} - {item?.hora_evento + 'h' || 'hora não definida'}

@@ -1,11 +1,9 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { IconCalendario, IconHome, IconUser } from '../icons';
+import { Icon } from '../icons';
 import { Perfil } from '../screens/Perfil';
-import { RouteLogado } from './Logado';
 import { Ingressos } from '../screens/Ingressos';
-import { RouteDesLogado } from './Deslogado';
 import { Eventos } from '../screens/Eventos';
 
 const Tab = createBottomTabNavigator();
@@ -32,22 +30,22 @@ export function TabRoute() {
                switch (route.name) {
                   case 'Eventos':
                      return focused ? (
-                        <IconHome />
+                        <Icon.Home />
                      ) : (
-                        <IconHome />
+                        <Icon.Home />
                      );
 
                   case 'IngressosTab':
                      return focused ? (
-                        <IconCalendario />
+                        <Icon.Calendario />
                      ) : (
-                        <IconCalendario />
+                        <Icon.Calendario />
                      );
                   case 'Perfil':
                      return focused ? (
-                        <IconUser />
+                        <Icon.User />
                      ) : (
-                        <IconUser />
+                        <Icon.User />
                      );
                }
             },

@@ -4,10 +4,9 @@ import { useForm } from 'react-hook-form';
 import { GradienteApp } from '../../components/GradienteApp';
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
-import { IconEnvelope } from '../../icons';
 import { InputPassword } from '../../components/Inputs/Password';
 import VStack from '../../components/Views/Vstack';
-import { IconFingerPrint } from '../../icons/FingerPrint';
+import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputText } from '../../components/Inputs/Text';
 
 import Text from '../../components/Text';
@@ -16,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Icon } from '../../icons';
 
 const schema = z.object({
    email: z.string().email({
@@ -52,7 +52,7 @@ export function Login() {
                      <InputText
                         variant='solid'
                         label="E-mail"
-                        iconLeft={<IconEnvelope color='#fff' size={24} />}
+                        iconLeft={<Icon.Envelope color='#fff' size={24} />}
                         name='email'
                         placeholder='seu@email.com'
                         control={control}
@@ -81,8 +81,8 @@ export function Login() {
 
                   <VStack gap="md" mb="sm">
                      <Pressable onPress={() => navigate('CriarConta')}>
-                        <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta{' '}
-                           <Text fontSize={14} fontWeight="900">
+                        <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
+                           <Text color='white' fontSize={16} fontWeight="900">
                               Cadastre-se
                            </Text>
                         </Text>

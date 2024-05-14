@@ -1,6 +1,6 @@
 import React from 'react'
 import HStack from '../Hstack'
-import { IconArrowLeft } from '../../../icons/Arrow'
+import { IconArrowLeft } from '../../../icons/IconArrow'
 import Text from '../../Text'
 import { Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'

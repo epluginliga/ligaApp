@@ -7,7 +7,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { RouteApp } from '../../@types/navigation';
 import { Imagem } from '../../components/Imagem';
 import { Section } from '../../components/Section';
-import { IconCalendario, IconClock, IconPin } from '../../icons';
+import { Icon } from '../../icons';
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
 import { Html } from '../../components/Html';
@@ -40,16 +40,16 @@ export function EventosDetalhe() {
             <Section.Root>
                <Section.Title>{eventoDetalhe.nome}</Section.Title>
 
-               <Section.SubTitle iconLeft={<IconCalendario />}>
+               <Section.SubTitle iconLeft={<Icon.Calendario />}>
                   {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
                </Section.SubTitle>
 
-               <Section.SubTitle iconLeft={<IconClock />}>
+               <Section.SubTitle iconLeft={<Icon.Clock />}>
                   {formataData(eventoDetalhe.data_evento).hora()}
                </Section.SubTitle>
 
-               <VStack gap="lg">
-                  <Section.SubTitle iconLeft={<IconPin />}>
+               <VStack gap="xs">
+                  <Section.SubTitle iconLeft={<Icon.Pin />}>
                      {eventoDetalhe.nome_local + '\n'}
                      <Section.Span>
                         {eventoDetalhe.logradouro}

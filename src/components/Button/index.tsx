@@ -1,8 +1,16 @@
 import React from 'react'
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { SpacingProps, VariantProps, createRestyleComponent, createText, createVariant, spacing } from '@shopify/restyle';
+import {
+   SpacingProps,
+   VariantProps,
+   createRestyleComponent,
+   createText,
+   createVariant,
+   spacing
+} from '@shopify/restyle';
+
 import { Theme } from '../../theme/default';
-import { Icon, IconCalendario } from '../../icons';
+import { Icon } from '../../icons';
 
 const Text = createText<Theme>();
 
@@ -18,7 +26,6 @@ const Box = createRestyleComponent<CustomButton, Theme>([
 ]);
 
 export function Button({ children, onPress, iconLeft, iconRight, ...props }: CustomButton) {
-
    return (
       <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
          <Box  {...props}>
@@ -27,7 +34,7 @@ export function Button({ children, onPress, iconLeft, iconRight, ...props }: Cus
             {typeof children !== "string" ? (
                children
             ) : (
-               <Text variant={props.variant === "link" ? 'botaoLink' : "header"} color='white'>
+               <Text variant={props.variant === "link" ? 'botaoLink' : "botaoDefault"} color='white'>
                   {children}
                </Text>
             )}
@@ -35,6 +42,5 @@ export function Button({ children, onPress, iconLeft, iconRight, ...props }: Cus
             {props.variant !== "link" ? iconLeft ? iconLeft : <Icon.ArrowRight size={24} color='#fff' /> : null}
          </Box>
       </TouchableOpacity>
-
    )
 }

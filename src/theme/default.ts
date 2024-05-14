@@ -15,11 +15,11 @@ const palette = {
    greenPrimary: '#0ECD9D',
    greenDark: '#0A906E',
 
-   black: '##1F1F1F',
+   black: '#1F1F1F',
    white: '#FFFFFF',
    bege: '#E0E0E0',
    bege_200: '#C2C2C2',
-   bege_900: '##868686',
+   bege_900: '#868686',
 };
 
 const theme = createTheme({
@@ -47,6 +47,7 @@ const theme = createTheme({
       header: {
          color: "black",
          fontWeight: '600',
+         lineHeight: 24,
          padding: "xs",
          fontSize: 22,
          fontFamily: "Poppins-SemiBold",
@@ -85,6 +86,12 @@ const theme = createTheme({
          fontSize: 14,
          fontFamily: "Poppins-Regular",
          margin: "0",
+      },
+      botaoDefault: {
+         color: "black",
+         fontWeight: '600',
+         fontSize: 22,
+         fontFamily: "Poppins-SemiBold",
       }
    },
    card: {

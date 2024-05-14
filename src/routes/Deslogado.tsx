@@ -22,12 +22,14 @@ export function RouteDesLogado() {
       <>
          <StatusBarApp />
 
-         <Stack.Navigator initialRouteName="TabRoute" screenOptions={{
-            headerShown: false,
-            contentStyle: {
-               backgroundColor: "#FCFCFC",
-            }
-         }}>
+         <Stack.Navigator
+            initialRouteName="TabRoute"
+            screenOptions={{
+               headerShown: false,
+               contentStyle: {
+                  backgroundColor: "#FCFCFC",
+               }
+            }}>
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />

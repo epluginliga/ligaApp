@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
-import { Dimensions, FlatList, ImageBackground, StyleSheet, View } from 'react-native';
+import { Dimensions, FlatList, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { data } from '../../../store/eventos';
 import VStack from '../Views/Vstack';
 import Text from '../Text';
 import { Button } from '../Button';
-import { useNavigation } from '@react-navigation/native';
 import { ItemData } from '../../screens/Eventos';
 import { Imagem } from '../Imagem';
 
@@ -30,12 +30,13 @@ export function Carrocel({ }: Carrocel) {
          []
       ),
    };
+
    function SlideImage({ item }: ItemData) {
 
       return (
          <VStack position='relative' overflow='hidden' borderRadius={10}>
             <Imagem source={{ uri: item.path_imagem }} >
-               <VStack zIndex={999} justifyContent="space-between" >
+               <VStack zIndex={999} justifyContent="space-between" flex={1}>
                   <VStack>
                      <Text color="white">qui - <Text fontWeight="900">{item.dia_evento}</Text> {item.mes_evento}</Text>
                      <Text fontSize={26} fontWeight="900" color="white">{item.nome}</Text>
@@ -54,7 +55,6 @@ export function Carrocel({ }: Carrocel) {
                   </Button>
                </VStack>
             </Imagem>
-
          </VStack>
       )
    }

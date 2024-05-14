@@ -4,13 +4,13 @@ import { Dimensions } from 'react-native';
 
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
-import { IconCalendario, IconEnvelope } from '../../icons';
+import { Icon } from '../../icons';
 import VStack from '../../components/Views/Vstack';
 import { InputText } from '../../components/Inputs/Text';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { IconFingerPrint } from '../../icons/FingerPrint';
+import { IconFingerPrint } from '../../icons/IconFingerPrint';
 
 const schema = z.object({
    nome: z.string(),
@@ -46,7 +46,7 @@ export function CriarConta() {
                   <VStack gap="lg" flex={1}>
                      <InputText
                         label="Nome"
-                        iconLeft={<IconEnvelope size={24} />}
+                        iconLeft={<Icon.Envelope size={24} />}
                         name='nome'
                         placeholder='Digite seu nome'
                         control={control}
@@ -55,7 +55,7 @@ export function CriarConta() {
 
                      <InputText
                         label="E-mail"
-                        iconLeft={<IconEnvelope size={24} />}
+                        iconLeft={<Icon.Envelope size={24} />}
                         name='email'
                         placeholder='seu@email.com'
                         control={control}
@@ -64,7 +64,7 @@ export function CriarConta() {
 
                      <InputText
                         label="CPF"
-                        iconLeft={<IconEnvelope size={24} />}
+                        iconLeft={<Icon.Envelope size={24} />}
                         name='cpf'
                         placeholder='xxx.xxx.xxx-xx'
                         control={control}
@@ -73,7 +73,7 @@ export function CriarConta() {
 
                      <InputText
                         label="Telefone"
-                        iconLeft={<IconEnvelope size={24} />}
+                        iconLeft={<Icon.Envelope size={24} />}
                         name='telefone'
                         placeholder='(00) 00000-0000'
                         control={control}
@@ -82,7 +82,7 @@ export function CriarConta() {
 
                      <InputText
                         label="Sexo"
-                        iconLeft={<IconEnvelope size={24} />}
+                        iconLeft={<Icon.Envelope size={24} />}
                         name='sexo'
                         placeholder='Selecione o Sexo'
                         control={control}
@@ -91,7 +91,7 @@ export function CriarConta() {
 
                      <InputText
                         label="Data de nascimento"
-                        iconLeft={<IconCalendario size={24} />}
+                        iconLeft={<Icon.Calendario size={24} />}
                         name='nascimento'
                         placeholder='00/00/0000'
                         control={control}

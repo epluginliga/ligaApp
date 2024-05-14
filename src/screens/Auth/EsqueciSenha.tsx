@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
-import { IconEnvelope } from '../../icons';
+import { Icon } from '../../icons';
 import VStack from '../../components/Views/Vstack';
 import { InputText } from '../../components/Inputs/Text';
 
@@ -44,7 +44,7 @@ export function EsqueciSenha() {
                   <VStack gap="md">
                      <InputText
                         label="E-mail"
-                        iconLeft={<IconEnvelope size={24} />}
+                        iconLeft={<Icon.Envelope size={24} />}
                         name='email'
                         placeholder='seu@email.com'
                         control={control}

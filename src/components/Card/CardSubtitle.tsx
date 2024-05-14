@@ -13,7 +13,7 @@ export type CardSubtitle = TextProps<Theme> & {
 export function CardSubTitle({ children, leftIcon, rightIcon, ...rest }: CardSubtitle) {
    if (leftIcon) {
       return (
-         <HStack>
+         <HStack alignItems='center'>
             {leftIcon}
             <Text variant="header2" pt='xs' {...rest}>
                {children}
@@ -23,7 +23,5 @@ export function CardSubTitle({ children, leftIcon, rightIcon, ...rest }: CardSub
       )
    }
 
-   return (
-      <Text variant="header2" {...rest}>{children}</Text>
-   )
+   return <Text variant="header2" {...rest}>{children}</Text>
 }
