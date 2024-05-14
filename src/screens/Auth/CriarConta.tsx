@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Dimensions } from 'react-native';
 
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
@@ -11,6 +10,7 @@ import { InputText } from '../../components/Inputs/Text';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { IconFingerPrint } from '../../icons/IconFingerPrint';
+import { InputPassword } from '../../components/Inputs/Password';
 
 const schema = z.object({
    nome: z.string(),
@@ -46,7 +46,7 @@ export function CriarConta() {
                   <VStack gap="lg" flex={1}>
                      <InputText
                         label="Nome"
-                        iconLeft={<Icon.Envelope size={24} />}
+                        iconLeft={<Icon.User size={24} />}
                         name='nome'
                         placeholder='Digite seu nome'
                         control={control}
@@ -64,7 +64,7 @@ export function CriarConta() {
 
                      <InputText
                         label="CPF"
-                        iconLeft={<Icon.Envelope size={24} />}
+                        iconLeft={<Icon.AddressCard size={24} />}
                         name='cpf'
                         placeholder='xxx.xxx.xxx-xx'
                         control={control}
@@ -73,7 +73,7 @@ export function CriarConta() {
 
                      <InputText
                         label="Telefone"
-                        iconLeft={<Icon.Envelope size={24} />}
+                        iconLeft={<Icon.PhoneFlipe size={24} />}
                         name='telefone'
                         placeholder='(00) 00000-0000'
                         control={control}
@@ -82,7 +82,7 @@ export function CriarConta() {
 
                      <InputText
                         label="Sexo"
-                        iconLeft={<Icon.Envelope size={24} />}
+                        iconLeft={<Icon.VenusMars size={24} />}
                         name='sexo'
                         placeholder='Selecione o Sexo'
                         control={control}
@@ -97,18 +97,18 @@ export function CriarConta() {
                         control={control}
                         error={errors?.email?.message}
                      />
-                     <InputText
+                     <InputPassword
                         label="Senha"
                         iconLeft={<IconFingerPrint size={24} />}
-                        name='email'
+                        name='senha'
                         placeholder='seu@email.com'
                         control={control}
                         error={errors?.email?.message}
                      />
-                     <InputText
+                     <InputPassword
                         label="Confirme a sua senha"
                         iconLeft={<IconFingerPrint size={24} />}
-                        name='email'
+                        name='confirmar_senha'
                         placeholder='seu@email.com'
                         control={control}
                         error={errors?.email?.message}

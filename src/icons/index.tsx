@@ -4,8 +4,11 @@ import { IconHome } from "./IconHome";
 import { IconCalendario } from "./IconCalendario";
 import { IconPin } from "./IconPin";
 import { IconUser } from "./IconUsers";
-import { IconEnvelope } from "./IconEnvelope";
+import { IconEnvelope, IconEnvelopeSolid } from "./IconEnvelope";
 import { IconClock } from "./IconClock";
+import { IconAddressCard } from "./IconAddressCard";
+import { IconPhoneFlipe, IconPhoneFlipeSolid } from "./IconPhoneFlipe";
+import { IconVenusMars } from "./IconVenusMars";
 
 export const Icon = {
    Eye: IconEye,
@@ -17,7 +20,12 @@ export const Icon = {
    Pin: IconPin,
    User: IconUser,
    Envelope: IconEnvelope,
+   EnvelopeSolid: IconEnvelopeSolid,
    Clock: IconClock,
+   AddressCard: IconAddressCard,
+   PhoneFlipe: IconPhoneFlipe,
+   PhoneFlipeSolid: IconPhoneFlipeSolid,
+   VenusMars: IconVenusMars,
 }
 
 export type Icon = {

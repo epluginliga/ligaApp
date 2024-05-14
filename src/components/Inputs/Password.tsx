@@ -30,7 +30,9 @@ export function InputPassword({ name, ...rest }: InputPassworld) {
       <Input {...rest}
          iconRight={(
             <Pressable onPress={() => setHidde(!hidde)}>
-               {hidde ? <Icon.Eye color='#fff' size={24} /> : <Icon.EyeSlash color="#fff" size={24} />}
+               {hidde ? (
+                  <Icon.Eye color={rest.variant ? theme.colors.white : theme.colors.secondary} size={24} />
+               ) : <Icon.EyeSlash color={rest.variant ? theme.colors.white : theme.colors.secondary} size={24} />}
             </Pressable>
          )}>
          <Controller

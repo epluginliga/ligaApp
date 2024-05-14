@@ -52,7 +52,7 @@ export function Login() {
                      <InputText
                         variant='solid'
                         label="E-mail"
-                        iconLeft={<Icon.Envelope color='#fff' size={24} />}
+                        iconLeft={<Icon.EnvelopeSolid color='#fff' size={24} />}
                         name='email'
                         placeholder='seu@email.com'
                         control={control}
