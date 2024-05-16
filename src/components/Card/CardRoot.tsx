@@ -13,6 +13,7 @@ import { Theme } from '../../theme/default';
 export type CardRoot = BoxProps<Theme> & {
    children: React.ReactNode | React.ReactNode[];
    onPress?(): void;
+   variant?: "shadow" | "border"
 }
 
 const Box = createBox<Theme>();
@@ -21,7 +22,7 @@ const Card = createRestyleComponent<
    Theme
 >([createVariant({ themeKey: 'card' })], Box);
 
-export function CardRoot({ children, onPress, ...rest }: CardRoot) {
+export function CardRoot({ children, onPress, variant = 'shadow', ...rest }: CardRoot) {
    return (
       <Pressable onPress={() => onPress?.()}>
          <Card
@@ -29,7 +30,7 @@ export function CardRoot({ children, onPress, ...rest }: CardRoot) {
             flex={1}
             borderRadius={12}
             backgroundColor='white'
-            variant='shadow'
+            variant={variant}
             justifyContent="space-between"
             alignItems='center'
             gap='sm'

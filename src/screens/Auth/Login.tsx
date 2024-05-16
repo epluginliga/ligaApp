@@ -30,7 +30,11 @@ export function Login() {
    const { navigate } = useNavigation();
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
-      resolver: zodResolver(schema)
+      resolver: zodResolver(schema),
+      defaultValues: {
+         email: "jean@gmail.com",
+         password: "1234567",
+      }
    });
 
    const handleLogin = (data: LoginFormInputs) => navigate('CarrinhoUtilizador');

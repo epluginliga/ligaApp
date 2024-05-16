@@ -17,7 +17,7 @@ const palette = {
 
    black: '#1F1F1F',
    white: '#FFFFFF',
-   bege: '#E0E0E0',
+   bege: '#F7F7F7',
    bege_200: '#C2C2C2',
    bege_900: '#868686',
 };
@@ -33,6 +33,7 @@ const theme = createTheme({
       buttonPrimaryBackground: palette.primary,
    },
    spacing: {
+      none: "0",
       0: 0,
       xs: 2,
       sm: 8,
@@ -47,7 +48,7 @@ const theme = createTheme({
       header: {
          color: "black",
          fontWeight: '600',
-         lineHeight: 24,
+         // lineHeight: 24,
          padding: "xs",
          fontSize: 22,
          fontFamily: "Poppins-SemiBold",
@@ -109,6 +110,18 @@ const theme = createTheme({
          shadowOpacity: 0.25,
          shadowRadius: 20,
          elevation: 5,
+      },
+      border: {
+         flexDirection: "row",
+         backgroundColor: "bege",
+         alignItems: "center",
+         paddingHorizontal: "md",
+         paddingVertical: "sm",
+         width: "100%",
+         overflow: 'hidden',
+         borderRadius: 12,
+         borderWidth: 1,
+         borderColor: 'primary'
       }
    },
    buttonVariants,

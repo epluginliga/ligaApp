@@ -77,35 +77,29 @@ export const EventosDetalhe = () => {
                </VStack>
             </VStack>
 
-            <VStack marginHorizontal="sm">
-               <Section.Root>
-                  <Section.Title>{eventoDetalhe.nome}</Section.Title>
+            <Section.Root>
+               <Section.Title>{eventoDetalhe.nome}</Section.Title>
 
-                  <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                     {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
+               <Section.SubTitle iconLeft={<Icon.Calendario />}>
+                  {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
+               </Section.SubTitle>
+
+               <Section.SubTitle iconLeft={<Icon.Clock />}>
+                  {formataData(eventoDetalhe.data_evento).hora()}
+               </Section.SubTitle>
+
+               <VStack gap="xs">
+                  <Section.SubTitle iconLeft={<Icon.Pin />}>
+                     {eventoDetalhe.nome_local + '\n'}
+                     <Section.Span>
+                        {eventoDetalhe.logradouro}
+                     </Section.Span>
                   </Section.SubTitle>
 
-                  <Section.SubTitle iconLeft={<Icon.Clock />}>
-                     {formataData(eventoDetalhe.data_evento).hora()}
-                  </Section.SubTitle>
+                  <Html source={eventoDetalhe.descricao} />
 
-                  <VStack gap="xs">
-                     <Section.SubTitle iconLeft={<Icon.Pin />}>
-                        {eventoDetalhe.nome_local + '\n'}
-                        <Section.Span>
-                           {eventoDetalhe.logradouro}
-                        </Section.Span>
-                     </Section.SubTitle>
-
-                     <Html source={eventoDetalhe.descricao} />
-                     <Html source={eventoDetalhe.descricao} />
-                     <Html source={eventoDetalhe.descricao} />
-                     <Html source={eventoDetalhe.descricao} />
-                     <Html source={eventoDetalhe.descricao} />
-
-                  </VStack>
-               </Section.Root>
-            </VStack>
+               </VStack>
+            </Section.Root>
          </Animated.ScrollView>
 
          <VStack position="absolute" justifyContent='center' width="100%" bottom={10}>

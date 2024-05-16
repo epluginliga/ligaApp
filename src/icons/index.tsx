@@ -10,6 +10,8 @@ import { IconAddressCard } from "./IconAddressCard";
 import { IconPhoneFlipe, IconPhoneFlipeSolid } from "./IconPhoneFlipe";
 import { IconVenusMars } from "./IconVenusMars";
 import { IconShare } from "./IconShare";
+import { IconMinus } from "./IconMinus";
+import { IconPlus } from "./IconPlus";
 
 export const Icon = {
    Eye: IconEye,
@@ -28,6 +30,8 @@ export const Icon = {
    PhoneFlipeSolid: IconPhoneFlipeSolid,
    VenusMars: IconVenusMars,
    Share: IconShare,
+   Minus: IconMinus,
+   Plus: IconPlus,
 }
 
 export type Icon = {

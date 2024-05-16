@@ -37,8 +37,8 @@ export function Carrocel({ }: Carrocel) {
          <VStack position='relative' overflow='hidden' borderRadius={10}>
             <Imagem source={{ uri: item.path_imagem }} >
                <VStack zIndex={999} justifyContent="space-between" flex={1}>
-                  <VStack>
-                     <Text color="white">qui - <Text fontWeight="900">{item.dia_evento}</Text> {item.mes_evento}</Text>
+                  <VStack gap="xs">
+                     <Text color="white">qui - <Text color='white' fontWeight="900">{item.dia_evento}</Text> {item.mes_evento}</Text>
                      <Text fontSize={26} fontWeight="900" color="white">{item.nome}</Text>
                      <Text fontSize={16} color="white">
                         <Text fontWeight="900" color="white">{item.cidade} - {item.estado}</Text> | {item.nome_local}
@@ -60,19 +60,23 @@ export function Carrocel({ }: Carrocel) {
    }
 
    return (
-      <FlatList
-         style={{ paddingVertical: 4, paddingLeft: 5 }}
-         ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-         nestedScrollEnabled
-         pagingEnabled
-         showsHorizontalScrollIndicator={false}
-         horizontal={true}
-         snapToAlignment="start"
-         decelerationRate="fast"
-         data={[data.data[0]]}
-         renderItem={SlideImage}
-         {...flatListOptimizationProps}
-      />
+      // <FlatList
+      //    style={{ paddingVertical: 4, paddingLeft: 5 }}
+      //    ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+      //    nestedScrollEnabled
+      //    pagingEnabled
+      //    showsHorizontalScrollIndicator={false}
+      //    horizontal={true}
+      //    snapToAlignment="start"
+      //    decelerationRate="fast"
+      //    data={[data.data[0]]}
+      //    renderItem={SlideImage}
+      //    {...flatListOptimizationProps}
+      // />
+      <VStack paddingVertical="xs" paddingHorizontal="sm">
+         <SlideImage item={data.data[0]} />
+
+      </VStack>
    );
 }
 
