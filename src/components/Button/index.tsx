@@ -29,7 +29,7 @@ export function Button({ children, onPress, iconLeft, iconRight, ...props }: Cus
    return (
       <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
          <Box  {...props}>
-            {iconRight && iconRight}
+            {/* {iconRight && iconRight} */}
 
             {typeof children !== "string" ? (
                children

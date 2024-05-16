@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable } from 'react-native';
+import { ImageBackground, Pressable } from 'react-native';
 import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
@@ -29,23 +29,40 @@ export const EventosDetalhe = () => {
       },
    });
 
+   // const animatedStyles = useAnimatedStyle(() => {
+   //    return {
+   //       opacity: scrollY.value / 100,
+   //       // transform: [{ scale: Math.max(1 - scrollY.value / 800, 0.5) }],
+   //    };
+   // });
+
    const animatedStyles = useAnimatedStyle(() => {
-      return {
-         transform: [{ scale: Math.max(1 - scrollY.value / 800, 0.5) }],
-      };
+      const height = interpolate(scrollY.value, [0, 200], [300, 100], "clamp");
+      const opacity = interpolate(scrollY.value, [0, 200], [1, 0], "clamp");
+      return { height, opacity };
    });
+
 
    const textStyles = useAnimatedStyle(() => {
       const opacity = interpolate(scrollY.value, [0, 50], [0, 1], 'clamp');
-      const height = interpolate(scrollY.value, [0, 50], [0, 60], 'clamp');
+      // const height = interpolate(scrollY.value, [0, 50], [0, 60], 'clamp');
 
-      return { opacity, height };
+      return { opacity };
    });
 
    return (
       <>
-         <Animated.View style={[textStyles]}>
-            <Layout.Header title={eventoDetalhe.nome} rigth={(
+         <Animated.View style={[{
+            width: '100%',
+            position: "absolute",
+            top: 0,
+            zIndex: 999,
+            left: 0,
+            right: 0,
+            backgroundColor: "#fff"
+         }, textStyles]}>
+
+            <Layout.Header title='ola' rigth={(
                <Pressable>
                   <IconShare />
                </Pressable>
@@ -58,15 +75,8 @@ export const EventosDetalhe = () => {
             scrollEventThrottle={16}
             style={{ position: "relative" }}
          >
-            <VStack backgroundColor='black'>
-               <Animated.Image
-                  style={[{
-                     height: 200,
-                     width: '100%',
-                  }, animatedStyles]}
-                  source={{ uri: eventoDetalhe.path_imagem }}
-               />
-
+            <Animated.View style={[animatedStyles]}>
+               <ImageBackground style={{ width: "100%", height: 400 }} source={{ uri: eventoDetalhe.path_imagem }} />
                <VStack position='absolute' width="100%">
                   <Layout.Header rigth={(
                      <Pressable>
@@ -75,7 +85,7 @@ export const EventosDetalhe = () => {
                   )} />
 
                </VStack>
-            </VStack>
+            </Animated.View>
 
             <Section.Root>
                <Section.Title>{eventoDetalhe.nome}</Section.Title>
@@ -103,7 +113,7 @@ export const EventosDetalhe = () => {
          </Animated.ScrollView>
 
          <VStack position="absolute" justifyContent='center' width="100%" bottom={10}>
-            <Button marginHorizontal="md" onPress={() => navigate('Login')}>Comprar</Button>
+            <Button marginHorizontal="md" onPress={() => navigate('Carrinho')}>Comprar</Button>
          </VStack>
       </>
    );

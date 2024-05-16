@@ -12,7 +12,7 @@ type RouteApp = {
 
    // private
    Perfil: undefined;
-   Carrinho: {};
+   Carrinho: undefined;
    CarrinhoUtilizador: {};
    Ingressos: undefined;
 }

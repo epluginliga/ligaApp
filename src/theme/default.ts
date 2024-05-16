@@ -1,5 +1,7 @@
 import { createTheme } from '@shopify/restyle';
 import { buttonVariants } from './buttonVariants';
+import { textVariants } from './textVariants';
+import { card } from './cardVariants';
 
 const palette = {
    primary: '#F23E17',
@@ -34,7 +36,6 @@ const theme = createTheme({
    },
    spacing: {
       none: "0",
-      0: 0,
       xs: 2,
       sm: 8,
       md: 16,
@@ -43,87 +44,8 @@ const theme = createTheme({
       xl5: 120,
       full: '100%',
    },
-
-   textVariants: {
-      header: {
-         color: "black",
-         fontWeight: '600',
-         // lineHeight: 24,
-         padding: "xs",
-         fontSize: 22,
-         fontFamily: "Poppins-SemiBold",
-      },
-      labelInput: {
-         color: "primary",
-         fontWeight: 'regular',
-         fontSize: 16,
-         fontFamily: "Poppins-Regular",
-         margin: "0",
-         padding: "0",
-      },
-      header2: {
-         color: "black",
-         fontWeight: "700",
-         fontSize: 14,
-         fontFamily: "Poppins-Bold",
-      },
-      header3: {
-         color: "black",
-         fontWeight: "300",
-         fontSize: 12,
-         fontFamily: "Poppins-Regular",
-      },
-      body: {
-         color: "black",
-         fontSize: 16,
-         fontFamily: "Poppins-Regular",
-      },
-      defaults: {
-         color: "black",
-         fontFamily: "Poppins-Regular",
-         fontSize: 20,
-      },
-      botaoLink: {
-         fontSize: 14,
-         fontFamily: "Poppins-Regular",
-         margin: "0",
-      },
-      botaoDefault: {
-         color: "black",
-         fontWeight: '600',
-         fontSize: 22,
-         fontFamily: "Poppins-SemiBold",
-      },
-      headerWhite: {
-         color: "white",
-         fontWeight: '600',
-         lineHeight: 24,
-         padding: "xs",
-         fontSize: 22,
-         fontFamily: "Poppins-SemiBold",
-      }
-   },
-   card: {
-      shadow: {
-         shadowColor: "bege_200",
-         shadowOffset: { width: 0, height: 4 },
-         shadowOpacity: 0.25,
-         shadowRadius: 20,
-         elevation: 5,
-      },
-      border: {
-         flexDirection: "row",
-         backgroundColor: "bege",
-         alignItems: "center",
-         paddingHorizontal: "md",
-         paddingVertical: "sm",
-         width: "100%",
-         overflow: 'hidden',
-         borderRadius: 12,
-         borderWidth: 1,
-         borderColor: 'primary'
-      }
-   },
+   textVariants,
+   card,
    buttonVariants,
 
 });
