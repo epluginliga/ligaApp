@@ -1,22 +1,34 @@
 import React from 'react'
-import HStack from '../Hstack'
-import { IconArrowLeft } from '../../../icons/IconArrow'
-import Text from '../../Text'
+
 import { Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
+import HStack from '../Hstack'
+import { IconArrowLeft } from '../../../icons/IconArrow'
+import Text from '../../Text'
+import VStack from '../Vstack'
+
 type LayoutHeader = {
-   title?: string
+   title?: string;
+   variant?: "white" | "default";
+   rigth?: any;
+   children?: React.ReactNode;
 }
 
-export function LayoutHeader({ title }: LayoutHeader) {
+export function LayoutHeader({ title, rigth, children, variant = "default" }: LayoutHeader) {
    const { goBack } = useNavigation();
 
+
    return (
-      <Pressable onPress={goBack}>
-         <HStack marginHorizontal="md" marginVertical="sm" alignItems='center'>
+      <Pressable style={{ position: "relative", zIndex: 99 }} onPress={goBack}>
+         <HStack p="md" alignItems='center'>
             <IconArrowLeft />
-            <Text variant='header' textAlign="center">{title}</Text>
+            <VStack justifyContent='center' flex={1}>
+               {children ? children : (
+                  <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
+               )}
+            </VStack>
+            {rigth && rigth}
          </HStack>
       </Pressable>
    )

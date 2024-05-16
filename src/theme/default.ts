@@ -92,6 +92,14 @@ const theme = createTheme({
          fontWeight: '600',
          fontSize: 22,
          fontFamily: "Poppins-SemiBold",
+      },
+      headerWhite: {
+         color: "white",
+         fontWeight: '600',
+         lineHeight: 24,
+         padding: "xs",
+         fontSize: 22,
+         fontFamily: "Poppins-SemiBold",
       }
    },
    card: {

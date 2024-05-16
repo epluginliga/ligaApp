@@ -9,6 +9,7 @@ import { IconClock } from "./IconClock";
 import { IconAddressCard } from "./IconAddressCard";
 import { IconPhoneFlipe, IconPhoneFlipeSolid } from "./IconPhoneFlipe";
 import { IconVenusMars } from "./IconVenusMars";
+import { IconShare } from "./IconShare";
 
 export const Icon = {
    Eye: IconEye,
@@ -26,6 +27,7 @@ export const Icon = {
    PhoneFlipe: IconPhoneFlipe,
    PhoneFlipeSolid: IconPhoneFlipeSolid,
    VenusMars: IconVenusMars,
+   Share: IconShare,
 }
 
 export type Icon = {
