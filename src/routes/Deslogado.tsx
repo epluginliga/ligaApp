@@ -13,6 +13,7 @@ import { Login } from '../screens/Auth/Login';
 import { StatusBarApp } from '../components/StatusBarApp';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
+import { StatusBar } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,7 +21,6 @@ export function RouteDesLogado() {
 
    return (
       <>
-         <StatusBarApp />
 
          <Stack.Navigator
             initialRouteName="TabRoute"

@@ -28,7 +28,7 @@ const Box = createRestyleComponent<CustomButton, Theme>([
 export function Button({ children, onPress, iconLeft, iconRight, ...props }: CustomButton) {
    return (
       <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-         <Box  {...props}>
+         <Box padding='md'  {...props}>
             {/* {iconRight && iconRight} */}
 
             {typeof children !== "string" ? (

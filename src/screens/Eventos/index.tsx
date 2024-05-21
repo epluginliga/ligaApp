@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList } from "react-native";
+import { FlatList, SafeAreaView } from "react-native";
 
 import Text from "../../components/Text";
 import { Card } from "../../components/Card";
@@ -9,6 +9,7 @@ import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
 import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
+import { StatusBarApp } from "../../components/StatusBarApp";
 
 export type ItemData = {
    item: typeof data.data[0];
@@ -60,24 +61,27 @@ export function Eventos() {
    }, []);
 
    return (
-      <FlatList
-         ListHeaderComponent={(
-            <VStack gap="md" justifyContent="space-evenly" mb="md">
+      <SafeAreaView>
+         <FlatList
 
-               <Carrocel />
+            ListHeaderComponent={(
+               <VStack gap="md" justifyContent="space-evenly" mb="md">
 
-               <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
-                  <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
+                  <Carrocel />
+
+                  <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
+                     <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
+                  </VStack>
                </VStack>
-            </VStack>
-         )}
-         ItemSeparatorComponent={() => <VStack height={20} />}
-         data={data.data}
-         keyExtractor={(item) => item.id}
-         renderItem={renderItem}
-         ListFooterComponent={<VStack height={20} />}
-         showsVerticalScrollIndicator={false}
-      />
+            )}
+            ItemSeparatorComponent={() => <VStack height={20} />}
+            data={data.data}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            ListFooterComponent={<VStack height={20} />}
+            showsVerticalScrollIndicator={false}
+         />
+      </SafeAreaView>
    );
 }
 
