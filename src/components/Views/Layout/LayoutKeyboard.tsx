@@ -10,7 +10,7 @@ export function LayoutKeyboard({ children }: LayoutKeyboard) {
       <KeyboardAvoidingView
          behavior={Platform.OS === "ios" ? "padding" : "height"}
          style={styles.container}
-         keyboardVerticalOffset={Platform.OS === "ios" ? 60 : StatusBar.currentHeight}
+         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : StatusBar.currentHeight}
       >
          {children}
       </KeyboardAvoidingView>

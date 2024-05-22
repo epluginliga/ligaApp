@@ -20,16 +20,18 @@ export function LayoutHeader({ title, rigth, children, variant = "default" }: La
 
 
    return (
-      <Pressable style={{ position: "relative", zIndex: 99 }} onPress={goBack}>
-         <HStack p="md" alignItems='center'>
-            <IconArrowLeft />
-            <VStack justifyContent='center' flex={1}>
-               {children ? children : (
-                  <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
-               )}
-            </VStack>
-            {rigth && rigth}
-         </HStack>
-      </Pressable>
+      <>
+         <Pressable style={{ position: "relative", zIndex: 99 }} onPress={goBack}>
+            <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center'>
+               <IconArrowLeft />
+               <VStack justifyContent='center' flex={1}>
+                  {children ? children : (
+                     <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
+                  )}
+               </VStack>
+               {rigth && rigth}
+            </HStack>
+         </Pressable>
+      </>
    )
 }

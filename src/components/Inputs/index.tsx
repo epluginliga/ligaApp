@@ -22,7 +22,7 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
    if (variant === "solid") {
       return (
 
-         <VStack paddingVertical="xs" gap="sm" >
+         <VStack paddingVertical="xs" gap="sm">
             {label && <Text variant="header2" color='white'>{label}</Text>}
 
             <HStack
@@ -34,6 +34,7 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
                overflow='hidden'
                borderRadius={12}
                minHeight={55}
+
             >
                {iconLeft && iconLeft}
 

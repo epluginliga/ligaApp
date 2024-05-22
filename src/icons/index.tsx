@@ -1,5 +1,5 @@
 import { IconEye, IconEyeSlash } from "./IconEye";
-import { IconArrowLeft, IconArrowRight } from "./IconArrow";
+import { IconArrowDown, IconArrowLeft, IconArrowRight } from "./IconArrow";
 import { IconHome } from "./IconHome";
 import { IconCalendario } from "./IconCalendario";
 import { IconPin } from "./IconPin";
@@ -12,6 +12,7 @@ import { IconVenusMars } from "./IconVenusMars";
 import { IconShare } from "./IconShare";
 import { IconMinus } from "./IconMinus";
 import { IconPlus } from "./IconPlus";
+import { IconX } from "./IconX";
 
 export const Icon = {
    Eye: IconEye,
@@ -32,6 +33,8 @@ export const Icon = {
    Share: IconShare,
    Minus: IconMinus,
    Plus: IconPlus,
+   Down: IconArrowDown,
+   X: IconX,
 }
 
 export type Icon = {

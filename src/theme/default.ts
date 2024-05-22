@@ -47,6 +47,30 @@ const theme = createTheme({
    textVariants,
    card,
    buttonVariants,
+   HStack: {
+      shadow: {
+         shadowColor: "bege_900",
+         shadowOffset: { width: 0, height: 4 },
+         shadowOpacity: 1,
+         shadowRadius: 20,
+         elevation: 10,
+      },
+      defaults: {}
+   },
+   Circle: {
+      shadow: {
+         shadowColor: "bege_900",
+         shadowOffset: { width: 0, height: 4 },
+         shadowOpacity: 1,
+         shadowRadius: 20,
+         elevation: 10,
+      },
+      defaults: {
+         borderRadius: 100,
+         backgroundColor: 'white',
+         alignItems: "center"
+      }
+   }
 
 });
 

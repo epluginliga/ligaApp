@@ -21,7 +21,7 @@ export function RouteDesLogado() {
 
    return (
       <>
-
+         <StatusBar barStyle="dark-content" backgroundColor="#fff" />
          <Stack.Navigator
             initialRouteName="TabRoute"
             screenOptions={{

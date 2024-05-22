@@ -1,7 +1,7 @@
 export const data = {
    "id": "0615dca7-45d1-4fb2-973c-1fccf4e1b2dd",
    "nome": "SALVA SEMESTRE",
-   "descricao": "<h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5>",
+   "descricao": "<h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3>",
    "data_evento": "2024-01-26 21:00:00",
    "inicio_vendas": null,
    "fim_vendas": null,
@@ -10,7 +10,7 @@ export const data = {
    "taxa_conveniencia": "0",
    "quantidade_por_usuario": 2,
    "status": "vendendo",
-   "path_imagem": "https://files.deualiga.com.br/storage/imagens/0fd72e78_5fdd_4d61_9db4_0157f7a34011.jpg",
+   "path_imagem": "https://files.deualiga.com.br/storage/imagens/e962f2ee_62f5_40ac_8a0c_e9381b6bd275.jpg",
    "palavras_chave": null,
    "estabelecimento_id": null,
    "usuario_id": "f2b3d2a1-f722-4ac6-881c-108d5fcbbe88",

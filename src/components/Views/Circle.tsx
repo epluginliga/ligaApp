@@ -8,16 +8,16 @@ import React from 'react';
 
 const Box = createBox<Theme>();
 const View = createRestyleComponent<
-   VariantProps<Theme, 'HStack'> & React.ComponentProps<typeof Box>,
+   VariantProps<Theme, 'Circle'> & React.ComponentProps<typeof Box>,
    Theme
->([createVariant({ themeKey: 'HStack' })], Box);
+>([createVariant({ themeKey: 'Circle' })], Box);
 
 export type HStack = BoxProps<Theme> & {
    children?: React.ReactNode;
    variant?: "shadow"
 }
 
-function HStack({ children, variant, ...props }: HStack) {
+function Circle({ children, variant, ...props }: HStack) {
    return (
       <View flexDirection='row'
          variant={variant} gap='sm' {...props}>
@@ -25,4 +25,4 @@ function HStack({ children, variant, ...props }: HStack) {
       </View>
    );
 }
-export default HStack;
+export default Circle;
