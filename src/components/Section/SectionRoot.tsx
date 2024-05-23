@@ -8,7 +8,7 @@ type Section = BoxProps<Theme> & {
 }
 export function SectionRoot({ children, ...rest }: Section) {
    return (
-      <VStack backgroundColor='bege' p="md" gap="md" width="100%" borderRadius={12} {...rest}>
+      <VStack backgroundColor='white' p="md" gap="md" width="100%" borderRadius={20} overflow='hidden' {...rest}>
          {children}
       </VStack>
    )
