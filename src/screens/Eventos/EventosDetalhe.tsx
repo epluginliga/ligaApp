@@ -71,6 +71,7 @@ export const EventosDetalhe = () => {
             showsVerticalScrollIndicator={false}
             onScroll={scrollHandler}
             scrollEventThrottle={16}
+            automaticallyAdjustKeyboardInsets
          >
             <Animated.View
                renderToHardwareTextureAndroid
