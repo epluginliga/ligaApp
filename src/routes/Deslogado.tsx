@@ -14,6 +14,7 @@ import { StatusBarApp } from '../components/StatusBarApp';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
+import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,8 @@ export function RouteDesLogado() {
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
+            <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
+
             <Stack.Screen name="Carrinho" component={Carrinho} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="Perfil" component={Perfil} />

@@ -9,11 +9,12 @@ type RouteApp = {
    EsqueciSenha: undefined;
    CriarConta: undefined;
    CarrinhoUtilizador: undefined;
+   CarrinhoResumo: undefined;
+
 
    // private
    Perfil: undefined;
    Carrinho: undefined;
-   CarrinhoUtilizador: {};
    Ingressos: undefined;
 }
 

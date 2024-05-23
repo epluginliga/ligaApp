@@ -15,6 +15,7 @@ import { IconPlus } from "./IconPlus";
 import { IconCheckCircle } from "./IconCheckCircle";
 import { IconSearch } from "./IconSearch";
 import { IconX } from "./IconX";
+import { IconTicket } from "./IconTicket";
 
 export const Icon = {
    Eye: IconEye,
@@ -39,6 +40,7 @@ export const Icon = {
    Search: IconSearch,
    Down: IconArrowDown,
    X: IconX,
+   Ticket: IconTicket,
 }
 
 export type Icon = {

@@ -1,9 +1,10 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { FlatList, Pressable, StatusBar } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
 import { Section } from '../../components/Section'
-import { formataData } from '../../utils/utils'
 import { Icon } from '../../icons'
 import VStack from '../../components/Views/Vstack'
 import { data } from '../../../store/eventoId';
@@ -11,15 +12,13 @@ import HStack from '../../components/Views/Hstack'
 import Text from '../../components/Text'
 import { ModalApp } from '../../components/Modal'
 import { InputText } from '../../components/Inputs/Text'
-
 import { Input } from '../../components/Inputs'
-import { FlatList, ImageBackground, Platform, Pressable, StatusBar } from 'react-native'
 import Circle from '../../components/Views/Circle'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '../../components/Button'
-import { StatusBarApp } from '../../components/StatusBarApp'
+import { formataData } from '../../utils/utils'
 
 const schema = z.object({
    atletica: z.string()
@@ -33,12 +32,14 @@ function Atletica() {
 
    return (
       <ModalApp handleOpen={(
-         <Input>
-            <HStack alignItems='center' justifyContent='space-between' width="100%">
-               <Text>Selecione uma atlética</Text>
-               <Icon.Down />
-            </HStack>
-         </Input>
+         <VStack marginHorizontal='md'>
+            <Input>
+               <HStack alignItems='center' justifyContent='space-between' width="100%">
+                  <Text>Selecione uma atlética</Text>
+                  <Icon.Down />
+               </HStack>
+            </Input>
+         </VStack>
       )}>
          <FlatList
             stickyHeaderHiddenOnScroll={false}
@@ -78,6 +79,7 @@ const schemaUtilizador = z.object({
 
 type FormUtilizador = z.input<typeof schemaUtilizador>;
 function FormUtilizador() {
+   const { navigate } = useNavigation();
 
    const { control, formState: { errors } } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador)
@@ -88,9 +90,10 @@ function FormUtilizador() {
       <VStack gap='md' >
          <Atletica />
 
-         <Text variant='header'>Utilizador dos ingressos</Text>
+         <Text marginLeft='md' variant='header'>Utilizador dos ingressos</Text>
 
-         <Section.Root >
+         <Section.Root>
+
             <HStack alignItems='center' mb='md'>
                <Circle variant='shadow'
                   width={25}
@@ -138,10 +141,12 @@ function FormUtilizador() {
                placeholder='Digite um e-mail válido'
                error={errors?.data_nascimento?.message}
             />
-
-
          </Section.Root>
-         <Button marginHorizontal="md">Continuar</Button>
+
+         <Button onPress={() => navigate('CarrinhoResumo')}
+            marginHorizontal="md">
+            Continuar
+         </Button>
       </VStack>
 
    )

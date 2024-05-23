@@ -27,7 +27,6 @@ export function CardRoot({ children, onPress, variant = 'shadow', ...rest }: Car
       <Pressable onPress={() => onPress?.()}>
          <Card
             flexDirection="row"
-            flex={1}
             borderRadius={12}
             backgroundColor='white'
             variant={variant}

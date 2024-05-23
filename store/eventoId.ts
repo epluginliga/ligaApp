@@ -1,7 +1,7 @@
 export const data = {
    "id": "0615dca7-45d1-4fb2-973c-1fccf4e1b2dd",
    "nome": "SALVA SEMESTRE",
-   "descricao": "<h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3>",
+   "descricao": "<h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3><b>SALVA SEMESTRE -&nbsp;</b>26/01/2024</h3><h3><b><br></b></h3><h5><b>Abertura das vendas: 08/12 12h<br></b><br>Se preparem a invasão já começou! 🛸👽</h5><h5><br>Open de outro mundo e atrações intergalácticas te esperam para salvar seu semestre! 🐝💙</h5><h3><h3>dededede<h3>ola mundoooo</h3>",
    "data_evento": "2024-01-26 21:00:00",
    "inicio_vendas": null,
    "fim_vendas": null,
