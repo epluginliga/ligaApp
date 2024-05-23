@@ -29,24 +29,15 @@ export const EventosDetalhe = () => {
       },
    });
 
-   // const animatedStyles = useAnimatedStyle(() => {
-   //    return {
-   //       opacity: scrollY.value / 100,
-   //       // transform: [{ scale: Math.max(1 - scrollY.value / 800, 0.5) }],
-   //    };
-   // });
-
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 200], [300, 100], "clamp");
-      const opacity = interpolate(scrollY.value, [0, 200], [1, 0], "clamp");
+      const height = interpolate(scrollY.value, [1, 200], [300, 100], "clamp");
+      const opacity = interpolate(scrollY.value, [0, 200], [1, 1], "clamp");
       return { height, opacity };
    });
 
 
    const textStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [0, 50], [0, 1], 'clamp');
-      // const height = interpolate(scrollY.value, [0, 50], [0, 60], 'clamp');
-
+      const opacity = interpolate(scrollY.value, [1, 50], [0, 1], 'clamp');
       return { opacity };
    });
 
@@ -62,12 +53,13 @@ export const EventosDetalhe = () => {
             backgroundColor: "#fff"
          }, textStyles]}>
 
-            <Layout.Header title='ola' rigth={(
+            <Layout.Header title={eventoDetalhe.nome} rigth={(
                <Pressable>
                   <IconShare />
                </Pressable>
             )} />
          </Animated.View>
+
 
          <Animated.ScrollView
             showsVerticalScrollIndicator={false}

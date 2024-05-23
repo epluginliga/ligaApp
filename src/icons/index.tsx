@@ -12,6 +12,8 @@ import { IconVenusMars } from "./IconVenusMars";
 import { IconShare } from "./IconShare";
 import { IconMinus } from "./IconMinus";
 import { IconPlus } from "./IconPlus";
+import { IconCheckCircle } from "./IconCheckCircle";
+import { IconSearch } from "./IconSearch";
 
 export const Icon = {
    Eye: IconEye,
@@ -32,6 +34,8 @@ export const Icon = {
    Share: IconShare,
    Minus: IconMinus,
    Plus: IconPlus,
+   CheckCircle: IconCheckCircle,
+   Search: IconSearch,
 }
 
 export type Icon = {
