@@ -9,6 +9,7 @@ type RouteApp = {
    EsqueciSenha: undefined;
    CriarConta: undefined;
    CarrinhoUtilizador: undefined;
+   CheckoutEnderecoCobranca: undefined;
    CarrinhoResumo: undefined;
 
 

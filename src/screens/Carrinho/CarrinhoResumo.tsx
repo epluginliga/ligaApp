@@ -11,8 +11,11 @@ import { Card } from '../../components/Card'
 import HStack from '../../components/Views/Hstack'
 import { ModalApp } from '../../components/Modal'
 import { Button } from '../../components/Button'
+import { useNavigation } from '@react-navigation/native'
 
 export function CarrinhoResumo() {
+   const { navigate } = useNavigation();
+
    return (
       <Layout.Root>
          <Layout.Keyboard>
@@ -76,7 +79,7 @@ export function CarrinhoResumo() {
 
                </Section.Root>
 
-               <Button marginHorizontal="md">Continuar</Button>
+               <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>Continuar</Button>
 
             </VStack>
 

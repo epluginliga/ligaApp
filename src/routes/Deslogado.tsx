@@ -15,6 +15,7 @@ import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
 import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
+import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ export function RouteDesLogado() {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
             <Stack.Screen name="CriarConta" component={CriarConta} />
+            <Stack.Screen name="CheckoutEnderecoCobranca" component={CheckoutEnderecoCobranca} />
          </Stack.Navigator>
       </>
    );
