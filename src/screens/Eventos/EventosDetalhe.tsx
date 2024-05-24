@@ -90,7 +90,6 @@ export const EventosDetalhe = () => {
             </Animated.View>
 
             <Section.Root>
-
                <Section.SubTitle iconLeft={<Icon.Calendario />}>
                   {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
                </Section.SubTitle>

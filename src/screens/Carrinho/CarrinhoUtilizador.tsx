@@ -19,6 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '../../components/Button'
 import { formataData } from '../../utils/utils'
+import { Card } from '../../components/Card'
 
 const schema = z.object({
    atletica: z.string()
@@ -32,14 +33,12 @@ function Atletica() {
 
    return (
       <ModalApp handleOpen={(
-         <VStack marginHorizontal='md'>
-            <Input>
-               <HStack alignItems='center' justifyContent='space-between' width="100%">
-                  <Text>Selecione uma atlética</Text>
-                  <Icon.Down />
-               </HStack>
-            </Input>
-         </VStack>
+         <Input>
+            <HStack alignItems='center' justifyContent='space-between' width="100%">
+               <Text>Selecione uma atlética</Text>
+               <Icon.Down />
+            </HStack>
+         </Input>
       )}>
          <FlatList
             stickyHeaderHiddenOnScroll={false}
@@ -88,11 +87,13 @@ function FormUtilizador() {
    return (
 
       <VStack gap='md' >
-         <Atletica />
 
-         <Text marginLeft='md' variant='header'>Utilizador dos ingressos</Text>
+         <Card.Root>
+            <Atletica />
+         </Card.Root>
 
          <Section.Root>
+            <Section.Title>Utilizador dos ingressos</Section.Title>
 
             <HStack alignItems='center' mb='md'>
                <Circle variant='shadow'
@@ -160,11 +161,10 @@ export function CarrinhoUtilizador() {
          <Layout.Root>
 
             <Layout.Keyboard>
-               <Layout.Header title='Ingressos disponíveis' />
+               <Layout.Header title='Utilizador' />
+
                <Layout.Scroll>
-
-                  <VStack gap="lg" m='sm' marginBottom='md'>
-
+                  <VStack gap="lg" marginBottom='md'>
                      <Section.Root>
                         <Section.Title>{data.nome}</Section.Title>
 

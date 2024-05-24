@@ -24,7 +24,7 @@ export function Carrinho() {
             <Layout.Header title='Ingressos disponíveis' />
 
             <Layout.Scroll>
-               <VStack gap="lg" m='sm'>
+               <VStack gap="lg">
 
                   <Section.Root>
                      <Section.Title>{data.nome}</Section.Title>

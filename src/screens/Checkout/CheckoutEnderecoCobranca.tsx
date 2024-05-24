@@ -75,7 +75,7 @@ function FormEndereco() {
             />
          </Section.Root>
 
-         <Button onPress={() => navigate('CarrinhoResumo')}
+         <Button onPress={() => navigate('CheckoutPagamento')}
             marginHorizontal="md">
             Continuar
          </Button>
@@ -93,7 +93,7 @@ export function CheckoutEnderecoCobranca() {
             <Layout.Header title='Ingressos disponíveis' />
 
             <Layout.Scroll>
-               <VStack gap="sm" m='sm'>
+               <VStack gap="md">
                   <Section.Root>
                      <Section.Title>Endereço de cobrança</Section.Title>
 

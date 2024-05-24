@@ -12,78 +12,53 @@ import HStack from '../../components/Views/Hstack'
 import { ModalApp } from '../../components/Modal'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
+import { ResumoPedido } from '../../components/ResumoPedido'
 
 export function CarrinhoResumo() {
    const { navigate } = useNavigation();
 
    return (
       <Layout.Root>
-         <Layout.Keyboard>
-            <Layout.Header title='Resumo do pedido' />
+         <Layout.Header title='Resumo do pedido' />
 
-            <VStack
-               gap="lg"
-               m='sm'
-               marginBottom='md'
-               justifyContent='space-between'
-               flex={1}
-            >
-               <VStack flex={1} gap='md' marginHorizontal='md'>
-                  <Section.Root>
-                     <Section.Title>{data.nome}</Section.Title>
+         <VStack
+            gap="lg"
+            marginBottom='md'
+            justifyContent='space-between'
+            flex={1}
+         >
+            <VStack flex={1} gap='md' >
+               <ResumoPedido data={data} />
 
-                     <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                        {formataData(data.data_evento).DiaMesAnoTexto()}
-                     </Section.SubTitle>
-
-                     <Section.SubTitle iconLeft={<Icon.Clock />}>
-                        {formataData(data.data_evento).hora()}
-                     </Section.SubTitle>
-
-                     <VStack gap="xs">
-                        <Section.SubTitle iconLeft={<Icon.Pin />}>
-                           {data.nome_local + '\n'}
-                           <Section.Span>
-                              {data.logradouro}
-                           </Section.Span>
-                        </Section.SubTitle>
-                     </VStack>
-                  </Section.Root>
-
+               <Card.Root title="Resumo do pedido" variant='border'>
                   <VStack>
-                     <Text variant='header'>Resumo do pedido</Text>
-                     <Card.Root variant='border'>
-                        <VStack>
-                           <Text lineHeight={23} variant='header'>1 lote</Text>
-                           <Text lineHeight={23} color='primary' variant='header'>R$ 60,00</Text>
-                        </VStack>
-                        <Card.Title variant='header'>1 unidade</Card.Title>
-                     </Card.Root>
+                     <Text lineHeight={23} variant='header'>1 lote</Text>
+                     <Text lineHeight={23} color='primary' variant='header'>R$ 60,00</Text>
                   </VStack>
-               </VStack>
-
-               <Section.Root >
-                  <ModalApp handleOpen={(
-                     <HStack alignItems='center'>
-                        <Icon.Ticket />
-                        <Section.Title>Cupom de Desconto?</Section.Title>
-                     </HStack>
-                  )}>
-                     <VStack></VStack>
-                  </ModalApp>
-
-                  <VStack>
-                     <Section.SubTitle>Total em ingressos: R$ 60,00</Section.SubTitle>
-                     <Section.SubTitle>Total em taxas: R$ 6,00</Section.SubTitle>
-                  </VStack>
-
-               </Section.Root>
-
-               <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>Continuar</Button>
-
+                  <Card.Title variant='header'>1 unidade</Card.Title>
+               </Card.Root>
             </VStack>
 
-         </Layout.Keyboard>
+            <Section.Root>
+               <ModalApp handleOpen={(
+                  <HStack alignItems='center'>
+                     <Icon.Ticket />
+                     <Section.Title>Cupom de Desconto?</Section.Title>
+                  </HStack>
+               )}>
+                  <VStack></VStack>
+               </ModalApp>
+
+               <VStack>
+                  <Section.SubTitle>Total em ingressos: R$ 60,00</Section.SubTitle>
+                  <Section.SubTitle>Total em taxas: R$ 6,00</Section.SubTitle>
+               </VStack>
+            </Section.Root>
+
+            <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>Continuar</Button>
+
+         </VStack>
+
 
       </Layout.Root>
 

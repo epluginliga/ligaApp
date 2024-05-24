@@ -10,7 +10,7 @@ type Section = {
 export function SectionSubTitle({ children, iconLeft, iconRight }: Section) {
    if (iconLeft || iconRight) {
       return (
-         <HStack>
+         <HStack alignItems='center'>
             {iconLeft && iconLeft}
             <Text variant='botaoLink'>{children}</Text>
             {iconRight && iconRight}

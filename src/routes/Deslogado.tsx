@@ -16,6 +16,8 @@ import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
 import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';
+import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
+import { CheckoutPix } from '../screens/Checkout/CheckoutPix';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,17 +36,20 @@ export function RouteDesLogado() {
             }}>
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
-            <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
-            <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
-
-            <Stack.Screen name="Carrinho" component={Carrinho} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
-            <Stack.Screen name="Perfil" component={Perfil} />
             <Stack.Screen name="TabRoute" component={TabRoute} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
             <Stack.Screen name="CriarConta" component={CriarConta} />
+
+            <Stack.Screen name="Carrinho" component={Carrinho} />
+            <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
+            <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
+            <Stack.Screen name="Perfil" component={Perfil} />
             <Stack.Screen name="CheckoutEnderecoCobranca" component={CheckoutEnderecoCobranca} />
+            <Stack.Screen name="CheckoutPagamento" component={CheckoutPagamento} />
+            <Stack.Screen name="CheckoutPix" component={CheckoutPix} />
+
          </Stack.Navigator>
       </>
    );

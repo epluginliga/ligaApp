@@ -1,18 +1,24 @@
-import { BackgroundColorProps, BoxProps, createBox } from '@shopify/restyle';
-import { Theme } from '../../theme/default';
 import React from 'react';
 
-const Box = createBox<Theme>();
+import { BoxProps, VariantProps, createBox, createRestyleComponent, createVariant } from '@shopify/restyle';
+import { Theme } from '../../theme/default';
 
-export type VStack = BoxProps<Theme> & {
-   children?: React.ReactNode
+const Box = createBox<Theme>();
+const View = createRestyleComponent<
+   VariantProps<Theme, 'VStack'> & React.ComponentProps<typeof Box>,
+   Theme
+>([createVariant({ themeKey: 'VStack' })], Box);
+
+export type VStackProps = BoxProps<Theme> & {
+   children?: React.ReactNode;
+   variant?: "shadow"
 }
 
-function VStack({ children, ...props }: VStack) {
+function VStack({ children, variant, ...props }: VStackProps) {
    return (
-      <Box {...props}>
+      <View variant={variant} {...props}>
          {children}
-      </Box>
+      </View>
    );
 }
 export default VStack;

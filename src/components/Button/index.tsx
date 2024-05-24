@@ -29,7 +29,7 @@ export function Button({ children, onPress, iconLeft, iconRight, ...props }: Cus
    return (
       <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
          <Box padding='sm'  {...props}>
-            {iconRight && iconRight}
+            {iconLeft && iconLeft}
 
             {typeof children !== "string" ? (
                children
@@ -39,7 +39,7 @@ export function Button({ children, onPress, iconLeft, iconRight, ...props }: Cus
                </Text>
             )}
 
-            {props.variant !== "link" ? iconLeft ? iconLeft : <Icon.ArrowRight size={24} color='#fff' /> : null}
+            {props.variant !== "link" ? iconRight ? iconRight : <Icon.ArrowRight size={24} color='#fff' /> : null}
          </Box>
       </TouchableOpacity>
    )

@@ -9,8 +9,10 @@ type RouteApp = {
    EsqueciSenha: undefined;
    CriarConta: undefined;
    CarrinhoUtilizador: undefined;
-   CheckoutEnderecoCobranca: undefined;
    CarrinhoResumo: undefined;
+   CheckoutEnderecoCobranca: undefined;
+   CheckoutPagamento: undefined;
+   CheckoutPix: undefined;
 
 
    // private

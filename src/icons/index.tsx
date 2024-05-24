@@ -16,6 +16,9 @@ import { IconCheckCircle } from "./IconCheckCircle";
 import { IconSearch } from "./IconSearch";
 import { IconX } from "./IconX";
 import { IconTicket } from "./IconTicket";
+import { IconWarning } from "./IconWarning";
+import { IconCredtCard, IconPix } from "./IconPayments";
+import { IconCopy } from "./IconCopy";
 
 export const Icon = {
    Eye: IconEye,
@@ -41,6 +44,10 @@ export const Icon = {
    Down: IconArrowDown,
    X: IconX,
    Ticket: IconTicket,
+   Warning: IconWarning,
+   CredtCard: IconCredtCard,
+   Pix: IconPix,
+   Copy: IconCopy,
 }
 
 export type Icon = {
