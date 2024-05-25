@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -11,6 +11,8 @@ import { Button } from '../../components/Button'
 import { Icon } from '../../icons'
 import { Theme } from '../../theme/default'
 import { useTheme } from '@shopify/restyle'
+import { Keyboard } from 'react-native'
+import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 type FormasPagamento = 'CheckoutCartao' | 'CheckoutPix';
 
@@ -49,13 +51,14 @@ function InputFormaPagamento({ formaPagamento, setFormaPagamento }: InputFormaPa
    )
 }
 
+
 export function CheckoutPagamento() {
    const { navigate } = useNavigation();
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('' as FormasPagamento);
 
    return (
       <Layout.Root>
-         <Layout.Header title='Checkout' />
+         <Layout.Header title='Pagamento' />
          <VStack justifyContent='space-between' flex={1}>
 
             <Section.Root>

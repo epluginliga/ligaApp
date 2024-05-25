@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -13,6 +13,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Icon } from '../../icons'
+import HStack from '../../components/Views/Hstack'
+import { Keyboard } from 'react-native'
+import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import { AnimateView } from '../../components/AnimateView'
 
 const schema = z.object({
    number: z.string(),
@@ -30,10 +34,10 @@ function FormCartaoCredito() {
    const controlaWidgetCartao = useRef<ITemCardActions>(null);
 
    return (
-      <VStack marginHorizontal='sm' gap='lg'>
+      <VStack marginHorizontal='sm' gap='lg' flex={1} justifyContent='space-between'>
          <CartaoWidget ref={controlaWidgetCartao} item={watch()} />
 
-         <VStack gap='md'>
+         <VStack gap='md' mb='lg'>
             <InputText
                label='Número do cartão'
                control={control}
@@ -53,23 +57,25 @@ function FormCartaoCredito() {
 
             />
 
-            <InputText
-               label='Validade'
-               control={control}
-               name='validade'
-               placeholder='00/00'
-               error={errors?.validade?.message}
-               onPress={() => controlaWidgetCartao.current?.back?.()}
-            />
+            <HStack>
+               <InputText
+                  label='Validade'
+                  control={control}
+                  name='validade'
+                  placeholder='00/00'
+                  error={errors?.validade?.message}
+                  onPress={() => controlaWidgetCartao.current?.back?.()}
+               />
 
-            <InputText
-               label='Código CVV'
-               control={control}
-               name='cvv'
-               placeholder='000'
-               error={errors?.cvv?.message}
-               onPress={() => controlaWidgetCartao.current?.back?.()}
-            />
+               <InputText
+                  label='CVV'
+                  control={control}
+                  name='cvv'
+                  placeholder='000'
+                  error={errors?.cvv?.message}
+                  onPress={() => controlaWidgetCartao.current?.back?.()}
+               />
+            </HStack>
          </VStack>
 
          <Button iconRight={<Icon.CheckCircle color='#fff' />}>FINALIZAR COMPRA</Button>
@@ -80,24 +86,38 @@ function FormCartaoCredito() {
 
 export function CheckoutCartao() {
    const { navigate } = useNavigation();
+   const [mostrarResumo, setMostrarResumo] = useState(true);
+
+   useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+         setMostrarResumo(false);
+      });
+
+      const keyboardDidHiddeListener = Keyboard.addListener('keyboardDidHide', () => {
+         setMostrarResumo(true);
+      });
+
+      return () => {
+         keyboardDidShowListener.remove();
+         keyboardDidHiddeListener.remove();
+      };
+   }, []);
 
    return (
       <Layout.Root>
          <Layout.Keyboard>
 
-            <Layout.Header title='Checkout' />
+            <Layout.Header title='Pagamento' />
 
             <Layout.Scroll>
 
-               <VStack gap='xl' justifyContent='space-between' flex={1} marginBottom='lg'>
-                  <VStack gap='md' >
-                     <Text variant='header' marginLeft='md'>Resumo do pedido</Text>
+               <VStack gap='md' justifyContent='space-between' flex={1} marginBottom='lg'>
 
-                     <ResumoPedido data={data} />
+                  <ResumoPedido data={data} />
 
+                  <AnimateView delay={{ opacity: 300, offset: 150 }}>
                      <FormCartaoCredito />
-
-                  </VStack>
+                  </AnimateView>
                </VStack>
 
             </Layout.Scroll>

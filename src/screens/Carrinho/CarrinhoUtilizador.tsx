@@ -20,6 +20,7 @@ import { z } from 'zod'
 import { Button } from '../../components/Button'
 import { formataData } from '../../utils/utils'
 import { Card } from '../../components/Card'
+import { ResumoPedido } from '../../components/ResumoPedido'
 
 const schema = z.object({
    atletica: z.string()
@@ -156,47 +157,18 @@ function FormUtilizador() {
 export function CarrinhoUtilizador() {
    return (
       <>
-         <StatusBar barStyle="dark-content" />
-
-         <Layout.Root>
-
-            <Layout.Keyboard>
+         {/* <StatusBar barStyle="dark-content" /> */}
+         <Layout.Keyboard>
+            <Layout.Root>
                <Layout.Header title='Utilizador' />
-
                <Layout.Scroll>
                   <VStack gap="lg" marginBottom='md'>
-                     <Section.Root>
-                        <Section.Title>{data.nome}</Section.Title>
-
-                        <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                           {formataData(data.data_evento).DiaMesAnoTexto()}
-                        </Section.SubTitle>
-
-                        <Section.SubTitle iconLeft={<Icon.Clock />}>
-                           {formataData(data.data_evento).hora()}
-                        </Section.SubTitle>
-
-                        <VStack gap="xs">
-                           <Section.SubTitle iconLeft={<Icon.Pin />}>
-                              {data.nome_local + '\n'}
-                              <Section.Span>
-                                 {data.logradouro}
-                              </Section.Span>
-                           </Section.SubTitle>
-                        </VStack>
-
-                     </Section.Root>
-
+                     <ResumoPedido data={data} />
                      <FormUtilizador />
-
                   </VStack>
-
                </Layout.Scroll>
-
-            </Layout.Keyboard>
-
-         </Layout.Root>
-
+            </Layout.Root>
+         </Layout.Keyboard>
       </>
    )
 }

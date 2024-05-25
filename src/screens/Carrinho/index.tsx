@@ -12,6 +12,7 @@ import { Card } from '../../components/Card'
 import HStack from '../../components/Views/Hstack'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
+import { ResumoPedido } from '../../components/ResumoPedido'
 
 export function Carrinho() {
    const { navigate } = useNavigation();
@@ -26,26 +27,7 @@ export function Carrinho() {
             <Layout.Scroll>
                <VStack gap="lg">
 
-                  <Section.Root>
-                     <Section.Title>{data.nome}</Section.Title>
-
-                     <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                        {formataData(data.data_evento).DiaMesAnoTexto()}
-                     </Section.SubTitle>
-
-                     <Section.SubTitle iconLeft={<Icon.Clock />}>
-                        {formataData(data.data_evento).hora()}
-                     </Section.SubTitle>
-
-                     <VStack gap="xs">
-                        <Section.SubTitle iconLeft={<Icon.Pin />}>
-                           {data.nome_local + '\n'}
-                           <Section.Span>
-                              {data.logradouro}
-                           </Section.Span>
-                        </Section.SubTitle>
-                     </VStack>
-                  </Section.Root>
+                  <ResumoPedido data={data} />
 
                   <Card.Root variant='border'>
                      <Card.Title>1 lote</Card.Title>

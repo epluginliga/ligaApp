@@ -14,6 +14,7 @@ import { RouteApp } from '../../@types/navigation';
 
 import { data as eventoDetalhe } from '../../../store/eventoId';
 import HStack from '../../components/Views/Hstack';
+import Circle from '../../components/Views/Circle';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 
@@ -41,6 +42,12 @@ export const EventosDetalhe = () => {
       return { opacity };
    });
 
+   const shareStyles = useAnimatedStyle(() => {
+      const opacity = interpolate(scrollY.value, [1, 100], [1, 0], 'clamp');
+      return { opacity };
+   });
+
+
    return (
       <>
          <StatusBar barStyle={Platform.OS === "ios" ? "light-content" : "dark-content"} />
@@ -56,7 +63,7 @@ export const EventosDetalhe = () => {
             <SafeAreaView>
                <Layout.Header title={eventoDetalhe.nome}
                   rigth={(
-                     <Pressable>
+                     <Pressable onPress={() => console.log("pre")}>
                         <IconShare />
                      </Pressable>
                   )}
@@ -70,24 +77,31 @@ export const EventosDetalhe = () => {
             onScroll={scrollHandler}
             scrollEventThrottle={16}
             automaticallyAdjustKeyboardInsets
+            style={{ position: "relative" }}
          >
             <Animated.View
                renderToHardwareTextureAndroid
                style={[{ height: 400 }, animatedStyles]}>
                <ImageBackground
-                  style={{ height: "100%", width: "100%", }}
+                  style={{ height: "100%", width: "100%" }}
                   source={{ uri: eventoDetalhe.path_imagem }} >
-                  <SafeAreaView >
-                     <Layout.Header rigth={(
-                        <Pressable>
-                           <IconShare />
-                        </Pressable>
-                     )} />
+                  <SafeAreaView>
+                     <Layout.Header />
                   </SafeAreaView>
                </ImageBackground>
             </Animated.View>
 
-            <Section.Root>
+            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: '25%', zIndex: 999 }, shareStyles]}>
+               <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
+                  <Pressable onPress={() => console.log("pre")}>
+                     <IconShare />
+                  </Pressable>
+               </Circle>
+            </Animated.View>
+
+            <Section.Root position='relative' zIndex={9}>
+
+
                <Section.SubTitle iconLeft={<Icon.Calendario />}>
                   {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
                </Section.SubTitle>

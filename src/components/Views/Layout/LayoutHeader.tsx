@@ -18,20 +18,21 @@ type LayoutHeader = {
 export function LayoutHeader({ title, rigth, children, variant = "default" }: LayoutHeader) {
    const { goBack } = useNavigation();
 
-
    return (
-      <>
-         <Pressable style={{ position: "relative", zIndex: 99 }} onPress={goBack}>
-            <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center'>
-               <IconArrowLeft />
-               <VStack justifyContent='center' flex={1}>
-                  {children ? children : (
-                     <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
-                  )}
-               </VStack>
-               {rigth && rigth}
-            </HStack>
+      <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center'>
+         <Pressable onPress={goBack}>
+            <IconArrowLeft />
          </Pressable>
-      </>
+
+         <VStack justifyContent='center' flex={1}>
+            <Pressable onPress={goBack}>
+               {children ? children : (
+                  <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
+               )}
+            </Pressable>
+         </VStack>
+
+         {rigth && rigth}
+      </HStack>
    )
 }

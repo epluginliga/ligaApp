@@ -87,10 +87,11 @@ function FormEndereco() {
 
 export function CheckoutEnderecoCobranca() {
    return (
-      <Layout.Root>
+      <Layout.Keyboard>
 
-         <Layout.Keyboard>
-            <Layout.Header title='Ingressos disponíveis' />
+         <Layout.Root>
+
+            <Layout.Header title='Endereço' />
 
             <Layout.Scroll>
                <VStack gap="md">
@@ -105,8 +106,9 @@ export function CheckoutEnderecoCobranca() {
                   <FormEndereco />
                </VStack>
             </Layout.Scroll>
-         </Layout.Keyboard>
-      </Layout.Root>
+
+         </Layout.Root>
+      </Layout.Keyboard>
 
    )
 }

@@ -27,11 +27,10 @@ interface ItemCardProps {
       brand?: string
       default?: boolean,
    },
-   small?: boolean,
    children?: React.ReactNode,
 
 }
-export const CartaoWidget = forwardRef(({ item, small, children }: ItemCardProps, ref: any) => {
+export const CartaoWidget = forwardRef(({ item, children }: ItemCardProps, ref: any) => {
    const rotateY = useSharedValue(0)
    const { colors } = useTheme<Theme>()
    const creditCard = useRef(null);
@@ -227,10 +226,8 @@ export const CartaoWidget = forwardRef(({ item, small, children }: ItemCardProps
       )
    }
 
-   let tabletStyle = {};
-
    return (
-      <VStack flex={1} {...tabletStyle}>
+      <VStack flex={1} >
 
          {children && children}
 

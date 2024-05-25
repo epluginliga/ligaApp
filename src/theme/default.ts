@@ -75,7 +75,7 @@ const theme = createTheme({
          shadowRadius: 20,
          elevation: 10,
          borderColor: "bege_200",
-         borderWidth: 1
+         // borderWidth: 1
       },
       defaults: {
          borderRadius: 100,
