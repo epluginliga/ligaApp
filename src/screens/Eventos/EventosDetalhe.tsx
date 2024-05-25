@@ -20,9 +20,7 @@ type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
    const { params } = useRoute<EventoDetalheRouteProp>();
-
    console.log(params.id);
-
    const scrollY = useSharedValue(0);
 
    const scrollHandler = useAnimatedScrollHandler({
@@ -114,7 +112,12 @@ export const EventosDetalhe = () => {
 
          </Animated.ScrollView>
 
-         <VStack position="absolute" justifyContent='center' width="100%" bottom={Platform.OS === "android" ? 10 : 30}>
+         <VStack
+            position="absolute"
+            justifyContent='center'
+            width="100%"
+            bottom={Platform.OS === "android" ? 10 : 30}
+         >
             <Button marginHorizontal="md" onPress={() => navigate('Carrinho')}>Comprar</Button>
          </VStack>
       </>

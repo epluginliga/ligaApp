@@ -18,6 +18,7 @@ import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';
 import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
 import { CheckoutPix } from '../screens/Checkout/CheckoutPix';
+import { CheckoutCartao } from '../screens/Checkout/CheckoutCartao';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,10 +47,11 @@ export function RouteDesLogado() {
             <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
             <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
             <Stack.Screen name="Perfil" component={Perfil} />
+
             <Stack.Screen name="CheckoutEnderecoCobranca" component={CheckoutEnderecoCobranca} />
             <Stack.Screen name="CheckoutPagamento" component={CheckoutPagamento} />
             <Stack.Screen name="CheckoutPix" component={CheckoutPix} />
-
+            <Stack.Screen name="CheckoutCartao" component={CheckoutCartao} />
          </Stack.Navigator>
       </>
    );

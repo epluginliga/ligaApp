@@ -13,6 +13,7 @@ type RouteApp = {
    CheckoutEnderecoCobranca: undefined;
    CheckoutPagamento: undefined;
    CheckoutPix: undefined;
+   CheckoutCartao: undefined;
 
 
    // private
