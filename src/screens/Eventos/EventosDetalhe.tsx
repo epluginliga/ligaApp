@@ -72,7 +72,6 @@ export const EventosDetalhe = () => {
          </Animated.View>
 
          <Animated.ScrollView
-            scrollEnabled={eventoDetalhe.descricao.length > 550}
             showsVerticalScrollIndicator={false}
             onScroll={scrollHandler}
             scrollEventThrottle={16}
