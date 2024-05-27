@@ -18,14 +18,14 @@ export function IngressosDisponivel() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => navigate.navigate("EventosDetalhe", { id: item.bilhete_id })}>
+            onPress={() => navigate.navigate("IngressosDetalhe", { id: item.bilhete_id })}>
             <Card.Image
                flex={1}
                height={88}
                source={{ uri: item.path_imagem }} />
 
-            <VStack flex={2}>
-               <Card.Title lineHeight={22.5}>{item.evento_nome}</Card.Title>
+            <VStack flex={2} justifyContent='space-around'>
+               <Card.Title lineHeight={22.5} mt='sm'>{item.evento_nome}</Card.Title>
 
                <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
                   {item.evento_data_evento}
@@ -38,13 +38,13 @@ export function IngressosDisponivel() {
                   </Card.Span>
                </Card.SubTitle>
 
-               <Pressable style={{ alignItems: 'flex-start', marginTop: 8, marginBottom: 4 }}>
+               <VStack alignItems='flex-start' marginVertical='sm' >
                   <VStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
                      <Text textAlign='center' color='white' variant='header3'>
                         Ver informações
                      </Text>
                   </VStack>
-               </Pressable>
+               </VStack>
 
             </VStack>
          </Card.Root>

@@ -12,6 +12,7 @@ const palette = {
    purple: '#6400DD',
    purple_200: '#37007A',
    purple_300: 'rgba(55, 0, 122, 0.65)',
+   purple_100: 'rgba(62, 19, 113, 0.32)',
 
    greenLight: '#56DCBA',
    greenPrimary: '#0ECD9D',

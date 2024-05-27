@@ -19,6 +19,9 @@ type RouteApp = {
    Perfil: undefined;
    Carrinho: undefined;
    Ingressos: undefined;
+   IngressosDetalhe: {
+      id: string;
+   };
 }
 
 declare global {

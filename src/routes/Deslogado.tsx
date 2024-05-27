@@ -18,6 +18,7 @@ import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCo
 import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
 import { CheckoutPix } from '../screens/Checkout/CheckoutPix';
 import { CheckoutCartao } from '../screens/Checkout/CheckoutCartao';
+import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ export function RouteDesLogado() {
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
+            <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
             <Stack.Screen name="TabRoute" component={TabRoute} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
