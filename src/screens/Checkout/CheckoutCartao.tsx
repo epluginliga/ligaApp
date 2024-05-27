@@ -32,6 +32,7 @@ function FormCartaoCredito() {
       resolver: zodResolver(schema)
    });
    const controlaWidgetCartao = useRef<ITemCardActions>(null);
+   const { navigate } = useNavigation();
 
    return (
       <VStack marginHorizontal='sm' gap='lg' flex={1} justifyContent='space-between'>
@@ -78,30 +79,16 @@ function FormCartaoCredito() {
             </HStack>
          </VStack>
 
-         <Button iconRight={<Icon.CheckCircle color='#fff' />}>FINALIZAR COMPRA</Button>
+         <Button
+            onPress={() => navigate("Ingressos")}
+            iconRight={<Icon.CheckCircle color='#fff' />}>FINALIZAR COMPRA</Button>
 
       </VStack>
    )
 }
 
 export function CheckoutCartao() {
-   const { navigate } = useNavigation();
-   const [mostrarResumo, setMostrarResumo] = useState(true);
 
-   useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-         setMostrarResumo(false);
-      });
-
-      const keyboardDidHiddeListener = Keyboard.addListener('keyboardDidHide', () => {
-         setMostrarResumo(true);
-      });
-
-      return () => {
-         keyboardDidShowListener.remove();
-         keyboardDidHiddeListener.remove();
-      };
-   }, []);
 
    return (
       <Layout.Root>

@@ -1,4 +1,4 @@
-const data = {
+export const data = {
    "current_page": 1,
    "data": [
       {

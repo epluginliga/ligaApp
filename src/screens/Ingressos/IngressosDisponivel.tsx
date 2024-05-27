@@ -1,20 +1,69 @@
-import React, { useContext } from 'react'
-import { Pressable, Text, View } from 'react-native'
-import { Layout } from '../../components/Views/Layout'
+import React from 'react'
+import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated'
+import { useNavigation } from '@react-navigation/native'
+
 import VStack from '../../components/Views/Vstack'
-import { StepContext } from '.'
+import { Card } from '../../components/Card'
+import { data } from '../../../store/ingressos'
+import { Icon } from '../../icons'
+import { FlatList, Pressable } from 'react-native'
+import Text from '../../components/Text'
 
 export function IngressosDisponivel() {
-   const { next, prev } = useContext(StepContext);
+   const navigate = useNavigation();
+   const item = data.data[0];
+
+   function Item() {
+      return (
+         <Card.Root
+            marginHorizontal="sm"
+            pr="xs"
+            onPress={() => navigate.navigate("EventosDetalhe", { id: item.bilhete_id })}>
+            <Card.Image
+               flex={1}
+               height={88}
+               source={{ uri: item.path_imagem }} />
+
+            <VStack flex={2}>
+               <Card.Title lineHeight={22.5}>{item.evento_nome}</Card.Title>
+
+               <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
+                  {item.evento_data_evento}
+               </Card.SubTitle>
+
+               <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
+                  item.local {'\n'}
+                  <Card.Span>
+                     {item.evento_cidade} | {item.evento_estado} - {item?.hora_evento + 'h' || 'hora não definida'}
+                  </Card.Span>
+               </Card.SubTitle>
+
+               <Pressable style={{ alignItems: 'flex-start', marginTop: 8, marginBottom: 4 }}>
+                  <VStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
+                     <Text textAlign='center' color='white' variant='header3'>
+                        Ver informações
+                     </Text>
+                  </VStack>
+               </Pressable>
+
+            </VStack>
+         </Card.Root>
+      )
+   }
 
    return (
-      <Layout.Root>
-         <Layout.Header title='Meus Eventos' />
-         <VStack backgroundColor='buttonPrimaryBackground' flex={1}>
-            <Pressable onPress={() => prev()}>
-               <Text> Voltar </Text>
-            </Pressable>
-         </VStack>
-      </Layout.Root>
+      <Animated.View
+         entering={FadeInRight}
+         exiting={FadeOutRight}
+         style={[{ flex: 1 }]}
+      >
+         <FlatList
+            renderItem={Item}
+            keyExtractor={(item) => item.bilhete_id}
+            data={data.data}
+         />
+
+      </Animated.View>
+
    )
 }

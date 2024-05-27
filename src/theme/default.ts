@@ -35,7 +35,7 @@ const theme = createTheme({
       buttonPrimaryBackground: palette.primary,
    },
    spacing: {
-      none: "0",
+      none: 0,
       xs: 2,
       sm: 8,
       md: 16,
