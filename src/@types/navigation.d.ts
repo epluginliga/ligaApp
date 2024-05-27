@@ -4,7 +4,6 @@ type RouteApp = {
    EventosDetalhe: {
       id: string;
    };
-   EventosIngressos: {};
    Login: undefined;
    EsqueciSenha: undefined;
    CriarConta: undefined;

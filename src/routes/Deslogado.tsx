@@ -10,7 +10,6 @@ import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 import { TabRoute } from './TabRoute';
 import { Login } from '../screens/Auth/Login';
-import { StatusBarApp } from '../components/StatusBarApp';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
