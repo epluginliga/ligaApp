@@ -7,6 +7,8 @@ const palette = {
    primary: '#F23E17',
    secondary: '#F2385A',
    botao_default: 'rgba(242, 56, 90, 0.65)',
+   background_red_tab: 'rgba(242, 56, 90, 0.10)',
+
 
    azul: '#0001F8',
    purple: '#6400DD',

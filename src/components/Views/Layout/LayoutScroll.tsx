@@ -13,12 +13,8 @@ export function LayoutScroll({ children, ...rest }: LayoutScroll) {
          contentInsetAdjustmentBehavior='automatic'
          showsHorizontalScrollIndicator={false}
          showsVerticalScrollIndicator={false}
-         contentContainerStyle={{ justifyContent: "space-between", minHeight: "100%" }}
          style={{
             flex: 1,
-            flexBasis: '0%',
-            flexGrow: 1,
-            flexShrink: 1,
          }}
          {...rest}
       >

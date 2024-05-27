@@ -7,19 +7,21 @@ import HStack from '../Hstack'
 import { IconArrowLeft } from '../../../icons/IconArrow'
 import Text from '../../Text'
 import VStack from '../Vstack'
+import { BoxProps } from '@shopify/restyle'
+import { Theme } from '../../../theme/default'
 
-type LayoutHeader = {
+type LayoutHeader = BoxProps<Theme> & {
    title?: string;
    variant?: "white" | "default";
    rigth?: any;
    children?: React.ReactNode;
 }
 
-export function LayoutHeader({ title, rigth, children, variant = "default" }: LayoutHeader) {
+export function LayoutHeader({ title, rigth, children, variant = "default", ...rest }: LayoutHeader) {
    const { goBack } = useNavigation();
 
    return (
-      <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center'>
+      <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center' {...rest}>
          <Pressable onPress={goBack}>
             <IconArrowLeft />
          </Pressable>

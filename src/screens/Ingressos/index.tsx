@@ -30,7 +30,7 @@ function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
             onPress={() => setStepAtual(1)}
             activeOpacity={0.7}>
             <VStack
-               paddingVertical="xs"
+               paddingVertical="sm"
                paddingHorizontal='lg'
                borderTopStartRadius={12}
                borderBottomStartRadius={12}
@@ -43,7 +43,7 @@ function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
             onPress={() => setStepAtual(2)}
             activeOpacity={0.7}>
             <VStack
-               paddingVertical="xs"
+               paddingVertical="sm"
                paddingHorizontal='lg'
                borderTopEndRadius={12}
                borderBottomEndRadius={12}
@@ -61,11 +61,12 @@ export function Ingressos() {
    return (
       <StepContext.Provider value={{}}>
          <Layout.Root>
-            <Layout.Header title='Meus Ingressos' />
+
+
+            {stepsIngressos[stepAtual]}
 
             <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
 
-            {stepsIngressos[stepAtual]}
          </Layout.Root>
       </StepContext.Provider>
    )

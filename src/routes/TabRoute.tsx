@@ -5,6 +5,7 @@ import { Icon } from '../icons';
 import { Perfil } from '../screens/Perfil';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
+import VStack from '../components/Views/Vstack';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,20 +31,27 @@ export function TabRoute() {
                switch (route.name) {
                   case 'Eventos':
                      return focused ? (
-                        <Icon.Home />
+                        <VStack overflow='hidden' backgroundColor='background_red_tab' borderRadius={12} p="sm">
+                           <Icon.Home />
+                        </VStack>
                      ) : (
                         <Icon.Home />
+
                      );
 
                   case 'IngressosTab':
                      return focused ? (
-                        <Icon.Calendario />
+                        <VStack backgroundColor='background_red_tab' borderRadius={12} p="sm">
+                           <Icon.Calendario />
+                        </VStack>
                      ) : (
                         <Icon.Calendario />
                      );
                   case 'Perfil':
                      return focused ? (
-                        <Icon.User />
+                        <VStack backgroundColor='background_red_tab' borderRadius={12} p="sm">
+                           <Icon.User />
+                        </VStack>
                      ) : (
                         <Icon.User />
                      );

@@ -1,13 +1,15 @@
-import React from 'react'
-import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated'
-import { useNavigation } from '@react-navigation/native'
+import React from 'react';
+import { FlatList } from 'react-native';
 
-import VStack from '../../components/Views/Vstack'
-import { Card } from '../../components/Card'
-import { data } from '../../../store/ingressos'
-import { Icon } from '../../icons'
-import { FlatList, Pressable } from 'react-native'
-import Text from '../../components/Text'
+import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+
+import VStack from '../../components/Views/Vstack';
+import { Card } from '../../components/Card';
+import { data } from '../../../store/ingressos';
+import { Icon } from '../../icons';
+import Text from '../../components/Text';
+import { Layout } from '../../components/Views/Layout';
 
 export function IngressosComprados() {
    const navigate = useNavigation();
@@ -58,12 +60,12 @@ export function IngressosComprados() {
          style={[{ flex: 1 }]}
       >
          <FlatList
+            ListHeaderComponent={<Layout.Header title='Meus Ingressos' backgroundColor='white' mb='md' />}
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
+            ItemSeparatorComponent={() => <VStack height={20} />}
             data={data.data}
          />
-
       </Animated.View>
-
    )
 }
