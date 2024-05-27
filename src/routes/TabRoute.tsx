@@ -63,7 +63,7 @@ export function TabRoute() {
          initialRouteName="Eventos">
          <Tab.Screen name="Eventos" component={Eventos} />
          <Tab.Screen name="IngressosTab" component={Ingressos} />
-         <Tab.Screen name="Perfil" component={Perfil} />
+         {/* <Tab.Screen name="Perfil" component={Perfil} /> */}
       </Tab.Navigator>
    )
 }
