@@ -31,8 +31,8 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 100], [300, 350], "clamp");
-      const opacity = interpolate(scrollY.value, [0, 80], [1, 0.2], "clamp");
+      const height = interpolate(scrollY.value, [0, 100], [300, 200, 0], "clamp");
+      const opacity = interpolate(scrollY.value, [0, 80], [1, 0], "clamp");
 
       return { opacity, height };
    });
@@ -91,7 +91,7 @@ export const EventosDetalhe = () => {
                </ImageBackground>
             </Animated.View>
 
-            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: '25%', zIndex: 999 }, shareStyles]}>
+            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 260, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
                   <Pressable onPress={() => console.log("pre")}>
                      <IconShare />
