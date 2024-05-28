@@ -13,15 +13,15 @@ import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
 import { data as eventoDetalhe } from '../../../store/eventoId';
-import HStack from '../../components/Views/Hstack';
 import Circle from '../../components/Views/Circle';
+import { useAuth } from '../../hooks/auth';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
-
 
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
+   const { logado } = useAuth();
+
    const { params } = useRoute<EventoDetalheRouteProp>();
-   console.log(params.id);
    const scrollY = useSharedValue(0);
 
    const scrollHandler = useAnimatedScrollHandler({
@@ -131,7 +131,17 @@ export const EventosDetalhe = () => {
             width="100%"
             bottom={Platform.OS === "android" ? 10 : 30}
          >
-            <Button marginHorizontal="md" onPress={() => navigate('Carrinho')}>Comprar</Button>
+            <Button marginHorizontal="md"
+               onPress={() => {
+                  if (logado) {
+                     return navigate('Carrinho');
+                  }
+
+                  return navigate("Login");
+                  
+               }}>
+               Comprar
+            </Button>
          </VStack>
       </>
    );

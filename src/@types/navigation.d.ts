@@ -1,4 +1,4 @@
-type RouteApp = {
+export type RouteApp = {
    Cadastro: undefined;
    Eventos: undefined;
    EventosDetalhe: {

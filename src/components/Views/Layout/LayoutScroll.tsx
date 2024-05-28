@@ -6,16 +6,16 @@ type LayoutScroll = ScrollViewProps & {
    topFixed?: React.ReactNode
 }
 
-export function LayoutScroll({ children, ...rest }: LayoutScroll) {
+export function LayoutScroll({ children, style,  ...rest }: LayoutScroll) {
 
    return (
       <ScrollView
          contentInsetAdjustmentBehavior='automatic'
          showsHorizontalScrollIndicator={false}
          showsVerticalScrollIndicator={false}
-         style={{
+         style={[{
             flex: 1,
-         }}
+         }, style]}
          {...rest}
       >
          {children}

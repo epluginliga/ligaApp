@@ -11,14 +11,17 @@ import { InputText } from '../../components/Inputs/Text';
 
 import Text from '../../components/Text';
 import { Image, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '../../icons';
+import { useAuth } from '../../hooks/auth';
+import { StatusBarApp } from '../../components/StatusBarApp';
+import { RouteApp } from '../../@types/navigation';
 
 const schema = z.object({
-   email: z.string().email({
+   user: z.string().email({
       message: "Email inválido",
    }),
    password: z.string().min(4, "Mínimo 4 caracteres"),
@@ -28,76 +31,87 @@ type LoginFormInputs = z.input<typeof schema>;
 
 export function Login() {
    const { navigate } = useNavigation();
+   const { handleSignIn, loading } = useAuth();
+
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
       resolver: zodResolver(schema),
       defaultValues: {
-         email: "jean@gmail.com",
-         password: "1234567",
+         user: "jean.silva@eplugin.app.br",
+         password: "123456",
       }
    });
 
-   const handleLogin = (data: LoginFormInputs) => navigate('CarrinhoUtilizador');
+   const handleLogin = async (data: LoginFormInputs) => {
+      try {
+         handleSignIn(data, "Carrinho");
+
+      } catch { }
+   };
 
    return (
-      <GradienteApp>
-         <Layout.Root>
-            <Layout.Keyboard>
-               <Layout.Scroll>
+      <>
+         <StatusBarApp />
+         <GradienteApp>
+            <Layout.Root >
+               <Layout.Keyboard>
+                  <Layout.Scroll contentContainerStyle={{ minHeight: "96%", padding: 10 }}>
 
-                  <VStack flex={1} justifyContent='center' alignItems='center'>
-                     <Image
-                        resizeMode='cover'
-                        fadeDuration={2}
-                        source={require("../../../assets/imagem/logo-white.png")} />
-                  </VStack>
+                     <VStack flex={1} justifyContent='center' alignItems='center'>
+                        <Image
+                           resizeMode='cover'
+                           fadeDuration={2}
+                           source={require("../../../assets/imagem/logo-white.png")} />
+                     </VStack>
 
-                  <VStack gap="md" flex={1}>
-                     <InputText
-                        variant='solid'
-                        label="E-mail"
-                        iconLeft={<Icon.EnvelopeSolid color='#fff' size={24} />}
-                        name='email'
-                        placeholder='seu@email.com'
-                        control={control}
-                        error={errors?.email?.message}
-                        autoCapitalize='none'
-                        keyboardType='email-address'
-                     />
+                     <VStack gap="md" flex={1}>
+                        <InputText
+                           variant='solid'
+                           label="E-mail"
+                           iconLeft={<Icon.EnvelopeSolid color='#fff' size={24} />}
+                           name='user'
+                           placeholder='seu@email.com'
+                           control={control}
+                           error={errors?.user?.message}
+                           autoCapitalize='none'
+                           keyboardType='email-address'
+                        />
 
-                     <InputPassword
-                        variant='solid'
-                        label="Senha"
-                        iconLeft={<IconFingerPrint color='#fff' size={24} />}
-                        name='password'
-                        placeholder='Digite sua senha'
-                        control={control}
-                        error={errors?.password?.message}
-                     />
+                        <InputPassword
+                           variant='solid'
+                           label="Senha"
+                           iconLeft={<IconFingerPrint color='#fff' size={24} />}
+                           name='password'
+                           placeholder='Digite sua senha'
+                           control={control}
+                           error={errors?.password?.message}
+                        />
 
-                     <Button onPress={handleSubmit(handleLogin)}>
-                        ENTRAR
-                     </Button>
+                        <Button onPress={handleSubmit(handleLogin)}>
+                           {!loading ? 'ENTRAR' : 'Autencicando...'}
+                        </Button>
 
-                     <Pressable onPress={() => navigate('EsqueciSenha')}>
-                        <Text textAlign="center" fontSize={14} color='white'>Esqueceu a senha?</Text>
-                     </Pressable>
-                  </VStack>
+                        <Pressable onPress={() => navigate('EsqueciSenha')}>
+                           <Text textAlign="center" fontSize={14} color='white'>Esqueceu a senha?</Text>
+                        </Pressable>
+                     </VStack>
 
-                  <VStack gap="md" mb="sm">
-                     <Pressable onPress={() => navigate('CriarConta')}>
-                        <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
-                           <Text color='white' fontSize={16} fontWeight="900">
-                              Cadastre-se
+                     <VStack gap="md" mb="sm">
+                        <Pressable onPress={() => navigate('CriarConta')}>
+                           <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
+                              <Text color='white' fontSize={16} fontWeight="900">
+                                 Cadastre-se
+                              </Text>
                            </Text>
-                        </Text>
-                     </Pressable>
-                  </VStack>
+                        </Pressable>
+                     </VStack>
 
-               </Layout.Scroll>
-            </Layout.Keyboard>
-         </Layout.Root>
-      </GradienteApp>
+                  </Layout.Scroll>
+               </Layout.Keyboard>
+            </Layout.Root>
+         </GradienteApp>
+
+      </>
 
    );
 };

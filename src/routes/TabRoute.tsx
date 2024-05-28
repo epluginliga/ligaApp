@@ -2,13 +2,13 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from '../icons';
-import { Perfil } from '../screens/Perfil';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import VStack from '../components/Views/Vstack';
+import { useAuth } from '../hooks/auth';
+import { Login } from '../screens/Auth/Login';
 
 const Tab = createBottomTabNavigator();
-
 interface PropsTabs {
    focused: boolean;
    color?: string;
@@ -16,6 +16,8 @@ interface PropsTabs {
 }
 
 export function TabRoute() {
+   const { logado } = useAuth();
+
    return (
       <Tab.Navigator
          screenOptions={({ route }) => ({
@@ -62,8 +64,7 @@ export function TabRoute() {
          })}
          initialRouteName="Eventos">
          <Tab.Screen name="Eventos" component={Eventos} />
-         <Tab.Screen name="IngressosTab" component={Ingressos} />
-         {/* <Tab.Screen name="Perfil" component={Perfil} /> */}
+         <Tab.Screen name="IngressosTab" component={logado ? Ingressos : Login} />
       </Tab.Navigator>
    )
 }

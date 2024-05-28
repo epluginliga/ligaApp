@@ -1,4 +1,5 @@
 import api from ".";
+import {login as loginResponse} from "../../store/login";
 
 export type UserProps = {
    mensagem: string;
@@ -10,8 +11,8 @@ export type UserProps = {
    userName: string;
    email: string;
    user_id: string;
-   customizacao_ui: string;
-   grupos_usuario: "comissario" | "comissao-organizadora" | "validador-ingresso";
+   customizacao_ui: any;
+   grupos_usuario: string[];
    possui_endereco_cadastrado: boolean;
    possui_imagem_cadastrada: boolean;
    cadastro_incompleto: boolean;
@@ -20,9 +21,14 @@ export type UserProps = {
    universidade_id?: string
 }
 
-export async function login(): Promise<UserProps> {
+export type LoginProps = {
+   user: string;
+   password: string;
+}
+export async function login(data: LoginProps): Promise<UserProps> {
+   return Promise.resolve().then(res => loginResponse);
    return await api
-      .post('/login')
+      .post('/login', { ...data })
       .then(success => success.data)
       .catch((err) => console.error(err));
 }

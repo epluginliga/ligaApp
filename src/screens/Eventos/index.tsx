@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { FlatList, SafeAreaView } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import Text from "../../components/Text";
 import { Card } from "../../components/Card";
@@ -9,7 +9,6 @@ import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
 import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
-import { StatusBarApp } from "../../components/StatusBarApp";
 
 export type ItemData = {
    item: typeof data.data[0];
@@ -81,7 +80,6 @@ export function Eventos() {
             ListFooterComponent={<VStack height={20} />}
             showsVerticalScrollIndicator={false}
          />
-      </SafeAreaView>
+        </SafeAreaView>
    );
 }
-
