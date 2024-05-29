@@ -6,6 +6,7 @@ export type RouteApp = {
    };
    Login?: {
       redirect: RootParamList;
+      params?: undefined;
    };
    EsqueciSenha: undefined;
    CriarConta: undefined;

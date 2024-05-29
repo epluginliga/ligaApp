@@ -136,7 +136,9 @@ export const EventosDetalhe = () => {
                      return navigate('Carrinho');
                   }
 
-                  return navigate("Login");
+                  return navigate("Login", {
+                     redirect: "Carrinho",
+                  });
 
                }}>
                Comprar

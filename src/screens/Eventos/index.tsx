@@ -26,7 +26,7 @@ export function Eventos() {
             const route = await AsyncStorage.getItem(KEY_REDIRECT);
             console.log("route", route);
             if (route) {
-               navigate.navigate(JSON.parse(route) as any);
+               return navigate.navigate(JSON.parse(route) as any);
             }
          } catch (e) { }
          finally {
