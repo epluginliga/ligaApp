@@ -9,8 +9,7 @@ import React, {
 import { login, LoginProps, UserProps } from '../services/auth';
 import { useMutation } from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import { RouteApp } from '../@types/navigation';
+import { useNavigation } from '@react-navigation/native';
 
 interface AuthContextProps {
    handleSignIn: (data: LoginProps, redirect?: string) => void;
@@ -27,7 +26,6 @@ const KEY_AUTH = '@auth';
 export const KEY_REDIRECT = '@redirect';
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
-
 
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const [usuario, setUsuario] = useState<UserProps | null>();
@@ -50,7 +48,7 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const signOut = useCallback(async () => {
       await AsyncStorage.multiRemove([KEY_AUTH, KEY_REDIRECT]);
       setUsuario(null);
-      navigate.navigate("Eventos")
+      navigate.navigate("TabRouteDeslogado")
    }, []);
 
    useEffect(() => {

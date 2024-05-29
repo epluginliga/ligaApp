@@ -21,6 +21,7 @@ const palette = {
    greenDark: '#0A906E',
 
    black: '#1F1F1F',
+   black_opacity: 'rgba(0, 0, 0, 0.65)',
    white: '#FFFFFF',
    bege: '#F7F7F7',
    bege_200: '#C2C2C2',

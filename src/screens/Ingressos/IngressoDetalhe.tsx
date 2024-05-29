@@ -53,11 +53,10 @@ export const IngressoDetalhe = () => {
          scrollY.value = event.contentOffset.y;
       },
    });
-
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 100], [300, 200, 0], "clamp");
+      const height = interpolate(scrollY.value, [0, 80], [300, 250,  0], "clamp");
 
-      return { height };
+      return {  height };
    });
 
    const textStyles = useAnimatedStyle(() => {

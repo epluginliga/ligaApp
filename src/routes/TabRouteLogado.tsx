@@ -15,10 +15,9 @@ interface PropsTabs {
 }
 
 export function TabRouteLogado() {
-
    return (
       <Tab.Navigator
-         initialRouteName='Eventos'
+         initialRouteName='EventosTab'
          screenOptions={({ route }) => ({
             tabBarStyle: {
                borderTopRightRadius: 20,
@@ -30,7 +29,7 @@ export function TabRouteLogado() {
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
-                  case 'Eventos':
+                  case 'EventosTab':
                      return focused ? (
                         <VStack overflow='hidden' backgroundColor='background_red_tab' borderRadius={12} p="sm">
                            <Icon.Home />
@@ -61,7 +60,7 @@ export function TabRouteLogado() {
             headerShown: false,
             tabBarShowLabel: false,
          })}>
-         <Tab.Screen name="Eventos" component={Eventos} />
+         <Tab.Screen name="EventosTab" component={Eventos} />
          <Tab.Screen name="IngressosTab" component={Ingressos} />
          <Tab.Screen name="Perfil" component={Perfil} />
       </Tab.Navigator>

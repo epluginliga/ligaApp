@@ -3,21 +3,38 @@ import React, { useEffect, useState } from 'react'
 import { RouteDesLogado } from './Deslogado';
 import { useAuth } from '../hooks/auth';
 import { RouteLogado } from './Logado';
-import Text from '../components/Text';
+import { Loading } from '../components/Loading';
+import api from '../services';
 
 export function Routes() {
    const { logado, loading } = useAuth();
+   const [loadingReq, setLoadingReq] = React.useState(false);
 
-   if (loading) {
-      return <Text>Carrendo rota</Text>
-   }
+   api.interceptors.request.use(
+      (config) => {
+         setLoadingReq(true);
+         return config;
+      },
+      (error) => {
+         return Promise.reject(error);
+      }
+   );
 
-   if (logado) {
-      console.log("logado");
+   api.interceptors.response.use(
+      (response) => {
+         setLoadingReq(false);
+         return response;
+      },
+      (error) => {
+         console.error('Erro na resposta:', error);
+         return Promise.reject(error);
+      }
+   );
 
-      return <RouteLogado />
-   }
-
-   console.log("deslogado");
-   return <RouteDesLogado />
+   return (
+      <>
+         {logado ? <RouteLogado /> : <RouteDesLogado />}
+         {loading || loadingReq && <Loading />}
+      </>
+   )
 }

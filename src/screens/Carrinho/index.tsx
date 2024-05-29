@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { Pressable, StatusBar } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Layout } from '../../components/Views/Layout'
-import { Section } from '../../components/Section'
-import { formataData } from '../../utils/utils'
 import { Icon } from '../../icons'
 import VStack from '../../components/Views/Vstack'
 
@@ -13,7 +12,6 @@ import HStack from '../../components/Views/Hstack'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { ResumoPedido } from '../../components/ResumoPedido'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { KEY_REDIRECT } from '../../hooks/auth'
 
 export function Carrinho() {

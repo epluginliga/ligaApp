@@ -15,19 +15,20 @@ type LayoutHeader = BoxProps<Theme> & {
    variant?: "white" | "default";
    rigth?: any;
    children?: React.ReactNode;
+   handleBack?: () => void;
 }
 
-export function LayoutHeader({ title, rigth, children, variant = "default", ...rest }: LayoutHeader) {
+export function LayoutHeader({ title, rigth, children, variant = "default", handleBack, ...rest }: LayoutHeader) {
    const { goBack } = useNavigation();
 
    return (
       <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center' {...rest}>
-         <Pressable onPress={goBack}>
+         <Pressable onPress={() => handleBack ? handleBack() : goBack()}>
             <IconArrowLeft />
          </Pressable>
 
          <VStack justifyContent='center' flex={1}>
-            <Pressable onPress={goBack}>
+            <Pressable onPress={() => handleBack ? handleBack() : goBack()}>
                {children ? children : (
                   <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
                )}

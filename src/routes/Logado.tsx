@@ -9,7 +9,6 @@ import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 import { TabRouteLogado } from './TabRouteLogado';
-import { Login } from '../screens/Auth/Login';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
@@ -23,6 +22,7 @@ import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 const Stack = createNativeStackNavigator();
 
 export function RouteLogado() {
+
    return (
       <>
          <StatusBar barStyle="dark-content" backgroundColor="#fff" />

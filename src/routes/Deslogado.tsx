@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { StatusBar } from 'react-native';
-import {  createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
@@ -26,11 +26,13 @@ export function RouteDesLogado() {
                   backgroundColor: "#FCFCFC",
                }
             }}>
+            <Stack.Screen name="TabRouteDeslogado" component={TabRouteDeslogado} />
+
+
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
-            <Stack.Screen name="TabRouteDeslogado" component={TabRouteDeslogado} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
             <Stack.Screen name="CriarConta" component={CriarConta} />

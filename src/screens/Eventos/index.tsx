@@ -11,6 +11,7 @@ import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KEY_REDIRECT } from "../../hooks/auth";
+import { Loading } from "../../components/Loading";
 
 export type ItemData = {
    item: typeof data.data[0];
@@ -24,9 +25,8 @@ export function Eventos() {
       async function obtemUrlRedirect() {
          try {
             const route = await AsyncStorage.getItem(KEY_REDIRECT);
-            console.log("route", route);
             if (route) {
-               return navigate.navigate(JSON.parse(route) as any);
+               navigate.navigate(JSON.parse(route) as any);
             }
          } catch (e) { }
          finally {
@@ -79,11 +79,9 @@ export function Eventos() {
       )
    }, []);
 
-   if (loading) {
-      return <Text>Carregando</Text>
-   }
-
    return (
+      <>
+      {loading && <Loading />}
       <SafeAreaView>
          <FlatList
 
@@ -105,5 +103,6 @@ export function Eventos() {
             showsVerticalScrollIndicator={false}
          />
       </SafeAreaView>
+      </>
    );
 }

@@ -80,7 +80,7 @@ function FormCartaoCredito() {
          </VStack>
 
          <Button
-            onPress={() => navigate("Ingressos")}
+            onPress={() => navigate("TabRouteLogado")}
             iconRight={<Icon.CheckCircle color='#fff' />}>FINALIZAR COMPRA</Button>
 
       </VStack>

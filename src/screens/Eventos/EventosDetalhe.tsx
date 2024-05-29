@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
 import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
@@ -15,7 +15,9 @@ import { RouteApp } from '../../@types/navigation';
 
 import { data as eventoDetalhe } from '../../../store/eventoId';
 import Circle from '../../components/Views/Circle';
-import { useAuth } from '../../hooks/auth';
+import { KEY_REDIRECT, useAuth } from '../../hooks/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Loading } from '../../components/Loading';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
@@ -23,6 +25,7 @@ export const EventosDetalhe = () => {
    const { logado } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
+   const [loading, setLoading] = useState(true);
 
    const scrollHandler = useAnimatedScrollHandler({
       onScroll: (event) => {
@@ -31,7 +34,7 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 20], [300, 200, 0], "clamp");
+      const height = interpolate(scrollY.value, [0, 80], [300, 250, 0], "clamp");
       const opacity = interpolate(scrollY.value, [0, 80], [1, 0], "clamp");
 
       return { opacity, height };
@@ -43,12 +46,28 @@ export const EventosDetalhe = () => {
    });
 
    const shareStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [1, 20], [1, 0], 'clamp');
+      const opacity = interpolate(scrollY.value, [1, 50], [1, 0], 'clamp');
       return { opacity };
    });
 
+   useEffect(() => {
+      async function obtemUrlRedirect() {
+         try {
+            const route = await AsyncStorage.getItem(KEY_REDIRECT);
+            if (route) {
+               navigate(JSON.parse(route) as any);
+            }
+         } catch (e) { }
+         finally {
+            setLoading(false);
+         }
+      }
+      obtemUrlRedirect();
+   }, []);
+
    return (
       <>
+         {loading && <Loading />}
          <StatusBar barStyle={Platform.OS === "ios" ? "light-content" : "dark-content"} />
 
          <Animated.View style={[
@@ -60,7 +79,7 @@ export const EventosDetalhe = () => {
             }, textStyles]}>
 
             <SafeAreaView>
-               <Layout.Header title={eventoDetalhe.nome}
+               <Layout.Header handleBack={() => navigate('TabRouteLogado')}  title={eventoDetalhe.nome}
                   rigth={(
                      <Pressable onPress={() => console.log("pre")}>
                         <IconShare />
@@ -79,12 +98,12 @@ export const EventosDetalhe = () => {
          >
             <Animated.View
                renderToHardwareTextureAndroid
-               style={[{ height: 400 }, animatedStyles]}>
+               style={[{ height: 300 }, animatedStyles]}>
                <ImageBackground
                   style={{ height: "100%", width: "100%" }}
                   source={{ uri: eventoDetalhe.path_imagem }} >
                   <SafeAreaView>
-                     <Layout.Header />
+                     <Layout.Header handleBack={() => navigate('TabRouteLogado')} />
                   </SafeAreaView>
                </ImageBackground>
             </Animated.View>
@@ -98,7 +117,6 @@ export const EventosDetalhe = () => {
             </Animated.View>
 
             <Section.Root position='relative' zIndex={9}>
-
 
                <Section.SubTitle iconLeft={<Icon.Calendario />}>
                   {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
@@ -117,9 +135,9 @@ export const EventosDetalhe = () => {
                   </Section.SubTitle>
 
                   <Html source={eventoDetalhe.descricao} />
+                  <View style={{ height: 180 }} />
 
                </VStack>
-               <View style={{ marginBottom: 100 }} />
             </Section.Root>
 
          </Animated.ScrollView>
