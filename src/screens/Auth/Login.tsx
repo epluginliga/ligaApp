@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { GradienteApp } from '../../components/GradienteApp';
@@ -16,9 +16,10 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '../../icons';
-import { useAuth } from '../../hooks/auth';
+import { KEY_REDIRECT, useAuth } from '../../hooks/auth';
 import { StatusBarApp } from '../../components/StatusBarApp';
 import { RouteApp } from '../../@types/navigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const schema = z.object({
    user: z.string().email({
@@ -28,10 +29,12 @@ const schema = z.object({
 });
 
 type LoginFormInputs = z.input<typeof schema>;
+type EventoDetalheRouteProp = RouteProp<RouteApp, 'Login'>;
 
 export function Login() {
    const { navigate } = useNavigation();
    const { handleSignIn, loading } = useAuth();
+   const { params } = useRoute<EventoDetalheRouteProp>();
 
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
@@ -44,8 +47,11 @@ export function Login() {
 
    const handleLogin = async (data: LoginFormInputs) => {
       try {
-         handleSignIn(data, "Carrinho");
+         if (params?.redirect) {
+            await AsyncStorage.setItem(KEY_REDIRECT, JSON.stringify(params?.redirect));
+         }
 
+         handleSignIn(data);
       } catch { }
    };
 

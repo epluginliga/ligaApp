@@ -4,7 +4,9 @@ export type RouteApp = {
    EventosDetalhe: {
       id: string;
    };
-   Login: undefined;
+   Login?: {
+      redirect: RootParamList;
+   };
    EsqueciSenha: undefined;
    CriarConta: undefined;
    CarrinhoUtilizador: undefined;

@@ -6,7 +6,7 @@ import {  createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { TabRoute } from './TabRoute';
+import { TabRouteDeslogado } from './TabRouteDeslogado';
 import { Login } from '../screens/Auth/Login';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
@@ -15,12 +15,11 @@ import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 const Stack = createNativeStackNavigator();
 
 export function RouteDesLogado() {
-
    return (
       <>
          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
          <Stack.Navigator
-            initialRouteName="TabRoute"
+            initialRouteName="TabRouteDeslogado"
             screenOptions={{
                headerShown: false,
                contentStyle: {
@@ -31,7 +30,7 @@ export function RouteDesLogado() {
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
-            <Stack.Screen name="TabRoute" component={TabRoute} />
+            <Stack.Screen name="TabRouteDeslogado" component={TabRouteDeslogado} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
             <Stack.Screen name="CriarConta" component={CriarConta} />

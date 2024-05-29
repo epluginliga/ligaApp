@@ -12,7 +12,6 @@ import { NavigationContainer } from '@react-navigation/native';
 const queryClient = new QueryClient()
 
 function App(): React.JSX.Element {
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>

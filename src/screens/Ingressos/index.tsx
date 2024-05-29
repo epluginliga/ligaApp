@@ -1,17 +1,22 @@
 import React, { Dispatch, createContext, useState } from 'react'
+import { Image, TouchableOpacity } from 'react-native';
+
 import { IngressosDisponivel } from './IngressosDisponivel';
 import { IngressosComprados } from './IngressosComprados';
 import HStack from '../../components/Views/Hstack';
-import { TouchableOpacity } from 'react-native';
 import VStack from '../../components/Views/Vstack';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
+import { useAuth } from '../../hooks/auth';
+import { Section } from '../../components/Section';
+import { Button } from '../../components/Button';
+import { useNavigation } from '@react-navigation/native';
+import { Icon } from '../../icons';
 
 type StepsIngressosProps = {
    [key: number]: React.ReactNode
 }
 type StepsIngressosContext = {}
-
 export const StepContext = createContext<StepsIngressosContext>({} as StepsIngressosContext);
 
 const stepsIngressos: StepsIngressosProps = {
@@ -57,17 +62,47 @@ function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
 
 export function Ingressos() {
    const [stepAtual, setStepAtual] = useState(() => 1);
+   const { logado } = useAuth();
+   const { navigate } = useNavigation();
+
+   if (logado) {
+      return (
+         <>
+            {stepsIngressos[stepAtual]}
+            <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
+         </>
+      )
+   }
 
    return (
-      <StepContext.Provider value={{}}>
-         <Layout.Root>
+      <>
+         <Layout.Header title='Meus Ingressos' backgroundColor='white' />
+
+         <VStack gap='lg' flex={1} justifyContent='center' alignItems='center'>
 
 
-            {stepsIngressos[stepAtual]}
+            <Section.Root alignItems='center'>
+               <Image
+                  resizeMode='cover'
+                  fadeDuration={2}
+                  style={{ width: 150, height: 50 }}
+                  source={require("../../../assets/imagem/logo.png")}
+               />
 
-            <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
+               <Section.Title>Você está desconectado</Section.Title>
+               <Section.SubTitle>Faça o login, para acessar todas as novidades</Section.SubTitle>
 
-         </Layout.Root>
-      </StepContext.Provider>
+            </Section.Root>
+
+            <Button
+               onPress={() => navigate("Login", {
+                  redirect: "Ingressos"
+               })}
+               iconRight={<Icon.User color='#fff' size={20} />}
+            >
+               Fazer Login
+            </Button>
+         </VStack>
+      </>
    )
 }

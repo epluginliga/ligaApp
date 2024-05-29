@@ -1,6 +1,6 @@
 
-import React from 'react'
-import { NativeStackNavigationOptions, createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react'
+import {  createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Perfil } from '../screens/Perfil';
 import { Carrinho } from '../screens/Carrinho';
@@ -8,7 +8,7 @@ import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { TabRoute } from './TabRoute';
+import { TabRouteLogado } from './TabRouteLogado';
 import { Login } from '../screens/Auth/Login';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
@@ -23,12 +23,11 @@ import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 const Stack = createNativeStackNavigator();
 
 export function RouteLogado() {
-
    return (
       <>
          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
          <Stack.Navigator
-            initialRouteName="TabRoute"
+            initialRouteName="TabRouteLogado"
             screenOptions={{
                headerShown: false,
                contentStyle: {
@@ -39,7 +38,7 @@ export function RouteLogado() {
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
-            <Stack.Screen name="TabRoute" component={TabRoute} />
+            <Stack.Screen name="TabRouteLogado" component={TabRouteLogado} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
             <Stack.Screen name="CriarConta" component={CriarConta} />
 
