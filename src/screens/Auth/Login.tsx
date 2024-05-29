@@ -35,7 +35,7 @@ export function Login() {
    const { navigate } = useNavigation();
    const { handleSignIn, loading } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
-
+   
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
       resolver: zodResolver(schema),

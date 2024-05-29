@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from '../icons';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import VStack from '../components/Views/Vstack';
-import { KEY_REDIRECT, useAuth } from '../hooks/auth';
-import { Login } from '../screens/Auth/Login';
 import { Perfil } from '../screens/Perfil';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import Text from '../components/Text';
 
 const Tab = createBottomTabNavigator();
 interface PropsTabs {
@@ -21,11 +16,9 @@ interface PropsTabs {
 
 export function TabRouteLogado() {
 
-
-
    return (
       <Tab.Navigator
-         initialRouteName="IngressosTab"
+         initialRouteName='Eventos'
          screenOptions={({ route }) => ({
             tabBarStyle: {
                borderTopRightRadius: 20,

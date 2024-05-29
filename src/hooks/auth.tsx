@@ -21,7 +21,6 @@ interface AuthContextProps {
 }
 interface AuthProviderProps {
    children: React.ReactNode;
-   redirect?: RouteProp<RouteApp, 'Eventos'>;
 }
 
 const KEY_AUTH = '@auth';
@@ -30,7 +29,7 @@ export const KEY_REDIRECT = '@redirect';
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 
-function AuthProvider({ children, redirect }: AuthProviderProps): React.ReactElement {
+function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const [usuario, setUsuario] = useState<UserProps | null>();
    const [loading, setLoading] = useState(true);
    const navigate = useNavigation();

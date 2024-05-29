@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -9,6 +9,8 @@ import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
 import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { KEY_REDIRECT } from "../../hooks/auth";
 
 export type ItemData = {
    item: typeof data.data[0];
@@ -16,6 +18,24 @@ export type ItemData = {
 
 export function Eventos() {
    const navigate = useNavigation();
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+      async function obtemUrlRedirect() {
+         try {
+            const route = await AsyncStorage.getItem(KEY_REDIRECT);
+            console.log("route", route);
+            if (route) {
+               navigate.navigate(JSON.parse(route) as any);
+            }
+         } catch (e) { }
+         finally {
+            setLoading(false);
+         }
+      }
+
+      obtemUrlRedirect();
+   }, [])
 
    const renderItem = useCallback(({ item }: ItemData) => {
       return (
@@ -59,6 +79,10 @@ export function Eventos() {
       )
    }, []);
 
+   if (loading) {
+      return <Text>Carregando</Text>
+   }
+
    return (
       <SafeAreaView>
          <FlatList
@@ -80,6 +104,6 @@ export function Eventos() {
             ListFooterComponent={<VStack height={20} />}
             showsVerticalScrollIndicator={false}
          />
-        </SafeAreaView>
+      </SafeAreaView>
    );
 }
