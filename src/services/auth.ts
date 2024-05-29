@@ -1,3 +1,4 @@
+import axios from "axios";
 import api from ".";
 import {login as loginResponse} from "../../store/login";
 
@@ -26,7 +27,6 @@ export type LoginProps = {
    password: string;
 }
 export async function login(data: LoginProps): Promise<UserProps> {
-   return Promise.resolve().then(res => loginResponse);
    return await api
       .post('/login', { ...data })
       .then(success => success.data)

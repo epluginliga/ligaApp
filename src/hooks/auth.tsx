@@ -25,21 +25,16 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const [usuario, setUsuario] = useState<UserProps>({} as UserProps);
-   const [loading, setLoading] = useState(false);
-   const [logado, setLogado] = useState(false);
-   const { navigate } = useNavigation();
 
-   const handleSignIn = useCallback(async (data: LoginProps, redirect = '') => {
-      setLoading(true);
-      const usuarioResposta = await login(data);
-      setUsuario(usuarioResposta);
-      setLoading(false);
-      setLogado(true);
-
-      if (redirect) {
-         console.log("", redirect);
-      }
-   }, []);
+   const handleSignIn = useMutation({
+      mutationKey: ['handleLogin'],
+      mutationFn: (data: LoginProps) => {
+         return login(data)
+      },
+      onSuccess(data) {
+         setUsuario(data)
+      },
+   });
 
    const signOut = useCallback(async () => {
 
@@ -48,10 +43,10 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    return (
       <AuthContext.Provider
          value={{
-            handleSignIn,
+            handleSignIn: (data) => handleSignIn.mutate(data),
             usuario,
-            logado,
-            loading,
+            logado: !!handleSignIn.data?.api_token,
+            loading: handleSignIn.isPending,
          }}>
          {children}
       </AuthContext.Provider>

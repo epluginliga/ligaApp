@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
 import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
 import { formataData } from '../../utils/utils';
 import VStack from '../../components/Views/Vstack';
 import { Html } from '../../components/Html';
 import { Button } from '../../components/Button';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Layout } from '../../components/Views/Layout';
 import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
@@ -20,7 +21,6 @@ type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
    const { logado } = useAuth();
-
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
 
@@ -31,7 +31,7 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 100], [300, 200, 0], "clamp");
+      const height = interpolate(scrollY.value, [0, 20], [300, 200, 0], "clamp");
       const opacity = interpolate(scrollY.value, [0, 80], [1, 0], "clamp");
 
       return { opacity, height };
@@ -43,10 +43,9 @@ export const EventosDetalhe = () => {
    });
 
    const shareStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [1, 100], [1, 0], 'clamp');
+      const opacity = interpolate(scrollY.value, [1, 20], [1, 0], 'clamp');
       return { opacity };
    });
-
 
    return (
       <>
@@ -138,7 +137,7 @@ export const EventosDetalhe = () => {
                   }
 
                   return navigate("Login");
-                  
+
                }}>
                Comprar
             </Button>
