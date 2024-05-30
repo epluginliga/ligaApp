@@ -48,7 +48,6 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const signOut = useCallback(async () => {
       await AsyncStorage.multiRemove([KEY_AUTH, KEY_REDIRECT]);
       setUsuario(null);
-      navigate.navigate("TabRouteDeslogado")
    }, []);
 
    useEffect(() => {

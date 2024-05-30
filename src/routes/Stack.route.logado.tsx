@@ -8,7 +8,6 @@ import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { TabRouteLogado } from './TabRouteLogado';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
@@ -18,6 +17,7 @@ import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
 import { CheckoutPix } from '../screens/Checkout/CheckoutPix';
 import { CheckoutCartao } from '../screens/Checkout/CheckoutCartao';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
+import { TabRouteLogado } from './Tab.route.logado';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,21 +27,19 @@ export function RouteLogado() {
       <>
          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
          <Stack.Navigator
-            initialRouteName="TabRouteLogado"
+            initialRouteName="Home"
             screenOptions={{
                headerShown: false,
                contentStyle: {
                   backgroundColor: "#FCFCFC",
                }
             }}>
-            <Stack.Screen name="TabRouteLogado" component={TabRouteLogado} />
+            <Stack.Screen name="Home" component={TabRouteLogado} />
 
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
-            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
-            <Stack.Screen name="CriarConta" component={CriarConta} />
 
             <Stack.Screen name="Carrinho" component={Carrinho} />
             <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />

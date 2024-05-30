@@ -11,6 +11,9 @@ import { Perfil } from '../screens/Perfil';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Text from '../components/Text';
+import { TabRouteLogado } from './Tab.route.logado';
+import { RouteLogado } from './Stack.route.logado';
+import { RouteDesLogado } from './Stack.route.deslogado';
 
 const Tab = createBottomTabNavigator();
 interface PropsTabs {
@@ -52,21 +55,13 @@ export function TabRouteDeslogado() {
                      ) : (
                         <Icon.Calendario />
                      );
-                  case 'Perfil':
-                     return focused ? (
-                        <VStack backgroundColor='background_red_tab' borderRadius={12} p="sm">
-                           <Icon.User />
-                        </VStack>
-                     ) : (
-                        <Icon.User />
-                     );
                }
             },
             headerShown: false,
             tabBarShowLabel: false,
          })}>
          <Tab.Screen name="EventosTab" component={Eventos} />
-         <Tab.Screen name="IngressosTab" component={Ingressos}  />
+         <Tab.Screen name="IngressosTab" component={Login}  />
       </Tab.Navigator>
    )
 }

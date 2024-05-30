@@ -6,11 +6,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { TabRouteDeslogado } from './TabRouteDeslogado';
 import { Login } from '../screens/Auth/Login';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
+import { TabRouteDeslogado } from './Tab.route.deslogado';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,15 +19,15 @@ export function RouteDesLogado() {
       <>
          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
          <Stack.Navigator
-            initialRouteName="TabRouteDeslogado"
+            initialRouteName="Home"
             screenOptions={{
                headerShown: false,
                contentStyle: {
                   backgroundColor: "#FCFCFC",
                }
             }}>
-            <Stack.Screen name="TabRouteDeslogado" component={TabRouteDeslogado} />
 
+            <Stack.Screen name="Home" component={TabRouteDeslogado} />
 
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
