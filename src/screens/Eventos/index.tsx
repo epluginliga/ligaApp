@@ -25,6 +25,7 @@ export function Eventos() {
       async function obtemUrlRedirect() {
          try {
             const route = await AsyncStorage.getItem(KEY_REDIRECT);
+
             if (route) {
                navigate.navigate(JSON.parse(route) as any);
             }
@@ -81,28 +82,27 @@ export function Eventos() {
 
    return (
       <>
-      {loading && <Loading />}
-      <SafeAreaView>
-         <FlatList
+         {loading && <Loading />}
+         <SafeAreaView>
+            <FlatList
+               ListHeaderComponent={(
+                  <VStack gap="md" justifyContent="space-evenly" mb="md">
 
-            ListHeaderComponent={(
-               <VStack gap="md" justifyContent="space-evenly" mb="md">
+                     <Carrocel />
 
-                  <Carrocel />
-
-                  <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
-                     <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
+                     <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
+                        <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
+                     </VStack>
                   </VStack>
-               </VStack>
-            )}
-            ItemSeparatorComponent={() => <VStack height={20} />}
-            data={data.data}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            ListFooterComponent={<VStack height={20} />}
-            showsVerticalScrollIndicator={false}
-         />
-      </SafeAreaView>
+               )}
+               ItemSeparatorComponent={() => <VStack height={20} />}
+               data={data.data}
+               keyExtractor={(item) => item.id}
+               renderItem={renderItem}
+               ListFooterComponent={<VStack height={20} />}
+               showsVerticalScrollIndicator={false}
+            />
+         </SafeAreaView>
       </>
    );
 }

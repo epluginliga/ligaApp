@@ -61,7 +61,7 @@ export function TabRouteDeslogado() {
             tabBarShowLabel: false,
          })}>
          <Tab.Screen name="EventosTab" component={Eventos} />
-         <Tab.Screen name="IngressosTab" component={Login}  />
+         <Tab.Screen name="IngressosTab" component={Login} initialParams={{redirect: 'Ingressos'}}  />
       </Tab.Navigator>
    )
 }
