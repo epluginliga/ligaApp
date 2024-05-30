@@ -1,5 +1,6 @@
-import React, { Dispatch, createContext, useEffect, useState } from 'react'
+import React, { Dispatch, createContext, useState } from 'react'
 import { Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { IngressosDisponivel } from './IngressosDisponivel';
 import { IngressosComprados } from './IngressosComprados';
@@ -7,12 +8,10 @@ import HStack from '../../components/Views/Hstack';
 import VStack from '../../components/Views/Vstack';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
-import { KEY_REDIRECT, useAuth } from '../../hooks/auth';
+import { useAuth } from '../../hooks/auth';
 import { Section } from '../../components/Section';
 import { Button } from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
 import { Icon } from '../../icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type StepsIngressosProps = {
    [key: number]: React.ReactNode
@@ -65,17 +64,6 @@ export function Ingressos() {
    const [stepAtual, setStepAtual] = useState(() => 1);
    const { logado } = useAuth();
    const { navigate } = useNavigation();
-
-   useEffect(() => {
-      async function removeUrlRedirect() {
-         try {
-            await AsyncStorage.removeItem(KEY_REDIRECT);
-         } catch (e) { }
-         finally {
-         }
-      }
-      removeUrlRedirect();
-   }, [])
 
    if (logado) {
       return (

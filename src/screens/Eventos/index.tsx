@@ -9,8 +9,8 @@ import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
 import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { KEY_REDIRECT } from "../../hooks/auth";
+import { useMMKVString } from "react-native-mmkv";
+import { useAuth, usuarioStorage } from "../../hooks/auth";
 import { Loading } from "../../components/Loading";
 
 export type ItemData = {
@@ -19,24 +19,7 @@ export type ItemData = {
 
 export function Eventos() {
    const navigate = useNavigation();
-   const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
-      async function obtemUrlRedirect() {
-         try {
-            const route = await AsyncStorage.getItem(KEY_REDIRECT);
-
-            if (route) {
-               navigate.navigate(JSON.parse(route) as any);
-            }
-         } catch (e) { }
-         finally {
-            setLoading(false);
-         }
-      }
-
-      obtemUrlRedirect();
-   }, [])
 
    const renderItem = useCallback(({ item }: ItemData) => {
       return (
@@ -82,7 +65,6 @@ export function Eventos() {
 
    return (
       <>
-         {loading && <Loading />}
          <SafeAreaView>
             <FlatList
                ListHeaderComponent={(

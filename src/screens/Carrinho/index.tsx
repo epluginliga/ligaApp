@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Pressable, StatusBar } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Layout } from '../../components/Views/Layout'
 import { Icon } from '../../icons'
@@ -20,7 +19,7 @@ export function Carrinho() {
    useEffect(() => {
       async function removeUrlRedirect() {
          try {
-            await AsyncStorage.removeItem(KEY_REDIRECT);
+           
          } catch (e) { }
          finally {
          }

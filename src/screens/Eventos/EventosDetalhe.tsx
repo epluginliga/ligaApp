@@ -15,9 +15,9 @@ import { RouteApp } from '../../@types/navigation';
 
 import { data as eventoDetalhe } from '../../../store/eventoId';
 import Circle from '../../components/Views/Circle';
-import { KEY_REDIRECT, useAuth } from '../../hooks/auth';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { KEY_REDIRECT, useAuth, usuarioStorage } from '../../hooks/auth';
 import { Loading } from '../../components/Loading';
+import { useMMKVString } from 'react-native-mmkv';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
@@ -25,7 +25,9 @@ export const EventosDetalhe = () => {
    const { logado } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
-   const [loading, setLoading] = useState(true);
+   const [route] = useMMKVString('route')
+
+   console.log(route)   
 
    const scrollHandler = useAnimatedScrollHandler({
       onScroll: (event) => {
@@ -51,23 +53,20 @@ export const EventosDetalhe = () => {
    });
 
    useEffect(() => {
-      async function obtemUrlRedirect() {
-         try {
-            const route = await AsyncStorage.getItem(KEY_REDIRECT);
-            if (route) {
-               navigate(JSON.parse(route) as any);
-            }
-         } catch (e) { }
-         finally {
-            setLoading(false);
+      const time = setTimeout(() => {
+         if (route && logado) {
+            navigate(route as any);
+            usuarioStorage.delete('route');
          }
-      }
-      obtemUrlRedirect();
-   }, []);
+      }, 1000);
+
+      return () => clearTimeout(time);
+
+   }, [route, logado]);
 
    return (
       <>
-         {loading && <Loading />}
+         {route && logado && <Loading />}
          <StatusBar barStyle={Platform.OS === "ios" ? "light-content" : "dark-content"} />
 
          <Animated.View style={[
@@ -103,7 +102,7 @@ export const EventosDetalhe = () => {
                   style={{ height: "100%", width: "100%" }}
                   source={{ uri: eventoDetalhe.path_imagem }} >
                   <SafeAreaView>
-                     <Layout.Header handleBack={() => navigate('TabRouteLogado')} />
+                     <Layout.Header handleBack={() => navigate('Home')} />
                   </SafeAreaView>
                </ImageBackground>
             </Animated.View>

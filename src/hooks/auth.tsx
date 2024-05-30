@@ -8,12 +8,12 @@ import React, {
 
 import { login, LoginProps, UserProps } from '../services/auth';
 import { useMutation } from '@tanstack/react-query';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { MMKV } from 'react-native-mmkv'
 
 interface AuthContextProps {
    handleSignIn: (data: LoginProps, redirect?: string) => void;
-   usuario: UserProps | null | undefined;
+   token: string;
    logado: boolean;
    loading: boolean;
    signOut: () => void
@@ -22,13 +22,14 @@ interface AuthProviderProps {
    children: React.ReactNode;
 }
 
-const KEY_AUTH = '@auth';
 export const KEY_REDIRECT = '@redirect';
+
+export const usuarioStorage = new MMKV()
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
-   const [usuario, setUsuario] = useState<UserProps | null>();
+   const [token, setToken] = useState('');
    const [loading, setLoading] = useState(true);
    const navigate = useNavigation();
 
@@ -37,25 +38,25 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
       mutationFn: (data: LoginProps) => login(data),
       async onSuccess(data) {
          try {
-            await AsyncStorage.setItem(KEY_AUTH, JSON.stringify(data));
-            setUsuario(data);
+            usuarioStorage.set('token', data.api_token);
+            setToken(data.api_token);
          } catch (e) {
 
          }
       },
    });
 
-   const signOut = useCallback(async () => {
-      await AsyncStorage.multiRemove([KEY_AUTH, KEY_REDIRECT]);
-      setUsuario(null);
+   const signOut = useCallback(() => {
+      usuarioStorage.clearAll();
+      setToken('');
    }, []);
 
    useEffect(() => {
-      const obtemUsuario = async () => {
+      const obtemUsuario = () => {
          try {
-            let usuario = await AsyncStorage.getItem(KEY_AUTH);
-            if (!!usuario) {
-               setUsuario(JSON.parse(usuario));
+            let token = usuarioStorage.getString('token');
+            if (!!token) {
+               setToken(token);
             }
 
          } catch (e) {
@@ -72,8 +73,8 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
       <AuthContext.Provider
          value={{
             handleSignIn: (data) => handleSignIn.mutate(data),
-            usuario,
-            logado: !!usuario,
+            token,
+            logado: !!token,
             loading: handleSignIn.isPending || loading,
             signOut
          }}>
