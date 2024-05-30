@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import {  createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Perfil } from '../screens/Perfil';
 import { Carrinho } from '../screens/Carrinho';
@@ -34,11 +34,12 @@ export function RouteLogado() {
                   backgroundColor: "#FCFCFC",
                }
             }}>
+            <Stack.Screen name="TabRouteLogado" component={TabRouteLogado} />
+
             <Stack.Screen name="Eventos" component={Eventos} />
             <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
             <Stack.Screen name="Ingressos" component={Ingressos} />
             <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
-            <Stack.Screen name="TabRouteLogado" component={TabRouteLogado} />
             <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
             <Stack.Screen name="CriarConta" component={CriarConta} />
 

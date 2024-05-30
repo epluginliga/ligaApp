@@ -79,7 +79,7 @@ export const EventosDetalhe = () => {
             }, textStyles]}>
 
             <SafeAreaView>
-               <Layout.Header handleBack={() => navigate('TabRouteLogado')}  title={eventoDetalhe.nome}
+               <Layout.Header title={eventoDetalhe.nome}
                   rigth={(
                      <Pressable onPress={() => console.log("pre")}>
                         <IconShare />

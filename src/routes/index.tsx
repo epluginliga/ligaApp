@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 import { RouteDesLogado } from './Deslogado';
 import { useAuth } from '../hooks/auth';
-import { RouteLogado } from './Logado';
 import { Loading } from '../components/Loading';
 import api from '../services';
+import { TabRouteLogado } from './TabRouteLogado';
 
 export function Routes() {
    const { logado, loading } = useAuth();
@@ -33,7 +33,7 @@ export function Routes() {
 
    return (
       <>
-         {logado ? <RouteLogado /> : <RouteDesLogado />}
+         {logado ? <TabRouteLogado /> : <RouteDesLogado />}
          {loading || loadingReq && <Loading />}
       </>
    )
