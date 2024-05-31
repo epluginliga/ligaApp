@@ -20,7 +20,7 @@ export type ItemData = {
 export function Eventos() {
    const navigate = useNavigation();
 
-   const { data, isLoading, isError } = useQuery({
+   const { data, isLoading } = useQuery({
       queryKey: ['eventos'],
       queryFn: fetchEventos,
    });
@@ -80,28 +80,26 @@ export function Eventos() {
    }
 
    return (
-      <>
-         <Layout.Root>
-            <FlatList
-               ListHeaderComponent={(
-                  <VStack gap="md" justifyContent="space-evenly" mb="md">
+      <Layout.Root>
+         <FlatList
+            ListHeaderComponent={(
+               <VStack gap="md" justifyContent="space-evenly" mb="md">
 
-                     <Carrocel />
+                  <Carrocel evento={data?.data[0]} />
 
-                     <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
-                        <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
-                     </VStack>
+                  <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
+                     <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
                   </VStack>
-               )}
-               ListEmptyComponent={<ListEmptyComponent title="Nenhum evento disponível" />}
-               ItemSeparatorComponent={() => <VStack height={20} />}
-               data={data?.data}
-               keyExtractor={(item) => item.id}
-               renderItem={renderItem}
-               ListFooterComponent={<VStack height={20} />}
-               showsVerticalScrollIndicator={false}
-            />
-         </Layout.Root>
-      </>
+               </VStack>
+            )}
+            ListEmptyComponent={<ListEmptyComponent title="Nenhum evento disponível" />}
+            ItemSeparatorComponent={() => <VStack height={20} />}
+            data={data?.data}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            ListFooterComponent={<VStack height={20} />}
+            showsVerticalScrollIndicator={false}
+         />
+      </Layout.Root>
    );
 }

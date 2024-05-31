@@ -26,6 +26,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const [token, setToken] = useState('');
+   const [loading, setLoading] = useState(true);
 
    const handleSignIn = useMutation({
       mutationKey: ['handleLogin'],
@@ -49,9 +50,10 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
 
    useEffect(() => {
       let token = usuarioStorage.getString('token');
-      if (!!token) {
-         setToken(token);
+      if (token) {
          api.defaults.headers.Authorization = token;
+         setToken(token);
+         setLoading(false)
       }
    }, []);
 
@@ -61,7 +63,7 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
             handleSignIn: (data) => handleSignIn.mutate(data),
             token,
             logado: !!token,
-            loading: handleSignIn.isPending,
+            loading: handleSignIn.isPending || loading,
             signOut
          }}>
          {children}

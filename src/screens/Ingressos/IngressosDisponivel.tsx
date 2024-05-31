@@ -59,7 +59,10 @@ export function IngressosDisponivel() {
          style={[{ flex: 1 }]}
       >
          <FlatList
-            ListHeaderComponent={<Layout.Header title='Meus Ingressos' backgroundColor='white' mb='md' />}
+            ListHeaderComponent={<Layout.Header title='Ingressos disponíveis'
+               backgroundColor='white'
+               mb='md'
+            />}
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}

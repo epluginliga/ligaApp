@@ -7,9 +7,8 @@ import { Loading } from '../components/Loading';
 import api from '../services';
 
 export function Routes() {
-   const { logado, loading } = useAuth();
+   const { logado, loading, signOut } = useAuth();
    const [loadingReq, setLoadingReq] = React.useState(false);
-
    api.interceptors.request.use(
       (config) => {
          setLoadingReq(true);
@@ -27,14 +26,20 @@ export function Routes() {
       },
       (error) => {
          setLoadingReq(false);
+         console.error(error);
+         // signOut();
          return Promise.reject(error);
       }
    );
 
+   if(loading) {
+      return <Loading />;
+   }
+
    return (
       <>
          {logado ? <RouteLogado /> : <RouteDesLogado />}
-         {loading || loadingReq && <Loading />}
+         {loadingReq && <Loading />}
       </>
    )
 }

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
 import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
 
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
@@ -13,11 +14,12 @@ import { Layout } from '../../components/Views/Layout';
 import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
-import { data as eventoDetalhe } from '../../../store/eventoId';
 import Circle from '../../components/Views/Circle';
 import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { Loading } from '../../components/Loading';
 import { useMMKVString } from 'react-native-mmkv';
+import { fetchEventoDetalhe } from '../../services/eventos';
+import Text from '../../components/Text';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
@@ -26,6 +28,12 @@ export const EventosDetalhe = () => {
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
    const [route] = useMMKVString('route')
+
+   const { data: eventoDetalhe } = useQuery({
+      queryKey: ['eventosDetalhe', params?.id],
+      queryFn: () => fetchEventoDetalhe(params?.id),
+      enabled: !!params?.id
+   });
 
    const scrollHandler = useAnimatedScrollHandler({
       onScroll: (event) => {
@@ -62,6 +70,21 @@ export const EventosDetalhe = () => {
 
    }, [route, logado]);
 
+   if (!eventoDetalhe) {
+      return (
+         <VStack gap='md' flex={1}>
+            <VStack backgroundColor='bege_200' height={300} />
+            <View style={{ marginTop: -20 }} >
+               <Section.Root position='relative' zIndex={9}>
+                  <VStack width={200} height={10} borderRadius={20} backgroundColor='bege_200'></VStack>
+                  <VStack width={100} height={10} borderRadius={20} backgroundColor='bege_200'></VStack>
+                  <VStack width={240} height={10} borderRadius={20} backgroundColor='bege_200'></VStack>
+               </Section.Root>
+            </View>
+         </VStack>
+      );
+   }
+
    return (
       <>
          {route && logado && <Loading />}
@@ -76,7 +99,7 @@ export const EventosDetalhe = () => {
             }, textStyles]}>
 
             <SafeAreaView>
-               <Layout.Header title={eventoDetalhe.nome}
+               <Layout.Header title={eventoDetalhe?.nome}
                   rigth={(
                      <Pressable onPress={() => console.log("pre")}>
                         <IconShare />
@@ -98,7 +121,7 @@ export const EventosDetalhe = () => {
                style={[{ height: 300 }, animatedStyles]}>
                <ImageBackground
                   style={{ height: "100%", width: "100%" }}
-                  source={{ uri: eventoDetalhe.path_imagem }} >
+                  source={{ uri: eventoDetalhe?.path_imagem }} >
                   <SafeAreaView>
                      <Layout.Header handleBack={() => navigate('Home')} />
                   </SafeAreaView>
@@ -113,30 +136,31 @@ export const EventosDetalhe = () => {
                </Circle>
             </Animated.View>
 
-            <Section.Root position='relative' zIndex={9}>
-
-               <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                  {formataData(eventoDetalhe.data_evento).DiaMesAnoTexto()}
-               </Section.SubTitle>
-
-               <Section.SubTitle iconLeft={<Icon.Clock />}>
-                  {formataData(eventoDetalhe.data_evento).hora()}
-               </Section.SubTitle>
-
-               <VStack gap="xs" >
-                  <Section.SubTitle iconLeft={<Icon.Pin />}>
-                     {eventoDetalhe.nome_local + '\n'}
-                     <Section.Span>
-                        {eventoDetalhe.logradouro}
-                     </Section.Span>
+            <View style={{ marginTop: -10 }} >
+               <Section.Root position='relative' zIndex={9}>
+                  <Section.SubTitle iconLeft={<Icon.Calendario />}>
+                     {formataData(eventoDetalhe?.data_evento).DiaMesAnoTexto()}
                   </Section.SubTitle>
 
-                  <Html source={eventoDetalhe.descricao} />
-                  <View style={{ height: 180 }} />
+                  <Section.SubTitle iconLeft={<Icon.Clock />}>
+                     {formataData(eventoDetalhe?.data_evento).hora()}
+                  </Section.SubTitle>
 
-               </VStack>
-            </Section.Root>
+                  <VStack gap="xs" >
+                     <Section.SubTitle iconLeft={<Icon.Pin />}>
+                        {eventoDetalhe?.nome_local + '\n'}
+                        <Section.Span>
+                           {eventoDetalhe?.logradouro}
+                        </Section.Span>
+                     </Section.SubTitle>
 
+                     <Html source={eventoDetalhe?.descricao} />
+
+                     <View style={{ height: 180 }} />
+
+                  </VStack>
+               </Section.Root>
+            </View>
          </Animated.ScrollView>
 
          <VStack

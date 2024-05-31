@@ -3,19 +3,24 @@ import { FlatList } from 'react-native';
 
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
 
 import VStack from '../../components/Views/Vstack';
 import { Card } from '../../components/Card';
-import { data } from '../../../store/ingressos';
 import { Icon } from '../../icons';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
+import { IngressosPayload, fetchIngressoComprado } from '../../services/eventos';
 
 export function IngressosComprados() {
    const navigate = useNavigation();
-   const item = data.data[0];
-
-   function Item() {
+   
+   const { data } = useQuery({
+      queryKey: ['ingressosComprados'],
+      queryFn: fetchIngressoComprado,
+   });
+   
+   function Item({item}: {item: IngressosPayload}) {
       return (
          <Card.Root
             marginHorizontal="sm"
@@ -24,7 +29,7 @@ export function IngressosComprados() {
             <Card.Image
                flex={1}
                height={88}
-               source={{ uri: item.path_imagem }} />
+               source={{ uri: item?.evento_path_imagem }} />
 
             <VStack flex={2} justifyContent='space-around'>
                <Card.Title lineHeight={22.5} mt='sm'>{item.evento_nome}</Card.Title>
@@ -60,11 +65,11 @@ export function IngressosComprados() {
          style={[{ flex: 1 }]}
       >
          <FlatList
-            ListHeaderComponent={<Layout.Header title='Meus Ingressos' backgroundColor='white' mb='md' />}
+            ListHeaderComponent={<Layout.Header title='Ingressos Comprados' backgroundColor='white' mb='md' />}
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
-            data={data.data}
+            data={data?.data}
          />
       </Animated.View>
    )
