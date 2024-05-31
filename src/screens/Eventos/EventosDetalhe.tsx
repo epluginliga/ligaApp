@@ -15,7 +15,7 @@ import { RouteApp } from '../../@types/navigation';
 
 import { data as eventoDetalhe } from '../../../store/eventoId';
 import Circle from '../../components/Views/Circle';
-import { KEY_REDIRECT, useAuth, usuarioStorage } from '../../hooks/auth';
+import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { Loading } from '../../components/Loading';
 import { useMMKVString } from 'react-native-mmkv';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
@@ -26,8 +26,6 @@ export const EventosDetalhe = () => {
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
    const [route] = useMMKVString('route')
-
-   console.log(route)   
 
    const scrollHandler = useAnimatedScrollHandler({
       onScroll: (event) => {

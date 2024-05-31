@@ -26,7 +26,7 @@ export function Routes() {
          return response;
       },
       (error) => {
-         console.error('Erro na resposta:', error);
+         setLoadingReq(false);
          return Promise.reject(error);
       }
    );

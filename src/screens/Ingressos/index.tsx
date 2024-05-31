@@ -1,6 +1,5 @@
 import React, { Dispatch, createContext, useState } from 'react'
-import { Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
 import { IngressosDisponivel } from './IngressosDisponivel';
 import { IngressosComprados } from './IngressosComprados';
@@ -9,9 +8,8 @@ import VStack from '../../components/Views/Vstack';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
 import { useAuth } from '../../hooks/auth';
-import { Section } from '../../components/Section';
-import { Button } from '../../components/Button';
-import { Icon } from '../../icons';
+
+import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
 
 type StepsIngressosProps = {
    [key: number]: React.ReactNode
@@ -63,7 +61,6 @@ function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
 export function Ingressos() {
    const [stepAtual, setStepAtual] = useState(() => 1);
    const { logado } = useAuth();
-   const { navigate } = useNavigation();
 
    if (logado) {
       return (
@@ -77,31 +74,7 @@ export function Ingressos() {
    return (
       <>
          <Layout.Header title='Meus Ingressos' backgroundColor='white' />
-
-         <VStack gap='lg' flex={1} justifyContent='center' alignItems='center'>
-
-            <Section.Root alignItems='center'>
-               <Image
-                  resizeMode='cover'
-                  fadeDuration={2}
-                  style={{ width: 150, height: 50 }}
-                  source={require("../../../assets/imagem/logo.png")}
-               />
-
-               <Section.Title>Você está desconectado</Section.Title>
-               <Section.SubTitle>Faça o login, para acessar todas as novidades</Section.SubTitle>
-
-            </Section.Root>
-
-            <Button
-               onPress={() => navigate("Login", {
-                  redirect: "IngressosTab"
-               })}
-               iconRight={<Icon.User color='#fff' size={20} />}
-            >
-               Fazer Login
-            </Button>
-         </VStack>
+         <UsuarioNaoLogado />
       </>
    )
 }

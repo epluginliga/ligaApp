@@ -11,7 +11,6 @@ import HStack from '../../components/Views/Hstack'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { ResumoPedido } from '../../components/ResumoPedido'
-import { KEY_REDIRECT } from '../../hooks/auth'
 
 export function Carrinho() {
    const { navigate } = useNavigation();

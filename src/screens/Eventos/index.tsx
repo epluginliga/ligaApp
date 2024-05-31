@@ -5,21 +5,25 @@ import { useNavigation } from "@react-navigation/native";
 import Text from "../../components/Text";
 import { Card } from "../../components/Card";
 import VStack from "../../components/Views/Vstack";
-import { data } from "../../../store/eventos";
 import HStack from "../../components/Views/Hstack";
 import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
-import { useMMKVString } from "react-native-mmkv";
-import { useAuth, usuarioStorage } from "../../hooks/auth";
-import { Loading } from "../../components/Loading";
+import { useQuery } from "@tanstack/react-query";
+import { EventosPayload, fetchEventos } from "../../services/eventos";
+import { ListEmptyComponent } from "../../components/ListEmptyComponent";
+import { Layout } from "../../components/Views/Layout";
 
 export type ItemData = {
-   item: typeof data.data[0];
+   item: EventosPayload;
 }
 
 export function Eventos() {
    const navigate = useNavigation();
 
+   const { data, isLoading, isError } = useQuery({
+      queryKey: ['eventos'],
+      queryFn: fetchEventos,
+   });
 
    const renderItem = useCallback(({ item }: ItemData) => {
       return (
@@ -63,9 +67,21 @@ export function Eventos() {
       )
    }, []);
 
+   if (isLoading) {
+      return null;
+   }
+
+   if (!data?.data?.length) {
+      return (
+         <Layout.Root>
+            <ListEmptyComponent title="Nenhum evento encontrado" />
+         </Layout.Root>
+      )
+   }
+
    return (
       <>
-         <SafeAreaView>
+         <Layout.Root>
             <FlatList
                ListHeaderComponent={(
                   <VStack gap="md" justifyContent="space-evenly" mb="md">
@@ -77,14 +93,15 @@ export function Eventos() {
                      </VStack>
                   </VStack>
                )}
+               ListEmptyComponent={<ListEmptyComponent title="Nenhum evento disponível" />}
                ItemSeparatorComponent={() => <VStack height={20} />}
-               data={data.data}
+               data={data?.data}
                keyExtractor={(item) => item.id}
                renderItem={renderItem}
                ListFooterComponent={<VStack height={20} />}
                showsVerticalScrollIndicator={false}
             />
-         </SafeAreaView>
+         </Layout.Root>
       </>
    );
 }
