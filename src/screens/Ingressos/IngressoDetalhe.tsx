@@ -1,13 +1,12 @@
 import React from 'react';
 import { Image, ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
 import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { RouteProp, useRoute } from '@react-navigation/native';
+
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
 import { formataData } from '../../utils/utils';
 import VStack from '../../components/Views/Vstack';
-import { Html } from '../../components/Html';
-import { Button } from '../../components/Button';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { Layout } from '../../components/Views/Layout';
 import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
@@ -15,10 +14,9 @@ import { RouteApp } from '../../@types/navigation';
 import { data } from '../../../store/ingressos';
 import Circle from '../../components/Views/Circle';
 import Text from '../../components/Text';
-import { Path, Svg } from 'react-native-svg';
 import HStack from '../../components/Views/Hstack';
-type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
+type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 const eventoDetalhe = data.data[0];
 
 function LayoutTicket({ children }: { children: React.ReactNode }) {
@@ -43,7 +41,6 @@ function LayoutTicket({ children }: { children: React.ReactNode }) {
 }
 
 export const IngressoDetalhe = () => {
-   const { navigate } = useNavigation();
    const { params } = useRoute<EventoDetalheRouteProp>();
    console.log(params.id);
    const scrollY = useSharedValue(0);
@@ -139,8 +136,6 @@ export const IngressoDetalhe = () => {
             </LayoutTicket>
 
          </Animated.ScrollView>
-
-
       </>
    );
 };

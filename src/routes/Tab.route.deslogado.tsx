@@ -5,12 +5,6 @@ import { Icon } from '../icons';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import VStack from '../components/Views/Vstack';
-import { KEY_REDIRECT, useAuth } from '../hooks/auth';
-import { Login } from '../screens/Auth/Login';
-import { Perfil } from '../screens/Perfil';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import Text from '../components/Text';
 
 const Tab = createBottomTabNavigator();
 interface PropsTabs {
@@ -29,8 +23,8 @@ export function TabRouteDeslogado() {
                borderTopLeftRadius: 20,
                borderCurve: "circular",
                borderTopWidth: 0,
-               backgroundColor: "#fff",
                overflow: "hidden",
+               height: 54,
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
@@ -51,14 +45,6 @@ export function TabRouteDeslogado() {
                         </VStack>
                      ) : (
                         <Icon.Calendario />
-                     );
-                  case 'Perfil':
-                     return focused ? (
-                        <VStack backgroundColor='background_red_tab' borderRadius={12} p="sm">
-                           <Icon.User />
-                        </VStack>
-                     ) : (
-                        <Icon.User />
                      );
                }
             },

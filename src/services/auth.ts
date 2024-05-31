@@ -1,6 +1,4 @@
-import axios from "axios";
 import api from ".";
-import {login as loginResponse} from "../../store/login";
 
 export type UserProps = {
    mensagem: string;

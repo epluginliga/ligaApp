@@ -6,7 +6,7 @@ import VStack from '../../components/Views/Vstack'
 import { Card } from '../../components/Card'
 import { data } from '../../../store/ingressos'
 import { Icon } from '../../icons'
-import { FlatList, Pressable } from 'react-native'
+import { FlatList } from 'react-native'
 import Text from '../../components/Text'
 import { Layout } from '../../components/Views/Layout'
 

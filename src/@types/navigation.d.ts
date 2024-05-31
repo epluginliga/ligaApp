@@ -16,9 +16,7 @@ export type RouteApp = {
    CheckoutPagamento: undefined;
    CheckoutPix: undefined;
    CheckoutCartao: undefined;
-   TabRouteLogado: undefined;
-   IngressosTab: undefined;
-   TabRouteDeslogado: undefined;
+   Home: undefined;
 
 
    // private

@@ -9,4 +9,12 @@ const api = axios.create({
    },
 });
 
+
+export type PayloadPaginacao<T> = {
+   current_page: number;
+   data: Array<T>;
+}
+
+export type PayloadPaginacaoResponse<T> = Promise<PayloadPaginacao<T>>
+
 export default api;

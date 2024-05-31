@@ -24,8 +24,8 @@ export function TabRouteLogado() {
                borderTopLeftRadius: 20,
                borderCurve: "circular",
                borderTopWidth: 0,
-               backgroundColor: "#fff",
                overflow: "hidden",
+               height: 54,
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {

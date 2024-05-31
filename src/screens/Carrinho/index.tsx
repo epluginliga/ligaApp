@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Pressable, StatusBar } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Layout } from '../../components/Views/Layout'
 import { Icon } from '../../icons'
@@ -12,7 +11,6 @@ import HStack from '../../components/Views/Hstack'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { ResumoPedido } from '../../components/ResumoPedido'
-import { KEY_REDIRECT } from '../../hooks/auth'
 
 export function Carrinho() {
    const { navigate } = useNavigation();
@@ -20,7 +18,7 @@ export function Carrinho() {
    useEffect(() => {
       async function removeUrlRedirect() {
          try {
-            await AsyncStorage.removeItem(KEY_REDIRECT);
+           
          } catch (e) { }
          finally {
          }

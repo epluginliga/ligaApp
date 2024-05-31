@@ -16,10 +16,9 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '../../icons';
-import { KEY_REDIRECT, useAuth } from '../../hooks/auth';
+import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { StatusBarApp } from '../../components/StatusBarApp';
 import { RouteApp } from '../../@types/navigation';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const schema = z.object({
    user: z.string().email({
@@ -31,11 +30,12 @@ const schema = z.object({
 type LoginFormInputs = z.input<typeof schema>;
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'Login'>;
 
+
 export function Login() {
    const { navigate } = useNavigation();
    const { handleSignIn, loading } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
-   
+
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
       resolver: zodResolver(schema),
@@ -44,12 +44,11 @@ export function Login() {
          password: "123456",
       }
    });
-
-
+   
    const handleLogin = async (data: LoginFormInputs) => {
       try {
          if (params?.redirect) {
-            await AsyncStorage.setItem(KEY_REDIRECT, JSON.stringify(params?.redirect));
+            usuarioStorage.set('route', params?.redirect)
          }
 
          handleSignIn(data);

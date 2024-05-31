@@ -6,14 +6,13 @@ import React, {
    useState,
 } from 'react';
 
-import { login, LoginProps, UserProps } from '../services/auth';
+import { login, LoginProps } from '../services/auth';
 import { useMutation } from '@tanstack/react-query';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-
+import { MMKV, useMMKVString } from 'react-native-mmkv'
+import api from '../services';
 interface AuthContextProps {
    handleSignIn: (data: LoginProps, redirect?: string) => void;
-   usuario: UserProps | null | undefined;
+   token: string;
    logado: boolean;
    loading: boolean;
    signOut: () => void
@@ -22,60 +21,47 @@ interface AuthProviderProps {
    children: React.ReactNode;
 }
 
-const KEY_AUTH = '@auth';
-export const KEY_REDIRECT = '@redirect';
-
+export const usuarioStorage = new MMKV()
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
-   const [usuario, setUsuario] = useState<UserProps | null>();
-   const [loading, setLoading] = useState(true);
-   const navigate = useNavigation();
+   const [token, setToken] = useState('');
 
    const handleSignIn = useMutation({
       mutationKey: ['handleLogin'],
       mutationFn: (data: LoginProps) => login(data),
       async onSuccess(data) {
          try {
-            await AsyncStorage.setItem(KEY_AUTH, JSON.stringify(data));
-            setUsuario(data);
+            usuarioStorage.set('token', data.api_token);
+            api.defaults.headers.Authorization = data.api_token;
+            setToken(data.api_token);
          } catch (e) {
 
          }
       },
    });
 
-   const signOut = useCallback(async () => {
-      await AsyncStorage.multiRemove([KEY_AUTH, KEY_REDIRECT]);
-      setUsuario(null);
-      navigate.navigate("TabRouteDeslogado")
+   const signOut = useCallback(() => {
+      usuarioStorage.clearAll();
+      setToken('');
+      delete api.defaults.headers.Authorization;
    }, []);
 
    useEffect(() => {
-      const obtemUsuario = async () => {
-         try {
-            let usuario = await AsyncStorage.getItem(KEY_AUTH);
-            if (!!usuario) {
-               setUsuario(JSON.parse(usuario));
-            }
-
-         } catch (e) {
-            // saving error
-         } finally {
-            setLoading(false);
-         }
+      let token = usuarioStorage.getString('token');
+      if (!!token) {
+         setToken(token);
+         api.defaults.headers.Authorization = token;
       }
-
-      obtemUsuario();
-   }, [])
+   }, []);
 
    return (
       <AuthContext.Provider
          value={{
             handleSignIn: (data) => handleSignIn.mutate(data),
-            usuario,
-            logado: !!usuario,
-            loading: handleSignIn.isPending || loading,
+            token,
+            logado: !!token,
+            loading: handleSignIn.isPending,
             signOut
          }}>
          {children}

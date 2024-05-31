@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import { RouteDesLogado } from './Deslogado';
+import { RouteDesLogado } from './Stack.route.deslogado';
+import { RouteLogado } from './Stack.route.logado';
 import { useAuth } from '../hooks/auth';
-import { RouteLogado } from './Logado';
 import { Loading } from '../components/Loading';
 import api from '../services';
 
@@ -26,7 +26,7 @@ export function Routes() {
          return response;
       },
       (error) => {
-         console.error('Erro na resposta:', error);
+         setLoadingReq(false);
          return Promise.reject(error);
       }
    );
