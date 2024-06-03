@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -14,6 +14,8 @@ import { Layout } from "../../components/Views/Layout";
 import { formataData } from "../../utils/utils";
 import { Imagem } from "../../components/Imagem";
 import { Button } from "../../components/Button";
+import { useMMKVString } from "react-native-mmkv";
+import { useAuth, usuarioStorage } from "../../hooks/auth";
 
 export type ItemData = {
    item: EventosPayload;
@@ -25,7 +27,7 @@ type DestaqueProps = {
 function Destaque({ evento }: DestaqueProps) {
    const navigate = useNavigation();
 
-   if(!evento) return null;
+   if (!evento) return null;
 
    const dataEvento = formataData(evento.data_evento);
 
@@ -66,6 +68,8 @@ function Destaque({ evento }: DestaqueProps) {
 
 export function Eventos() {
    const navigate = useNavigation();
+   const [route] = useMMKVString('route')
+   const { logado } = useAuth();
 
    const { data, isLoading } = useQuery({
       queryKey: ['eventos'],
@@ -114,6 +118,18 @@ export function Eventos() {
          </Card.Root>
       )
    }, []);
+
+   useEffect(() => {
+      const time = setTimeout(() => {
+         if (route && logado) {
+            navigate.navigate(route as any);
+            usuarioStorage.delete('route');
+         }
+      }, 500);
+
+      return () => clearTimeout(time);
+
+   }, [route, logado]);
 
    if (isLoading) {
       return null;

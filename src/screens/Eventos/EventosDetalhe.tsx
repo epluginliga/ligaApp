@@ -1,5 +1,13 @@
-import React, { useEffect } from 'react';
-import { ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
+import React from 'react';
+import {
+   ImageBackground,
+   Platform,
+   Pressable,
+   SafeAreaView,
+   StatusBar,
+   View
+} from 'react-native';
+
 import Animated, {
    interpolate,
    useAnimatedScrollHandler,
@@ -20,10 +28,9 @@ import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
 import Circle from '../../components/Views/Circle';
-import { useAuth, usuarioStorage } from '../../hooks/auth';
-import { Loading } from '../../components/Loading';
-import { useMMKVString } from 'react-native-mmkv';
+import { useAuth} from '../../hooks/auth';
 import { fetchEventoDetalhe } from '../../services/eventos';
+
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
@@ -31,7 +38,6 @@ export const EventosDetalhe = () => {
    const { logado } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
-   const [route] = useMMKVString('route')
 
    const { data: eventoDetalhe } = useQuery({
       queryKey: ['eventosDetalhe', params?.id],
@@ -62,18 +68,6 @@ export const EventosDetalhe = () => {
       return { opacity };
    });
 
-   useEffect(() => {
-      const time = setTimeout(() => {
-         if (route && logado) {
-            navigate(route as any);
-            usuarioStorage.delete('route');
-         }
-      }, 1000);
-
-      return () => clearTimeout(time);
-
-   }, [route, logado]);
-
    if (!eventoDetalhe) {
       return (
          <VStack gap='md' flex={1}>
@@ -91,7 +85,6 @@ export const EventosDetalhe = () => {
 
    return (
       <>
-         {route && logado && <Loading />}
          <StatusBar barStyle={Platform.OS === "ios" ? "light-content" : "dark-content"} />
 
          <Animated.View style={[

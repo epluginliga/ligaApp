@@ -10,11 +10,18 @@ import { Layout } from '../../components/Views/Layout';
 import { useAuth } from '../../hooks/auth';
 
 import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
+import { useQuery } from '@tanstack/react-query';
+import { EventosPayload, IngressosPayload, fetchIngressoComprado } from '../../services/eventos';
+import { isAfter, isBefore, isDate } from 'date-fns';
+import { formataData } from '../../utils/utils';
 
 type StepsIngressosProps = {
    [key: number]: React.ReactNode
 }
-type StepsIngressosContext = {}
+type StepsIngressosContext = {
+   proximoEventos?: IngressosPayload[];
+   eventosPassados?: IngressosPayload[];
+}
 export const StepContext = createContext<StepsIngressosContext>({} as StepsIngressosContext);
 
 const stepsIngressos: StepsIngressosProps = {
@@ -59,22 +66,45 @@ function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
 }
 
 export function Ingressos() {
-   const [stepAtual, setStepAtual] = useState(() => 1);
    const { logado } = useAuth();
+   const [stepAtual, setStepAtual] = useState(() => 1);
 
    if (logado) {
+
+      const { data } = useQuery({
+         queryKey: ['ingressosComprados'],
+         queryFn: fetchIngressoComprado,
+      });
+
+      if (!data) return null;
+
+      const proximoEventos = data.data.filter(eventos => {
+         const dataEvento = formataData();
+         const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
+         return new Date <= new Date(novaData);
+      });
+
+      const eventosPassados = data.data.filter(eventos => {
+         const dataEvento = formataData();
+         const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
+         return new Date > new Date(novaData);
+      });
+
       return (
-         <>
+         <StepContext.Provider value={{
+            eventosPassados,
+            proximoEventos
+         }}>
             {stepsIngressos[stepAtual]}
             <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
-         </>
+         </StepContext.Provider>
       )
    }
 
    return (
-      <>
+      <Layout.Root>
          <Layout.Header title='Meus Ingressos' backgroundColor='white' />
          <UsuarioNaoLogado />
-      </>
+      </Layout.Root>
    )
 }

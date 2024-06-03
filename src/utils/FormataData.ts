@@ -1,5 +1,6 @@
 import { isValid, format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
+
 export class FormatData {
    private data = new Date();
 
@@ -34,4 +35,18 @@ export class FormatData {
    diaMesAnoISOBR(formato = "dd/MM/yyyy", locale = ptBR) {
       return format(new Date(this.data), formato, { locale });
    }
+
+   converteDataBRtoISO(date: string) {
+      if(!date) {
+         throw new Error("converteDataBRtoISO parametro obrigatório");
+      }
+      
+      let hora = date?.split(" ")?.[1];
+      const removeHora = date?.split(" ")?.[0]?.split("/");
+
+      return `${removeHora?.reverse()?.join("-")} ${hora}`;
+   }
+
+
 }
+

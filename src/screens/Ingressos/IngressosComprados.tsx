@@ -1,26 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FlatList } from 'react-native';
 
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
 
 import VStack from '../../components/Views/Vstack';
 import { Card } from '../../components/Card';
 import { Icon } from '../../icons';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
-import { IngressosPayload, fetchIngressoComprado } from '../../services/eventos';
+import { IngressosPayload } from '../../services/eventos';
+import { StepContext } from '.';
+import { formataData } from '../../utils/utils';
 
 export function IngressosComprados() {
    const navigate = useNavigation();
-   
-   const { data } = useQuery({
-      queryKey: ['ingressosComprados'],
-      queryFn: fetchIngressoComprado,
-   });
-   
-   function Item({item}: {item: IngressosPayload}) {
+   const { eventosPassados } = useContext(StepContext)
+
+   function Item({ item }: { item: IngressosPayload }) {
+      const dataISO = formataData().converteDataBRtoISO(item.evento_data_evento)
+      const dataEvento = formataData(dataISO);
+
       return (
          <Card.Root
             marginHorizontal="sm"
@@ -35,13 +35,12 @@ export function IngressosComprados() {
                <Card.Title lineHeight={22.5} mt='sm'>{item.evento_nome}</Card.Title>
 
                <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
-                  {item.evento_data_evento}
+                  {dataEvento.diaMesAnoTexto()}
                </Card.SubTitle>
 
                <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
-                  item.local {'\n'}
                   <Card.Span>
-                     {item.evento_cidade} | {item.evento_estado} - {item?.hora_evento + 'h' || 'hora não definida'}
+                     {item.evento_cidade} | {item.evento_estado} - {dataEvento.hora() || 'hora não definida'}
                   </Card.Span>
                </Card.SubTitle>
 
@@ -69,7 +68,7 @@ export function IngressosComprados() {
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
-            data={data?.data}
+            data={eventosPassados}
          />
       </Animated.View>
    )
