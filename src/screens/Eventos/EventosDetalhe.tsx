@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import { ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+   interpolate,
+   useAnimatedScrollHandler,
+   useAnimatedStyle,
+   useSharedValue
+} from 'react-native-reanimated';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,7 +24,6 @@ import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { Loading } from '../../components/Loading';
 import { useMMKVString } from 'react-native-mmkv';
 import { fetchEventoDetalhe } from '../../services/eventos';
-import Text from '../../components/Text';
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
@@ -139,7 +143,7 @@ export const EventosDetalhe = () => {
             <View style={{ marginTop: -10 }} >
                <Section.Root position='relative' zIndex={9}>
                   <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                     {formataData(eventoDetalhe?.data_evento).DiaMesAnoTexto()}
+                     {formataData(eventoDetalhe?.data_evento).diaMesAnoTexto()}
                   </Section.SubTitle>
 
                   <Section.SubTitle iconLeft={<Icon.Clock />}>

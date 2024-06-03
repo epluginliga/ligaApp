@@ -1,7 +1,7 @@
 import { FormatData } from "./FormataData";
 import { CartaoCredito } from "./cartaoCredito";
 
-export function formataData(data: string) {
+export function formataData(data?: string) {
    return new FormatData(data);
 }
 

@@ -109,7 +109,7 @@ export const IngressoDetalhe = () => {
 
                <VStack>
                   <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                     {formataData(eventoDetalhe.evento_data_evento_format_db).DiaMesAnoTexto()}
+                     {formataData(eventoDetalhe.evento_data_evento_format_db).diaMesAnoTexto()}
                   </Section.SubTitle>
 
                   <VStack gap="xs">

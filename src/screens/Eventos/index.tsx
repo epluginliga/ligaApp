@@ -1,20 +1,67 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { FlatList, SafeAreaView } from "react-native";
+import React, { useCallback } from "react";
+import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 
 import Text from "../../components/Text";
 import { Card } from "../../components/Card";
 import VStack from "../../components/Views/Vstack";
 import HStack from "../../components/Views/Hstack";
-import { Carrocel } from "../../components/Carrocel";
 import { Icon } from "../../icons";
-import { useQuery } from "@tanstack/react-query";
 import { EventosPayload, fetchEventos } from "../../services/eventos";
 import { ListEmptyComponent } from "../../components/ListEmptyComponent";
 import { Layout } from "../../components/Views/Layout";
+import { formataData } from "../../utils/utils";
+import { Imagem } from "../../components/Imagem";
+import { Button } from "../../components/Button";
 
 export type ItemData = {
    item: EventosPayload;
+}
+
+type DestaqueProps = {
+   evento?: EventosPayload;
+}
+function Destaque({ evento }: DestaqueProps) {
+   const navigate = useNavigation();
+
+   if(!evento) return null;
+
+   const dataEvento = formataData(evento.data_evento);
+
+   return (
+      <VStack position='relative' alignItems="center" overflow='hidden' borderRadius={10}>
+         <Imagem style={{ position: "relative" }} source={{ uri: evento.path_imagem }} >
+            <VStack zIndex={999} justifyContent="space-between" flex={1}>
+
+               <VStack gap="xs">
+                  <Text color="white">{dataEvento.diaSemana()} - <Text color='white' fontWeight="900">
+                     {dataEvento.diaMes()}</Text> de {dataEvento.nomeMes()}
+                  </Text>
+                  <Text fontSize={26} fontWeight="900" color="white">
+                     {evento.nome}
+                  </Text>
+                  <Text fontSize={16} color="white">
+                     <Text fontWeight="900" color="white">
+                        {evento.cidade} - {evento.estado}
+                     </Text>
+                     | {evento.nome_local}
+                  </Text>
+               </VStack>
+
+               <Button
+                  variant="link"
+                  onPress={() => navigate.navigate("EventosDetalhe", {
+                     id: evento.id,
+                  })}
+               >
+                  @Ver detalhes do evento
+               </Button>
+            </VStack>
+         </Imagem>
+
+      </VStack>
+   )
 }
 
 export function Eventos() {
@@ -26,6 +73,7 @@ export function Eventos() {
    });
 
    const renderItem = useCallback(({ item }: ItemData) => {
+      const diaEvento = formataData(item.data_evento);
       return (
          <Card.Root
             marginHorizontal="sm"
@@ -49,16 +97,16 @@ export function Eventos() {
                   <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
                      {item.nome_local} {'\n'}
                      <Card.Span>
-                        {item.cidade} | {item.estado} - {item?.hora_evento + 'h' || 'hora não definida'}
+                        {item.cidade} | {item.estado} - {diaEvento.hora() || 'hora não definida'}
                      </Card.Span>
                   </Card.SubTitle>
 
                   <Card.Widget>
                      <Text textAlign="center" color="white" fontWeight="700" fontSize={22}>
-                        {item.dia_evento}
+                        {diaEvento.diaMes()}
                      </Text>
                      <Text color="white" textTransform="uppercase" fontWeight="500" fontSize={14} style={{ marginTop: -8 }}>
-                        {item.mes_evento}
+                        {diaEvento.nomeMes()}
                      </Text>
                   </Card.Widget>
                </HStack>
@@ -79,15 +127,22 @@ export function Eventos() {
       )
    }
 
+   const destaque = data?.data?.find(evento => !!evento.destaque);
+
    return (
       <Layout.Root>
          <FlatList
             ListHeaderComponent={(
                <VStack gap="md" justifyContent="space-evenly" mb="md">
 
-                  <Carrocel evento={data?.data[0]} />
+                  <Destaque evento={destaque} />
 
-                  <VStack borderTopColor="bege" marginVertical="md" pt="md" marginHorizontal="sm" borderTopWidth={1}>
+                  <VStack
+                     borderTopColor="bege"
+                     marginVertical="md"
+                     pt="md"
+                     marginHorizontal="sm"
+                     borderTopWidth={1}>
                      <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
                   </VStack>
                </VStack>

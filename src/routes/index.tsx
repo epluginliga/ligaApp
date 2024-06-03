@@ -27,7 +27,7 @@ export function Routes() {
       (error) => {
          setLoadingReq(false);
          console.error(error);
-         // signOut();
+         signOut();
          return Promise.reject(error);
       }
    );

@@ -14,7 +14,7 @@ export function ResumoPedido({ data }: ResumoPedidoProps) {
          <Section.Title>{data.nome}</Section.Title>
 
          <Section.SubTitle iconLeft={<Icon.Calendario />}>
-            {formataData(data.data_evento).DiaMesAnoTexto()}
+            {formataData(data.data_evento).diaMesAnoTexto()}
          </Section.SubTitle>
 
          <Section.SubTitle iconLeft={<Icon.Clock />}>

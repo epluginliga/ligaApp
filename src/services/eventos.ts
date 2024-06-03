@@ -12,18 +12,16 @@ export type EventosPayload = {
    cidade: string;
    estado: string;
    nome_local: string;
-   dia_semana: string;
-   hora_evento: string;
-   dia_evento: string;
-   mes_evento: string;
    descricao: string;
+   destaque: number;
 }
+
+const vendaAplicativo = '62ba7aa0-07dc-435d-8961-f4ff309b8bd0';
 
 export async function fetchEventos(): PayloadPaginacaoResponse<EventosPayload> {
    return await api
-      .get('/evento?pontoVenda=baa1e135-5c35-44cf-9d6d-9e221dcdb004')
+      .get(`/app/evento?pontoVenda=${vendaAplicativo}`)
       .then(success => {
-         console.log("status", success.status);
          if (success.status !== 200) {
             throw new Error("Erro");
          }
@@ -34,48 +32,48 @@ export async function fetchEventos(): PayloadPaginacaoResponse<EventosPayload> {
 
 export async function fetchEventoDetalhe(evento_id: string): Promise<EventosPayload> {
    return await api
-      .get(`/evento/${evento_id}`)
+      .get(`/app/evento/${evento_id}`)
       .then(success => success.data)
       .catch((err) => err);
 }
 
 export type IngressosPayload = {
-   "bilhete_id": "f7e87999-d8e1-49fe-a0ce-9b6053beb3c6",
-   "usuario_id": "38347b7f-81ab-40ba-bf90-0393c0fa861b",
-   "codigo_barra": "5c9df60227",
-   "cpf_compra": "75540355172",
-   "bilhete_permite_transferencia": 1,
-   "nome_compra": "Jean Marcos Vieira da Silva",
-   "cpf_dono_original": "75540355172",
-   "bilhete_valor_pago": "5",
-   "bilhete_tipo_pagamento": "dinheiro",
-   "vezes_utilizado": 0,
-   "lote_nome": "TESTE 1234",
-   "evento_nome": "Evento teste maquininha",
-   "evento_path_imagem": "http://localhost/liga/public/assets\\img\\placeholder-evento.jpg",
-   "evento_cidade": "Goiânia",
-   "evento_estado": "GO",
-   "evento_data_evento": "30/11/2023 18:00",
-   "evento_data_encerramento": "2023-11-30 19:00:00",
-   "evento_data_liberacao_ingresso": "19/11/2023 10:00",
-   "evento_data_limite_transferencia": "2023-09-30 18:00:00",
-   "ingresso_necessario_aprovacao_imagem": 0,
-   "nome_ingresso": "Teste de ingresso",
-   "ingresso_possui_restricao": 0,
-   "ingresso_necessario_restricao": null,
-   "ingresso_tipo_restricao": "sem_restricao",
-   "ingresso_transferido": 0,
-   "usuario_dono": boolean,
-   "pode_transferir": boolean,
-   "dia_semana": "qui",
-   "hora_evento": "18",
-   "dia_evento": "30",
-   "mes_evento": "nov",
-   "evento_data_evento_format_db": "2023-11-30 18:00:00",
-   "evento_data_liberacao_ingresso_format_db": "2023-11-19 10:00:00",
-   "evento_data_limite_transferencia_format_db": "2023-09-30 18:00:00",
-   "data_encerramento": "2023-11-30 19:00:00",
-   "cortesia": boolean
+   bilhete_id: string;
+   usuario_id: string;
+   codigo_barra: string;
+   cpf_compra: string;
+   bilhete_permite_transferencia: number;
+   nome_compra: string;
+   cpf_dono_original: string;
+   bilhete_valor_pago: string;
+   bilhete_tipo_pagamento: string;
+   vezes_utilizado: number;
+   lote_nome: string;
+   evento_nome: string;
+   evento_path_imagem: string;
+   evento_cidade: string;
+   evento_estado: string;
+   evento_data_evento: string;
+   evento_data_encerramento: string;
+   evento_data_liberacao_ingresso: string;
+   evento_data_limite_transferencia: string;
+   ingresso_necessario_aprovacao_imagem: number;
+   nome_ingresso: string;
+   ingresso_possui_restricao: number;
+   ingresso_necessario_restricao: null,
+   ingresso_tipo_restricao: string;
+   ingresso_transferido: number;
+   usuario_dono: boolean,
+   pode_transferir: boolean,
+   dia_semana: string;
+   hora_evento: string;
+   dia_evento: string;
+   mes_evento: string;
+   evento_data_evento_format_db: string;
+   evento_data_liberacao_ingresso_format_db: string;
+   evento_data_limite_transferencia_format_db: string;
+   data_encerramento: string;
+   cortesia: boolean
 };
 
 export async function fetchIngressoComprado(): PayloadPaginacaoResponse<IngressosPayload> {

@@ -53,8 +53,9 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
       if (token) {
          api.defaults.headers.Authorization = token;
          setToken(token);
-         setLoading(false)
       }
+      setLoading(false)
+
    }, []);
 
    return (
