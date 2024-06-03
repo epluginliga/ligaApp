@@ -32,6 +32,10 @@ export class FormatData {
       return format(this.data, 'MMM', { locale: ptBR });
    }
 
+   nomeFullMes() {
+      return format(this.data, 'MMMM', { locale: ptBR });
+   }
+
    diaMesAnoISOBR(formato = "dd/MM/yyyy", locale = ptBR) {
       return format(new Date(this.data), formato, { locale });
    }

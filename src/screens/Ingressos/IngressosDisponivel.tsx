@@ -11,6 +11,7 @@ import { Layout } from '../../components/Views/Layout'
 import { StepContext } from '.'
 import { IngressosPayload } from '../../services/eventos'
 import { formataData } from '../../utils/utils'
+import { ListEmptyComponent } from '../../components/ListEmptyComponent'
 
 export function IngressosDisponivel() {
    const navigate = useNavigation();
@@ -34,8 +35,10 @@ export function IngressosDisponivel() {
                <Card.Title lineHeight={22.5} mt='sm'>{item.evento_nome}</Card.Title>
 
                <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
-                  {dataEvento.diaMesAnoTexto()}
+                  {dataEvento.diaSemana()}, {'\n'}
+                  {`${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
                </Card.SubTitle>
+
 
                <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
                   item.local {'\n'}
@@ -66,6 +69,7 @@ export function IngressosDisponivel() {
          style={[{ flex: 1 }]}
       >
          <FlatList
+            ListEmptyComponent={<ListEmptyComponent title='Nenhum Ingresso disponível' />}
             ListHeaderComponent={<Layout.Header title='Ingressos disponíveis'
                backgroundColor='white'
                mb='md'

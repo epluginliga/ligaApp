@@ -12,6 +12,7 @@ import { Layout } from '../../components/Views/Layout';
 import { IngressosPayload } from '../../services/eventos';
 import { StepContext } from '.';
 import { formataData } from '../../utils/utils';
+import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 
 export function IngressosComprados() {
    const navigate = useNavigation();
@@ -26,16 +27,21 @@ export function IngressosComprados() {
             marginHorizontal="sm"
             pr="xs"
             onPress={() => navigate.navigate("IngressosDetalhe", { id: item.bilhete_id })}>
+
             <Card.Image
                flex={1}
                height={88}
-               source={{ uri: item?.evento_path_imagem }} />
+               source={{ uri: item?.evento_path_imagem }}
+            />
 
             <VStack flex={2} justifyContent='space-around'>
-               <Card.Title lineHeight={22.5} mt='sm'>{item.evento_nome}</Card.Title>
+               <Card.Title lineHeight={22.5} mt='sm'>
+                  {item.evento_nome}
+               </Card.Title>
 
                <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
-                  {dataEvento.diaMesAnoTexto()}
+                  {dataEvento.diaSemana()}, {'\n'}
+                  {`${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
                </Card.SubTitle>
 
                <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
@@ -64,7 +70,16 @@ export function IngressosComprados() {
          style={[{ flex: 1 }]}
       >
          <FlatList
-            ListHeaderComponent={<Layout.Header title='Ingressos Comprados' backgroundColor='white' mb='md' />}
+            ListHeaderComponent={
+               <Layout.Header
+                  title='Ingressos Comprados'
+                  backgroundColor='white'
+                  mb='md'
+               />
+            }
+            ListEmptyComponent={
+               <ListEmptyComponent title='Nenhum Ingresso utilizado' />
+            }
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
