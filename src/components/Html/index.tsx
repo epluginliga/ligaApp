@@ -20,6 +20,9 @@ export function Html({ source, size }: Html) {
                fontSize: "18px",
                color: "#1F1F1F",
             },
+            body: {
+               color: "#1F1F1F",
+            },
             h5: {
                fontSize: "15px",
                marginBottom: 0,

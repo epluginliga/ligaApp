@@ -2,10 +2,8 @@ import React from 'react'
 
 import { Layout } from '../../components/Views/Layout'
 import { Section } from '../../components/Section'
-import { formataData } from '../../utils/utils'
 import { Icon } from '../../icons'
 import VStack from '../../components/Views/Vstack'
-import { data } from '../../../store/eventoId';
 import Text from '../../components/Text'
 import { Card } from '../../components/Card'
 import HStack from '../../components/Views/Hstack'
@@ -28,7 +26,7 @@ export function CarrinhoResumo() {
             flex={1}
          >
             <VStack flex={1} gap='md' >
-               <ResumoPedido data={data} />
+               <ResumoPedido />
 
                <Card.Root title="Resumo do pedido" variant='border'>
                   <VStack>
@@ -55,7 +53,9 @@ export function CarrinhoResumo() {
                </VStack>
             </Section.Root>
 
-            <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>Continuar</Button>
+            <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>
+               Continuar
+            </Button>
 
          </VStack>
 

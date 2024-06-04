@@ -1,4 +1,5 @@
-import api, { PayloadPaginacaoResponse } from ".";
+import api, { PayloadDefault, PayloadPaginacaoResponse } from ".";
+import { vendaAplicativo } from "../utils/constantes";
 
 export type EventosPayload = {
    id: string;
@@ -15,8 +16,6 @@ export type EventosPayload = {
    descricao: string;
    destaque: number;
 }
-
-const vendaAplicativo = '62ba7aa0-07dc-435d-8961-f4ff309b8bd0';
 
 export async function fetchEventos(): PayloadPaginacaoResponse<EventosPayload> {
    return await api
@@ -39,43 +38,12 @@ export async function fetchEventoDetalhe(evento_id: string): Promise<EventosPayl
 
 export type IngressosPayload = {
    bilhete_id: string;
-   usuario_id: string;
-   codigo_barra: string;
-   cpf_compra: string;
-   bilhete_permite_transferencia: number;
-   nome_compra: string;
-   cpf_dono_original: string;
-   bilhete_valor_pago: string;
-   bilhete_tipo_pagamento: string;
-   vezes_utilizado: number;
-   lote_nome: string;
    evento_nome: string;
    evento_path_imagem: string;
    evento_cidade: string;
    evento_estado: string;
    evento_data_evento: string;
-   evento_data_encerramento: string;
-   evento_data_liberacao_ingresso: string;
-   evento_data_limite_transferencia: string;
-   ingresso_necessario_aprovacao_imagem: number;
-   nome_ingresso: string;
-   ingresso_possui_restricao: number;
-   ingresso_necessario_restricao: null,
-   ingresso_tipo_restricao: string;
-   ingresso_transferido: number;
-   usuario_dono: boolean,
-   pode_transferir: boolean,
-   dia_semana: string;
-   hora_evento: string;
-   dia_evento: string;
-   mes_evento: string;
-   evento_data_evento_format_db: string;
-   evento_data_liberacao_ingresso_format_db: string;
-   evento_data_limite_transferencia_format_db: string;
-   data_encerramento: string;
-   cortesia: boolean
 };
-
 export async function fetchIngressoComprado(): PayloadPaginacaoResponse<IngressosPayload> {
    return await api
       .get(`/evento/ingresso/ingressos-comprados`)
@@ -83,3 +51,54 @@ export async function fetchIngressoComprado(): PayloadPaginacaoResponse<Ingresso
       .catch((err) => err);
 }
 
+export type IngressosDisponivelIngressoPayloadProps = {
+   id: string;
+   nome: string;
+   quantidade_por_usuario: number;
+   valor: string;
+   permitir_compra: number;
+   lote_id: string;
+   nome_lote: string;
+   quantidade_por_compra: number,
+   quantidade_disponivel_ingresso: number;
+   quantidade_disponivel_lote: number;
+   disponivel_data_ingresso: boolean;
+   data_inicio_vendas: string;
+   hora_inicio_vendas: string;
+   dia_inicio_vendas_ingresso: string;
+   mes_inicio_vendas_ingresso: string;
+   ano_inicio_vendas_ingresso: string;
+   data_fim_vendas: string;
+   hora_fim_vendas: string;
+   dia_fim_vendas_ingresso: string;
+   mes_fim_vendas_ingresso: string;
+   ano_fim_vendas_ingresso: string;
+   taxa_conveniencia?: any,
+   status_lote: string;
+   mostrar_data_encerramento_lote: number;
+   descricao?: string,
+   nome_atletica?: string;
+}
+
+export type IngressosDisponivelPayloadProps = {
+   "setor_id": string;
+   "setor_nome": string;
+   "ingressos": IngressosDisponivelIngressoPayloadProps[]
+}
+type IngressoDisponivelProps = {
+   pontoVenda: string;
+   evento_id: string;
+
+}
+export async function fetchIngressoDisponivel(
+   { pontoVenda, evento_id }: IngressoDisponivelProps): PayloadDefault<IngressosDisponivelPayloadProps[]> {
+   return await api
+      .get(`/venda/ingressos/${pontoVenda}/${evento_id}`)
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      })
+      .catch((err) => err);
+}

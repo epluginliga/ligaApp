@@ -15,5 +15,6 @@ export type PayloadPaginacao<T> = {
 }
 
 export type PayloadPaginacaoResponse<T> = Promise<PayloadPaginacao<T>>
+export type PayloadDefault<T> = Promise<T>
 
 export default api;

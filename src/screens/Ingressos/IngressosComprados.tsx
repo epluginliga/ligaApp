@@ -10,9 +10,9 @@ import { Icon } from '../../icons';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
 import { IngressosPayload } from '../../services/eventos';
-import { StepContext } from '.';
 import { formataData } from '../../utils/utils';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
+import { StepContext } from '.';
 
 export function IngressosComprados() {
    const navigate = useNavigation();

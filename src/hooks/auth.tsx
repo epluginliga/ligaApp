@@ -8,7 +8,7 @@ import React, {
 
 import { login, LoginProps } from '../services/auth';
 import { useMutation } from '@tanstack/react-query';
-import { MMKV, useMMKVString } from 'react-native-mmkv'
+import { MMKV } from 'react-native-mmkv'
 import api from '../services';
 interface AuthContextProps {
    handleSignIn: (data: LoginProps, redirect?: string) => void;

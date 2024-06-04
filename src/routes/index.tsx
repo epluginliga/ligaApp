@@ -5,6 +5,7 @@ import { RouteLogado } from './Stack.route.logado';
 import { useAuth } from '../hooks/auth';
 import { Loading } from '../components/Loading';
 import api from '../services';
+import { CarrinhoProvider } from '../hooks/carrinho';
 
 export function Routes() {
    const { logado, loading, signOut } = useAuth();
@@ -26,19 +27,28 @@ export function Routes() {
       },
       (error) => {
          setLoadingReq(false);
-         console.error(error);
-         signOut();
+         if (error.response?.data?.codigoretorno === 401) {
+            signOut();
+         }
          return Promise.reject(error);
       }
    );
 
-   if(loading) {
+   if (loading) {
       return <Loading />;
    }
 
    return (
       <>
-         {logado ? <RouteLogado /> : <RouteDesLogado />}
+         {logado ? (
+            <CarrinhoProvider>
+               <RouteLogado />
+            </CarrinhoProvider>
+         ) :
+            (
+               <RouteDesLogado />
+            )
+         }
          {loadingReq && <Loading />}
       </>
    )

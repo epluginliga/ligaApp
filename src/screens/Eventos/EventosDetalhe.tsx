@@ -28,14 +28,17 @@ import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
 import Circle from '../../components/Views/Circle';
-import { useAuth} from '../../hooks/auth';
+import { useAuth } from '../../hooks/auth';
 import { fetchEventoDetalhe } from '../../services/eventos';
+import { useCarrinho } from '../../hooks/carrinho';
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
    const { logado } = useAuth();
+   const { handleAddEvento } = useCarrinho();
+
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
 
@@ -169,6 +172,7 @@ export const EventosDetalhe = () => {
             <Button marginHorizontal="md"
                onPress={() => {
                   if (logado) {
+                     handleAddEvento(eventoDetalhe);
                      return navigate('Carrinho');
                   }
 
