@@ -81,9 +81,9 @@ export type IngressosDisponivelIngressoPayloadProps = {
 }
 
 export type IngressosDisponivelPayloadProps = {
-   "setor_id": string;
-   "setor_nome": string;
-   "ingressos": IngressosDisponivelIngressoPayloadProps[]
+   setor_id: string;
+   setor_nome: string;
+   ingressos: IngressosDisponivelIngressoPayloadProps[]
 }
 type IngressoDisponivelProps = {
    pontoVenda: string;

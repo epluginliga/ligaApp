@@ -1,5 +1,5 @@
 import { FormatData } from "./FormataData";
-import { CartaoCredito } from "./cartaoCredito";
+import { CartaoCredito } from "./CartaoCredito";
 
 export function formataData(data?: string) {
    return new FormatData(data);

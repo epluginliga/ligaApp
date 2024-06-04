@@ -10,7 +10,7 @@ const palette = {
    background_red_tab: 'rgba(242, 56, 90, 0.10)',
 
 
-   azul: '#0001F8',
+   azul: '#232C79',
    purple: '#6400DD',
    purple_200: '#37007A',
    purple_300: 'rgba(55, 0, 122, 0.65)',
