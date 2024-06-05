@@ -37,7 +37,7 @@ type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
    const { logado } = useAuth();
-   const { handleAddEvento } = useCarrinho();
+   const { adicionaEvento } = useCarrinho();
 
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
@@ -171,8 +171,9 @@ export const EventosDetalhe = () => {
          >
             <Button marginHorizontal="md"
                onPress={() => {
+                  adicionaEvento(eventoDetalhe);
+
                   if (logado) {
-                     handleAddEvento(eventoDetalhe);
                      return navigate('Carrinho');
                   }
 

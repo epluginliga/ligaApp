@@ -17,7 +17,7 @@ const Text = createText<Theme>();
 type CustomButton = SpacingProps<Theme> & VariantProps<Theme, 'buttonVariants'> & TouchableOpacityProps & {
    children?: React.ReactNode | string;
    iconLeft?: React.JSX.Element;
-   iconRight?: React.JSX.Element;
+   iconRight?: React.JSX.Element | boolean;
 }
 
 const Box = createRestyleComponent<CustomButton, Theme>([
@@ -39,7 +39,13 @@ export function Button({ children, onPress, iconLeft, iconRight, ...props }: Cus
                </Text>
             )}
 
-            {props.variant !== "link" ? iconRight ? iconRight : <Icon.ArrowRight size={24} color='#fff' /> : null}
+            {
+               iconRight !== false ?
+                  props.variant !== "link" ?
+                     iconRight ? iconRight : <Icon.ArrowRight size={24} color='#fff' />
+                     : null
+                  : null
+            }
          </Box>
       </TouchableOpacity>
    )

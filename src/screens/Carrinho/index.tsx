@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -15,48 +15,20 @@ import { vendaAplicativo } from '../../utils/constantes';
 import { useCarrinho } from '../../hooks/carrinho';
 import { IngressosDisponivelIngressoPayloadProps, fetchIngressoDisponivel } from '../../services/eventos';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
-import { EventoCarrinhoIngresso } from '../../services/carrinho';
 import { Maskara } from '../../utils/Maskara';
 import Text from '../../components/Text';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
-   setPedido: (ingresso: EventoCarrinhoIngresso) => void;
+   eventoId: string;
 }
 
-function IngressosAdicionar({ ingresso, setPedido }: IngressosAdicionarProps) {
-   const [ingressoComprado, setIngressoComprado] = useState<EventoCarrinhoIngresso[]>([]);
+function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
+   const { adicionaIngressoAoEvento, pedido } = useCarrinho()
 
-   const handleAdd = useCallback((ingressoSelecionado: EventoCarrinhoIngresso) => {
-      const ingressoExistente = ingressoComprado
-         .find((ingresso) => ingresso.id === ingressoSelecionado.id);
-
-      if (ingressoExistente) {
-         ingressoExistente.qtd += 1;
-         setIngressoComprado([ingressoExistente]);
-
-      } else {
-         setIngressoComprado([...ingressoComprado, ingressoSelecionado]);
-      }
-
-   }, [ingressoComprado, setPedido]);
-
-   const handleRemove = useCallback((ingressoSelecionado: EventoCarrinhoIngresso) => {
-      const ingressoExistente = ingressoComprado.find((ingresso) => ingresso.id === ingressoSelecionado.id);
-
-      if (ingressoExistente) {
-         if (ingressoExistente.qtd === 0) {
-            return;
-         }
-         ingressoExistente.qtd -= 1;
-         setIngressoComprado([...ingressoComprado, ingressoExistente]);
-      } else {
-         ingressoComprado.push(ingressoSelecionado);
-         setIngressoComprado(ingressoComprado);
-      }
-   }, [ingressoComprado]);
-
-   const eventoAtual = ingressoComprado.find(curr => curr.id === ingresso.id);
+   const quantidade = pedido?.eventos
+      .find(item => item.evento_id === eventoId)?.ingressos
+      .find(ingr => ingr.id === ingresso.id)?.qtd || 0;
 
    return (
       <Card.Root key={ingresso.id} variant='border'>
@@ -75,7 +47,7 @@ function IngressosAdicionar({ ingresso, setPedido }: IngressosAdicionarProps) {
 
          <HStack alignItems='center' gap="lg">
             <Pressable
-               onPress={() => handleRemove(
+               onPress={() => console.log(
                   {
                      id: ingresso.id,
                      lote_id: ingresso.lote_id,
@@ -86,18 +58,23 @@ function IngressosAdicionar({ ingresso, setPedido }: IngressosAdicionarProps) {
             </Pressable>
 
             <Card.Title variant='header'>
-               {eventoAtual?.qtd || 0}
+               {quantidade}
             </Card.Title>
 
             <Pressable
-               onPress={() => handleAdd({
-                  id: ingresso.id,
-                  lote_id: ingresso.lote_id,
-                  qtd: 1
-               })}
+               onPress={() => {
+                  adicionaIngressoAoEvento(eventoId, {
+                     id: ingresso.id,
+                     lote_id: ingresso.lote_id,
+                     qtd: 1,
+                     valor: +ingresso.valor
+                  },
+                  );
+               }}
             >
                <Icon.Plus />
             </Pressable>
+
          </HStack>
       </Card.Root>
    );
@@ -105,12 +82,7 @@ function IngressosAdicionar({ ingresso, setPedido }: IngressosAdicionarProps) {
 
 export function Carrinho() {
    const { navigate } = useNavigation();
-   const { evento } = useCarrinho();
-   const [pedido, setPedido] = useState<EventoCarrinhoIngresso[]>([]);
-
-   const handleMontaPedido = useCallback((ingresso: EventoCarrinhoIngresso) => {
-      setPedido((state) => [...state, ingresso])
-   }, []);
+   const { evento, pedido, total } = useCarrinho();
 
    if (!evento) return null;
 
@@ -148,7 +120,13 @@ export function Carrinho() {
                         <Text color='azul' marginHorizontal='sm'>{data.setor_nome}</Text>
                         {data?.ingressos?.map(ingresso => {
                            if (ingresso?.quantidade_disponivel_ingresso > 0) {
-                              return <IngressosAdicionar setPedido={handleMontaPedido} key={ingresso.id} ingresso={ingresso} />;
+                              return (
+                                 <IngressosAdicionar
+                                    eventoId={evento.id}
+                                    key={ingresso.id}
+                                    ingresso={ingresso}
+                                 />
+                              );
                            }
 
                            return (
@@ -163,13 +141,24 @@ export function Carrinho() {
                         })}
                      </VStack>
                   ))}
-
                </VStack>
             </Layout.Scroll>
 
             <VStack justifyContent='center' width="100%" bottom={10}>
-               <Button marginHorizontal="md" onPress={() => navigate('CarrinhoUtilizador')}>
-                  Continuar
+               <Button iconRight={(
+                  <Text variant='header' color='white'>
+                     {Maskara.dinheiro(total)}
+                  </Text>
+               )}
+                  marginHorizontal="md"
+                  onPress={() => {
+                     console.log(JSON.stringify(pedido, null, 2));
+                     // navigate('CarrinhoUtilizador')
+                  }}
+               >
+                  <Text color='white'>
+                     Continuar
+                  </Text>
                </Button>
             </VStack>
          </Layout.Root>

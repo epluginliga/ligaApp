@@ -14,6 +14,7 @@ export type EventoCarrinhoIngresso = {
    id: string;
    lote_id: string;
    qtd: number;
+   valor?: number;
 }
 
 export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<any> {
