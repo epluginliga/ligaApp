@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Layout } from '../../components/Views/Layout';
 import { Icon } from '../../icons';
@@ -17,6 +17,7 @@ import { IngressosDisponivelIngressoPayloadProps, fetchIngressoDisponivel } from
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 import { Maskara } from '../../utils/Maskara';
 import Text from '../../components/Text';
+import { CriaEditaCarrinhoProps, criaEditaCarrinho } from '../../services/carrinho';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -24,11 +25,17 @@ type IngressosAdicionarProps = {
 }
 
 function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
-   const { adicionaIngressoAoEvento, pedido } = useCarrinho()
+   const { adicionaIngressoAoEvento, removeIngressoDoEvento, pedido, totalItens } = useCarrinho()
 
    const quantidade = pedido?.eventos
       .find(item => item.evento_id === eventoId)?.ingressos
       .find(ingr => ingr.id === ingresso.id)?.qtd || 0;
+
+   const desabilitarBotao = ingresso.quantidade_disponivel_ingresso <= 0 ||
+      totalItens >= ingresso.quantidade_por_compra ||
+      totalItens >= ingresso.quantidade_por_usuario ||
+      quantidade >= ingresso.quantidade_disponivel_ingresso ||
+      quantidade >= ingresso.quantidade_disponivel_lote;
 
    return (
       <Card.Root key={ingresso.id} variant='border'>
@@ -47,7 +54,10 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
 
          <HStack alignItems='center' gap="lg">
             <Pressable
-               onPress={() => console.log(
+               style={{ opacity: quantidade === 0 ? 0.4 : 1 }}
+               disabled={quantidade === 0}
+               onPress={() => removeIngressoDoEvento(
+                  eventoId,
                   {
                      id: ingresso.id,
                      lote_id: ingresso.lote_id,
@@ -62,6 +72,8 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
             </Card.Title>
 
             <Pressable
+               style={{ opacity: desabilitarBotao ? 0.4 : 1 }}
+               disabled={desabilitarBotao}
                onPress={() => {
                   adicionaIngressoAoEvento(eventoId, {
                      id: ingresso.id,
@@ -82,7 +94,7 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
 
 export function Carrinho() {
    const { navigate } = useNavigation();
-   const { evento, pedido, total } = useCarrinho();
+   const { evento, pedido, total, totalItens } = useCarrinho();
 
    if (!evento) return null;
 
@@ -90,6 +102,20 @@ export function Carrinho() {
       queryKey: ['fetchIngressoDisponivel', evento?.id,],
       queryFn: () => fetchIngressoDisponivel({ evento_id: evento.id, pontoVenda: vendaAplicativo }),
       enabled: !!evento?.id,
+   });
+
+   const handleCriaCarrinho = useMutation({
+      mutationKey: ['criaCarrinho'],
+      mutationFn: (pedido: CriaEditaCarrinhoProps) => {
+         const copyPedido = { ...pedido };
+         const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0)
+         return criaEditaCarrinho({ ...pedido, eventos: newPedido });
+      },
+      onError: (error: Error) => { },
+      onSuccess: (data) => {
+         console.log(data.mensagem);
+         navigate('CarrinhoUtilizador')
+      },
    });
 
    if (!data?.length && !isLoading) {
@@ -145,15 +171,21 @@ export function Carrinho() {
             </Layout.Scroll>
 
             <VStack justifyContent='center' width="100%" bottom={10}>
-               <Button iconRight={(
-                  <Text variant='header' color='white'>
-                     {Maskara.dinheiro(total)}
-                  </Text>
-               )}
+               <Button
+                  disabled={total === 0}
+                  iconRight={(
+                     <Text variant='header' color='white' verticalAlign='middle'>
+                        <Text variant='header3' color='white'>{totalItens} Item por: {' '}</Text>
+                        {Maskara.dinheiro(total)}
+                     </Text>
+                  )}
                   marginHorizontal="md"
                   onPress={() => {
-                     console.log(JSON.stringify(pedido, null, 2));
-                     // navigate('CarrinhoUtilizador')
+                     if (pedido) {
+                        return handleCriaCarrinho.mutate(pedido);
+                     }
+
+                     return;
                   }}
                >
                   <Text color='white'>

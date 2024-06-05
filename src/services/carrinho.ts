@@ -17,7 +17,15 @@ export type EventoCarrinhoIngresso = {
    valor?: number;
 }
 
-export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<any> {
+type PayloadCriaEditaCarrinho = {
+   "codigoretorno": number,
+   "erro": boolean;
+   "id": string;
+   "mensagem": string;
+   "mensagenserro": []
+}
+
+export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<PayloadCriaEditaCarrinho> {
    return await api
       .post(`/carrinho`, { ...body })
       .then(success => {

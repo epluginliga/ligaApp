@@ -9,8 +9,9 @@ type CarrinhoContextProps = {
    evento: EventosPayload | null;
    adicionaEvento: (evento: EventosPayload) => void;
    adicionaIngressoAoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
-   removeIngressoDoEvento: () => void;
+   removeIngressoDoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
    total: number;
+   totalItens: number;
    pedido?: CriaEditaCarrinhoProps;
 }
 
@@ -38,6 +39,10 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       .flatMap((evento) => evento.ingressos)
       .reduce((acumulador, ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0), 0);
 
+   let totalItens = pedido.eventos
+      .flatMap(item => item.ingressos)
+      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
+
    function adicionaEventoAoPedido(eventoId: string) {
       const existe = pedido.eventos.find(evento => evento.evento_id === eventoId);
       if (!existe) {
@@ -46,7 +51,37 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       setPedido(pedido);
    }
 
-   const removeIngressoDoEvento = useCallback(() => { }, []);
+   const removeIngressoDoEvento = useCallback((
+      eventoId: string,
+      ingresso: EventoCarrinhoIngresso,
+   ) => {
+      let copyPedido = { ...pedido };
+
+      let eventos = copyPedido.eventos.find(item => item.evento_id === eventoId);
+      if (!eventos) {
+         return;
+      }
+
+      let existeIngresso = eventos?.ingressos.find(item => item.id === ingresso.id);
+      if (existeIngresso) {
+         existeIngresso.qtd -= 1;
+         if (existeIngresso.qtd < 0) {
+            return;
+         }
+      }
+
+      eventos.ingressos = copyPedido.eventos.flatMap(item => item.ingressos).filter(item => item.qtd !== 0);
+      copyPedido.eventos.map(cppedido => {
+         if (cppedido.evento_id === eventoId) {
+            return eventos.ingressos
+         }
+
+         return cppedido;
+      });
+
+      setPedido(copyPedido);
+
+   }, []);
 
    const adicionaIngressoAoEvento = useCallback((
       eventoId: string,
@@ -84,7 +119,8 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          pedido,
          adicionaIngressoAoEvento,
          removeIngressoDoEvento,
-         total
+         total,
+         totalItens
       }}>
          {children}
       </CarrinhoContext.Provider>

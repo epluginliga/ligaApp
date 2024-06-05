@@ -25,9 +25,14 @@ const Box = createRestyleComponent<CustomButton, Theme>([
    createVariant({ themeKey: "buttonVariants" }),
 ]);
 
-export function Button({ children, onPress, iconLeft, iconRight, ...props }: CustomButton) {
+export function Button({ children, onPress, iconLeft, iconRight, disabled = false, ...props }: CustomButton) {
    return (
-      <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+      <TouchableOpacity
+         disabled={disabled}
+         activeOpacity={0.7}
+         onPress={onPress}
+         style={{opacity: disabled ? 0.7 : 1}}
+         >
          <Box padding='sm'  {...props}>
             {iconLeft && iconLeft}
 
