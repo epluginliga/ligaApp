@@ -8,8 +8,8 @@ import api from '../services';
 import { CarrinhoProvider } from '../hooks/carrinho';
 
 export function Routes() {
-   const { logado, loading, signOut } = useAuth();
-   const [loadingReq, setLoadingReq] = React.useState(false);
+   const { logado,loading,signOut } = useAuth();
+   const [loadingReq,setLoadingReq] = React.useState(false);
    api.interceptors.request.use(
       (config) => {
          setLoadingReq(true);
@@ -34,22 +34,14 @@ export function Routes() {
       }
    );
 
-   if (loading) {
-      return <Loading />;
-   }
+   // if (loading) {
+   //    return <Loading />;
+   // }
 
    return (
-      <>
-         {logado ? (
-            <CarrinhoProvider>
-               <RouteLogado />
-            </CarrinhoProvider>
-         ) :
-            (
-               <RouteDesLogado />
-            )
-         }
+      <CarrinhoProvider>
+         {logado ? <RouteLogado /> : <RouteDesLogado />}
          {loadingReq && <Loading />}
-      </>
+      </CarrinhoProvider>
    )
 }

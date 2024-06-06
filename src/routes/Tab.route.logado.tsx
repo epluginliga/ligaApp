@@ -20,12 +20,13 @@ export function TabRouteLogado() {
          initialRouteName='EventosTab'
          screenOptions={({ route }) => ({
             tabBarStyle: {
-               borderTopRightRadius: 20,
-               borderTopLeftRadius: 20,
+               borderTopRightRadius: 25,
+               borderTopLeftRadius: 25,
                borderCurve: "circular",
                borderTopWidth: 0,
                overflow: "hidden",
-               height: 54,
+               minHeight: 54,
+               paddingTop: 20
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {

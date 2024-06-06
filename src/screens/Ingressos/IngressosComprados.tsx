@@ -73,7 +73,6 @@ export function IngressosComprados() {
             ListHeaderComponent={
                <Layout.Header
                   title='Ingressos Comprados'
-                  backgroundColor='white'
                   mb='md'
                />
             }

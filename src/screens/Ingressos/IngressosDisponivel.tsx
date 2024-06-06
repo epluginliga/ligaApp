@@ -71,7 +71,6 @@ export function IngressosDisponivel() {
          <FlatList
             ListEmptyComponent={<ListEmptyComponent title='Nenhum Ingresso disponível' />}
             ListHeaderComponent={<Layout.Header title='Ingressos disponíveis'
-               backgroundColor='white'
                mb='md'
             />}
             renderItem={Item}

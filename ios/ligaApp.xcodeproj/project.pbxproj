@@ -46,7 +46,7 @@
 		823DFBF02BE1856400F8D45B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		892D9A86281604C9AC6D93B1 /* Pods-ligaApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp.release.xcconfig"; path = "Target Support Files/Pods-ligaApp/Pods-ligaApp.release.xcconfig"; sourceTree = "<group>"; };
 		AF93EB85DB694A74A09EC66B /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
-		B33321AA19EFEBCF3C363C73 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = ligaApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		B33321AA19EFEBCF3C363C73 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ligaApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BE88410D67E08B0E40B2C81D /* Pods-ligaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp.debug.xcconfig"; path = "Target Support Files/Pods-ligaApp/Pods-ligaApp.debug.xcconfig"; sourceTree = "<group>"; };
 		CC37051C2FE34EFEB67A1057 /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -490,7 +490,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6KB4MW56MU;
+				DEVELOPMENT_TEAM = 67JLL923H2;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = ligaApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LIGA;
@@ -504,7 +504,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = deualiga.com.br;
+				PRODUCT_BUNDLE_IDENTIFIER = br.app.eplugin.liga;
 				PRODUCT_NAME = ligaApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -522,7 +522,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6KB4MW56MU;
+				DEVELOPMENT_TEAM = 67JLL923H2;
 				INFOPLIST_FILE = ligaApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LIGA;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -535,7 +535,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = deualiga.com.br;
+				PRODUCT_BUNDLE_IDENTIFIER = br.app.eplugin.liga;
 				PRODUCT_NAME = ligaApp;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -616,10 +616,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -691,10 +688,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

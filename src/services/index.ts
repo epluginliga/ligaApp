@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_URL } from "@env";
-console.log("API_URL", API_URL);
+console.log("API_UR   L", API_URL);
+
 const api = axios.create({
    baseURL: API_URL,
    timeout: 5000,

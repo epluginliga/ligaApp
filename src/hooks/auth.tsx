@@ -31,14 +31,21 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const handleSignIn = useMutation({
       mutationKey: ['handleLogin'],
       mutationFn: (data: LoginProps) => login(data),
-      async onSuccess(data) {
+       onSuccess(data) {
          try {
+            if(!data) {
+               throw new Error("Dados inválidos!");
+            }
+
             usuarioStorage.set('token', data.api_token);
             api.defaults.headers.Authorization = data.api_token;
             setToken(data.api_token);
          } catch (e) {
-
+            
          }
+      },
+      onError(error) {
+         console.log(error)
       },
    });
 

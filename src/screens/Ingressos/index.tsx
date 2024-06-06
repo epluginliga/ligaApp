@@ -1,4 +1,4 @@
-import React, { Dispatch, createContext, useState } from 'react'
+import React,{ Dispatch,createContext,useState } from 'react'
 import { TouchableOpacity } from 'react-native';
 
 import { IngressosDisponivel } from './IngressosDisponivel';
@@ -11,8 +11,8 @@ import { useAuth } from '../../hooks/auth';
 
 import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
 import { useQuery } from '@tanstack/react-query';
-import { EventosPayload, IngressosPayload, fetchIngressoComprado } from '../../services/eventos';
-import { isAfter, isBefore, isDate } from 'date-fns';
+import { EventosPayload,IngressosPayload,fetchIngressoComprado } from '../../services/eventos';
+import { isAfter,isBefore,isDate } from 'date-fns';
 import { formataData } from '../../utils/utils';
 
 type StepsIngressosProps = {
@@ -33,7 +33,7 @@ type HeaderProps = {
    setStepAtual: Dispatch<React.SetStateAction<number>>;
    stepAtual: number;
 }
-function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
+function Tabs({ setStepAtual,stepAtual }: HeaderProps) {
    return (
       <HStack justifyContent='center' m='md' gap='none'>
          <TouchableOpacity
@@ -67,7 +67,7 @@ function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
 
 export function Ingressos() {
    const { logado } = useAuth();
-   const [stepAtual, setStepAtual] = useState(() => 1);
+   const [stepAtual,setStepAtual] = useState(() => 1);
 
    if (logado) {
 
@@ -95,15 +95,17 @@ export function Ingressos() {
             eventosPassados,
             proximoEventos
          }}>
-            {stepsIngressos[stepAtual]}
-            <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
+            <Layout.Root>
+               {stepsIngressos[stepAtual]}
+               <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
+            </Layout.Root>
          </StepContext.Provider>
       )
    }
 
    return (
       <Layout.Root>
-         <Layout.Header title='Meus Ingressos' backgroundColor='white' />
+         <Layout.Header title='Meus Ingressos' />
          <UsuarioNaoLogado />
       </Layout.Root>
    )
