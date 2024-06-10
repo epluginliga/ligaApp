@@ -11,8 +11,7 @@ import { useAuth } from '../../hooks/auth';
 
 import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
 import { useQuery } from '@tanstack/react-query';
-import { EventosPayload,IngressosPayload,fetchIngressoComprado } from '../../services/eventos';
-import { isAfter,isBefore,isDate } from 'date-fns';
+import { IngressosPayload,fetchIngressoComprado } from '../../services/eventos';
 import { formataData } from '../../utils/utils';
 
 type StepsIngressosProps = {

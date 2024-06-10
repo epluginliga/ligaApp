@@ -1,7 +1,4 @@
-import { useTheme } from '@shopify/restyle'
 import React from 'react'
-import { View } from 'react-native'
-import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
 import { Section } from '../../components/Section';
 import { Button } from '../../components/Button';
