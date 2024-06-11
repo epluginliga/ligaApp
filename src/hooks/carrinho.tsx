@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { MMKV } from "react-native-mmkv";
 
-import { EventosPayload } from "../services/eventos";
 import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso } from "../services/carrinho";
 import { vendaAplicativo } from "../utils/constantes";
+import { EventosPayload } from "../services/@eventos";
 
 type CarrinhoContextProps = {
    evento: EventosPayload | null;

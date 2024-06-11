@@ -8,7 +8,7 @@ import { Card } from "../../components/Card";
 import VStack from "../../components/Views/Vstack";
 import HStack from "../../components/Views/Hstack";
 import { Icon } from "../../icons";
-import { EventosPayload, fetchEventos } from "../../services/eventos";
+import { fetchEventos } from "../../services/eventos";
 import { ListEmptyComponent } from "../../components/ListEmptyComponent";
 import { Layout } from "../../components/Views/Layout";
 import { formataData } from "../../utils/utils";
@@ -16,6 +16,7 @@ import { Imagem } from "../../components/Imagem";
 import { Button } from "../../components/Button";
 import { useMMKVString } from "react-native-mmkv";
 import { useAuth, usuarioStorage } from "../../hooks/auth";
+import { EventosPayload } from "../../services/@eventos";
 
 export type ItemData = {
    item: EventosPayload;

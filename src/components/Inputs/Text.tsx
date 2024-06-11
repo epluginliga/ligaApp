@@ -23,6 +23,7 @@ export function InputText({ name, ...rest }: InputText) {
          borderColor: theme.colors.primary,
       }
    }
+
    return (
       <Input {...rest}>
          <Controller
@@ -35,7 +36,7 @@ export function InputText({ name, ...rest }: InputText) {
                      placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
                      onChangeText={onChange}
                      value={value}
-                     onBlur={onBlur}
+                     onBlur={onBlur}                     
                      style={{
                         fontSize: theme.spacing.md,
                         fontFamily: theme.fonts.medium,

@@ -9,10 +9,10 @@ import { Card } from '../../components/Card';
 import { Icon } from '../../icons';
 import Text from '../../components/Text';
 import { Layout } from '../../components/Views/Layout';
-import { IngressosPayload } from '../../services/eventos';
 import { formataData } from '../../utils/utils';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 import { StepContext } from '.';
+import { IngressosPayload } from '../../services/@eventos';
 
 export function IngressosComprados() {
    const navigate = useNavigation();

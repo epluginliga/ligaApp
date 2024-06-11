@@ -13,11 +13,12 @@ import { Button } from '../../components/Button';
 import { ResumoPedido } from '../../components/ResumoPedido';
 import { vendaAplicativo } from '../../utils/constantes';
 import { useCarrinho } from '../../hooks/carrinho';
-import { IngressosDisponivelIngressoPayloadProps, fetchIngressoDisponivel } from '../../services/eventos';
+import {  fetchIngressoDisponivel } from '../../services/eventos';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 import { Maskara } from '../../utils/Maskara';
 import Text from '../../components/Text';
 import { CriaEditaCarrinhoProps, criaEditaCarrinho } from '../../services/carrinho';
+import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -129,6 +130,10 @@ export function Carrinho() {
       )
    };
 
+   const texto: any = {
+      1: 'item'
+   }
+   
    return (
       <>
          <StatusBar barStyle="dark-content" />
@@ -175,7 +180,9 @@ export function Carrinho() {
                   disabled={total === 0}
                   iconRight={(
                      <Text variant='header' color='white' verticalAlign='middle'>
-                        <Text variant='header3' color='white'>{totalItens} Item por: {' '}</Text>
+                        {totalItens > 0 && <Text variant='header3' color='white'>
+                           {totalItens} {texto[totalItens] || 'itens'} por: {' '}
+                        </Text>}
                         {Maskara.dinheiro(total)}
                      </Text>
                   )}
@@ -189,7 +196,7 @@ export function Carrinho() {
                   }}
                >
                   <Text color='white'>
-                     Continuar
+                     Comprar
                   </Text>
                </Button>
             </VStack>

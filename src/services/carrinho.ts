@@ -1,4 +1,5 @@
 import api, { PayloadDefault } from ".";
+import { PayloadCarrinho } from "./@carrinho";
 
 export type CriaEditaCarrinhoProps = {
    ponto_venda_id: string;
@@ -28,6 +29,18 @@ type PayloadCriaEditaCarrinho = {
 export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<PayloadCriaEditaCarrinho> {
    return await api
       .post(`/carrinho`, { ...body })
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      })
+      .catch((err) => err);
+}
+
+export async function obtemCarrinho(): PayloadDefault<PayloadCarrinho> {
+   return await api
+      .get(`/carrinho`)
       .then(success => {
          if (success.status !== 200) {
             throw new Error("Erro");

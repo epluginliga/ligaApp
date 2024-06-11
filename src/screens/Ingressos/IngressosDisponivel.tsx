@@ -9,9 +9,9 @@ import { FlatList } from 'react-native'
 import Text from '../../components/Text'
 import { Layout } from '../../components/Views/Layout'
 import { StepContext } from '.'
-import { IngressosPayload } from '../../services/eventos'
 import { formataData } from '../../utils/utils'
 import { ListEmptyComponent } from '../../components/ListEmptyComponent'
+import { IngressosPayload } from '../../services/@eventos'
 
 export function IngressosDisponivel() {
    const navigate = useNavigation();
