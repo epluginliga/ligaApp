@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
@@ -33,7 +33,7 @@ const schemaUtilizador = z.object({
          evento_ingresso_id: z.string().optional(),
          donos: z.array(
             z.object({
-               usuario_proprio: z.boolean(),
+               usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
                   nome: z.string(),
                   email: z.string().email({
@@ -63,15 +63,17 @@ function FormUtilizador({
       "email": "EMAIL",
    };
 
+   // console.log(ingresso_key)
+
    return (
       <VStack gap='md' >
 
          <Section.Root>
-            <Section.Title>{ingresso.nome}</Section.Title>
+            <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
 
             <HStack alignItems='center' mb='md'>
                <Circle variant='shadow' width={25} height={25} />
-               <Text variant='labelInput'>Esse ingresso é pra mim</Text>
+               <Text variant='labelInput'>Esse ingresso é pra mim {ingresso_key}</Text>
             </HStack>
 
             {/* {inputsRestricao[ingresso.tipo_restricao]} */}
@@ -93,6 +95,8 @@ function FormUtilizador({
             />
 
 
+
+
          </Section.Root>
       </VStack>
    )
@@ -112,7 +116,8 @@ export function CarrinhoUtilizador() {
       return;
    }
 
-   // console.log(JSON.stringify(errors, null, 1));
+   useEffect(() => setValue("lotes", []), []);
+
    return (
       <Layout.Keyboard>
          <Layout.Root>
@@ -129,24 +134,28 @@ export function CarrinhoUtilizador() {
                      />
                   </Card.Root>
 
-                  {data?.eventos.map((evento, evento_key: number) => (
+                  {data?.eventos.map((evento) => (
                      evento.ingressos.map((ingresso, ingresso_key: number) => {
-                        setValue(`lotes.${evento_key}.id`, ingresso.lote_id);
-                        setValue(`lotes.${evento_key}.evento_ingresso_id`, ingresso.id);
-                        setValue(`lotes.${evento_key}.donos.${ingresso_key}.usuario_proprio`, false);
+                        return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
+                           setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
+                           setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
+                           setValue(`lotes.${ingresso_key}.donos.${indice}.usuario_proprio`, false);
 
-                        return (
-                           <FormUtilizador
-                              errors={errors}
-                              control={control}
-                              key={ingresso.id}
-                              evento_key={evento_key}
-                              ingresso_key={ingresso_key}
-                              ingresso={ingresso}
-                           />
-                        )
+                           return (
+                              <FormUtilizador
+                                 errors={errors}
+                                 control={control}
+                                 key={indice}
+                                 evento_key={ingresso_key}
+                                 ingresso_key={indice}
+                                 ingresso={ingresso}
+                              />
+                           )
+                        })
                      })
                   ))}
+
+                  {/* <Text variant='header3'>{JSON.stringify(getValues(), null, 1)}</Text> */}
 
                   <Button onPress={handleSubmit((data) => {
                      console.log(JSON.stringify(data, null, 1));
