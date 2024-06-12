@@ -19,6 +19,7 @@ import { IconTicket } from "./IconTicket";
 import { IconWarning } from "./IconWarning";
 import { IconCredtCard, IconPix } from "./IconPayments";
 import { IconCopy } from "./IconCopy";
+import { IconTrashCan } from "./IconTrashCan";
 
 export const Icon = {
    Eye: IconEye,
@@ -48,6 +49,7 @@ export const Icon = {
    CredtCard: IconCredtCard,
    Pix: IconPix,
    Copy: IconCopy,
+   Trash: IconTrashCan
 }
 
 export type Icon = {

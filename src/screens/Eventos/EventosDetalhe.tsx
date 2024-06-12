@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
    ImageBackground,
    Platform,
    Pressable,
    SafeAreaView,
    StatusBar,
+   TouchableOpacity,
    View
 } from 'react-native';
 
@@ -15,7 +16,7 @@ import Animated, {
    useSharedValue
 } from 'react-native-reanimated';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
@@ -31,13 +32,118 @@ import Circle from '../../components/Views/Circle';
 import { useAuth } from '../../hooks/auth';
 import { fetchEventoDetalhe } from '../../services/eventos';
 import { useCarrinho } from '../../hooks/carrinho';
+import { deletaCarrinho, obtemCarrinho } from '../../services/carrinho';
+import { CarrinhoModalEmCompra } from '../Carrinho/CarrinhoModalEmCompra';
+import { EventosPayload } from '../../services/@eventos';
+import { useTheme } from '@shopify/restyle';
+import Text from '../../components/Text';
+import HStack from '../../components/Views/Hstack';
+import { Theme } from '../../theme/default';
+
+
+type ButtonComprarInfressosProps = {
+   evento: EventosPayload
+}
+function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
+   const [mostraModal, setMostraModal] = useState(false);
+   const { logado } = useAuth();
+   const { adicionaEvento } = useCarrinho();
+   const { colors } = useTheme<Theme>()
+   const { navigate } = useNavigation();
+
+   const handleVerificaSeExisteCarrinho = useMutation({
+      mutationFn: obtemCarrinho,
+      onSuccess(data) {
+         const mostrarModal = data.status === "em_compra";
+         if (!mostrarModal) {
+            return navigate("Carrinho");
+         }
+
+         setMostraModal(mostrarModal);
+      },
+   });
+
+   const cancelaCarrinho = useMutation({
+      mutationFn: deletaCarrinho,
+      onSuccess() {
+         setMostraModal(false);
+         navigate('Carrinho');
+      },
+   });
+
+   const { data } = handleVerificaSeExisteCarrinho;
+
+   return (
+      <>
+         <CarrinhoModalEmCompra ativo={mostraModal}>
+            {data && (
+               <>
+                  <Text textAlign='center' color='azul'>
+                     Você já tem um carrinho
+                     <Text variant='header' >{'\n'} {data?.status_str}</Text>
+                  </Text>
+
+                  <VStack gap="md">
+                     <Text textAlign='center' variant='header2'>O que Deseja fazer?</Text>
+
+                     <HStack width="100%" paddingHorizontal='md' justifyContent='space-between'>
+                        <TouchableOpacity onPress={() => cancelaCarrinho.mutate(data.id)}>
+                           <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
+                              <Icon.Ticket size={14} color={colors.primary} />
+                              <Text variant='botaoLink' color='primary'>Escolher ingressos</Text>
+                           </HStack>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => {
+                           setMostraModal(false);
+                           navigate("CarrinhoUtilizador");
+                        }}>
+                           <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
+                              <Text variant='botaoLink' color='greenDark'>Carrinho</Text>
+                              <Icon.ArrowRight size={18} color={colors.greenDark} />
+                           </HStack>
+                        </TouchableOpacity>
+                     </HStack>
+                  </VStack>
+               </>
+            )}
+
+         </CarrinhoModalEmCompra>
+
+         <VStack
+            position="absolute"
+            justifyContent='center'
+            width="100%"
+            bottom={Platform.OS === "android" ? 10 : 30}
+         >
+            <Button
+               loading={handleVerificaSeExisteCarrinho.isPending}
+               marginHorizontal="md"
+               onPress={() => {
+                  adicionaEvento(evento);
+
+                  if (logado) {
+                     handleVerificaSeExisteCarrinho.mutate();
+                     return;
+                  }
+
+                  return navigate("Login", {
+                     redirect: "Carrinho",
+                  });
+
+
+               }}>
+               Comprar
+            </Button>
+         </VStack>
+      </>
+   )
+}
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
-   const { logado } = useAuth();
-   const { adicionaEvento } = useCarrinho();
 
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
@@ -163,29 +269,9 @@ export const EventosDetalhe = () => {
             </View>
          </Animated.ScrollView>
 
-         <VStack
-            position="absolute"
-            justifyContent='center'
-            width="100%"
-            bottom={Platform.OS === "android" ? 10 : 30}
-         >
-            <Button marginHorizontal="md"
-               onPress={() => {
-                  adicionaEvento(eventoDetalhe);
-
-                  if (logado) {
-                     return navigate('Carrinho');
-                  }
-
-                  return navigate("Login", {
-                     redirect: "Carrinho",
-                  });
-
-               }}>
-               Comprar
-            </Button>
-         </VStack>
+         <ButtonComprarIngressos evento={eventoDetalhe} />
       </>
    );
 };
+
 

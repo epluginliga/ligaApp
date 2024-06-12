@@ -2,7 +2,7 @@
 export type PayloadCarrinho = {
    id: string;
    valor: number;
-   status: string;
+   status: "em_compra";
    status_str: string;
    eventos: EventoCarrinho[];
    usuario: {

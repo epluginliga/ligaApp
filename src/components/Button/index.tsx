@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import {
    SpacingProps,
    VariantProps,
@@ -18,6 +18,7 @@ type CustomButton = SpacingProps<Theme> & VariantProps<Theme, 'buttonVariants'> 
    children?: React.ReactNode | string;
    iconLeft?: React.JSX.Element;
    iconRight?: React.JSX.Element | boolean;
+   loading?: boolean;
 }
 
 const Box = createRestyleComponent<CustomButton, Theme>([
@@ -25,7 +26,7 @@ const Box = createRestyleComponent<CustomButton, Theme>([
    createVariant({ themeKey: "buttonVariants" }),
 ]);
 
-export function Button({ children, onPress, iconLeft, iconRight, disabled = false, ...props }: CustomButton) {
+export function Button({ children, onPress, iconLeft, iconRight, disabled = false, loading, ...props }: CustomButton) {
    return (
       <TouchableOpacity
          disabled={disabled}
@@ -34,18 +35,18 @@ export function Button({ children, onPress, iconLeft, iconRight, disabled = fals
          style={{opacity: disabled ? 0.7 : 1}}
          >
          <Box padding='sm'  {...props}>
-            {iconLeft && iconLeft}
+            {!loading && iconLeft && iconLeft}
 
             {typeof children !== "string" ? (
                children
             ) : (
                <Text variant={props.variant === "link" ? 'botaoLink' : "botaoDefault"} color='white'>
-                  {children}
+                  {loading ? <Text color='white'>Carregando...</Text> : children}
                </Text>
             )}
 
             {
-               iconRight !== false ?
+              !loading && iconRight !== false ?
                   props.variant !== "link" ?
                      iconRight ? iconRight : <Icon.ArrowRight size={24} color='#fff' />
                      : null

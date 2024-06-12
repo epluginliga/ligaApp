@@ -1,24 +1,28 @@
 import React from 'react';
-import { Pressable, StatusBar } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { Modal, Pressable, StatusBar, Button as ButtonRN, TouchableOpacity } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Layout } from '../../components/Views/Layout';
-import { Icon } from '../../icons';
 import VStack from '../../components/Views/Vstack';
-
 import { Card } from '../../components/Card';
 import HStack from '../../components/Views/Hstack';
 import { Button } from '../../components/Button';
 import { ResumoPedido } from '../../components/ResumoPedido';
-import { vendaAplicativo } from '../../utils/constantes';
-import { useCarrinho } from '../../hooks/carrinho';
-import {  fetchIngressoDisponivel } from '../../services/eventos';
-import { ListEmptyComponent } from '../../components/ListEmptyComponent';
-import { Maskara } from '../../utils/Maskara';
 import Text from '../../components/Text';
-import { CriaEditaCarrinhoProps, criaEditaCarrinho } from '../../services/carrinho';
+import { ListEmptyComponent } from '../../components/ListEmptyComponent';
+import { fetchIngressoDisponivel } from '../../services/eventos';
+import { CriaEditaCarrinhoProps, criaEditaCarrinho, obtemCarrinho } from '../../services/carrinho';
 import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
+import { Icon } from '../../icons';
+
+import { useCarrinho } from '../../hooks/carrinho';
+
+import { Maskara } from '../../utils/Maskara';
+import { vendaAplicativo } from '../../utils/constantes';
+import { useTheme } from '@shopify/restyle';
+import { Theme } from '../../theme/default';
+import { CarrinhoModalEmCompra } from './CarrinhoModalEmCompra';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -65,7 +69,7 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
                      qtd: 1
                   })}
             >
-               <Icon.Minus />
+               <Icon.Minus color='#232C79' />
             </Pressable>
 
             <Card.Title variant='header'>
@@ -85,7 +89,7 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
                   );
                }}
             >
-               <Icon.Plus />
+               <Icon.Plus color='#232C79' />
             </Pressable>
 
          </HStack>
@@ -93,15 +97,23 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
    );
 }
 
+const itemTextSingular: { [key: number]: string } = {
+   1: 'item'
+}
+
 export function Carrinho() {
    const { navigate } = useNavigation();
    const { evento, pedido, total, totalItens } = useCarrinho();
 
-   if (!evento) return null;
+   const { data } = useQuery({
+      queryKey: ['fetchIngressoDisponivel', evento],
+      queryFn: () => {
+         if (!evento?.id) {
+            return null;
+         }
 
-   const { data, isLoading } = useQuery({
-      queryKey: ['fetchIngressoDisponivel', evento?.id,],
-      queryFn: () => fetchIngressoDisponivel({ evento_id: evento.id, pontoVenda: vendaAplicativo }),
+         return fetchIngressoDisponivel({ evento_id: evento.id, pontoVenda: vendaAplicativo });
+      },
       enabled: !!evento?.id,
    });
 
@@ -119,24 +131,14 @@ export function Carrinho() {
       },
    });
 
-   if (!data?.length && !isLoading) {
-      return (
-         <Layout.Root>
-            <Layout.Header title='Ingressos disponíveis' />
-            <ResumoPedido />
-
-            <ListEmptyComponent title='Nenhum ingresso disponível!' />
-         </Layout.Root>
-      )
-   };
-
-   const texto: any = {
-      1: 'item'
+   if (!evento) {
+      return;
    }
-   
+
    return (
       <>
          <StatusBar barStyle="dark-content" />
+
 
          <Layout.Root>
             <Layout.Header title='Ingressos disponíveis' />
@@ -181,7 +183,7 @@ export function Carrinho() {
                   iconRight={(
                      <Text variant='header' color='white' verticalAlign='middle'>
                         {totalItens > 0 && <Text variant='header3' color='white'>
-                           {totalItens} {texto[totalItens] || 'itens'} por: {' '}
+                           {totalItens} {itemTextSingular[totalItens] || 'itens'} por: {' '}
                         </Text>}
                         {Maskara.dinheiro(total)}
                      </Text>

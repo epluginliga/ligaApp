@@ -18,6 +18,8 @@ import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
 import { cpfMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
+import Animated, { FadeIn, FadeInDown, FadeInUp, FadeOut, FadeOutDown, FadeOutUp } from 'react-native-reanimated'
+import { useFocusEffect } from '@react-navigation/native'
 
 const schemaUtilizador = z.object({
    lotes: z.array(
@@ -52,27 +54,29 @@ const schemaUtilizador = z.object({
 export type FormUtilizador = z.infer<typeof schemaUtilizador>;
 
 export function CarrinhoUtilizador() {
-   const { data } = useQuery({
-      queryKey: ['obtemCarrinho'],
-      queryFn: obtemCarrinho,
-      select(data) {
-         setValue("lotes", []);
-         data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
-            return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
-               setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
-               setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
-               setValue(`lotes.${ingresso_key}.donos.${indice}.usuario_proprio`, false);
-            });
-         })
 
-         return data;
-      },
+   const { data, isLoading, refetch } = useQuery({
+      queryKey: ['obtemCarrinhoPaginaCarrinho'],
+      queryFn: obtemCarrinho,
+      refetchOnWindowFocus: true,
    });
 
    const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
+   if (isLoading) {
+      return;
+   }
+
+   data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
+      return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
+         setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
+         setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
+         setValue(`lotes.${ingresso_key}.donos.${indice}.usuario_proprio`, false);
+      });
+   })
+   
    const ingresso = data?.eventos?.flatMap(ingre => ingre.ingressos);
 
    return (
@@ -81,59 +85,84 @@ export function CarrinhoUtilizador() {
             <Layout.Header title='Utilizador' />
             <Layout.Scroll>
                <VStack gap="lg" marginBottom='md'>
-                  <ResumoPedido />
+                  <Animated.View
+                     entering={FadeInDown}
+                     exiting={FadeOutUp}
+                  >
+                     <ResumoPedido />
+                  </Animated.View>
 
-                  <Card.Root>
-                     <CarrinhoUtilizadorAtletica
-                        name="atletica_slug"
-                        control={control}
-                        error={errors?.atletica_slug?.message}
-                     />
-                  </Card.Root>
+                  <Animated.View
+                     entering={FadeIn}
+                     exiting={FadeOut}>
+                     <Card.Root>
+                        <CarrinhoUtilizadorAtletica
+                           name="atletica_slug"
+                           control={control}
+                           error={errors?.atletica_slug?.message}
+                        />
+                     </Card.Root>
+                  </Animated.View>
 
                   {ingresso?.map((ingresso, ingresso_indice) => {
                      return new Array(ingresso.qtd).fill(null).map((_key, indice) => (
-                        <VStack gap='md' key={indice}>
-                           <Section.Root>
-                              <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
+                        <Animated.View
+                           entering={FadeIn}
+                           exiting={FadeOut}
+                           key={indice}
+                        >
+                           <VStack gap='md'>
+                              <Section.Root>
+                                 <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
 
-                              <HStack alignItems='center' mb='md'>
-                                 <Circle variant='shadow' width={25} height={25} />
-                                 <Text variant='labelInput'>Esse ingresso é pra mim</Text>
-                              </HStack>
+                                 <HStack alignItems='center' mb='md'>
+                                    <Circle variant='shadow' width={25} height={25} />
+                                    <Text variant='labelInput'>Esse ingresso é pra mim</Text>
+                                 </HStack>
 
-                              <InputText
-                                 label='Nome'
-                                 control={control}
-                                 name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
-                                 placeholder='Nome completo do utilizador'
-                                 error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
-                              />
+                                 <Animated.View
+                                    entering={FadeInDown}
+                                    exiting={FadeOutUp}
+                                 >
+                                    <InputText
+                                       label='Nome'
+                                       control={control}
+                                       name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
+                                       placeholder='Nome completo do utilizador'
+                                       error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
+                                    />
+                                 </Animated.View>
 
-                              <InputText
-                                 label='CPF'
-                                 mask={cpfMask}
-                                 control={control}
-                                 name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
-                                 placeholder='CPF do utilizador'
-                                 error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
-                              />
-                           </Section.Root>
-                        </VStack>
+                                 <Animated.View
+                                    entering={FadeInDown.delay(indice * 500)}
+                                    exiting={FadeOutUp}
+                                 >
+                                    <InputText
+                                       label='CPF'
+                                       mask={cpfMask}
+                                       control={control}
+                                       name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
+                                       placeholder='CPF do utilizador'
+                                       error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
+                                    />
+                                 </Animated.View>
+                              </Section.Root>
+                           </VStack>
+                        </Animated.View>
                      ))
                   })}
-                  
-                  {/* <Text variant='header3'>{JSON.stringify(getValues(), null, 1)}</Text> */}
 
-                  <Button
-                     // disabled={!isValid}
-                     onPress={handleSubmit((data) => {
-                        console.log(JSON.stringify(data, null, 1));
-                        // navigate('CarrinhoResumo');
-                     })}
-                     marginHorizontal="md">
-                     Continuar
-                  </Button>
+                  {data && (
+                     <Button
+                        onPress={handleSubmit((data) => {
+                           console.log(JSON.stringify(data, null, 1));
+                           // navigate('CarrinhoResumo');
+                        })}
+                        marginHorizontal="md">
+                        Continuar
+                     </Button>
+                  )}
+
                </VStack>
             </Layout.Scroll>
          </Layout.Root>

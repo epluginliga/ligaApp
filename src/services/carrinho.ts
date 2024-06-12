@@ -49,3 +49,16 @@ export async function obtemCarrinho(): PayloadDefault<PayloadCarrinho> {
       })
       .catch((err) => err);
 }
+
+
+export async function deletaCarrinho(carrinho_id: string): PayloadDefault<string> {
+   return await api
+      .delete(`/carrinho/${carrinho_id}`)
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      })
+      .catch((err) => err);
+}
