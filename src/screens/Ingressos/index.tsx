@@ -11,8 +11,9 @@ import { useAuth } from '../../hooks/auth';
 
 import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
 import { useQuery } from '@tanstack/react-query';
-import { IngressosPayload,fetchIngressoComprado } from '../../services/eventos';
+import { fetchIngressoComprado } from '../../services/eventos';
 import { formataData } from '../../utils/utils';
+import { IngressosPayload } from '../../services/@eventos';
 
 type StepsIngressosProps = {
    [key: number]: React.ReactNode
@@ -77,13 +78,13 @@ export function Ingressos() {
 
       if (!data) return null;
 
-      const proximoEventos = data.data.filter(eventos => {
+      const proximoEventos = data?.data?.filter(eventos => {
          const dataEvento = formataData();
          const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
          return new Date <= new Date(novaData);
       });
 
-      const eventosPassados = data.data.filter(eventos => {
+      const eventosPassados = data?.data?.filter(eventos => {
          const dataEvento = formataData();
          const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
          return new Date > new Date(novaData);

@@ -9,9 +9,10 @@ import { Input, InputDefault } from '.'
 type InputText = InputDefault & {
    name: string;
    control: any;
+   mask?: (val: string) => string;
 }
 
-export function InputText({ name, ...rest }: InputText) {
+export function InputText({ name, control, mask,...rest }: InputText) {
    const theme = useTheme<Theme>();
 
    const style: { solid: object; transparent: object } = {
@@ -29,12 +30,12 @@ export function InputText({ name, ...rest }: InputText) {
          <Controller
             name={name}
             rules={{ required: true }}
-            control={rest.control}
+            control={control}
             render={({ field: { onBlur, onChange, value } }) => {
                return (
                   <TextInput
                      placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
-                     onChangeText={onChange}
+                     onChangeText={(text) => mask ? onChange(mask(text)) : onChange(text)}
                      value={value}
                      onBlur={onBlur}                     
                      style={{
