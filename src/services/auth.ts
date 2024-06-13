@@ -1,4 +1,5 @@
 import api from ".";
+import { PayloadDefault } from "./@index";
 
 export type UserProps = {
    mensagem: string;
@@ -24,7 +25,7 @@ export type LoginProps = {
    user: string;
    password: string;
 }
-export async function login(data: LoginProps): Promise<UserProps> {
+export async function login(data: LoginProps): PayloadDefault<UserProps> {
    return await api
       .post('/login', { ...data })
       .then(success => success.data)

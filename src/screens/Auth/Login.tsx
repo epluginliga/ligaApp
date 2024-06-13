@@ -10,14 +10,13 @@ import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputText } from '../../components/Inputs/Text';
 
 import Text from '../../components/Text';
-import { Image, Pressable } from 'react-native';
+import { Image, Pressable, StatusBar } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '../../icons';
 import { useAuth, usuarioStorage } from '../../hooks/auth';
-import { StatusBarApp } from '../../components/StatusBarApp';
 import { RouteApp } from '../../@types/navigation';
 
 const schema = z.object({
@@ -44,7 +43,7 @@ export function Login() {
          password: "123456",
       }
    });
-   
+
    const handleLogin = async (data: LoginFormInputs) => {
       try {
          if (params?.redirect) {
@@ -57,7 +56,8 @@ export function Login() {
 
    return (
       <>
-         <StatusBarApp />
+         <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
+
          <GradienteApp>
             <Layout.Root >
                <Layout.Keyboard>

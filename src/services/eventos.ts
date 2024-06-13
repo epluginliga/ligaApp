@@ -1,6 +1,7 @@
-import api, { PayloadDefault, PayloadPaginacaoResponse } from ".";
+import api from ".";
 import { vendaAplicativo } from "../utils/constantes";
 import { EventosPayload, IngressoDisponivelProps, IngressosDisponivelPayloadProps, IngressosPayload, PayloadEventoAtletica } from "./@eventos";
+import { PayloadDefault, PayloadPaginacaoResponse } from "./@index";
 
 export async function fetchEventos(): PayloadPaginacaoResponse<EventosPayload> {
    return await api

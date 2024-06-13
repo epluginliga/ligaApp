@@ -53,3 +53,22 @@ export type IngressoCarrinho = {
    bilhetes_id: [];
    permitir_cupom: true
 }
+
+
+export type CriaEditaCarrinhoProps = {
+   ponto_venda_id: string;
+   eventos: EventoCarrinho[];
+}
+
+export type EventoCarrinho = {
+   evento_id: string;
+   ingressos: EventoCarrinhoIngresso[];
+}
+
+export type EventoCarrinhoIngresso = {
+   id: string;
+   lote_id: string;
+   qtd: number;
+   valor?: number;
+}
+

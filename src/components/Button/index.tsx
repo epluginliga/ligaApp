@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import {
    SpacingProps,
    VariantProps,
@@ -32,8 +32,8 @@ export function Button({ children, onPress, iconLeft, iconRight, disabled = fals
          disabled={disabled}
          activeOpacity={0.7}
          onPress={onPress}
-         style={{opacity: disabled ? 0.7 : 1}}
-         >
+         style={{ opacity: disabled ? 0.7 : 1 }}
+      >
          <Box padding='sm'  {...props}>
             {!loading && iconLeft && iconLeft}
 
@@ -46,7 +46,7 @@ export function Button({ children, onPress, iconLeft, iconRight, disabled = fals
             )}
 
             {
-              !loading && iconRight !== false ?
+               !loading && iconRight !== false ?
                   props.variant !== "link" ?
                      iconRight ? iconRight : <Icon.ArrowRight size={24} color='#fff' />
                      : null

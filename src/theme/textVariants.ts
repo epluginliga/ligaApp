@@ -7,7 +7,7 @@ export const textVariants = {
       fontFamily: "Poppins-SemiBold",
    },
    labelInput: {
-      color: "primary",
+      color: "azul",
       fontWeight: 'regular',
       fontSize: 16,
       fontFamily: "Poppins-Regular",

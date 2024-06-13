@@ -20,7 +20,7 @@ export const CarrinhoModalEmCompra = ({ children, ativo }: CarrinhoModalEmCompra
          style={[{ flex: 1 }]}
       >
          <VStack backgroundColor='black_opacity' flex={1} justifyContent='center' alignItems='center'>
-            <VStack backgroundColor='white' p='sm' m='md' width="85%" maxWidth={350} height="40%" maxHeight={250} borderRadius={20} justifyContent='space-around' alignItems='center'>
+            <VStack backgroundColor='white' p='sm' m='md' width="90%" maxWidth={380} height="40%" maxHeight={250} borderRadius={20} justifyContent='space-around' alignItems='center'>
                {children}
             </VStack>
          </VStack>

@@ -66,7 +66,6 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const cancelaCarrinho = useMutation({
       mutationFn: deletaCarrinho,
       onSuccess() {
-         setMostraModal(false);
          navigate('Carrinho');
       },
    });
@@ -87,10 +86,12 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                      <Text textAlign='center' variant='header2'>O que Deseja fazer?</Text>
 
                      <HStack width="100%" paddingHorizontal='md' justifyContent='space-between'>
-                        <TouchableOpacity onPress={() => cancelaCarrinho.mutate(data.id)}>
+                        <TouchableOpacity onPress={() => {
+                           setMostraModal(false);
+                           cancelaCarrinho.mutate(data.id);
+                        }}>
                            <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
-                              <Icon.Ticket size={14} color={colors.primary} />
-                              <Text variant='botaoLink' color='primary'>Escolher ingressos</Text>
+                              <Text variant='botaoLink' color='primary'>Limpar, e continuar</Text>
                            </HStack>
                         </TouchableOpacity>
 
@@ -99,7 +100,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                            navigate("CarrinhoUtilizador");
                         }}>
                            <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
-                              <Text variant='botaoLink' color='greenDark'>Carrinho</Text>
+                              <Text variant='botaoLink' color='greenDark'>Ir para o Carrinho</Text>
                               <Icon.ArrowRight size={18} color={colors.greenDark} />
                            </HStack>
                         </TouchableOpacity>
@@ -107,7 +108,6 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                   </VStack>
                </>
             )}
-
          </CarrinhoModalEmCompra>
 
          <VStack

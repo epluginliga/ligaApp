@@ -34,7 +34,6 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
                overflow='hidden'
                borderRadius={12}
                minHeight={55}
-
             >
                {iconLeft && iconLeft}
 

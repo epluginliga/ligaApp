@@ -10,9 +10,10 @@ type InputText = InputDefault & {
    name: string;
    control: any;
    mask?: (val: string) => string;
+   editable?: boolean;
 }
 
-export function InputText({ name, control, mask,...rest }: InputText) {
+export function InputText({ name, control, mask, editable, ...rest }: InputText) {
    const theme = useTheme<Theme>();
 
    const style: { solid: object; transparent: object } = {
@@ -34,15 +35,18 @@ export function InputText({ name, control, mask,...rest }: InputText) {
             render={({ field: { onBlur, onChange, value } }) => {
                return (
                   <TextInput
-                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
+                     aria-disabled
+                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_200}
                      onChangeText={(text) => mask ? onChange(mask(text)) : onChange(text)}
                      value={value}
-                     onBlur={onBlur}                     
+                     onBlur={onBlur}
                      style={{
                         fontSize: theme.spacing.md,
                         fontFamily: theme.fonts.medium,
                         ...style[rest.variant || "transparent"],
-                        flex: 1
+                        flex: 1,
+                        opacity: editable ? 0.4 : 1,
+                        color: editable ? theme.colors.black : theme.colors.bege_200,
                      }}
                      {...rest}
                   />
