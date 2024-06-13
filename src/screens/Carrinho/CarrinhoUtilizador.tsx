@@ -33,10 +33,15 @@ const schemaUtilizador = z.object({
             z.object({
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
-                  nome: z.string().min(3, {
+                  nome: z.string({
+                     message: "Obrigatório!"
+                  }).min(3, {
                      message: "Obrigatório!"
                   }),
-                  cpf: z.string().superRefine((val, ctx) => {
+                  cpf: z.string({
+                     message: "Obrigatório!"
+                  }).superRefine((val, ctx) => {
+
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
                            code: "custom",
@@ -44,15 +49,28 @@ const schemaUtilizador = z.object({
                         })
                      }
                   }),
-               })
+               }),
             })
-         ),
-      }).superRefine((val, ctx) => {
-         const donos = val.donos.flatMap(item => item.dono_ingresso).filter(cpf => cpf.cpf);
-         console.log(JSON.stringify(donos, null, 1))
+         ).superRefine((val, ctx) => {
+            const conjuntoCPFs = new Set();
+            for (const item of val) {
+               if (conjuntoCPFs.has(item.dono_ingresso.cpf)) {
+                  ctx.addIssue({
+                     code: z.ZodIssueCode.custom,
+                     message: "Ingresso não pode ser atribuido no mesmo CPF!",
+                     fatal: true,
+                  });
+               }
+               conjuntoCPFs.add(item.dono_ingresso.cpf);
+            }
+
+
+         }),
       }),
    ),
-   atletica_slug: z.string(),
+   atletica_slug: z.string({
+      message: "Obrigatório!"
+   }),
 });
 
 export type FormUtilizador = z.infer<typeof schemaUtilizador>;
@@ -69,7 +87,7 @@ export function CarrinhoUtilizador() {
       refetchOnWindowFocus: true,
    });
 
-   const { control, handleSubmit, formState: { errors }, setValue, resetField } = useForm<FormUtilizador>({
+   const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
@@ -87,8 +105,7 @@ export function CarrinhoUtilizador() {
 
    const ingresso = data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = data?.usuario;
-
-
+   
    return (
       <Layout.Keyboard>
          <Layout.Root>
@@ -133,10 +150,14 @@ export function CarrinhoUtilizador() {
                                        onPress={() => {
                                           if (!usuario) return;
 
+                                          new Array(ingresso.qtd).fill(null).map((_key, indice_clean) => {
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.usuario_proprio`, false);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.nome`, "");
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.cpf`, "");
+                                          });
+
                                           if (ativo) {
                                              serAtribuiUser(null);
-
-                                             setValue(`lotes.${ingresso_indice}.donos`, []);
                                              return;
                                           }
 
@@ -182,6 +203,8 @@ export function CarrinhoUtilizador() {
                                        <InputText
                                           editable={!ativo}
                                           label='CPF'
+                                          keyboardType='decimal-pad'
+                                          returnKeyType='done'
                                           mask={cpfMask}
                                           control={control}
                                           name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
@@ -195,6 +218,10 @@ export function CarrinhoUtilizador() {
                         )
                      })
                   })}
+
+                  <Text textAlign='center' variant='header3' color='buttonPrimaryBackground'>
+                     {errors?.lotes?.[0]?.donos?.root?.message}
+                  </Text>
 
                   {data && (
                      <Button

@@ -41,13 +41,12 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
                         ...style[rest.variant || "transparent"],
                         flex: 1,
                         opacity: 0.4,
-                        color: theme.colors.bege_200,
+                        color: theme.colors.bege_900,
                      }}>
                         {value}
                      </Text>
                   )
                }
-               console.log("aqui", JSON.stringify(rest, null,1))
 
                return (
                   <TextInput

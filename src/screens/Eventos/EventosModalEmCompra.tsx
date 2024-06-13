@@ -4,11 +4,11 @@ import VStack from '../../components/Views/Vstack';
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
-type CarrinhoModalEmCompraProps = {
+type EventosModalEmCompraProps = {
    children: React.ReactNode;
    ativo: boolean;
 }
-export const CarrinhoModalEmCompra = ({ children, ativo }: CarrinhoModalEmCompraProps) => (
+export const EventosModalEmCompra = ({ children, ativo }: EventosModalEmCompraProps) => (
    <Modal
       animationType="slide"
       transparent={true}

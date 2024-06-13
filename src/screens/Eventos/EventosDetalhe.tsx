@@ -5,7 +5,6 @@ import {
    Pressable,
    SafeAreaView,
    StatusBar,
-   TouchableOpacity,
    View
 } from 'react-native';
 
@@ -33,12 +32,12 @@ import { useAuth } from '../../hooks/auth';
 import { fetchEventoDetalhe } from '../../services/eventos';
 import { useCarrinho } from '../../hooks/carrinho';
 import { deletaCarrinho, obtemCarrinho } from '../../services/carrinho';
-import { CarrinhoModalEmCompra } from '../Carrinho/CarrinhoModalEmCompra';
 import { EventosPayload } from '../../services/@eventos';
 import { useTheme } from '@shopify/restyle';
 import Text from '../../components/Text';
 import HStack from '../../components/Views/Hstack';
 import { Theme } from '../../theme/default';
+import { EventosModalEmCompra } from './EventosModalEmCompra';
 
 
 type ButtonComprarInfressosProps = {
@@ -74,7 +73,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
 
    return (
       <>
-         <CarrinhoModalEmCompra ativo={mostraModal}>
+         <EventosModalEmCompra ativo={mostraModal}>
             {data && (
                <>
                   <Text textAlign='center' color='azul'>
@@ -86,16 +85,16 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                      <Text textAlign='center' variant='header2'>O que Deseja fazer?</Text>
 
                      <HStack width="100%" paddingHorizontal='md' justifyContent='space-between'>
-                        <TouchableOpacity onPress={() => {
+                        <Pressable onPress={() => {
                            setMostraModal(false);
                            cancelaCarrinho.mutate(data.id);
                         }}>
                            <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
                               <Text variant='botaoLink' color='primary'>Limpar, e continuar</Text>
                            </HStack>
-                        </TouchableOpacity>
+                        </Pressable>
 
-                        <TouchableOpacity onPress={() => {
+                        <Pressable onPress={() => {
                            setMostraModal(false);
                            navigate("CarrinhoUtilizador");
                         }}>
@@ -103,12 +102,12 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                               <Text variant='botaoLink' color='greenDark'>Ir para o Carrinho</Text>
                               <Icon.ArrowRight size={18} color={colors.greenDark} />
                            </HStack>
-                        </TouchableOpacity>
+                        </Pressable>
                      </HStack>
                   </VStack>
                </>
             )}
-         </CarrinhoModalEmCompra>
+         </EventosModalEmCompra>
 
          <VStack
             position="absolute"
