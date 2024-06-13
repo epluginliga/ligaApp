@@ -55,6 +55,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
       onSuccess(data) {
          const mostrarModal = data.status === "em_compra";
          if (!mostrarModal) {
+            adicionaEvento(evento);
             return navigate("Carrinho");
          }
 
@@ -87,6 +88,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                      <HStack width="100%" paddingHorizontal='md' justifyContent='space-between'>
                         <Pressable onPress={() => {
                            setMostraModal(false);
+                           adicionaEvento(evento);
                            cancelaCarrinho.mutate(data.id);
                         }}>
                            <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
@@ -119,13 +121,13 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                loading={handleVerificaSeExisteCarrinho.isPending}
                marginHorizontal="md"
                onPress={() => {
-                  adicionaEvento(evento);
 
                   if (logado) {
                      handleVerificaSeExisteCarrinho.mutate();
                      return;
                   }
 
+                  adicionaEvento(evento);
                   return navigate("Login", {
                      redirect: "Carrinho",
                   });

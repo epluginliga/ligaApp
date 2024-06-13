@@ -31,7 +31,7 @@ const schemaUtilizador = z.object({
          evento_ingresso_id: z.string(),
          donos: z.array(
             z.object({
-               usuario_proprio: z.boolean().optional(),
+               usuario_proprio: z.boolean(),
                dono_ingresso: z.object({
                   nome: z.string({
                      message: "Obrigatório!"
@@ -41,7 +41,6 @@ const schemaUtilizador = z.object({
                   cpf: z.string({
                      message: "Obrigatório!"
                   }).superRefine((val, ctx) => {
-
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
                            code: "custom",
@@ -50,22 +49,8 @@ const schemaUtilizador = z.object({
                      }
                   }),
                }),
-            })
-         ).superRefine((val, ctx) => {
-            const conjuntoCPFs = new Set();
-            for (const item of val) {
-               if (conjuntoCPFs.has(item.dono_ingresso.cpf)) {
-                  ctx.addIssue({
-                     code: z.ZodIssueCode.custom,
-                     message: "Ingresso não pode ser atribuido no mesmo CPF!",
-                     fatal: true,
-                  });
-               }
-               conjuntoCPFs.add(item.dono_ingresso.cpf);
-            }
-
-
-         }),
+            }),
+         ),
       }),
    ),
    atletica_slug: z.string({
@@ -96,16 +81,16 @@ export function CarrinhoUtilizador() {
    }
 
    data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
-      return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
+      return new Array(ingresso.qtd).fill(null).map((_key) => {
          setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
          setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
-         setValue(`lotes.${ingresso_key}.donos.${indice}.usuario_proprio`, false);
       });
    });
 
    const ingresso = data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = data?.usuario;
-   
+
+   console.log(JSON.stringify(errors, null, 1))
    return (
       <Layout.Keyboard>
          <Layout.Root>
@@ -156,10 +141,7 @@ export function CarrinhoUtilizador() {
                                              setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.cpf`, "");
                                           });
 
-                                          if (ativo) {
-                                             serAtribuiUser(null);
-                                             return;
-                                          }
+                                          if (ativo) return serAtribuiUser(null);
 
                                           serAtribuiUser({
                                              [ingresso_indice]: {
@@ -219,9 +201,6 @@ export function CarrinhoUtilizador() {
                      })
                   })}
 
-                  <Text textAlign='center' variant='header3' color='buttonPrimaryBackground'>
-                     {errors?.lotes?.[0]?.donos?.root?.message}
-                  </Text>
 
                   {data && (
                      <Button

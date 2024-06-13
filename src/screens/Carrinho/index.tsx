@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Pressable, StatusBar } from 'react-native';
+import {  Pressable, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
