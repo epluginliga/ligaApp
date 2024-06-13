@@ -1,7 +1,7 @@
 import React from 'react';
-import { Modal, Pressable, StatusBar, Button as ButtonRN, TouchableOpacity } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Modal, Pressable, StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Layout } from '../../components/Views/Layout';
 import VStack from '../../components/Views/Vstack';
@@ -10,19 +10,16 @@ import HStack from '../../components/Views/Hstack';
 import { Button } from '../../components/Button';
 import { ResumoPedido } from '../../components/ResumoPedido';
 import Text from '../../components/Text';
-import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 import { fetchIngressoDisponivel } from '../../services/eventos';
-import { CriaEditaCarrinhoProps, criaEditaCarrinho, obtemCarrinho } from '../../services/carrinho';
-import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
+import {  criaEditaCarrinho } from '../../services/carrinho';
 import { Icon } from '../../icons';
 
 import { useCarrinho } from '../../hooks/carrinho';
 
 import { Maskara } from '../../utils/Maskara';
 import { vendaAplicativo } from '../../utils/constantes';
-import { useTheme } from '@shopify/restyle';
-import { Theme } from '../../theme/default';
-import { CarrinhoModalEmCompra } from './CarrinhoModalEmCompra';
+import { CriaEditaCarrinhoProps } from '../../services/@carrinho';
+import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -138,7 +135,6 @@ export function Carrinho() {
    return (
       <>
          <StatusBar barStyle="dark-content" />
-
 
          <Layout.Root>
             <Layout.Header title='Ingressos disponíveis' />

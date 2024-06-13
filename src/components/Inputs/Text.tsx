@@ -1,10 +1,11 @@
 import React from 'react'
 import { Controller } from 'react-hook-form'
-import { TextInput } from 'react-native'
+import { TextInput, View } from 'react-native'
 import { border, useTheme } from '@shopify/restyle'
 
 import { Theme } from '../../theme/default'
 import { Input, InputDefault } from '.'
+import Text from '../Text'
 
 type InputText = InputDefault & {
    name: string;
@@ -13,9 +14,8 @@ type InputText = InputDefault & {
    editable?: boolean;
 }
 
-export function InputText({ name, control, mask, editable, ...rest }: InputText) {
+export function InputText({ name, control, mask, editable = true, ...rest }: InputText) {
    const theme = useTheme<Theme>();
-
    const style: { solid: object; transparent: object } = {
       solid: {
          color: theme.colors.white,
@@ -33,10 +33,25 @@ export function InputText({ name, control, mask, editable, ...rest }: InputText)
             rules={{ required: true }}
             control={control}
             render={({ field: { onBlur, onChange, value } }) => {
+               if (!editable) {
+                  return (
+                     <Text style={{
+                        fontSize: theme.spacing.md,
+                        fontFamily: theme.fonts.medium,
+                        ...style[rest.variant || "transparent"],
+                        flex: 1,
+                        opacity: 0.4,
+                        color: theme.colors.bege_200,
+                     }}>
+                        {value}
+                     </Text>
+                  )
+               }
+               console.log("aqui", JSON.stringify(rest, null,1))
+
                return (
                   <TextInput
-                     aria-disabled
-                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_200}
+                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
                      onChangeText={(text) => mask ? onChange(mask(text)) : onChange(text)}
                      value={value}
                      onBlur={onBlur}
@@ -45,8 +60,7 @@ export function InputText({ name, control, mask, editable, ...rest }: InputText)
                         fontFamily: theme.fonts.medium,
                         ...style[rest.variant || "transparent"],
                         flex: 1,
-                        opacity: editable ? 0.4 : 1,
-                        color: editable ? theme.colors.black : theme.colors.bege_200,
+                        color: theme.colors.black,
                      }}
                      {...rest}
                   />

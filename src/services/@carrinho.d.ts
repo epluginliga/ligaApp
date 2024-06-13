@@ -31,22 +31,23 @@ export type EventoCarrinho = {
    data_evento: string;
    abertura_portoes: string;
    ingressos: IngressoCarrinho[];
+   evento_id: string;
 }
 
 export type IngressoCarrinho = {
    id: string;
-   possui_restricao: 1;
+   possui_restricao: boolean;
    restricao: string;
    tipo_restricao: "outro" | "cpf" | "email";
    lote_id: string;
    nome: string;
    classificacao_idade: string;
    sexo: string;
-   valor: string;
+   valor: number;
    lote: string;
-   necessario_aprovacao_imagem: 1;
-   qtd: 1;
-   taxa_conveniencia: 0;
+   necessario_aprovacao_imagem: number;
+   qtd: number;
+   taxa_conveniencia: number;
    dados_atribuir: {
       bilhete_id: string;
    }[];

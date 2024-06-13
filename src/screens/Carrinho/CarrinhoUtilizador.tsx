@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
@@ -21,7 +21,7 @@ import Text from '../../components/Text'
 import { cpfMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
-import { color, useTheme } from '@shopify/restyle';
+import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 
 const schemaUtilizador = z.object({
@@ -31,7 +31,7 @@ const schemaUtilizador = z.object({
          evento_ingresso_id: z.string(),
          donos: z.array(
             z.object({
-               usuario_proprio: z.boolean(),
+               usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
                   nome: z.string().min(3, {
                      message: "Obrigatório!"
@@ -47,18 +47,21 @@ const schemaUtilizador = z.object({
                })
             })
          ),
-      })
+      }).superRefine((val, ctx) => {
+         const donos = val.donos.flatMap(item => item.dono_ingresso).filter(cpf => cpf.cpf);
+         console.log(JSON.stringify(donos, null, 1))
+      }),
    ),
-   atletica_slug: z.string({
-      message: "Obrigatório"
-   }),
+   atletica_slug: z.string(),
 });
 
 export type FormUtilizador = z.infer<typeof schemaUtilizador>;
-
+type AtribuirUserProps = {
+   [key: number]: any
+}
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
-   const [atribuiUsuario, setAtribuiUsuario] = useState(false);
+   const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
 
    const { data, isLoading } = useQuery({
       queryKey: ['obtemCarrinhoPaginaCarrinho'],
@@ -66,7 +69,7 @@ export function CarrinhoUtilizador() {
       refetchOnWindowFocus: true,
    });
 
-   const { control, handleSubmit, formState: { errors }, setValue, reset, watch } = useForm<FormUtilizador>({
+   const { control, handleSubmit, formState: { errors }, setValue, resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
@@ -80,12 +83,11 @@ export function CarrinhoUtilizador() {
          setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
          setValue(`lotes.${ingresso_key}.donos.${indice}.usuario_proprio`, false);
       });
-   })
+   });
 
    const ingresso = data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = data?.usuario;
 
-   console.log("uso");
 
    return (
       <Layout.Keyboard>
@@ -93,6 +95,7 @@ export function CarrinhoUtilizador() {
             <Layout.Header title='Utilizador' />
             <Layout.Scroll>
                <VStack gap="lg" marginBottom='md'>
+
                   <Animated.View
                      entering={FadeInDown}
                      exiting={FadeOutUp}
@@ -114,8 +117,8 @@ export function CarrinhoUtilizador() {
 
                   {ingresso?.map((ingresso, ingresso_indice) => {
                      return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
-                        const nome = watch(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`);
-                        const cpf = watch(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`);
+                        const ativo = atribuiUser?.[ingresso_indice]?.[indice];
+
                         return (
                            <Animated.View
                               entering={FadeIn}
@@ -127,27 +130,29 @@ export function CarrinhoUtilizador() {
                                     <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
 
                                     <Pressable
-                                       // disabled={ !nome && !cpf}
-                                       style={{ opacity: !nome && !cpf && !atribuiUsuario ? 0.4 : 1 }}
                                        onPress={() => {
                                           if (!usuario) return;
 
-                                          if (nome && cpf) {
-                                             reset();
-                                             setAtribuiUsuario(false);
+                                          if (ativo) {
+                                             serAtribuiUser(null);
+
+                                             setValue(`lotes.${ingresso_indice}.donos`, []);
                                              return;
                                           }
 
-                                          if (atribuiUsuario) {
-                                             reset();
-                                          }
+                                          serAtribuiUser({
+                                             [ingresso_indice]: {
+                                                [indice]: true
+                                             }
+                                          });
 
-                                          setAtribuiUsuario(true);
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, true);
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, usuario?.cpf);
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
                                        }}>
+
                                        <HStack alignItems='center' mb='md'>
-                                          {nome && cpf ? (
+                                          {ativo ? (
                                              <Icon.CheckCircle color={colors.greenDark} />
                                           ) : (
                                              <Circle variant='shadow' width={25} height={25} />
@@ -161,7 +166,7 @@ export function CarrinhoUtilizador() {
                                        exiting={FadeOutUp}
                                     >
                                        <InputText
-                                          editable={!!nome}
+                                          editable={!ativo}
                                           label='Nome'
                                           control={control}
                                           name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
@@ -175,7 +180,7 @@ export function CarrinhoUtilizador() {
                                        exiting={FadeOutUp}
                                     >
                                        <InputText
-                                          editable={!!cpf}
+                                          editable={!ativo}
                                           label='CPF'
                                           mask={cpfMask}
                                           control={control}

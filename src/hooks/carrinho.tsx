@@ -1,9 +1,9 @@
 import React, { createContext, useCallback, useContext, useState } from "react";
 import { MMKV } from "react-native-mmkv";
 
-import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso } from "../services/carrinho";
 import { vendaAplicativo } from "../utils/constantes";
 import { EventosPayload } from "../services/@eventos";
+import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso, IngressoCarrinho } from "../services/@carrinho";
 
 type CarrinhoContextProps = {
    evento: EventosPayload | null;
@@ -46,7 +46,15 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
    function adicionaEventoAoPedido(eventoId: string) {
       const existe = pedido.eventos.find(evento => evento.evento_id === eventoId);
       if (!existe) {
-         pedido.eventos.push({ evento_id: eventoId, ingressos: [] });
+         pedido.eventos.push({
+            evento_id: eventoId,
+            ingressos: [],
+            abertura_portoes: "",
+            data_evento: "",
+            id: "",
+            nome: "",
+            slug: ""
+         });
       }
       setPedido(pedido);
    }
@@ -85,7 +93,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
 
    const adicionaIngressoAoEvento = useCallback((
       eventoId: string,
-      ingresso: EventoCarrinhoIngresso,
+      ingresso: any ,
    ) => {
       let copyPedido = { ...pedido };
 
