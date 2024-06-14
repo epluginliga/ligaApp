@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutUp } from 'react-native-reanimated';
 import { Pressable } from 'react-native';
 import { z } from 'zod'
@@ -23,6 +23,7 @@ import { Icon } from '../../icons';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { useCarrinho } from '../../hooks/carrinho';
+import { fetchEventoAtleticas } from '../../services/eventos';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -31,16 +32,11 @@ export const schemaUtilizador = z.object({
          evento_ingresso_id: z.string(),
          donos: z.array(
             z.object({
+               restricao: z.string().optional(),
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
-                  nome: z.string({
-                     message: "Obrigatório!"
-                  }).min(3, {
-                     message: "Obrigatório!"
-                  }),
-                  cpf: z.string({
-                     message: "Obrigatório!"
-                  }).superRefine((val, ctx) => {
+                  nome: z.string({ message: "Obrigatório!" }).min(3, { message: "Obrigatório!" }),
+                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
                            code: "custom",
@@ -66,30 +62,48 @@ export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
    const { total, evento } = useCarrinho();
+   
+   if (!evento) return;
 
-   const { data, isLoading } = useQuery({
-      queryKey: ['obtemCarrinhoPaginaCarrinho'],
-      queryFn: obtemCarrinho,
-      refetchOnWindowFocus: true,
+   const [carrinho, atleticas] = useQueries({
+      queries: [
+         {
+            queryKey: ['obtemCarrinhoPaginaCarrinho'],
+            queryFn: obtemCarrinho,
+            refetchOnWindowFocus: true,
+         },
+         {
+            queryKey: ['fetchEventoAtleticas', evento?.id],
+            queryFn: () => fetchEventoAtleticas(evento.id),
+            enabled: !!evento?.id,
+         }
+      ]
    });
 
    const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
-   if (isLoading && !data) {
+   if (carrinho.isLoading && !carrinho.data) {
       return;
    }
 
-   data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
-      return new Array(ingresso.qtd).fill(null).map((_key) => {
+   if (atleticas.data?.length === 1) {
+      setValue("atletica_slug", "nenhuma");
+   }
+
+   carrinho.data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
+      return new Array(ingresso.qtd).fill(null).map((key) => {
          setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
          setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
       });
    });
 
-   const ingresso = data?.eventos?.flatMap(ingre => ingre.ingressos);
-   const usuario = data?.usuario;
+   const ingresso = carrinho?.data?.eventos?.flatMap(ingre => ingre.ingressos);
+   const usuario = carrinho?.data?.usuario;
+
+   console.log(JSON.stringify(errors, null, 1));
+
 
    return (
       <Layout.Keyboard>
@@ -101,7 +115,7 @@ export function CarrinhoUtilizador() {
                   <Section.Root>
                      <Section.SubTitle>{evento?.nome} / {evento?.cidade} - {evento?.estado}</Section.SubTitle>
                      <Section.Title color='primary'>
-                        Informe quem irá utilizar os ingressos 
+                        Informe quem irá utilizar os ingressos
                      </Section.Title>
                   </Section.Root>
 
@@ -109,11 +123,13 @@ export function CarrinhoUtilizador() {
                      entering={FadeIn}
                      exiting={FadeOut}>
                      <Card.Root>
-                        <CarrinhoUtilizadorAtletica
+                        {atleticas.data && atleticas.data?.length > 1 && <CarrinhoUtilizadorAtletica
+                           data={atleticas.data}
+                           setValue={(val: string) => setValue("atletica_slug", val)}
                            name="atletica_slug"
                            control={control}
                            error={errors?.atletica_slug?.message}
-                        />
+                        />}
                      </Card.Root>
                   </Animated.View>
 
@@ -176,6 +192,7 @@ export function CarrinhoUtilizador() {
                                           placeholder='Nome completo do utilizador'
                                           error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
                                        />
+
                                     </Animated.View>
 
                                     <Animated.View
@@ -194,6 +211,25 @@ export function CarrinhoUtilizador() {
                                           error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
                                        />
                                     </Animated.View>
+
+
+                                    <Animated.View
+                                       entering={FadeInDown.delay(indice * 500)}
+                                       exiting={FadeOutUp}
+                                    >
+
+                                       {ingresso.possui_restricao ? (
+                                          <InputText
+                                             label={ingresso.restricao}
+                                             control={control}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
+                                             placeholder={`${ingresso.restricao} do utilizador.`}
+                                             error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
+                                          />
+                                       ) : null}
+
+                                    </Animated.View>
+
                                  </Section.Root>
                               </VStack>
                            </Animated.View>
@@ -209,27 +245,28 @@ export function CarrinhoUtilizador() {
                         <VStack>
                            <HStack alignItems='center' justifyContent='space-between'>
                               <Section.SubTitle>Total em ingressos: </Section.SubTitle>
-                              <Text color='greenDark'>{Maskara.dinheiro(total)}</Text>
+                              <Text color='greenDark'>{Maskara.dinheiro(total)}
+                                 <Text color='greenDark' fontSize={12}>{' '}+ Taxas</Text>
+                              </Text>
+
                            </HStack>
-                           <HStack alignItems='center' justifyContent='space-between'>
-                              <Section.SubTitle>Total em taxas: </Section.SubTitle>
-                              <Text color='greenDark'>{Maskara.dinheiro(50)}</Text>
-                           </HStack>
+
                         </VStack>
+                        {carrinho.data && (
+                           <Button
+                              onPress={handleSubmit((data) => {
+                                 console.log(JSON.stringify(data, null, 1));
+                                 // navigate('CarrinhoResumo');
+                              })}
+                           >
+                              Continuar
+                           </Button>
+                        )}
                      </Section.Root>
                   </Animated.View>
 
 
-                  {data && (
-                     <Button
-                        onPress={handleSubmit((data) => {
-                           console.log(JSON.stringify(data, null, 1));
-                           // navigate('CarrinhoResumo');
-                        })}
-                        marginHorizontal="sm">
-                        Continuar
-                     </Button>
-                  )}
+
 
                </VStack>
             </Layout.Scroll>
