@@ -1,5 +1,5 @@
 import React from 'react';
-import {  Pressable, StatusBar } from 'react-native';
+import { Pressable, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -11,7 +11,7 @@ import { Button } from '../../components/Button';
 import { ResumoPedido } from '../../components/ResumoPedido';
 import Text from '../../components/Text';
 import { fetchIngressoDisponivel } from '../../services/eventos';
-import {  criaEditaCarrinho } from '../../services/carrinho';
+import { criaEditaCarrinho } from '../../services/carrinho';
 import { Icon } from '../../icons';
 
 import { useCarrinho } from '../../hooks/carrinho';
@@ -77,13 +77,12 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
                style={{ opacity: desabilitarBotao ? 0.4 : 1 }}
                disabled={desabilitarBotao}
                onPress={() => {
-                  adicionaIngressoAoEvento(eventoId, {
+                  adicionaIngressoAoEvento({
                      id: ingresso.id,
                      lote_id: ingresso.lote_id,
                      qtd: 1,
                      valor: +ingresso.valor
-                  },
-                  );
+                  });
                }}
             >
                <Icon.Plus color='#232C79' />

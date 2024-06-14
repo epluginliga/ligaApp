@@ -4,7 +4,24 @@ export type PayloadCarrinho = {
    valor: number;
    status: "em_compra";
    status_str: string;
-   eventos: EventoCarrinho[];
+   eventos: [
+      {
+         id: string;
+         nome: string;
+         slug: string;
+         data_evento: string;
+         abertura_portoes: string;
+         path_imagem: string;
+         nome_local: string;
+         path_imagem_topo: string;
+         path_imagem_rodape: string;
+         visibilidade: string;
+         data_liberacao_ingresso: string;
+         data_limite_transferencia: string;
+         info_ingresso_impresso: null,
+         ingressos: IngressoCarrinho[]
+      }
+   ];
    usuario: {
       nome: string;
       username: string;
@@ -24,15 +41,7 @@ export type PayloadCarrinho = {
    data_expiracao: string;
 };
 
-export type EventoCarrinho = {
-   id: string;
-   nome: string;
-   slug: string;
-   data_evento: string;
-   abertura_portoes: string;
-   ingressos: IngressoCarrinho[];
-   evento_id: string;
-}
+
 
 export type IngressoCarrinho = {
    id: string;

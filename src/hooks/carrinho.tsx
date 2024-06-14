@@ -8,7 +8,7 @@ import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso } from "../services/@car
 type CarrinhoContextProps = {
    evento: EventoHook | null;
    adicionaEvento: (evento: EventosPayload) => void;
-   adicionaIngressoAoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
+   adicionaIngressoAoEvento: (ingresso: EventoCarrinhoIngresso) => void;
    removeIngressoDoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
    total: number;
    totalItens: number;
@@ -40,12 +40,12 @@ type CarrinhoProviderProps = {
 }
 function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactElement {
    const [evento, setEvento] = useState<EventoHook | null>(null);
-
-   console.log("evento", JSON.stringify(evento, null, 1));
-
    const [carrinho, setCarrinho] = useState<CriaEditaCarrinhoProps>({
       ponto_venda_id: vendaAplicativo,
-      eventos: []
+      eventos: [{
+         evento_id: "",
+         ingressos: []
+      }]
    });
 
    const adicionaEvento = useCallback((evento: EventosPayload) => {
@@ -62,27 +62,34 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
 
       setEvento(storeEvento);
       carrinhoStorage.set("@evento", JSON.stringify(storeEvento));
+
+      setCarrinho((old) => ({
+         ...old,
+         eventos: [{
+            evento_id: evento.id,
+            ingressos: []
+         }]
+      }));
+
    }, []);
 
-   const adicionaIngressoAoEvento = useCallback((eventoId: string, ingresso: any) => {
+   const adicionaIngressoAoEvento = useCallback((ingresso: EventoCarrinhoIngresso) => {
       let copyPedido = { ...carrinho };
+      let [eventos] = copyPedido.eventos;
 
-      let eventos = copyPedido.eventos.find(item => item.evento_id === eventoId);
-      if (!eventos) {
-         return;
+      if (evento?.id) {
+         eventos.evento_id = evento?.id;
       }
 
       let existeIngresso = eventos?.ingressos.find(item => item.id === ingresso.id);
       if (existeIngresso) {
          existeIngresso.qtd += 1;
       } else {
-         eventos?.ingressos.push(ingresso);
-         copyPedido.eventos = [eventos];
+         eventos.ingressos.push(ingresso);
       }
 
       setCarrinho(copyPedido);
-
-   }, []);
+   }, [evento]);
 
    const removeIngressoDoEvento = useCallback((
       eventoId: string,
@@ -113,7 +120,6 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       });
 
       setCarrinho(copyPedido);
-
    }, []);
 
    let total = carrinho.eventos
@@ -130,7 +136,6 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          setEvento(JSON.parse(store));
       }
    }, []);
-
 
    useEffect(() => obtemPedido(), [obtemPedido]);
 

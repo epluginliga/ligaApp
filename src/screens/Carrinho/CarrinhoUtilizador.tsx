@@ -65,7 +65,7 @@ type AtribuirUserProps = {
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
-   const { total } = useCarrinho();
+   const { total, evento } = useCarrinho();
 
    const { data, isLoading } = useQuery({
       queryKey: ['obtemCarrinhoPaginaCarrinho'],
@@ -99,7 +99,10 @@ export function CarrinhoUtilizador() {
                <VStack gap="lg" marginBottom='md'>
 
                   <Section.Root>
-                     <Section.Title color='primary'>Informe quem irá utilizar os ingressos</Section.Title>
+                     <Section.SubTitle>{evento?.nome} / {evento?.cidade} - {evento?.estado}</Section.SubTitle>
+                     <Section.Title color='primary'>
+                        Informe quem irá utilizar os ingressos 
+                     </Section.Title>
                   </Section.Root>
 
                   <Animated.View
