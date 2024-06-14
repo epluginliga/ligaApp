@@ -8,13 +8,14 @@ import { fetchEventoAtleticas } from "../../services/eventos";
 import { ModalApp } from "../../components/Modal";
 import { Icon } from "../../icons";
 import HStack from "../../components/Views/Hstack";
-import { FlatList } from "react-native";
+import { FlatList, TextInput } from "react-native";
 import { Input } from "../../components/Inputs";
 import Text from "../../components/Text";
 import VStack from "../../components/Views/Vstack";
-import { InputText } from "../../components/Inputs/Text";
 import { InputSelecionar } from "../../components/Inputs/Selecionar";
 import { FormUtilizador } from "./CarrinhoUtilizador";
+import { useTheme } from "@shopify/restyle";
+import theme, { Theme } from "../../theme/default";
 
 type AtleticaProps = {
    control: Control<FormUtilizador>;
@@ -22,22 +23,15 @@ type AtleticaProps = {
    error?: string;
 };
 
-const schema = z.object({
-   search: z.string()
-});
-type Form = z.input<typeof schema>;
+
 
 export function CarrinhoUtilizadorAtletica({ control: controlForm, ...rest }: AtleticaProps) {
    const { evento } = useCarrinho();
    const [itemSelecionado, setItemSelecionado] = useState({ id: null, label: null, name: null });
+   const [search, setSearch] = useState("");
+   const { colors } = useTheme<Theme>();
 
-   const { control, formState: { errors }, watch } = useForm<Form>({
-      resolver: zodResolver(schema),
-      defaultValues: {
-         search: ''
-      }
-   });
-
+   console.log(evento)
    if (!evento?.id) {
       return;
    }
@@ -51,7 +45,6 @@ export function CarrinhoUtilizadorAtletica({ control: controlForm, ...rest }: At
    if (isLoading || !data) {
       return;
    }
-   const { search } = watch();
 
    const dadosFiltrados = data?.filter((item) =>
       item?.slug?.toLowerCase()?.includes(search.toLowerCase())
@@ -78,12 +71,22 @@ export function CarrinhoUtilizadorAtletica({ control: controlForm, ...rest }: At
             data={dadosFiltrados}
             ListHeaderComponent={(
                <VStack marginBottom='sm' flex={1} gap='md' >
-                  <InputText
-                     placeholder='Selecione a atlética'
-                     control={control}
-                     name='search'
-                     error={errors?.search?.message}
-                  />
+                  <Input>
+                     <TextInput
+                        placeholderTextColor={colors.bege_900}
+                        onChangeText={(text) => setSearch(text)}
+                        value={search}
+                        style={{
+                           fontSize: theme.spacing.md,
+                           fontFamily: theme.fonts.medium,
+                           flex: 1,
+                           color: theme.colors.black,
+                        }}
+                        {...rest}
+                     />
+
+                  </Input>
+
                </VStack>
             )}
             ItemSeparatorComponent={() => <HStack borderBottomColor='bege' opacity={0.1} borderWidth={1} />}

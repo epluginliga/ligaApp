@@ -1,12 +1,12 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { MMKV } from "react-native-mmkv";
 
 import { vendaAplicativo } from "../utils/constantes";
 import { EventosPayload } from "../services/@eventos";
-import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso, IngressoCarrinho } from "../services/@carrinho";
+import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso } from "../services/@carrinho";
 
 type CarrinhoContextProps = {
-   evento: EventosPayload | null;
+   evento: EventoHook | null;
    adicionaEvento: (evento: EventosPayload) => void;
    adicionaIngressoAoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
    removeIngressoDoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
@@ -15,55 +15,80 @@ type CarrinhoContextProps = {
    pedido?: CriaEditaCarrinhoProps;
 }
 
-type CarrinhoProviderProps = {
-   children: React.ReactNode;
-}
-
 export type AdicionaIngressosAoEventoProps = {
    id: string;
    lote_id: string;
    qtd: number;
 }
 
-const CarrinhoContext = createContext<CarrinhoContextProps>({} as CarrinhoContextProps);
-export const usuarioStorage = new MMKV();
+type EventoHook = {
+   bairro: string;
+   cidade: string;
+   data_evento: string;
+   nome: string;
+   nome_local: string;
+   numero: string;
+   id: string;
+   estado: string;
+}
 
+const CarrinhoContext = createContext<CarrinhoContextProps>({} as CarrinhoContextProps);
+export const carrinhoStorage = new MMKV();
+
+type CarrinhoProviderProps = {
+   children: React.ReactNode;
+}
 function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactElement {
-   const [evento, setEvento] = useState<EventosPayload | null>(null);
-   const [pedido, setPedido] = useState<CriaEditaCarrinhoProps>({
+   const [evento, setEvento] = useState<EventoHook | null>(null);
+
+   console.log("evento", JSON.stringify(evento, null, 1));
+
+   const [carrinho, setCarrinho] = useState<CriaEditaCarrinhoProps>({
       ponto_venda_id: vendaAplicativo,
       eventos: []
    });
 
-   let total = pedido.eventos
-      .flatMap((evento) => evento.ingressos)
-      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0), 0);
+   const adicionaEvento = useCallback((evento: EventosPayload) => {
+      const storeEvento = {
+         bairro: evento.bairro,
+         cidade: evento.cidade,
+         data_evento: evento.data_evento,
+         nome: evento.nome,
+         nome_local: evento.nome_local,
+         numero: evento.numero,
+         id: evento.id,
+         estado: evento.estado,
+      };
 
-   let totalItens = pedido.eventos
-      .flatMap(item => item.ingressos)
-      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
+      setEvento(storeEvento);
+      carrinhoStorage.set("@evento", JSON.stringify(storeEvento));
+   }, []);
 
-   function adicionaEventoAoPedido(eventoId: string) {
-      const existe = pedido.eventos.find(evento => evento.evento_id === eventoId);
-      if (!existe) {
-         pedido.eventos.push({
-            evento_id: eventoId,
-            ingressos: [],
-            abertura_portoes: "",
-            data_evento: "",
-            id: "",
-            nome: "",
-            slug: ""
-         });
+   const adicionaIngressoAoEvento = useCallback((eventoId: string, ingresso: any) => {
+      let copyPedido = { ...carrinho };
+
+      let eventos = copyPedido.eventos.find(item => item.evento_id === eventoId);
+      if (!eventos) {
+         return;
       }
-      setPedido(pedido);
-   }
+
+      let existeIngresso = eventos?.ingressos.find(item => item.id === ingresso.id);
+      if (existeIngresso) {
+         existeIngresso.qtd += 1;
+      } else {
+         eventos?.ingressos.push(ingresso);
+         copyPedido.eventos = [eventos];
+      }
+
+      setCarrinho(copyPedido);
+
+   }, []);
 
    const removeIngressoDoEvento = useCallback((
       eventoId: string,
       ingresso: EventoCarrinhoIngresso,
    ) => {
-      let copyPedido = { ...pedido };
+      let copyPedido = { ...carrinho };
 
       let eventos = copyPedido.eventos.find(item => item.evento_id === eventoId);
       if (!eventos) {
@@ -87,44 +112,33 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          return cppedido;
       });
 
-      setPedido(copyPedido);
+      setCarrinho(copyPedido);
 
    }, []);
 
-   const adicionaIngressoAoEvento = useCallback((
-      eventoId: string,
-      ingresso: any ,
-   ) => {
-      let copyPedido = { ...pedido };
+   let total = carrinho.eventos
+      .flatMap((evento) => evento.ingressos)
+      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0), 0);
 
-      let eventos = copyPedido.eventos.find(item => item.evento_id === eventoId);
-      if (!eventos) {
-         return;
+   let totalItens = carrinho.eventos
+      .flatMap(item => item.ingressos)
+      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
+
+   const obtemPedido = useCallback(() => {
+      const store = carrinhoStorage.getString("@evento");
+      if (store) {
+         setEvento(JSON.parse(store));
       }
-
-      let existeIngresso = eventos?.ingressos.find(item => item.id === ingresso.id);
-      if (existeIngresso) {
-         existeIngresso.qtd += 1;
-      } else {
-         eventos?.ingressos.push(ingresso);
-         copyPedido.eventos = [eventos];
-      }
-
-      setPedido(copyPedido);
-
    }, []);
 
-   const adicionaEvento = useCallback((evento: EventosPayload) => {
-      setEvento(evento);
-      adicionaEventoAoPedido(evento.id)
-   }, []);
 
+   useEffect(() => obtemPedido(), [obtemPedido]);
 
    return (
       <CarrinhoContext.Provider value={{
          evento,
          adicionaEvento,
-         pedido,
+         pedido: carrinho,
          adicionaIngressoAoEvento,
          removeIngressoDoEvento,
          total,
@@ -134,6 +148,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       </CarrinhoContext.Provider>
    )
 }
+
 
 function useCarrinho(): CarrinhoContextProps {
    const context = useContext(CarrinhoContext);

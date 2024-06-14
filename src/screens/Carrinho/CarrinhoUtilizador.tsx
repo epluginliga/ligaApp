@@ -12,26 +12,26 @@ import VStack from '../../components/Views/Vstack'
 import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
-import { ResumoPedido } from '../../components/ResumoPedido'
 import { obtemCarrinho } from '../../services/carrinho'
 import { CarrinhoUtilizadorAtletica } from './CarrinhoUtilizadorAtletica'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
-import { cpfMask } from '../../utils/Maskara'
+import { Maskara, cpfMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
+import { useCarrinho } from '../../hooks/carrinho';
 
-const schemaUtilizador = z.object({
+export const schemaUtilizador = z.object({
    lotes: z.array(
       z.object({
          id: z.string(),
          evento_ingresso_id: z.string(),
          donos: z.array(
             z.object({
-               usuario_proprio: z.boolean(),
+               usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
                   nome: z.string({
                      message: "Obrigatório!"
@@ -65,6 +65,7 @@ type AtribuirUserProps = {
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
+   const { total } = useCarrinho();
 
    const { data, isLoading } = useQuery({
       queryKey: ['obtemCarrinhoPaginaCarrinho'],
@@ -90,7 +91,6 @@ export function CarrinhoUtilizador() {
    const ingresso = data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = data?.usuario;
 
-   console.log(JSON.stringify(errors, null, 1))
    return (
       <Layout.Keyboard>
          <Layout.Root>
@@ -98,12 +98,9 @@ export function CarrinhoUtilizador() {
             <Layout.Scroll>
                <VStack gap="lg" marginBottom='md'>
 
-                  <Animated.View
-                     entering={FadeInDown}
-                     exiting={FadeOutUp}
-                  >
-                     <ResumoPedido />
-                  </Animated.View>
+                  <Section.Root>
+                     <Section.Title color='primary'>Informe quem irá utilizar os ingressos</Section.Title>
+                  </Section.Root>
 
                   <Animated.View
                      entering={FadeIn}
@@ -201,6 +198,24 @@ export function CarrinhoUtilizador() {
                      })
                   })}
 
+                  <Animated.View
+                     entering={FadeInDown}
+                     exiting={FadeOutUp}
+                  >
+                     <Section.Root>
+                        <VStack>
+                           <HStack alignItems='center' justifyContent='space-between'>
+                              <Section.SubTitle>Total em ingressos: </Section.SubTitle>
+                              <Text color='greenDark'>{Maskara.dinheiro(total)}</Text>
+                           </HStack>
+                           <HStack alignItems='center' justifyContent='space-between'>
+                              <Section.SubTitle>Total em taxas: </Section.SubTitle>
+                              <Text color='greenDark'>{Maskara.dinheiro(50)}</Text>
+                           </HStack>
+                        </VStack>
+                     </Section.Root>
+                  </Animated.View>
+
 
                   {data && (
                      <Button
@@ -208,7 +223,7 @@ export function CarrinhoUtilizador() {
                            console.log(JSON.stringify(data, null, 1));
                            // navigate('CarrinhoResumo');
                         })}
-                        marginHorizontal="md">
+                        marginHorizontal="sm">
                         Continuar
                      </Button>
                   )}
