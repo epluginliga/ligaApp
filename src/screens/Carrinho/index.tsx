@@ -120,7 +120,6 @@ export function Carrinho() {
          const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0);
          return criaEditaCarrinho({ ...pedido, eventos: newPedido });
       },
-      onError: (error: Error) => { },
       onSuccess: (data) => {
          console.log(data.mensagem);
          navigate('CarrinhoUtilizador')

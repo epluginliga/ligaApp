@@ -10,6 +10,7 @@ import { login, LoginProps } from '../services/auth';
 import { useMutation } from '@tanstack/react-query';
 import { MMKV } from 'react-native-mmkv'
 import api from '../services';
+import { carrinhoStorage } from './carrinho';
 interface AuthContextProps {
    handleSignIn: (data: LoginProps, redirect?: string) => void;
    token: string;
@@ -51,6 +52,7 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
 
    const signOut = useCallback(() => {
       usuarioStorage.clearAll();
+      carrinhoStorage.clearAll();
       setToken('');
       delete api.defaults.headers.Authorization;
    }, []);

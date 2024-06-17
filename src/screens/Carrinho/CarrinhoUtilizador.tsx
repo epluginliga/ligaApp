@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React,{ useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
-import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutUp } from 'react-native-reanimated';
-import { Pressable } from 'react-native';
+import Animated,{ FadeIn,FadeInDown,FadeOut,FadeOutUp } from 'react-native-reanimated';
+import { Pressable,TextInput } from 'react-native';
 import { z } from 'zod'
 
 import { Layout } from '../../components/Views/Layout'
@@ -12,31 +12,32 @@ import VStack from '../../components/Views/Vstack'
 import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
-import { obtemCarrinho } from '../../services/carrinho'
+import { AtribuiUtilizadorPayload,obtemCarrinho } from '../../services/carrinho'
 import { CarrinhoUtilizadorAtletica } from './CarrinhoUtilizadorAtletica'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
-import { Maskara, cpfMask } from '../../utils/Maskara'
+import { Maskara,cpfMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
 import { useTheme } from '@shopify/restyle';
-import { Theme } from '../../theme/default';
+import theme,{ Theme } from '../../theme/default';
 import { useCarrinho } from '../../hooks/carrinho';
 import { fetchEventoAtleticas } from '../../services/eventos';
+import { Input } from '../../components/Inputs';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
       z.object({
-         id: z.string(),
-         evento_ingresso_id: z.string(),
+         id: z.string().optional(),
+         evento_ingresso_id: z.string().optional(),
          donos: z.array(
             z.object({
                restricao: z.string().optional(),
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
-                  nome: z.string({ message: "Obrigatório!" }).min(3, { message: "Obrigatório!" }),
-                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
+                  nome: z.string({ message: "Obrigatório!" }).min(3,{ message: "Obrigatório!" }),
+                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val,ctx) => {
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
                            code: "custom",
@@ -60,12 +61,15 @@ type AtribuirUserProps = {
 }
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
-   const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
-   const { total, evento } = useCarrinho();
-   
+   const [atribuiUser,serAtribuiUser] = useState<AtribuirUserProps | null>();
+   const { total,evento } = useCarrinho();
+   const [ingressosUsuario,setIngressosUsuario] = useState<AtribuiUtilizadorPayload>({
+      lotes: []
+   });
+
    if (!evento) return;
 
-   const [carrinho, atleticas] = useQueries({
+   const [carrinho,atleticas] = useQueries({
       queries: [
          {
             queryKey: ['obtemCarrinhoPaginaCarrinho'],
@@ -73,14 +77,14 @@ export function CarrinhoUtilizador() {
             refetchOnWindowFocus: true,
          },
          {
-            queryKey: ['fetchEventoAtleticas', evento?.id],
+            queryKey: ['fetchEventoAtleticas',evento?.id],
             queryFn: () => fetchEventoAtleticas(evento.id),
             enabled: !!evento?.id,
          }
       ]
    });
 
-   const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormUtilizador>({
+   const { control,handleSubmit,formState: { errors },setValue } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
@@ -89,20 +93,11 @@ export function CarrinhoUtilizador() {
    }
 
    if (atleticas.data?.length === 1) {
-      setValue("atletica_slug", "nenhuma");
+      setValue("atletica_slug","nenhuma");
    }
-
-   carrinho.data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
-      return new Array(ingresso.qtd).fill(null).map((key) => {
-         setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
-         setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
-      });
-   });
 
    const ingresso = carrinho?.data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = carrinho?.data?.usuario;
-
-   console.log(JSON.stringify(errors, null, 1));
 
 
    return (
@@ -125,7 +120,7 @@ export function CarrinhoUtilizador() {
                      <Card.Root>
                         {atleticas.data && atleticas.data?.length > 1 && <CarrinhoUtilizadorAtletica
                            data={atleticas.data}
-                           setValue={(val: string) => setValue("atletica_slug", val)}
+                           setValue={(val: string) => setValue("atletica_slug",val)}
                            name="atletica_slug"
                            control={control}
                            error={errors?.atletica_slug?.message}
@@ -133,9 +128,22 @@ export function CarrinhoUtilizador() {
                      </Card.Root>
                   </Animated.View>
 
-                  {ingresso?.map((ingresso, ingresso_indice) => {
-                     return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
-                        const ativo = atribuiUser?.[ingresso_indice]?.[indice];
+                  {ingresso?.map((ingresso,ingresso_indice) => {
+                     return new Array(ingresso.qtd).fill(null).map((_key,indice) => {
+                        let copyIngressoForm = { ...ingressosUsuario };
+
+
+                        if (copyIngressoForm.lotes.length < ingresso.qtd) {
+                           copyIngressoForm.lotes.push(
+                              {
+                                 id: ingresso.lote_id,
+                                 evento_ingresso_id: ingresso.id,
+                                 donos: [{
+                                    dono_ingresso: {}
+                                 }]
+                              }
+                           );
+                        }
 
                         return (
                            <Animated.View
@@ -147,51 +155,74 @@ export function CarrinhoUtilizador() {
                                  <Section.Root>
                                     <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
 
-                                    <Pressable
-                                       onPress={() => {
-                                          if (!usuario) return;
-
-                                          new Array(ingresso.qtd).fill(null).map((_key, indice_clean) => {
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.usuario_proprio`, false);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.nome`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.cpf`, "");
-                                          });
-
-                                          if (ativo) return serAtribuiUser(null);
-
-                                          serAtribuiUser({
-                                             [ingresso_indice]: {
-                                                [indice]: true
-                                             }
-                                          });
-
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, true);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
-                                       }}>
-
-                                       <HStack alignItems='center' mb='md'>
-                                          {ativo ? (
-                                             <Icon.CheckCircle color={colors.greenDark} />
-                                          ) : (
-                                             <Circle variant='shadow' width={25} height={25} />
-                                          )}
-                                          <Text variant='labelInput'>Esse ingresso é pra mim</Text>
-                                       </HStack>
-                                    </Pressable>
-
                                     <Animated.View
                                        entering={FadeInDown}
                                        exiting={FadeOutUp}
                                     >
-                                       <InputText
-                                          editable={!ativo}
-                                          label='Nome'
-                                          control={control}
-                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
-                                          placeholder='Nome completo do utilizador'
-                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
-                                       />
+                                       <VStack gap="md">
+                                          <Input label='Nome'>
+                                             <TextInput
+                                                placeholderTextColor={colors.bege_900}
+                                                placeholder='Nome do Utilizador'
+                                                value={ingressosUsuario?.lotes?.[ingresso_indice]?.donos[indice]?.dono_ingresso?.nome || ""}
+                                                onChangeText={(text) => {
+                                                   if (copyIngressoForm.lotes[ingresso_indice].donos[indice]?.dono_ingresso?.nome) {
+                                                      copyIngressoForm.lotes[ingresso_indice].donos[indice].dono_ingresso.nome = text;
+                                                      setIngressosUsuario(copyIngressoForm)
+                                                   } else {
+                                                      copyIngressoForm.lotes[ingresso_indice].donos[indice] = {
+                                                         usuario_proprio: false,
+                                                         dono_ingresso: {
+                                                            nome: text
+                                                         }
+                                                      };
+                                                      setIngressosUsuario(copyIngressoForm)
+                                                   }
+
+                                                   console.log(JSON.stringify(copyIngressoForm,null,1))
+                                                }}
+                                                onBlur={() => console.log(JSON.stringify(copyIngressoForm,null,1))}
+                                                // value={value}
+                                                style={{
+                                                   fontSize: theme.spacing.md,
+                                                   fontFamily: theme.fonts.medium,
+                                                   flex: 1,
+                                                   color: theme.colors.black,
+                                                }}
+                                             />
+                                          </Input>
+
+                                          <Input label='CPF'>
+                                             <TextInput
+                                                placeholderTextColor={colors.bege_900}
+                                                placeholder='CPF do Utilizador'
+                                                value={ingressosUsuario?.lotes?.[ingresso_indice]?.donos[indice]?.dono_ingresso?.cpf || ""}
+                                                onChangeText={(text) => {
+                                                   if (copyIngressoForm.lotes[ingresso_indice].donos[indice]?.dono_ingresso?.cpf) {
+                                                      copyIngressoForm.lotes[ingresso_indice].donos[indice].dono_ingresso.cpf = cpfMask(text);
+                                                      setIngressosUsuario(copyIngressoForm)
+                                                   } else {
+                                                      copyIngressoForm.lotes[ingresso_indice].donos[indice] = {
+                                                         usuario_proprio: false,
+                                                         dono_ingresso: {
+                                                            cpf: cpfMask(text)
+                                                         }
+                                                      };
+
+                                                      setIngressosUsuario(copyIngressoForm)
+                                                   }
+                                                }}
+                                                onBlur={() => console.log(JSON.stringify(copyIngressoForm,null,1))}
+                                                // value={value}
+                                                style={{
+                                                   fontSize: theme.spacing.md,
+                                                   fontFamily: theme.fonts.medium,
+                                                   flex: 1,
+                                                   color: theme.colors.black,
+                                                }}
+                                             />
+                                          </Input>
+                                       </VStack>
 
                                     </Animated.View>
 
@@ -199,7 +230,7 @@ export function CarrinhoUtilizador() {
                                        entering={FadeInDown.delay(indice * 500)}
                                        exiting={FadeOutUp}
                                     >
-                                       <InputText
+                                       {/* <InputText
                                           editable={!ativo}
                                           label='CPF'
                                           keyboardType='decimal-pad'
@@ -209,11 +240,11 @@ export function CarrinhoUtilizador() {
                                           name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
                                           placeholder='CPF do utilizador'
                                           error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
-                                       />
+                                       /> */}
                                     </Animated.View>
 
 
-                                    <Animated.View
+                                    {/* <Animated.View
                                        entering={FadeInDown.delay(indice * 500)}
                                        exiting={FadeOutUp}
                                     >
@@ -228,7 +259,7 @@ export function CarrinhoUtilizador() {
                                           />
                                        ) : null}
 
-                                    </Animated.View>
+                                    </Animated.View> */}
 
                                  </Section.Root>
                               </VStack>
@@ -255,7 +286,7 @@ export function CarrinhoUtilizador() {
                         {carrinho.data && (
                            <Button
                               onPress={handleSubmit((data) => {
-                                 console.log(JSON.stringify(data, null, 1));
+                                 console.log(JSON.stringify(data,null,1));
                                  // navigate('CarrinhoResumo');
                               })}
                            >

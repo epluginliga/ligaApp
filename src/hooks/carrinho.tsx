@@ -1,15 +1,16 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import React,{ createContext,useCallback,useContext,useEffect,useState } from "react";
 import { MMKV } from "react-native-mmkv";
 
 import { vendaAplicativo } from "../utils/constantes";
 import { EventosPayload } from "../services/@eventos";
-import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso } from "../services/@carrinho";
+import { CriaEditaCarrinhoProps,EventoCarrinhoIngresso } from "../services/@carrinho";
 
 type CarrinhoContextProps = {
    evento: EventoHook | null;
    adicionaEvento: (evento: EventosPayload) => void;
    adicionaIngressoAoEvento: (ingresso: EventoCarrinhoIngresso) => void;
-   removeIngressoDoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
+   removeIngressoDoEvento: (eventoId: string,ingresso: EventoCarrinhoIngresso) => void;
+   limpaCarrinho: () => void;
    total: number;
    totalItens: number;
    pedido?: CriaEditaCarrinhoProps;
@@ -39,8 +40,8 @@ type CarrinhoProviderProps = {
    children: React.ReactNode;
 }
 function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactElement {
-   const [evento, setEvento] = useState<EventoHook | null>(null);
-   const [carrinho, setCarrinho] = useState<CriaEditaCarrinhoProps>({
+   const [evento,setEvento] = useState<EventoHook | null>(null);
+   const [carrinho,setCarrinho] = useState<CriaEditaCarrinhoProps>({
       ponto_venda_id: vendaAplicativo,
       eventos: [{
          evento_id: "",
@@ -71,7 +72,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          }]
       }));
 
-   }, []);
+   },[]);
 
    const adicionaIngressoAoEvento = useCallback((ingresso: EventoCarrinhoIngresso) => {
       let copyPedido = { ...carrinho };
@@ -89,13 +90,14 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       }
 
       setCarrinho(copyPedido);
-   }, [evento]);
+   },[evento]);
 
    const removeIngressoDoEvento = useCallback((
       eventoId: string,
       ingresso: EventoCarrinhoIngresso,
    ) => {
       let copyPedido = { ...carrinho };
+      console.log(copyPedido)
 
       let eventos = copyPedido.eventos.find(item => item.evento_id === eventoId);
       if (!eventos) {
@@ -120,24 +122,33 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       });
 
       setCarrinho(copyPedido);
-   }, []);
+   },[]);
+
+   const limpaCarrinho = useCallback(() => {
+      carrinhoStorage.delete("@evento")
+   },[]);
 
    let total = carrinho.eventos
       .flatMap((evento) => evento.ingressos)
-      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0), 0);
+      .reduce((acumulador,ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0),0);
 
    let totalItens = carrinho.eventos
       .flatMap(item => item.ingressos)
-      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
+      .reduce((acumulador,ingresso) => acumulador + ingresso.qtd,0);
+
+
+
+      console.log("evento: ", evento)
+
 
    const obtemPedido = useCallback(() => {
       const store = carrinhoStorage.getString("@evento");
       if (store) {
          setEvento(JSON.parse(store));
       }
-   }, []);
+   },[]);
 
-   useEffect(() => obtemPedido(), [obtemPedido]);
+   useEffect(() => obtemPedido(),[obtemPedido]);
 
    return (
       <CarrinhoContext.Provider value={{
@@ -146,6 +157,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          pedido: carrinho,
          adicionaIngressoAoEvento,
          removeIngressoDoEvento,
+         limpaCarrinho,
          total,
          totalItens
       }}>
@@ -165,4 +177,4 @@ function useCarrinho(): CarrinhoContextProps {
    return context;
 }
 
-export { CarrinhoProvider, useCarrinho };
+export { CarrinhoProvider,useCarrinho };
