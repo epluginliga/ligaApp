@@ -91,7 +91,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                            adicionaEvento(evento);
                            cancelaCarrinho.mutate(data.id);
                         }}>
-                           <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
+                           <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
                               <Text variant='botaoLink' color='primary'>Limpar, e continuar</Text>
                            </HStack>
                         </Pressable>
@@ -100,7 +100,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                            setMostraModal(false);
                            navigate("CarrinhoUtilizador");
                         }}>
-                           <HStack alignItems='center' variant='shadow' backgroundColor='white' p='sm' borderRadius={10}>
+                           <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
                               <Text variant='botaoLink' color='greenDark'>Ir para o Carrinho</Text>
                               <Icon.ArrowRight size={18} color={colors.greenDark} />
                            </HStack>
@@ -162,7 +162,7 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 80], [300, 250, 0], "clamp");
+      const height = interpolate(scrollY.value, [0, 0], [300, 250, 0], "clamp");
       const opacity = interpolate(scrollY.value, [0, 80], [1, 0], "clamp");
 
       return { opacity, height };
@@ -222,6 +222,7 @@ export const EventosDetalhe = () => {
             scrollEventThrottle={16}
             automaticallyAdjustKeyboardInsets
             style={{ position: "relative" }}
+            scrollToOverflowEnabled
          >
             <Animated.View
                renderToHardwareTextureAndroid

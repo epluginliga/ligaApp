@@ -26,8 +26,8 @@ export function TabRouteDeslogado() {
                borderTopWidth: 0,
                overflow: "hidden",
                minHeight: 60,
-               paddingTop: 25,
-               paddingBottom: Platform.OS === "android" ? 20 : 0
+               justifyContent: "center",
+               alignItems: 'center',
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {

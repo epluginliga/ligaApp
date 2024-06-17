@@ -117,7 +117,7 @@ export function Carrinho() {
       mutationKey: ['criaCarrinho'],
       mutationFn: (pedido: CriaEditaCarrinhoProps) => {
          const copyPedido = { ...pedido };
-         const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0)
+         const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0);
          return criaEditaCarrinho({ ...pedido, eventos: newPedido });
       },
       onError: (error: Error) => { },

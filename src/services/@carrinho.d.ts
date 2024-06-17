@@ -42,7 +42,6 @@ export type PayloadCarrinho = {
 };
 
 
-
 export type IngressoCarrinho = {
    id: string;
    possui_restricao: boolean;

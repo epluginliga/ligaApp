@@ -6,7 +6,6 @@ import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import VStack from '../components/Views/Vstack';
 import { Perfil } from '../screens/Perfil';
-import { Platform } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 interface PropsTabs {
@@ -20,16 +19,14 @@ export function TabRouteLogado() {
       <Tab.Navigator
          initialRouteName='EventosTab'
          screenOptions={({ route }) => ({
-            tabBarStyle: {
-               borderTopRightRadius: 25,
-               borderTopLeftRadius: 25,
-               borderCurve: "circular",
-               borderTopWidth: 0,
-               overflow: "hidden",
-               minHeight: 60,
-               paddingTop: 25,
-               paddingBottom: Platform.OS === "android" ? 20 : 0
-            },
+            borderTopRightRadius: 25,
+            borderTopLeftRadius: 25,
+            borderCurve: "circular",
+            borderTopWidth: 0,
+            overflow: "hidden",
+            minHeight: 60,
+            justifyContent: "center",
+            alignItems: 'center',
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
                   case 'EventosTab':
