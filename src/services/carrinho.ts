@@ -1,10 +1,10 @@
 import api from ".";
-import { CriaEditaCarrinhoProps, PayloadCarrinho } from "./@carrinho";
-import { PayloadDefault, PayloadDefaultError } from "./@index";
+import { CriaEditaCarrinhoProps,PayloadCarrinho } from "./@carrinho";
+import { PayloadDefault,PayloadDefaultError } from "./@index";
 
 export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<PayloadDefaultError> {
    return await api
-      .post(`/carrinho`, { ...body })
+      .post(`/carrinho`,{ ...body })
       .then(success => {
          if (success.status !== 200) {
             throw new Error("Erro");
@@ -40,9 +40,9 @@ export async function deletaCarrinho(carrinho_id: string): PayloadDefault<string
 }
 
 
-export async function atribuiUtilizador(carrinho_id: string): PayloadDefault<string> {
+export async function atribuiUtilizador(carrinho_id: string,body: object): PayloadDefault<string> {
    return await api
-      .delete(`/carrinho/${carrinho_id}`)
+      .post(`/carrinho/atribui-dono-ingresso/${carrinho_id}`,{ ...body })
       .then(success => {
          if (success.status !== 200) {
             throw new Error("Erro");

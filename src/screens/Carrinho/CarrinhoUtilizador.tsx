@@ -1,7 +1,7 @@
 import React,{ useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueries } from '@tanstack/react-query';
+import { useMutation,useQueries } from '@tanstack/react-query';
 import Animated,{ FadeIn,FadeInDown,FadeOut,FadeOutUp } from 'react-native-reanimated';
 import { Pressable } from 'react-native';
 import { z } from 'zod'
@@ -12,7 +12,7 @@ import VStack from '../../components/Views/Vstack'
 import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
-import { obtemCarrinho } from '../../services/carrinho'
+import { atribuiUtilizador,obtemCarrinho } from '../../services/carrinho'
 import { CarrinhoUtilizadorAtletica } from './CarrinhoUtilizadorAtletica'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
@@ -24,6 +24,7 @@ import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { useCarrinho } from '../../hooks/carrinho';
 import { fetchEventoAtleticas } from '../../services/eventos';
+import { useNavigation } from '@react-navigation/native';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -62,9 +63,16 @@ export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser,serAtribuiUser] = useState<AtribuirUserProps | null>();
    const { total,evento } = useCarrinho();
-
+   const { navigate } = useNavigation();
    const { control,handleSubmit,formState: { errors },setValue,resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
+   });
+
+   const handleAtribuirUtilizador = useMutation({
+      mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""),data),
+      onSuccess(data) {
+         navigate('CarrinhoResumo');
+      },
    });
 
    if (!evento) return;
@@ -86,7 +94,6 @@ export function CarrinhoUtilizador() {
          }
       ]
    });
-
 
    if (carrinho.isFetching || atleticas.isFetching) {
       return;
@@ -153,8 +160,8 @@ export function CarrinhoUtilizador() {
                                           if (!usuario) return;
                                           if (ativo) {
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,false);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, "");
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,"");
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,"");
                                              return serAtribuiUser(undefined);
                                           }
                                           serAtribuiUser({
@@ -252,10 +259,7 @@ export function CarrinhoUtilizador() {
                         </VStack>
                         {carrinho.data && (
                            <Button
-                              onPress={handleSubmit((data) => {
-                                 console.log(JSON.stringify(data,null,1));
-                                 // navigate('CarrinhoResumo');
-                              })}
+                              onPress={handleSubmit((data) => handleAtribuirUtilizador.mutate(data))}
                            >
                               Continuar
                            </Button>
