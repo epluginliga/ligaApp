@@ -19,14 +19,16 @@ export function TabRouteLogado() {
       <Tab.Navigator
          initialRouteName='EventosTab'
          screenOptions={({ route }) => ({
-            borderTopRightRadius: 25,
-            borderTopLeftRadius: 25,
-            borderCurve: "circular",
-            borderTopWidth: 0,
-            overflow: "hidden",
-            minHeight: 60,
-            justifyContent: "center",
-            alignItems: 'center',
+            tabBarStyle: {
+               borderTopRightRadius: 25,
+               borderTopLeftRadius: 25,
+               borderCurve: "circular",
+               borderTopWidth: 0,
+               overflow: "hidden",
+               minHeight: 60,
+               justifyContent: "center",
+               alignItems: 'center',
+            },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
                   case 'EventosTab':

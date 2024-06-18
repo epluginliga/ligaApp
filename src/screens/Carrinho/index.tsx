@@ -116,8 +116,8 @@ export function Carrinho() {
    const handleCriaCarrinho = useMutation({
       mutationKey: ['criaCarrinho'],
       mutationFn: (pedido: CriaEditaCarrinhoProps) => {
-         const copyPedido = { ...pedido };
-         const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0);
+         const copyPedido = Object.assign({}, pedido);
+         const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0)
          return criaEditaCarrinho({ ...pedido, eventos: newPedido });
       },
       onError: (error: Error) => { },

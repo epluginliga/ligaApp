@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React,{ useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueries } from '@tanstack/react-query';
-import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutUp } from 'react-native-reanimated';
+import Animated,{ FadeIn,FadeInDown,FadeOut,FadeOutUp } from 'react-native-reanimated';
 import { Pressable } from 'react-native';
 import { z } from 'zod'
 
@@ -17,7 +17,7 @@ import { CarrinhoUtilizadorAtletica } from './CarrinhoUtilizadorAtletica'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
-import { Maskara, cpfMask } from '../../utils/Maskara'
+import { Maskara,cpfMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
 import { useTheme } from '@shopify/restyle';
@@ -35,8 +35,8 @@ export const schemaUtilizador = z.object({
                restricao: z.string().optional(),
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
-                  nome: z.string({ message: "Obrigatório!" }).min(3, { message: "Obrigatório!" }),
-                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
+                  nome: z.string({ message: "Obrigatório!" }).min(3,{ message: "Obrigatório!" }),
+                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val,ctx) => {
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
                            code: "custom",
@@ -60,50 +60,51 @@ type AtribuirUserProps = {
 }
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
-   const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
-   const { total, evento } = useCarrinho();
-   
+   const [atribuiUser,serAtribuiUser] = useState<AtribuirUserProps | null>();
+   const { total,evento } = useCarrinho();
+
+   const { control,handleSubmit,formState: { errors },setValue,resetField } = useForm<FormUtilizador>({
+      resolver: zodResolver(schemaUtilizador),
+   });
+
    if (!evento) return;
 
-   const [carrinho, atleticas] = useQueries({
+   const [carrinho,atleticas] = useQueries({
       queries: [
          {
             queryKey: ['obtemCarrinhoPaginaCarrinho'],
-            queryFn: obtemCarrinho,
+            queryFn: () => {
+               resetField("lotes");
+               return obtemCarrinho();
+            },
             refetchOnWindowFocus: true,
          },
          {
-            queryKey: ['fetchEventoAtleticas', evento?.id],
+            queryKey: ['fetchEventoAtleticas',evento?.id],
             queryFn: () => fetchEventoAtleticas(evento.id),
             enabled: !!evento?.id,
          }
       ]
    });
 
-   const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormUtilizador>({
-      resolver: zodResolver(schemaUtilizador),
-   });
 
-   if (carrinho.isLoading && !carrinho.data) {
+   if (carrinho.isFetching || atleticas.isFetching) {
       return;
    }
 
    if (atleticas.data?.length === 1) {
-      setValue("atletica_slug", "nenhuma");
+      setValue("atletica_slug","nenhuma");
    }
 
-   carrinho.data?.eventos.flatMap(item => item.ingressos).map((ingresso, ingresso_key: number) => {
-      return new Array(ingresso.qtd).fill(null).map((key) => {
-         setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
-         setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
-      });
+   carrinho.data?.eventos.flatMap(item => item.ingressos).forEach((ingresso,ingresso_key: number) => {
+      for (let i = 1; i <= ingresso.qtd; i++) {
+         setValue(`lotes.${ingresso_key}.id`,ingresso.lote_id);
+         setValue(`lotes.${ingresso_key}.evento_ingresso_id`,ingresso.id);
+      }
    });
 
    const ingresso = carrinho?.data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = carrinho?.data?.usuario;
-
-   console.log(JSON.stringify(errors, null, 1));
-
 
    return (
       <Layout.Keyboard>
@@ -125,7 +126,7 @@ export function CarrinhoUtilizador() {
                      <Card.Root>
                         {atleticas.data && atleticas.data?.length > 1 && <CarrinhoUtilizadorAtletica
                            data={atleticas.data}
-                           setValue={(val: string) => setValue("atletica_slug", val)}
+                           setValue={(val: string) => setValue("atletica_slug",val)}
                            name="atletica_slug"
                            control={control}
                            error={errors?.atletica_slug?.message}
@@ -133,10 +134,9 @@ export function CarrinhoUtilizador() {
                      </Card.Root>
                   </Animated.View>
 
-                  {ingresso?.map((ingresso, ingresso_indice) => {
-                     return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
+                  {ingresso?.map((ingresso,ingresso_indice) => {
+                     return new Array(ingresso.qtd).fill(null).map((_key,indice) => {
                         const ativo = atribuiUser?.[ingresso_indice]?.[indice];
-
                         return (
                            <Animated.View
                               entering={FadeIn}
@@ -148,26 +148,24 @@ export function CarrinhoUtilizador() {
                                     <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
 
                                     <Pressable
+                                       disabled={atribuiUser !== undefined && !ativo}
                                        onPress={() => {
                                           if (!usuario) return;
-
-                                          new Array(ingresso.qtd).fill(null).map((_key, indice_clean) => {
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.usuario_proprio`, false);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.nome`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice_clean}.dono_ingresso.cpf`, "");
-                                          });
-
-                                          if (ativo) return serAtribuiUser(null);
-
+                                          if (ativo) {
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,false);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, "");
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, "");
+                                             return serAtribuiUser(undefined);
+                                          }
                                           serAtribuiUser({
                                              [ingresso_indice]: {
                                                 [indice]: true
                                              }
                                           });
 
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, true);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,true);
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,usuario?.nome);
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,cpfMask(usuario?.cpf));
                                        }}>
 
                                        <HStack alignItems='center' mb='md'>
@@ -255,7 +253,7 @@ export function CarrinhoUtilizador() {
                         {carrinho.data && (
                            <Button
                               onPress={handleSubmit((data) => {
-                                 console.log(JSON.stringify(data, null, 1));
+                                 console.log(JSON.stringify(data,null,1));
                                  // navigate('CarrinhoResumo');
                               })}
                            >

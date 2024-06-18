@@ -46,7 +46,7 @@ type ButtonComprarInfressosProps = {
 function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const [mostraModal, setMostraModal] = useState(false);
    const { logado } = useAuth();
-   const { adicionaEvento } = useCarrinho();
+   const { adicionaEvento, limpaCarrinho} = useCarrinho();
    const { colors } = useTheme<Theme>()
    const { navigate } = useNavigation();
 
@@ -66,6 +66,8 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const cancelaCarrinho = useMutation({
       mutationFn: deletaCarrinho,
       onSuccess() {
+         limpaCarrinho();
+         adicionaEvento(evento);
          navigate('Carrinho');
       },
    });
@@ -88,7 +90,6 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                      <HStack width="100%" paddingHorizontal='md' justifyContent='space-between'>
                         <Pressable onPress={() => {
                            setMostraModal(false);
-                           adicionaEvento(evento);
                            cancelaCarrinho.mutate(data.id);
                         }}>
                            <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
