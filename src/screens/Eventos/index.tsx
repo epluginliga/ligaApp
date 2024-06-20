@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React,{ useCallback,useEffect } from "react";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import { formataData } from "../../utils/utils";
 import { Imagem } from "../../components/Imagem";
 import { Button } from "../../components/Button";
 import { useMMKVString } from "react-native-mmkv";
-import { useAuth, usuarioStorage } from "../../hooks/auth";
+import { useAuth,usuarioStorage } from "../../hooks/auth";
 import { EventosPayload } from "../../services/@eventos";
 
 export type ItemData = {
@@ -54,7 +54,7 @@ function Destaque({ evento }: DestaqueProps) {
 
                <Button
                   variant="link"
-                  onPress={() => navigate.navigate("EventosDetalhe", {
+                  onPress={() => navigate.navigate("EventosDetalhe",{
                      id: evento.id,
                   })}
                >
@@ -72,7 +72,7 @@ export function Eventos() {
    const [route] = useMMKVString('route')
    const { logado } = useAuth();
 
-   const { data, isLoading } = useQuery({
+   const { data,isLoading } = useQuery({
       queryKey: ['eventos'],
       queryFn: fetchEventos,
    });
@@ -83,7 +83,7 @@ export function Eventos() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => navigate.navigate("EventosDetalhe", { id: item.id })}>
+            onPress={() => navigate.navigate("EventosDetalhe",{ id: item.id })}>
 
             <Card.Image
                flex={1}
@@ -97,28 +97,35 @@ export function Eventos() {
 
                <Card.Title marginVertical="sm">{item.nome}</Card.Title>
 
-               <HStack justifyContent="space-around">
+               <HStack justifyContent="space-around" alignItems="center">
 
-                  <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
-                     {item.nome_local} {'\n'}
-                     <Card.Span>
-                        {item.cidade} | {item.estado} - {diaEvento.hora() || 'hora não definida'}
-                     </Card.Span>
-                  </Card.SubTitle>
+                  <VStack flex={1}>
+                     <Card.SubTitle>
+                        {item.nome_local} {'\n'}
+                        <Card.Span>
+                           <Icon.Pin size={16} />
+                           {item.cidade} | {item.estado} - {diaEvento.hora() || 'hora não definida'}
+                        </Card.Span>
+                     </Card.SubTitle>
+                  </VStack>
 
-                  <Card.Widget>
-                     <Text textAlign="center" color="white" fontWeight="700" fontSize={22}>
-                        {diaEvento.diaMes()}
-                     </Text>
-                     <Text color="white" textTransform="uppercase" fontWeight="500" fontSize={14} style={{ marginTop: -8 }}>
-                        {diaEvento.nomeMes()}
-                     </Text>
-                  </Card.Widget>
+                  <VStack>
+                     <Card.Widget>
+                        <Text textAlign="center" color="white" fontWeight="700" fontSize={22}>
+                           {diaEvento.diaMes()}
+                        </Text>
+                        <Text color="white" textTransform="uppercase" fontWeight="500" fontSize={14} style={{ marginTop: -8 }}>
+                           {diaEvento.nomeMes()}
+                        </Text>
+                     </Card.Widget>
+                  </VStack>
+
+
                </HStack>
             </VStack>
          </Card.Root>
       )
-   }, []);
+   },[]);
 
    useEffect(() => {
       const time = setTimeout(() => {
@@ -126,11 +133,11 @@ export function Eventos() {
             navigate.navigate(route as any);
             usuarioStorage.delete('route');
          }
-      }, 500);
+      },500);
 
       return () => clearTimeout(time);
 
-   }, [route, logado]);
+   },[route,logado]);
 
    if (isLoading) {
       return null;

@@ -9,7 +9,8 @@ export type PayloadDefaultError = {
    erro: boolean;
    id: string;
    mensagem: string;
-   mensagenserro: []
+   mensagenserro: [],
+   message?: string;
 }
 
 export type PayloadPaginacaoResponse<T> = Promise<PayloadPaginacao<T>>

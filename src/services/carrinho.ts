@@ -45,9 +45,9 @@ export async function atribuiUtilizador(carrinho_id: string,body: object): Paylo
       .post(`/carrinho/atribui-dono-ingresso/${carrinho_id}`,{ ...body })
       .then(success => {
          if (success.status !== 200) {
+            console.log(success)
             throw new Error("Erro");
          }
          return success.data;
-      })
-      .catch((err) => err);
+      });
 }

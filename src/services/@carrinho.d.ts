@@ -55,6 +55,7 @@ export type IngressoCarrinho = {
    lote: string;
    necessario_aprovacao_imagem: number;
    qtd: number;
+   sexo?: "masculino" | "feminino" | "naoinformar"
    taxa_conveniencia: number;
    dados_atribuir: {
       bilhete_id: string;

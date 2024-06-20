@@ -12,7 +12,7 @@ export type CardSpan = TextProps<Theme> & {
 export function CardSpan({ children, leftIcon, ...rest }: CardSpan) {
    if (leftIcon) {
       return (
-         <HStack>
+         <HStack alignItems='center'>
             {leftIcon}
             <Text variant="header3" pt='xs' {...rest}>
                {children}

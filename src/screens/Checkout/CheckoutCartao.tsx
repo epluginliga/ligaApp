@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React,{ useEffect,useRef,useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -6,7 +6,7 @@ import VStack from '../../components/Views/Vstack'
 import Text from '../../components/Text'
 import { ResumoPedido } from '../../components/ResumoPedido'
 import { data } from '../../../store/eventoId'
-import { CartaoWidget, ITemCardActions } from '../../components/Cartao'
+import { CartaoWidget,ITemCardActions } from '../../components/Cartao'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,7 +15,7 @@ import { Button } from '../../components/Button'
 import { Icon } from '../../icons'
 import HStack from '../../components/Views/Hstack'
 import { Keyboard } from 'react-native'
-import Animated, { interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated'
+import Animated,{ interpolate,useAnimatedStyle,useSharedValue } from 'react-native-reanimated'
 import { AnimateView } from '../../components/AnimateView'
 
 const schema = z.object({
@@ -28,7 +28,7 @@ const schema = z.object({
 type Form = z.input<typeof schema>;
 
 function FormCartaoCredito() {
-   const { control, formState: { errors }, watch } = useForm<Form>({
+   const { control,formState: { errors },watch } = useForm<Form>({
       resolver: zodResolver(schema)
    });
    const controlaWidgetCartao = useRef<ITemCardActions>(null);
@@ -102,9 +102,9 @@ export function CheckoutCartao() {
 
                <VStack gap='md' justifyContent='space-between' flex={1} marginBottom='lg'>
 
-                  <ResumoPedido data={data} />
+                  <ResumoPedido />
 
-                  <AnimateView delay={{ opacity: 300, offset: 150 }}>
+                  <AnimateView delay={{ opacity: 300,offset: 150 }}>
                      <FormCartaoCredito />
                   </AnimateView>
                </VStack>

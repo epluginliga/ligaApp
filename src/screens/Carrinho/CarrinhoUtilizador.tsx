@@ -13,7 +13,6 @@ import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
 import { atribuiUtilizador,obtemCarrinho } from '../../services/carrinho'
-import { CarrinhoUtilizadorAtletica } from './CarrinhoUtilizadorAtletica'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
@@ -25,6 +24,7 @@ import { Theme } from '../../theme/default';
 import { useCarrinho } from '../../hooks/carrinho';
 import { fetchEventoAtleticas } from '../../services/eventos';
 import { useNavigation } from '@react-navigation/native';
+import { InputSelecionar } from '../../components/Inputs/Selecionar';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -37,6 +37,7 @@ export const schemaUtilizador = z.object({
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
                   nome: z.string({ message: "Obrigatório!" }).min(3,{ message: "Obrigatório!" }),
+                  sexo: z.string().optional(),
                   cpf: z.string({ message: "Obrigatório!" }).superRefine((val,ctx) => {
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
@@ -71,7 +72,8 @@ export function CarrinhoUtilizador() {
    const handleAtribuirUtilizador = useMutation({
       mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""),data),
       onSuccess(data) {
-         navigate('CarrinhoResumo');
+         console.log(data)
+         // navigate('CarrinhoResumo');
       },
    });
 
@@ -112,6 +114,10 @@ export function CarrinhoUtilizador() {
 
    const ingresso = carrinho?.data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = carrinho?.data?.usuario;
+   const atleticaFormulario = atleticas.data?.map(item => ({
+      label: item.nome,
+      name: item.slug
+   })) || [];
 
    return (
       <Layout.Keyboard>
@@ -131,13 +137,14 @@ export function CarrinhoUtilizador() {
                      entering={FadeIn}
                      exiting={FadeOut}>
                      <Card.Root>
-                        {atleticas.data && atleticas.data?.length > 1 && <CarrinhoUtilizadorAtletica
-                           data={atleticas.data}
-                           setValue={(val: string) => setValue("atletica_slug",val)}
-                           name="atletica_slug"
-                           control={control}
-                           error={errors?.atletica_slug?.message}
-                        />}
+                        {atleticaFormulario?.length > 1 && (
+                           <InputSelecionar
+                              name="atletica_slug"
+                              control={control}
+                              option={atleticaFormulario || []}
+                              error={errors?.atletica_slug?.message}
+                           />
+                        )}
                      </Card.Root>
                   </Animated.View>
 
@@ -222,16 +229,41 @@ export function CarrinhoUtilizador() {
                                        entering={FadeInDown.delay(indice * 500)}
                                        exiting={FadeOutUp}
                                     >
+                                       <VStack gap='md'>
+                                          {ingresso.possui_restricao ? (
+                                             <InputText
+                                                label={ingresso.restricao}
+                                                control={control}
+                                                name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
+                                                placeholder={`${ingresso.restricao} do utilizador.`}
+                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
+                                             />
+                                          ) : null}
 
-                                       {ingresso.possui_restricao ? (
-                                          <InputText
-                                             label={ingresso.restricao}
-                                             control={control}
-                                             name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
-                                             placeholder={`${ingresso.restricao} do utilizador.`}
-                                             error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
-                                          />
-                                       ) : null}
+                                          {ingresso.sexo && (
+                                             <InputSelecionar
+                                                placeholder='Selecione o sexo'
+                                                label='Sexo'
+                                                name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
+                                                control={control}
+                                                option={[
+                                                   {
+                                                      label: "Masculino",
+                                                      name: "masculino"
+                                                   },
+                                                   {
+                                                      label: "Feminino",
+                                                      name: "feminino"
+                                                   },
+                                                   {
+                                                      label: "Não informar",
+                                                      name: "naoinformar"
+                                                   }
+                                                ]}
+                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.sexo?.message}
+                                             />
+                                          )}
+                                       </VStack>
 
                                     </Animated.View>
 
@@ -259,16 +291,16 @@ export function CarrinhoUtilizador() {
                         </VStack>
                         {carrinho.data && (
                            <Button
-                              onPress={handleSubmit((data) => handleAtribuirUtilizador.mutate(data))}
+                              onPress={handleSubmit((data) => {
+                                 // console.log(JSON.stringify(data,null,1));
+                                 return handleAtribuirUtilizador.mutate(data);
+                              })}
                            >
                               Continuar
                            </Button>
                         )}
                      </Section.Root>
                   </Animated.View>
-
-
-
 
                </VStack>
             </Layout.Scroll>

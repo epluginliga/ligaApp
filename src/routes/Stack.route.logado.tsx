@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Perfil } from '../screens/Perfil';
@@ -8,8 +8,6 @@ import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
-import { CriarConta } from '../screens/Auth/CriarConta';
 import { StatusBar } from 'react-native';
 import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';

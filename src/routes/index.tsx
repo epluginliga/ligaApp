@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useState } from 'react'
 
 import { RouteDesLogado } from './Stack.route.deslogado';
 import { RouteLogado } from './Stack.route.logado';
@@ -6,10 +6,20 @@ import { useAuth } from '../hooks/auth';
 import { Loading } from '../components/Loading';
 import api from '../services';
 import { CarrinhoProvider } from '../hooks/carrinho';
+import { PayloadDefaultError } from '../services/@index';
+import { ErroRequest } from '../components/ErroRequest';
+
+type ErrorProps = {
+   response: {
+      data: PayloadDefaultError
+   }
+}
 
 export function Routes() {
-   const { logado,loading,signOut } = useAuth();
-   const [loadingReq,setLoadingReq] = React.useState(false);
+   const { logado,signOut } = useAuth();
+   const [loadingReq,setLoadingReq] = useState(false);
+   const [erro,setErro] = useState("");
+
    api.interceptors.request.use(
       (config) => {
          setLoadingReq(true);
@@ -25,21 +35,22 @@ export function Routes() {
          setLoadingReq(false);
          return response;
       },
-      (error) => {
+      (error: ErrorProps) => {
          setLoadingReq(false);
          if (error.response?.data?.codigoretorno === 401) {
             signOut();
          }
+
+         setErro(error?.response?.data?.mensagenserro?.join(", ") || "");
          return Promise.reject(error);
       }
    );
 
-   // if (loading) {
-   //    return <Loading />;
-   // }
-
    return (
       <CarrinhoProvider>
+
+         {erro && <ErroRequest erro={erro} clear={() => setErro('')} />}
+
          {logado ? <RouteLogado /> : <RouteDesLogado />}
          {loadingReq && <Loading />}
       </CarrinhoProvider>
