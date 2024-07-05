@@ -3,22 +3,23 @@ import { Icon } from "../../icons";
 import Text from "../Text";
 import VStack from "../Views/Vstack";
 import { useEffect,useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type ErroRequestProps = {
    erro: string;
    clear: () => void
 }
-export function ErroRequest({ erro , clear}: ErroRequestProps) {
-   const [mostrar,setMostrar] = useState(() => !!erro);
+export function ErroRequest({ erro,clear }: ErroRequestProps) {
+   const insets = useSafeAreaInsets();
 
    useEffect(() => {
       if (erro) {
          const time = setTimeout(() => clear(),4000);
          return () => clearTimeout(time);
-      } 
+      }
    },[erro]);
 
-   if (!mostrar) return;
+   if (!erro) return;
 
    return (
       <Animated.View
@@ -30,8 +31,8 @@ export function ErroRequest({ erro , clear}: ErroRequestProps) {
          }}
          entering={FadeInUp}
          exiting={FadeOutUp}>
-         <VStack justifyContent='center' alignItems='center' position='absolute' top={10} zIndex={999} width="100%" >
-            <VStack width="100%" gap="sm" maxWidth="95%" backgroundColor='botao_default' borderRadius={14} alignItems='center' p="sm">
+         <VStack justifyContent='center' alignItems='center' position='absolute' top={insets.top} zIndex={999} width="100%" >
+            <VStack width="100%" gap="sm" maxWidth="95%" backgroundColor='primary' borderRadius={14} alignItems='center' p="sm">
                <Icon.Warning color='#fff' />
                <Text fontSize={14} color='white' textAlign='center'>{erro}</Text>
             </VStack>

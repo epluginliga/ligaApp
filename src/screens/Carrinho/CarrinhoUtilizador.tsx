@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation,useQueries } from '@tanstack/react-query';
 import Animated,{ FadeIn,FadeInDown,FadeOut,FadeOutUp } from 'react-native-reanimated';
-import { Pressable } from 'react-native';
+import { Pressable,StatusBar } from 'react-native';
 import { z } from 'zod'
 
 import { Layout } from '../../components/Views/Layout'
@@ -72,8 +72,7 @@ export function CarrinhoUtilizador() {
    const handleAtribuirUtilizador = useMutation({
       mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""),data),
       onSuccess(data) {
-         console.log(data)
-         // navigate('CarrinhoResumo');
+         navigate('CarrinhoResumo');
       },
    });
 
@@ -120,191 +119,195 @@ export function CarrinhoUtilizador() {
    })) || [];
 
    return (
-      <Layout.Keyboard>
-         <Layout.Root>
-            <Layout.Header title='Utilizador' />
-            <Layout.Scroll>
-               <VStack gap="lg" marginBottom='md'>
+      <>
+         <StatusBar barStyle="dark-content" />
 
-                  <Section.Root>
-                     <Section.SubTitle>{evento?.nome} / {evento?.cidade} - {evento?.estado}</Section.SubTitle>
-                     <Section.Title color='primary'>
-                        Informe quem irá utilizar os ingressos
-                     </Section.Title>
-                  </Section.Root>
+         <Layout.Keyboard>
+            <Layout.Root>
+               <Layout.Header title='Utilizador' />
+               <Layout.Scroll>
+                  <VStack gap="lg" marginBottom='md'>
 
-                  <Animated.View
-                     entering={FadeIn}
-                     exiting={FadeOut}>
-                     <Card.Root>
-                        {atleticaFormulario?.length > 1 && (
-                           <InputSelecionar
-                              name="atletica_slug"
-                              control={control}
-                              option={atleticaFormulario || []}
-                              error={errors?.atletica_slug?.message}
-                           />
-                        )}
-                     </Card.Root>
-                  </Animated.View>
-
-                  {ingresso?.map((ingresso,ingresso_indice) => {
-                     return new Array(ingresso.qtd).fill(null).map((_key,indice) => {
-                        const ativo = atribuiUser?.[ingresso_indice]?.[indice];
-                        return (
-                           <Animated.View
-                              entering={FadeIn}
-                              exiting={FadeOut}
-                              key={indice}
-                           >
-                              <VStack gap='md'>
-                                 <Section.Root>
-                                    <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
-
-                                    <Pressable
-                                       disabled={atribuiUser !== undefined && !ativo}
-                                       onPress={() => {
-                                          if (!usuario) return;
-                                          if (ativo) {
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,false);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,"");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,"");
-                                             return serAtribuiUser(undefined);
-                                          }
-                                          serAtribuiUser({
-                                             [ingresso_indice]: {
-                                                [indice]: true
-                                             }
-                                          });
-
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,true);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,usuario?.nome);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,cpfMask(usuario?.cpf));
-                                       }}>
-
-                                       <HStack alignItems='center' mb='md'>
-                                          {ativo ? (
-                                             <Icon.CheckCircle color={colors.greenDark} />
-                                          ) : (
-                                             <Circle variant='shadow' width={25} height={25} />
-                                          )}
-                                          <Text variant='labelInput'>Esse ingresso é pra mim</Text>
-                                       </HStack>
-                                    </Pressable>
-
-                                    <Animated.View
-                                       entering={FadeInDown}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <InputText
-                                          editable={!ativo}
-                                          label='Nome'
-                                          control={control}
-                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
-                                          placeholder='Nome completo do utilizador'
-                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
-                                       />
-
-                                    </Animated.View>
-
-                                    <Animated.View
-                                       entering={FadeInDown.delay(indice * 500)}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <InputText
-                                          editable={!ativo}
-                                          label='CPF'
-                                          keyboardType='decimal-pad'
-                                          returnKeyType='done'
-                                          mask={cpfMask}
-                                          control={control}
-                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
-                                          placeholder='CPF do utilizador'
-                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
-                                       />
-                                    </Animated.View>
-
-
-                                    <Animated.View
-                                       entering={FadeInDown.delay(indice * 500)}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <VStack gap='md'>
-                                          {ingresso.possui_restricao ? (
-                                             <InputText
-                                                label={ingresso.restricao}
-                                                control={control}
-                                                name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
-                                                placeholder={`${ingresso.restricao} do utilizador.`}
-                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
-                                             />
-                                          ) : null}
-
-                                          {ingresso.sexo && (
-                                             <InputSelecionar
-                                                placeholder='Selecione o sexo'
-                                                label='Sexo'
-                                                name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
-                                                control={control}
-                                                option={[
-                                                   {
-                                                      label: "Masculino",
-                                                      name: "masculino"
-                                                   },
-                                                   {
-                                                      label: "Feminino",
-                                                      name: "feminino"
-                                                   },
-                                                   {
-                                                      label: "Não informar",
-                                                      name: "naoinformar"
-                                                   }
-                                                ]}
-                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.sexo?.message}
-                                             />
-                                          )}
-                                       </VStack>
-
-                                    </Animated.View>
-
-                                 </Section.Root>
-                              </VStack>
-                           </Animated.View>
-                        )
-                     })
-                  })}
-
-                  <Animated.View
-                     entering={FadeInDown}
-                     exiting={FadeOutUp}
-                  >
                      <Section.Root>
-                        <VStack>
-                           <HStack alignItems='center' justifyContent='space-between'>
-                              <Section.SubTitle>Total em ingressos: </Section.SubTitle>
-                              <Text color='greenDark'>{Maskara.dinheiro(total)}
-                                 <Text color='greenDark' fontSize={12}>{' '}+ Taxas</Text>
-                              </Text>
-
-                           </HStack>
-
-                        </VStack>
-                        {carrinho.data && (
-                           <Button
-                              onPress={handleSubmit((data) => {
-                                 // console.log(JSON.stringify(data,null,1));
-                                 return handleAtribuirUtilizador.mutate(data);
-                              })}
-                           >
-                              Continuar
-                           </Button>
-                        )}
+                        <Section.SubTitle>{evento?.nome} / {evento?.cidade} - {evento?.estado}</Section.SubTitle>
+                        <Section.Title color='primary'>
+                           Informe quem irá utilizar os ingressos
+                        </Section.Title>
                      </Section.Root>
-                  </Animated.View>
 
-               </VStack>
-            </Layout.Scroll>
-         </Layout.Root>
-      </Layout.Keyboard >
+                     <Animated.View
+                        entering={FadeIn}
+                        exiting={FadeOut}>
+                        <Card.Root>
+                           {atleticaFormulario?.length > 1 && (
+                              <InputSelecionar
+                                 name="atletica_slug"
+                                 control={control}
+                                 option={atleticaFormulario || []}
+                                 error={errors?.atletica_slug?.message}
+                              />
+                           )}
+                        </Card.Root>
+                     </Animated.View>
+
+                     {ingresso?.map((ingresso,ingresso_indice) => {
+                        return new Array(ingresso.qtd).fill(null).map((_key,indice) => {
+                           const ativo = atribuiUser?.[ingresso_indice]?.[indice];
+                           return (
+                              <Animated.View
+                                 entering={FadeIn}
+                                 exiting={FadeOut}
+                                 key={indice}
+                              >
+                                 <VStack gap='md'>
+                                    <Section.Root>
+                                       <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
+
+                                       <Pressable
+                                          disabled={atribuiUser !== undefined && !ativo}
+                                          onPress={() => {
+                                             if (!usuario) return;
+                                             if (ativo) {
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,false);
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,"");
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,"");
+                                                return serAtribuiUser(undefined);
+                                             }
+                                             serAtribuiUser({
+                                                [ingresso_indice]: {
+                                                   [indice]: true
+                                                }
+                                             });
+
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,true);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,usuario?.nome);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,cpfMask(usuario?.cpf));
+                                          }}>
+
+                                          <HStack alignItems='center' mb='md'>
+                                             {ativo ? (
+                                                <Icon.CheckCircle color={colors.greenDark} />
+                                             ) : (
+                                                <Circle variant='shadow' width={25} height={25} />
+                                             )}
+                                             <Text variant='labelInput'>Esse ingresso é pra mim</Text>
+                                          </HStack>
+                                       </Pressable>
+
+                                       <Animated.View
+                                          entering={FadeInDown}
+                                          exiting={FadeOutUp}
+                                       >
+                                          <InputText
+                                             editable={!ativo}
+                                             label='Nome'
+                                             control={control}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
+                                             placeholder='Nome completo do utilizador'
+                                             error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
+                                          />
+
+                                       </Animated.View>
+
+                                       <Animated.View
+                                          entering={FadeInDown.delay(indice * 500)}
+                                          exiting={FadeOutUp}
+                                       >
+                                          <InputText
+                                             editable={!ativo}
+                                             label='CPF'
+                                             keyboardType='decimal-pad'
+                                             returnKeyType='done'
+                                             mask={cpfMask}
+                                             control={control}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
+                                             placeholder='CPF do utilizador'
+                                             error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
+                                          />
+                                       </Animated.View>
+
+
+                                       <Animated.View
+                                          entering={FadeInDown.delay(indice * 500)}
+                                          exiting={FadeOutUp}
+                                       >
+                                          <VStack gap='md'>
+                                             {ingresso.possui_restricao ? (
+                                                <InputText
+                                                   label={ingresso.restricao}
+                                                   control={control}
+                                                   name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
+                                                   placeholder={`${ingresso.restricao} do utilizador.`}
+                                                   error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
+                                                />
+                                             ) : null}
+
+                                             {ingresso.sexo && (
+                                                <InputSelecionar
+                                                   placeholder='Selecione o sexo'
+                                                   label='Sexo'
+                                                   name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
+                                                   control={control}
+                                                   option={[
+                                                      {
+                                                         label: "Masculino",
+                                                         name: "masculino"
+                                                      },
+                                                      {
+                                                         label: "Feminino",
+                                                         name: "feminino"
+                                                      },
+                                                      {
+                                                         label: "Não informar",
+                                                         name: "naoinformar"
+                                                      }
+                                                   ]}
+                                                   error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.sexo?.message}
+                                                />
+                                             )}
+                                          </VStack>
+
+                                       </Animated.View>
+
+                                    </Section.Root>
+                                 </VStack>
+                              </Animated.View>
+                           )
+                        })
+                     })}
+
+                     <Animated.View
+                        entering={FadeInDown}
+                        exiting={FadeOutUp}
+                     >
+                        <Section.Root>
+                           <VStack>
+                              <HStack alignItems='center' justifyContent='space-between'>
+                                 <Section.SubTitle>Total em ingressos: </Section.SubTitle>
+                                 <Text color='greenDark'>{Maskara.dinheiro(total)}
+                                    <Text color='greenDark' fontSize={12}>{' '}+ Taxas</Text>
+                                 </Text>
+
+                              </HStack>
+
+                           </VStack>
+                           {carrinho.data && (
+                              <Button
+                                 onPress={handleSubmit((data) => {
+                                    // console.log(JSON.stringify(data,null,1));
+                                    return handleAtribuirUtilizador.mutate(data);
+                                 })}
+                              >
+                                 Continuar
+                              </Button>
+                           )}
+                        </Section.Root>
+                     </Animated.View>
+
+                  </VStack>
+               </Layout.Scroll>
+            </Layout.Root>
+         </Layout.Keyboard >
+      </>
    )
 }

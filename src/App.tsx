@@ -2,12 +2,13 @@ import React from 'react';
 
 import { ThemeProvider } from '@shopify/restyle';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 
 import theme from './theme/default';
 import { Routes } from './routes';
 import { AuthProvider } from './hooks/auth';
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 const queryClient = new QueryClient()
 
 function App(): React.JSX.Element {
@@ -18,7 +19,9 @@ function App(): React.JSX.Element {
 
           <QueryClientProvider client={queryClient}>
             <AuthProvider>
-              <Routes />
+              <SafeAreaProvider>
+                <Routes />
+              </SafeAreaProvider>
             </AuthProvider>
           </QueryClientProvider>
 

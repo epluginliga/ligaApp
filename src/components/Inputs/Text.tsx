@@ -38,10 +38,9 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
                      <Text style={{
                         fontSize: theme.spacing.md,
                         fontFamily: theme.fonts.medium,
-                        ...style[rest.variant || "transparent"],
                         flex: 1,
                         opacity: 0.4,
-                        color: theme.colors.bege_900,
+                        ...style[rest.variant || "transparent"],
                      }}>
                         {value}
                      </Text>
@@ -59,7 +58,6 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
                         fontFamily: theme.fonts.medium,
                         ...style[rest.variant || "transparent"],
                         flex: 1,
-                        color: theme.colors.black,
                      }}
                      {...rest}
                   />
