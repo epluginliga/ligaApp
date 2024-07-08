@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pressable, StatusBar } from 'react-native';
+import { Pressable,StatusBar,View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation,useQuery } from '@tanstack/react-query';
 
 import { Layout } from '../../components/Views/Layout';
 import VStack from '../../components/Views/Vstack';
@@ -26,8 +26,8 @@ type IngressosAdicionarProps = {
    eventoId: string;
 }
 
-function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
-   const { adicionaIngressoAoEvento, removeIngressoDoEvento, pedido, totalItens } = useCarrinho()
+function IngressosAdicionar({ ingresso,eventoId }: IngressosAdicionarProps) {
+   const { adicionaIngressoAoEvento,removeIngressoDoEvento,pedido,totalItens } = useCarrinho()
 
    const quantidade = pedido?.eventos
       .find(item => item.evento_id === eventoId)?.ingressos
@@ -99,16 +99,16 @@ const itemTextSingular: { [key: number]: string } = {
 
 export function Carrinho() {
    const { navigate } = useNavigation();
-   const { evento, pedido, total, totalItens } = useCarrinho();
+   const { evento,pedido,total,totalItens } = useCarrinho();
 
    const { data } = useQuery({
-      queryKey: ['fetchIngressoDisponivel', evento],
+      queryKey: ['fetchIngressoDisponivel',evento],
       queryFn: () => {
          if (!evento?.id) {
             return null;
          }
 
-         return fetchIngressoDisponivel({ evento_id: evento.id, pontoVenda: vendaAplicativo });
+         return fetchIngressoDisponivel({ evento_id: evento.id,pontoVenda: vendaAplicativo });
       },
       enabled: !!evento?.id,
    });
@@ -116,9 +116,9 @@ export function Carrinho() {
    const handleCriaCarrinho = useMutation({
       mutationKey: ['criaCarrinho'],
       mutationFn: (pedido: CriaEditaCarrinhoProps) => {
-         const copyPedido = Object.assign({}, pedido);
+         const copyPedido = Object.assign({},pedido);
          const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0)
-         return criaEditaCarrinho({ ...pedido, eventos: newPedido });
+         return criaEditaCarrinho({ ...pedido,eventos: newPedido });
       },
       onError: (error: Error) => { },
       onSuccess: (data) => {
@@ -149,27 +149,35 @@ export function Carrinho() {
                         {data?.ingressos?.map(ingresso => {
                            if (ingresso?.quantidade_disponivel_ingresso > 0) {
                               return (
-                                 <IngressosAdicionar
-                                    eventoId={evento.id}
-                                    key={ingresso.id}
-                                    ingresso={ingresso}
-                                 />
+                                 <React.Fragment key={ingresso.id}>
+                                    <IngressosAdicionar
+                                       eventoId={evento.id}
+                                       ingresso={ingresso}
+                                    />
+                                    <View style={{ height: 10 }} />
+
+                                 </React.Fragment>
                               );
                            }
 
                            return (
-                              <Card.Root key={ingresso.id} variant='border'>
-                                 <Card.Title>{ingresso.nome}</Card.Title>
-                                 <Card.Title variant='labelInput'>
-                                    {ingresso.valor}
-                                 </Card.Title>
-                                 <Card.Title variant='labelInput'>Esgotado</Card.Title>
-                              </Card.Root>
+                              <>
+                                 <Card.Root key={ingresso.id} variant='border'>
+                                    <Card.Title>{ingresso.nome}</Card.Title>
+                                    <Card.Title variant='labelInput'>
+                                       {ingresso.valor}
+                                    </Card.Title>
+                                    <Card.Title variant='labelInput'>Esgotado</Card.Title>
+                                 </Card.Root>
+                                 <View style={{ height: 10 }} />
+                              </>
                            )
                         })}
                      </VStack>
                   ))}
                </VStack>
+               <View style={{ height: 20 }} />
+
             </Layout.Scroll>
 
             <VStack justifyContent='center' width="100%" bottom={10}>

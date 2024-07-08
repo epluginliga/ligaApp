@@ -39,6 +39,7 @@ export type PayloadCarrinho = {
    };
    parcelas_permitidas: number;
    data_expiracao: string;
+   cupom?: PayloadCupomAplicado
 };
 
 
@@ -82,3 +83,11 @@ export type EventoCarrinhoIngresso = {
    valor?: number;
 }
 
+export type PayloadCupomAplicado = {
+   id: string;
+   descricao: string;
+   codigo: string;
+   status: boolean,
+   tipo_desconto: "percentual" | "fixo",
+   valor: number,
+}

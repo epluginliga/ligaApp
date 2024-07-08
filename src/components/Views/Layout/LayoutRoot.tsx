@@ -13,6 +13,7 @@ export function LayoutRoot({ children }: Layout) {
          flexBasis: '0%',
          flexGrow: 1,
          flexShrink: 1,
+
       }}>
          {children}
       </SafeAreaView>

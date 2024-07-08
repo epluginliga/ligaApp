@@ -1,5 +1,5 @@
 import React from 'react'
-import { KeyboardAvoidingView, Platform, StatusBar, StyleSheet } from 'react-native';
+import { Keyboard,KeyboardAvoidingView,Platform,StatusBar,StyleSheet,TouchableWithoutFeedback } from 'react-native';
 
 export type LayoutKeyboard = {
    children: React.ReactNode;
@@ -8,11 +8,17 @@ export type LayoutKeyboard = {
 export function LayoutKeyboard({ children }: LayoutKeyboard) {
    return (
       <KeyboardAvoidingView
+         removeClippedSubviews
+
          behavior={Platform.OS === "ios" ? "padding" : "height"}
          style={styles.container}
          keyboardVerticalOffset={Platform.OS === "ios" ? 5 : StatusBar.currentHeight}
       >
-         {children}
+         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <>
+               {children}
+            </>
+         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
    )
 }

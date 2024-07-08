@@ -29,7 +29,7 @@ export function RouteLogado() {
             screenOptions={{
                headerShown: false,
                contentStyle: {
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: "#fff",
                }
             }}>
             <Stack.Screen name="Home" component={TabRouteLogado} />

@@ -63,7 +63,7 @@ type AtribuirUserProps = {
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser,serAtribuiUser] = useState<AtribuirUserProps | null>();
-   const { total,evento } = useCarrinho();
+   const { total,evento,setCarrinhoId } = useCarrinho();
    const { navigate } = useNavigation();
    const { control,handleSubmit,formState: { errors },setValue,resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
@@ -92,8 +92,8 @@ export function CarrinhoUtilizador() {
             queryKey: ['fetchEventoAtleticas',evento?.id],
             queryFn: () => fetchEventoAtleticas(evento.id),
             enabled: !!evento?.id,
-         }
-      ]
+         },
+      ],
    });
 
    if (carrinho.isFetching || atleticas.isFetching) {
@@ -118,6 +118,10 @@ export function CarrinhoUtilizador() {
       name: item.slug
    })) || [];
 
+   if (carrinho?.data?.id) {
+      setCarrinhoId(carrinho.data?.id)
+   }
+   
    return (
       <>
          <StatusBar barStyle="dark-content" />

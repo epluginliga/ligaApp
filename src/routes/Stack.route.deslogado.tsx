@@ -23,7 +23,7 @@ export function RouteDesLogado() {
             screenOptions={{
                headerShown: false,
                contentStyle: {
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: "#fff",
                }               
             }}>
 

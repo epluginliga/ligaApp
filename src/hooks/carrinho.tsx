@@ -3,7 +3,7 @@ import { MMKV } from "react-native-mmkv";
 
 import { vendaAplicativo } from "../utils/constantes";
 import { EventosPayload } from "../services/@eventos";
-import { CriaEditaCarrinhoProps,EventoCarrinhoIngresso } from "../services/@carrinho";
+import { CriaEditaCarrinhoProps,EventoCarrinhoIngresso,PayloadCupomAplicado } from "../services/@carrinho";
 
 type CarrinhoContextProps = {
    evento: EventoHook | null;
@@ -14,6 +14,10 @@ type CarrinhoContextProps = {
    total: number;
    totalItens: number;
    pedido?: CriaEditaCarrinhoProps;
+   setCarrinhoId: (id: string) => void,
+   carrinhoId: string;
+   setCupom: (cupom: PayloadCupomAplicado) => void,
+   cupom: PayloadCupomAplicado;
 }
 
 export type AdicionaIngressosAoEventoProps = {
@@ -41,6 +45,8 @@ type CarrinhoProviderProps = {
 }
 function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactElement {
    const [evento,setEvento] = useState<EventoHook | null>(null);
+   const [carrinhoId,setCarrinhoId] = useState('');
+   const [cupom,setCupom] = useState<PayloadCupomAplicado>({} as PayloadCupomAplicado);
    const [carrinho,setCarrinho] = useState<CriaEditaCarrinhoProps>({
       ponto_venda_id: vendaAplicativo,
       eventos: [{
@@ -91,7 +97,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
 
       setCarrinho(copyPedido);
       carrinhoStorage.set("@carrinho",JSON.stringify(copyPedido));
-   },[evento, carrinho]);
+   },[evento,carrinho]);
 
    const removeIngressoDoEvento = useCallback((
       eventoId: string,
@@ -130,7 +136,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       setEvento(null);
       carrinhoStorage.delete("@carrinho");
       carrinhoStorage.delete("@evento");
-   },[])
+   },[]);
 
    let total = carrinho.eventos
       .flatMap((evento) => evento.ingressos)
@@ -163,7 +169,11 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          removeIngressoDoEvento,
          limpaCarrinho,
          total,
-         totalItens
+         totalItens,
+         setCarrinhoId,
+         carrinhoId,
+         setCupom,
+         cupom,
       }}>
          {children}
       </CarrinhoContext.Provider>

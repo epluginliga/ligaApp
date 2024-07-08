@@ -50,3 +50,15 @@ export async function atribuiUtilizador(carrinho_id: string,body: object): Paylo
          return success.data;
       });
 }
+
+
+export async function aplicaCupomDesconto(carrinho: string,codigo: string): PayloadDefault<string> {
+   return await api
+      .post(`/carrinho/cupom/aplicar`,{ carrinho,codigo })
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      });
+}

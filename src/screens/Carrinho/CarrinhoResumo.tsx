@@ -11,9 +11,17 @@ import { ModalApp } from '../../components/Modal'
 import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { ResumoPedido } from '../../components/ResumoPedido'
+import { useQuery } from '@tanstack/react-query'
+import { obtemCarrinho } from '../../services/carrinho'
+import { useCarrinho } from '../../hooks/carrinho'
+import { Maskara } from '../../utils/Maskara'
+import { CarrinhoCupomDesconto } from './CarrinhoCupomDesconto'
 
 export function CarrinhoResumo() {
    const { navigate } = useNavigation();
+
+   const { total, totalItens } = useCarrinho();
+// console.log(JSON.stringify(totalItens, null, 1))
 
    return (
       <Layout.Root>
@@ -28,30 +36,15 @@ export function CarrinhoResumo() {
             <VStack flex={1} gap='md' >
                <ResumoPedido />
 
-               <Card.Root title="Resumo do pedido" variant='border'>
+               <Card.Root title="Resumo" variant='border'>
                   <VStack>
-                     <Text lineHeight={23} variant='header'>1 lote</Text>
-                     <Text lineHeight={23} color='primary' variant='header'>R$ 60,00</Text>
+                     <Text lineHeight={23} color='primary' variant='header'>{Maskara.dinheiro(total)}</Text>
                   </VStack>
-                  <Card.Title variant='header'>1 unidade</Card.Title>
+                  <Card.Title variant='header'>{totalItens} ingresso</Card.Title>
                </Card.Root>
             </VStack>
 
-            <Section.Root>
-               <ModalApp handleOpen={(
-                  <HStack alignItems='center'>
-                     <Icon.Ticket />
-                     <Section.Title>Cupom de Desconto?</Section.Title>
-                  </HStack>
-               )}>
-                  <VStack></VStack>
-               </ModalApp>
-
-               <VStack>
-                  <Section.SubTitle>Total em ingressos: R$ 60,00</Section.SubTitle>
-                  <Section.SubTitle>Total em taxas: R$ 6,00</Section.SubTitle>
-               </VStack>
-            </Section.Root>
+            <CarrinhoCupomDesconto />
 
             <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>
                Continuar

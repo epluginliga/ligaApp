@@ -28,6 +28,9 @@ export function TabRouteLogado() {
                minHeight: 60,
                justifyContent: "center",
                alignItems: 'center',
+               contentStyle: {
+                  backgroundColor: "#fff",
+               }    
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
