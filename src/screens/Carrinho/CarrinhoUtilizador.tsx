@@ -16,7 +16,7 @@ import { atribuiUtilizador,obtemCarrinho } from '../../services/carrinho'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
-import { Maskara,cpfMask } from '../../utils/Maskara'
+import { Maskara,cpfMask,dataMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
 import { useTheme } from '@shopify/restyle';
@@ -25,6 +25,7 @@ import { useCarrinho } from '../../hooks/carrinho';
 import { fetchEventoAtleticas } from '../../services/eventos';
 import { useNavigation } from '@react-navigation/native';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
+import { formataData } from '../../utils/utils';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -37,6 +38,7 @@ export const schemaUtilizador = z.object({
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
                   nome: z.string({ message: "Obrigatório!" }).min(3,{ message: "Obrigatório!" }),
+                  data_nascimento: z.string().optional(),
                   sexo: z.string().optional(),
                   cpf: z.string({ message: "Obrigatório!" }).superRefine((val,ctx) => {
                      if (!Validacoes.validarCPF(val)) {
@@ -121,7 +123,7 @@ export function CarrinhoUtilizador() {
    if (carrinho?.data?.id) {
       setCarrinhoId(carrinho.data?.id)
    }
-   
+
    return (
       <>
          <StatusBar barStyle="dark-content" />
@@ -175,6 +177,7 @@ export function CarrinhoUtilizador() {
                                                 setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,false);
                                                 setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,"");
                                                 setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,"");
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`,"");
                                                 return serAtribuiUser(undefined);
                                              }
                                              serAtribuiUser({
@@ -186,6 +189,8 @@ export function CarrinhoUtilizador() {
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,true);
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,usuario?.nome);
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,cpfMask(usuario?.cpf));
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`,usuario?.sexo);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`,formataData(usuario?.data_nascimento).diaMesAnoISOBR());
                                           }}>
 
                                           <HStack alignItems='center' mb='md'>
@@ -198,6 +203,23 @@ export function CarrinhoUtilizador() {
                                           </HStack>
                                        </Pressable>
 
+                                       <Animated.View
+                                          entering={FadeInDown.delay(indice * 500)}
+                                          exiting={FadeOutUp}
+                                       >
+                                          <VStack gap='md'>
+                                             {ingresso.possui_restricao ? (
+                                                <InputText
+                                                   label={ingresso.restricao}
+                                                   control={control}
+                                                   name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
+                                                   placeholder={`${ingresso.restricao} do utilizador.`}
+                                                   error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
+                                                />
+                                             ) : null}
+                                          </VStack>
+
+                                       </Animated.View>
                                        <Animated.View
                                           entering={FadeInDown}
                                           exiting={FadeOutUp}
@@ -230,49 +252,55 @@ export function CarrinhoUtilizador() {
                                           />
                                        </Animated.View>
 
+                                       {ingresso.classificacao_idade !== "livre" && (
+                                          <Animated.View
+                                             entering={FadeInDown.delay(indice * 500)}
+                                             exiting={FadeOutUp}
+                                          >
+                                             <InputText
+                                                editable={!ativo}
+                                                label='Data de nascimento'
+                                                keyboardType='decimal-pad'
+                                                returnKeyType='done'
+                                                mask={dataMask}
+                                                control={control}
+                                                name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`}
+                                                placeholder='dd/mm/aaaa'
+                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.data_nascimento?.message}
+                                             />
 
-                                       <Animated.View
-                                          entering={FadeInDown.delay(indice * 500)}
-                                          exiting={FadeOutUp}
-                                       >
-                                          <VStack gap='md'>
-                                             {ingresso.possui_restricao ? (
-                                                <InputText
-                                                   label={ingresso.restricao}
-                                                   control={control}
-                                                   name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
-                                                   placeholder={`${ingresso.restricao} do utilizador.`}
-                                                   error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
-                                                />
-                                             ) : null}
+                                          </Animated.View>
+                                       )}
 
-                                             {ingresso.sexo && (
-                                                <InputSelecionar
-                                                   placeholder='Selecione o sexo'
-                                                   label='Sexo'
-                                                   name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
-                                                   control={control}
-                                                   option={[
-                                                      {
-                                                         label: "Masculino",
-                                                         name: "masculino"
-                                                      },
-                                                      {
-                                                         label: "Feminino",
-                                                         name: "feminino"
-                                                      },
-                                                      {
-                                                         label: "Não informar",
-                                                         name: "naoinformar"
-                                                      }
-                                                   ]}
-                                                   error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.sexo?.message}
-                                                />
-                                             )}
-                                          </VStack>
 
-                                       </Animated.View>
-
+                                       {ingresso.sexo && (
+                                          <Animated.View
+                                             entering={FadeInDown.delay(indice * 500)}
+                                             exiting={FadeOutUp}
+                                          >
+                                             <InputSelecionar
+                                                placeholder='Selecione o sexo'
+                                                label='Sexo'
+                                                name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
+                                                control={control}
+                                                option={[
+                                                   {
+                                                      label: "Masculino",
+                                                      name: "masculino"
+                                                   },
+                                                   {
+                                                      label: "Feminino",
+                                                      name: "feminino"
+                                                   },
+                                                   {
+                                                      label: "Não informar",
+                                                      name: "naoinformar"
+                                                   }
+                                                ]}
+                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.sexo?.message}
+                                             />
+                                          </Animated.View>
+                                       )}
                                     </Section.Root>
                                  </VStack>
                               </Animated.View>

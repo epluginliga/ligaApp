@@ -2,7 +2,7 @@ export class Maskara {
 
    static dinheiro(valor: number) {
       return new Intl
-         .NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+         .NumberFormat('pt-BR',{ style: 'currency',currency: 'BRL' })
          .format(valor);
    }
 
@@ -10,12 +10,19 @@ export class Maskara {
 
 export const cpfMask = (value: string) => {
    if (!value) {
-     return ''
+      return ''
    }
    return value
-     .replace(/\D/g, '')
-     .replace(/(\d{3})(\d)/, '$1.$2')
-     .replace(/(\d{3})(\d)/, '$1.$2')
-     .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-     .replace(/(-\d{2})\d+?$/, '$1')
- }
+      .replace(/\D/g,'')
+      .replace(/(\d{3})(\d)/,'$1.$2')
+      .replace(/(\d{3})(\d)/,'$1.$2')
+      .replace(/(\d{3})(\d{1,2})/,'$1-$2')
+      .replace(/(-\d{2})\d+?$/,'$1')
+}
+
+export const dataMask = (value: string) => {
+   return value
+      .replace(/\D/g,'')
+      .replace(/(\d{2})(\d)/,'$1/$2')
+      .replace(/(\d{2})(\d)/,'$1/$2')
+}

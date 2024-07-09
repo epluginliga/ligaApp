@@ -50,7 +50,7 @@ export type IngressoCarrinho = {
    tipo_restricao: "outro" | "cpf" | "email";
    lote_id: string;
    nome: string;
-   classificacao_idade: string;
+   classificacao_idade: "livre";
    sexo: string;
    valor: number;
    lote: string;

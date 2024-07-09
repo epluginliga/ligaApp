@@ -16,9 +16,11 @@ import { Button } from '../../components/Button';
 import { Pressable,View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMutation,useQueries,useQuery,useQueryClient } from '@tanstack/react-query';
-import { aplicaCupomDesconto,obtemCarrinho } from '../../services/carrinho';
+import { aplicaCupomDesconto,obtemCarrinho,removeCupomDesconto } from '../../services/carrinho';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
+import { PayloadCupomAplicado } from '../../services/@carrinho';
+import Circle from '../../components/Views/Circle';
 
 const schema = z.object({
    codigo: z.string().min(3,"Código é obrigatório"),
@@ -39,7 +41,7 @@ export function CarrinhoCupomDesconto() {
    const onSubmit = useMutation({
       mutationKey: ['handleAplicaCupom'],
       mutationFn: (codigo: CupomForm) => aplicaCupomDesconto(carrinhoId,codigo.codigo),
-      onSuccess: async (data) => {
+      onSuccess: async () => {
          const carrinho = await obtemCarrinho();
          if (carrinho?.cupom) {
             setCupom(carrinho?.cupom);
@@ -49,6 +51,18 @@ export function CarrinhoCupomDesconto() {
          console.log(error)
       },
    });
+
+   const deletaCupom = useMutation({
+      mutationKey: ['handleAplicaCupom'],
+      mutationFn: () => removeCupomDesconto(carrinhoId),
+      onSuccess: () => {
+         setCupom({} as PayloadCupomAplicado);
+      },
+      onError(error) {
+         console.log(error)
+      },
+   });
+
 
    return (
       <Section.Root>
@@ -62,7 +76,7 @@ export function CarrinhoCupomDesconto() {
                         Cupom aplicado!
                      </Section.Title>
 
-                     <Pressable>
+                     <Pressable onPress={() => deletaCupom.mutate()}>
                         <HStack
                            justifyContent='center'
                            alignItems='center'
@@ -99,6 +113,12 @@ export function CarrinhoCupomDesconto() {
                         control={control}
                         error={errors?.codigo?.message}
                      />
+
+                     <HStack flex={1} position='relative'>
+                        <Icon.CheckCircle size={40} color={colors.greenDark} />
+                        <Text>{cupom.tipo_desconto === "percentual" ? total - cupom.valor : ""}</Text>
+                     </HStack>
+
                      <View style={{ marginBottom: insets.bottom }}>
                         <Button
                            loading={onSubmit.isPending}
@@ -113,7 +133,9 @@ export function CarrinhoCupomDesconto() {
          </ModalApp>
 
          <VStack>
-            <Section.SubTitle>Subtotal: {Maskara.dinheiro(total)}</Section.SubTitle>
+            <Section.SubTitle>
+               {cupom?.id ? `Subtotal: ` : `Total do pedido`}:  {Maskara.dinheiro(total)}
+            </Section.SubTitle>
             {cupom.valor && <Text variant='header' fontSize={16} color='greenDark'>Valor com desconto: {Maskara.dinheiro(cupom.valor)}</Text>}
          </VStack>
       </Section.Root>

@@ -62,3 +62,15 @@ export async function aplicaCupomDesconto(carrinho: string,codigo: string): Payl
          return success.data;
       });
 }
+
+
+export async function removeCupomDesconto(carrinho: string): PayloadDefault<string> {
+   return await api
+      .delete(`/carrinho/cupom/remover/${carrinho}`)
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      });
+}

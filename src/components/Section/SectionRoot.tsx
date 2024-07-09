@@ -9,7 +9,7 @@ type Section = BoxProps<Theme> & VStackProps & {
 export function SectionRoot({ children, paddingHorizontal = 'sm', ...rest }: Section) {
    return (
       <VStack marginHorizontal={paddingHorizontal} >
-         <VStack backgroundColor='white'  p="md" gap="md" width="100%" borderRadius={20} overflow='hidden' {...rest}>
+         <VStack backgroundColor='bege'  p="md" gap="md" width="100%" borderRadius={20} overflow='hidden' {...rest}>
             {children}
          </VStack>
       </VStack>
