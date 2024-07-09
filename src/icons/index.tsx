@@ -20,6 +20,7 @@ import { IconWarning } from "./IconWarning";
 import { IconCredtCard, IconPix } from "./IconPayments";
 import { IconCopy } from "./IconCopy";
 import { IconTrashCan } from "./IconTrashCan";
+import { IconMoney } from "./IconMoney";
 
 export const Icon = {
    Eye: IconEye,
@@ -49,7 +50,8 @@ export const Icon = {
    CredtCard: IconCredtCard,
    Pix: IconPix,
    Copy: IconCopy,
-   Trash: IconTrashCan
+   Trash: IconTrashCan,
+   Money: IconMoney,
 }
 
 export type Icon = {

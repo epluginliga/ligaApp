@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -9,10 +9,10 @@ import Circle from '../../components/Views/Circle'
 import VStack from '../../components/Views/Vstack'
 import { Button } from '../../components/Button'
 import { Icon } from '../../icons'
-import { Theme } from '../../theme/default'
+import theme, { Theme } from '../../theme/default'
 import { useTheme } from '@shopify/restyle'
-import { Keyboard } from 'react-native'
-import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import { useCarrinho } from '../../hooks/carrinho'
+import { Maskara } from '../../utils/Maskara'
 
 type FormasPagamento = 'CheckoutCartao' | 'CheckoutPix';
 
@@ -55,6 +55,7 @@ function InputFormaPagamento({ formaPagamento, setFormaPagamento }: InputFormaPa
 export function CheckoutPagamento() {
    const { navigate } = useNavigation();
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('' as FormasPagamento);
+   const { total, cupom } = useCarrinho();
 
    return (
       <Layout.Root>
@@ -73,14 +74,20 @@ export function CheckoutPagamento() {
             </Section.Root>
 
             <Section.Root variant='shadow' mb='md'>
-               <Section.Title >Total do pedido</Section.Title>
+               <Section.Title >Seu pedido</Section.Title>
 
                <VStack>
-                  <Section.SubTitle iconLeft={<Icon.Ticket size={18} />}>Total em ingressos: R$ 60,00</Section.SubTitle>
-                  <Section.SubTitle iconLeft={<Icon.CheckCircle size={18} />}>Total em taxas: R$ 6,00</Section.SubTitle>
+                  <Section.SubTitle iconLeft={<Icon.Ticket size={18} />}>Subtotal: {Maskara.dinheiro(total)}</Section.SubTitle>
+                  {cupom?.valor && <Section.SubTitle color='greenDark' fontWeight="bold" iconLeft={<Icon.CheckCircle color={theme.colors.greenDark} size={18} />}>
+                     Desconto: {Maskara.dinheiro(cupom.valor)}
+                  </Section.SubTitle>}
+                  <Section.SubTitle iconLeft={<Icon.Money size={18} />}>Taxas: {Maskara.dinheiro(total)}</Section.SubTitle>
+                  <Section.Title color='azul'>Total do pedido: {Maskara.dinheiro(total - (cupom.valor || 0))}</Section.Title>
                </VStack>
 
-               <Button onPress={() => navigate(formaPagamento)}
+               <Button
+                  disabled={!formaPagamento}
+                  onPress={() => navigate(formaPagamento)}
                   marginHorizontal="md">
                   Continuar
                </Button>

@@ -41,7 +41,7 @@ export function CarrinhoResumo() {
                <TituloCardCupom cupom={cupom} />
             </Pressable>
 
-            <Button marginHorizontal="md" onPress={() => navigate("CheckoutEnderecoCobranca")}>
+            <Button marginHorizontal="md" onPress={() => navigate("CheckoutPagamento")}>
                Continuar
             </Button>
 
