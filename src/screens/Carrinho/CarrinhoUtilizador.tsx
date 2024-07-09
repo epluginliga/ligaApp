@@ -1,9 +1,9 @@
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation,useQueries } from '@tanstack/react-query';
-import Animated,{ FadeIn,FadeInDown,FadeOut,FadeOutUp } from 'react-native-reanimated';
-import { Pressable,StatusBar } from 'react-native';
+import { useMutation, useQueries } from '@tanstack/react-query';
+import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutUp } from 'react-native-reanimated';
+import { Pressable, StatusBar } from 'react-native';
 import { z } from 'zod'
 
 import { Layout } from '../../components/Views/Layout'
@@ -12,11 +12,11 @@ import VStack from '../../components/Views/Vstack'
 import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Card } from '../../components/Card'
-import { atribuiUtilizador,obtemCarrinho } from '../../services/carrinho'
+import { atribuiUtilizador, obtemCarrinho } from '../../services/carrinho'
 import HStack from '../../components/Views/Hstack'
 import Circle from '../../components/Views/Circle'
 import Text from '../../components/Text'
-import { Maskara,cpfMask,dataMask } from '../../utils/Maskara'
+import { Maskara, cpfMask, dataMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
 import { useTheme } from '@shopify/restyle';
@@ -37,10 +37,10 @@ export const schemaUtilizador = z.object({
                restricao: z.string().optional(),
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
-                  nome: z.string({ message: "Obrigatório!" }).min(3,{ message: "Obrigatório!" }),
+                  nome: z.string({ message: "Obrigatório!" }).min(3, { message: "Obrigatório!" }),
                   data_nascimento: z.string().optional(),
                   sexo: z.string().optional(),
-                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val,ctx) => {
+                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
                      if (!Validacoes.validarCPF(val)) {
                         ctx.addIssue({
                            code: "custom",
@@ -64,15 +64,15 @@ type AtribuirUserProps = {
 }
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
-   const [atribuiUser,serAtribuiUser] = useState<AtribuirUserProps | null>();
-   const { total,evento,setCarrinhoId } = useCarrinho();
+   const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
+   const { total, evento, setCarrinhoId } = useCarrinho();
    const { navigate } = useNavigation();
-   const { control,handleSubmit,formState: { errors },setValue,resetField } = useForm<FormUtilizador>({
+   const { control, handleSubmit, formState: { errors }, setValue, resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
    const handleAtribuirUtilizador = useMutation({
-      mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""),data),
+      mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""), data),
       onSuccess(data) {
          navigate('CarrinhoResumo');
       },
@@ -80,18 +80,23 @@ export function CarrinhoUtilizador() {
 
    if (!evento) return;
 
-   const [carrinho,atleticas] = useQueries({
+   const [carrinho, atleticas] = useQueries({
       queries: [
          {
             queryKey: ['obtemCarrinhoPaginaCarrinho'],
-            queryFn: () => {
+            queryFn: async () => {
                resetField("lotes");
-               return obtemCarrinho();
+               const carrinho = await obtemCarrinho();
+               if (carrinho.id) {
+                  setCarrinhoId(carrinho?.id);
+               }
+
+               return carrinho;
             },
             refetchOnWindowFocus: true,
          },
          {
-            queryKey: ['fetchEventoAtleticas',evento?.id],
+            queryKey: ['fetchEventoAtleticas', evento?.id],
             queryFn: () => fetchEventoAtleticas(evento.id),
             enabled: !!evento?.id,
          },
@@ -103,13 +108,13 @@ export function CarrinhoUtilizador() {
    }
 
    if (atleticas.data?.length === 1) {
-      setValue("atletica_slug","nenhuma");
+      setValue("atletica_slug", "nenhuma");
    }
 
-   carrinho.data?.eventos.flatMap(item => item.ingressos).forEach((ingresso,ingresso_key: number) => {
+   carrinho.data?.eventos.flatMap(item => item.ingressos).forEach((ingresso, ingresso_key: number) => {
       for (let i = 1; i <= ingresso.qtd; i++) {
-         setValue(`lotes.${ingresso_key}.id`,ingresso.lote_id);
-         setValue(`lotes.${ingresso_key}.evento_ingresso_id`,ingresso.id);
+         setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
+         setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
       }
    });
 
@@ -119,10 +124,6 @@ export function CarrinhoUtilizador() {
       label: item.nome,
       name: item.slug
    })) || [];
-
-   if (carrinho?.data?.id) {
-      setCarrinhoId(carrinho.data?.id)
-   }
 
    return (
       <>
@@ -156,8 +157,8 @@ export function CarrinhoUtilizador() {
                         </Card.Root>
                      </Animated.View>
 
-                     {ingresso?.map((ingresso,ingresso_indice) => {
-                        return new Array(ingresso.qtd).fill(null).map((_key,indice) => {
+                     {ingresso?.map((ingresso, ingresso_indice) => {
+                        return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
                            const ativo = atribuiUser?.[ingresso_indice]?.[indice];
                            return (
                               <Animated.View
@@ -174,10 +175,10 @@ export function CarrinhoUtilizador() {
                                           onPress={() => {
                                              if (!usuario) return;
                                              if (ativo) {
-                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,false);
-                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,"");
-                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,"");
-                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`,"");
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, false);
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, "");
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, "");
+                                                setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, "");
                                                 return serAtribuiUser(undefined);
                                              }
                                              serAtribuiUser({
@@ -186,11 +187,11 @@ export function CarrinhoUtilizador() {
                                                 }
                                              });
 
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,true);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,usuario?.nome);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,cpfMask(usuario?.cpf));
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`,usuario?.sexo);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`,formataData(usuario?.data_nascimento).diaMesAnoISOBR());
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, true);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, usuario?.sexo);
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, formataData(usuario?.data_nascimento).diaMesAnoISOBR());
                                           }}>
 
                                           <HStack alignItems='center' mb='md'>

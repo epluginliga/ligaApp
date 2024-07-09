@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { Modal, Pressable, TouchableOpacity } from "react-native";
 import VStack from "../Views/Vstack";
 import HStack from "../Views/Hstack";
@@ -10,13 +10,24 @@ type ModalApp = {
    handleOpen: React.ReactNode;
 
 }
-export function ModalApp({ children, handleOpen }: ModalApp) {
+export type HandleModalApp = {
+   open: () => void;
+   close: () => void;
+}
+export const ModalApp = forwardRef(({ children, handleOpen }: ModalApp, ref) => {
    const [modalVisible, setModalVisible] = useState(false);
+
+   useImperativeHandle(ref, () => {
+      return {
+         open: () => setModalVisible(true),
+         close: () => setModalVisible(false),
+      }
+   }, [])
 
    return (
       <>
          <Modal
-            presentationStyle="formSheet"
+            presentationStyle="overFullScreen"
             animationType="slide"
             visible={modalVisible}
             onRequestClose={() => setModalVisible(!modalVisible)}>
@@ -54,4 +65,4 @@ export function ModalApp({ children, handleOpen }: ModalApp) {
          </TouchableOpacity>
       </>
    )
-}
+})

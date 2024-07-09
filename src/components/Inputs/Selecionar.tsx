@@ -1,16 +1,16 @@
-import React,{ useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Controller } from 'react-hook-form'
-import { FlatList,Pressable,TextInput } from 'react-native'
+import { FlatList, Pressable, TextInput } from 'react-native'
 
-import { Input,InputDefault } from '.'
+import { Input, InputDefault } from '.'
 import HStack from '../Views/Hstack'
 import Text from '../Text'
 import { Icon } from '../../icons'
-import Animated,{ FadeInRight,FadeOutRight } from 'react-native-reanimated'
+import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import VStack from '../Views/Vstack'
 import { useTheme } from '@shopify/restyle'
 import { Theme } from '../../theme/default'
-import { ModalApp } from '../Modal'
+import { HandleModalApp, ModalApp } from '../Modal'
 
 type InputText = InputDefault & {
    name: string;
@@ -22,9 +22,10 @@ type InputText = InputDefault & {
    }[]
 }
 
-export function InputSelecionar({ name,label,option,...rest }: InputText) {
-   const { colors,spacing,fonts } = useTheme<Theme>();
-   const [search,setSearch] = useState("");
+export function InputSelecionar({ name, label, option, ...rest }: InputText) {
+   const { colors, spacing, fonts } = useTheme<Theme>();
+   const [search, setSearch] = useState("");
+   const modalRef = useRef<HandleModalApp>(null);
 
    const dadosFiltrados = option?.filter((item) =>
       item?.name?.toLowerCase()?.includes(search.toLowerCase())
@@ -35,21 +36,23 @@ export function InputSelecionar({ name,label,option,...rest }: InputText) {
          name={name}
          rules={{ required: true }}
          control={rest.control}
-         render={({ field: { onChange,value } }) => {
+         render={({ field: { onChange, value } }) => {
             return (
-               <ModalApp handleOpen={(
-                  <Input label={label} error={rest.error}>
-                     <HStack alignItems='center' justifyContent='space-between' width="100%">
-                        <HStack alignItems='center'>
-                           {value && <Icon.CheckCircle color="#0A906E" />}
-                           <Text color='bege_900' fontSize={16}>
-                              {value ? value : rest.placeholder ? rest.placeholder : "Selecione.."}
-                           </Text>
+               <ModalApp
+                  ref={modalRef}
+                  handleOpen={(
+                     <Input label={label} error={rest.error}>
+                        <HStack alignItems='center' justifyContent='space-between' width="100%">
+                           <HStack alignItems='center'>
+                              {value && <Icon.CheckCircle color="#0A906E" />}
+                              <Text color='bege_900' fontSize={16}>
+                                 {value ? value : rest.placeholder ? rest.placeholder : "Selecione.."}
+                              </Text>
+                           </HStack>
+                           <Icon.Down />
                         </HStack>
-                        <Icon.Down />
-                     </HStack>
-                  </Input>
-               )}>
+                     </Input>
+                  )}>
                   <FlatList
                      keyExtractor={(item) => item.name}
                      stickyHeaderHiddenOnScroll={false}
@@ -78,7 +81,10 @@ export function InputSelecionar({ name,label,option,...rest }: InputText) {
                      ItemSeparatorComponent={() => <HStack borderBottomColor='bege' opacity={0.1} borderWidth={1} />}
                      initialNumToRender={10}
                      renderItem={({ item }) => (
-                        <Pressable onPress={() => onChange(item.name)}>
+                        <Pressable onPress={() => {
+                           onChange(item.name);
+                           modalRef.current?.close();
+                        }}>
                            <HStack padding='sm' justifyContent='space-between'>
                               <Text variant='body'>{item.label}</Text>
                               {value === item.name && (
@@ -92,25 +98,7 @@ export function InputSelecionar({ name,label,option,...rest }: InputText) {
                         </Pressable>
                      )}
                   />
-               </ModalApp >
-
-
-
-               // <Pressable onPress={() => {
-               //    callback?.({ id, name, label })
-               //    onChange(id);
-               // }}>
-               //    <HStack padding='sm' justifyContent='space-between'>
-               //       <Text variant='body'>{label}</Text>
-               //       {value === id && (
-               //          <Animated.View
-               //             entering={FadeInRight}
-               //             exiting={FadeOutRight}>
-               //             <Icon.CheckCircle />
-               //          </Animated.View>
-               //       )}
-               //    </HStack>
-               // </Pressable>
+               </ModalApp>
             )
          }}
       />

@@ -13,44 +13,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { InputText } from '../../components/Inputs/Text';
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
-import { Pressable,View } from 'react-native';
+import { Dimensions, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useMutation,useQueries,useQuery,useQueryClient } from '@tanstack/react-query';
-import { aplicaCupomDesconto,obtemCarrinho,removeCupomDesconto } from '../../services/carrinho';
+import { useMutation } from '@tanstack/react-query';
+import { aplicaCupomDesconto, obtemCarrinho, removeCupomDesconto } from '../../services/carrinho';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { PayloadCupomAplicado } from '../../services/@carrinho';
-import Circle from '../../components/Views/Circle';
+import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 
-const schema = z.object({
-   codigo: z.string().min(3,"Código é obrigatório"),
-});
 
-type CupomForm = z.input<typeof schema>;
 
-export function CarrinhoCupomDesconto() {
-   const { total,carrinhoId,setCupom,cupom } = useCarrinho();
-   const insets = useSafeAreaInsets();
-   const { colors } = useTheme<Theme>();
-
-   const { control,handleSubmit,formState: { errors }
-   } = useForm<CupomForm>({
-      resolver: zodResolver(schema)
-   });
-
-   const onSubmit = useMutation({
-      mutationKey: ['handleAplicaCupom'],
-      mutationFn: (codigo: CupomForm) => aplicaCupomDesconto(carrinhoId,codigo.codigo),
-      onSuccess: async () => {
-         const carrinho = await obtemCarrinho();
-         if (carrinho?.cupom) {
-            setCupom(carrinho?.cupom);
-         }
-      },
-      onError(error) {
-         console.log(error)
-      },
-   });
+function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
+   const { carrinhoId, setCupom } = useCarrinho();
 
    const deletaCupom = useMutation({
       mutationKey: ['handleAplicaCupom'],
@@ -58,97 +33,147 @@ export function CarrinhoCupomDesconto() {
       onSuccess: () => {
          setCupom({} as PayloadCupomAplicado);
       },
+
+   });
+
+   if (!cupom?.id) {
+      return (
+         <HStack alignItems='center'>
+            <Icon.Ticket />
+            <Section.Title>
+               Cupom de Desconto?
+            </Section.Title>
+         </HStack>
+      );
+   };
+
+   return (
+      <HStack alignItems='center'>
+         <Section.Title color='greenDark'>
+            Cupom aplicado!
+         </Section.Title>
+
+         <Pressable onPress={() => deletaCupom.mutate()}>
+            <HStack
+               justifyContent='center'
+               alignItems='center'
+               borderWidth={1}
+               p="xs"
+               px='sm'
+               backgroundColor='background_red_tab'
+               borderRadius={4}
+               borderColor='buttonPrimaryBackground'>
+               <Icon.Trash size={12} />
+               <Text color='primary' variant='header3'>
+                  Deletar
+               </Text>
+            </HStack>
+         </Pressable>
+      </HStack>
+   )
+}
+
+function Sucesso({ data }: { data: PayloadCupomAplicado }) {
+   const { colors } = useTheme<Theme>();
+   const { total } = useCarrinho();
+
+   if (!data) return;
+
+   return (
+      <Section.Root marginHorizontal='none'>
+         <Section.Title>{data.descricao}</Section.Title>
+
+         <HStack alignItems='center'>
+            <Icon.CheckCircle size={40} color={colors.greenDark} />
+            <Text
+               textDecorationLine="line-through"
+               color="black"
+               fontWeight="light"
+            >
+               {Maskara.dinheiro(total)}
+            </Text>
+
+            <Text
+               color="greenDark"
+               variant='header'
+               fontWeight="bold">
+               {Maskara.dinheiro(total - data.valor)}
+            </Text>
+         </HStack>
+      </Section.Root>
+   )
+}
+
+type StatusCupom = "error" | "idle" | "pending" | "success";
+function Error({ status }: { status: StatusCupom }) {
+   const msgs: { [key: string]: string } = {
+      error: 'Cupom não encontrado!',
+      idle: 'Use seu Cupom de desconto!'
+   }
+   return <ListEmptyComponent title={msgs[status]} />
+}
+
+const schema = z.object({
+   codigo: z.string().min(3, "Código é obrigatório"),
+});
+
+type CupomForm = z.input<typeof schema>;
+
+export function CarrinhoCupomDesconto() {
+   const { total, carrinhoId, setCupom, cupom } = useCarrinho();
+   const insets = useSafeAreaInsets();
+   const { height } = Dimensions.get("screen");
+   const { control, handleSubmit, formState: { errors }
+   } = useForm<CupomForm>({
+      resolver: zodResolver(schema)
+   });
+
+   const onSubmit = useMutation({
+      mutationKey: ['handleAplicaCupom'],
+      mutationFn: (form: CupomForm) => aplicaCupomDesconto(carrinhoId, form.codigo),
+      onSuccess: async () => {
+         const carrinho = await obtemCarrinho();
+         if (carrinho?.cupom) {
+            setCupom(carrinho?.cupom);
+         }
+      },
       onError(error) {
-         console.log(error)
+         setCupom({} as PayloadCupomAplicado)
       },
    });
 
 
+
    return (
       <Section.Root>
-         <ModalApp handleOpen={(
-            <HStack alignItems='center'>
-               {cupom?.codigo ? <Icon.CheckCircle color={colors.greenDark} /> : <Icon.Ticket />}
+         <ModalApp handleOpen={<TituloCardCupom cupom={cupom} />}>
 
-               {cupom?.codigo ? (
-                  <HStack alignItems='center'>
-                     <Section.Title color='greenDark'>
-                        Cupom aplicado!
-                     </Section.Title>
+            <Layout.Scroll contentContainerStyle={{ flexGrow: 1 }}>
+               <VStack justifyContent='space-between' flex={1} m='sm' >
+                  <VStack gap='md'>
+                     <InputText
+                        label="Cupom"
+                        iconLeft={<Icon.Ticket size={24} />}
+                        name='codigo'
+                        placeholder='Digite o código do cupom'
+                        control={control}
+                        error={errors?.codigo?.message}
+                     />
+                     {cupom.id ? <Sucesso data={cupom} /> : <Error status={onSubmit.status || 'idle'} />}
 
-                     <Pressable onPress={() => deletaCupom.mutate()}>
-                        <HStack
-                           justifyContent='center'
-                           alignItems='center'
-                           borderWidth={1}
-                           p="xs"
-                           px='sm'
-                           backgroundColor='background_red_tab'
-                           borderRadius={4}
-                           borderColor='buttonPrimaryBackground'>
-                           <Icon.Trash size={12} />
-                           <Text color='primary' variant='header3'>
-                              Deletar
-                           </Text>
-                        </HStack>
-                     </Pressable>
-
-                  </HStack>
-               ) : (
-                  <Section.Title >
-                     Cupom de Desconto?
-                  </Section.Title>
-               )}
-            </HStack>
-         )}>
-
-            <Layout.Keyboard>
-               <Layout.Scroll contentContainerStyle={{ flex: 1 }}>
-                  <VStack justifyContent='space-between' flex={1} m='sm'>
-                     <VStack>
-                        <InputText
-                           label="Cupom"
-                           iconLeft={<Icon.Ticket size={24} />}
-                           name='codigo'
-                           placeholder='Digite o código do cupom'
-                           control={control}
-                           error={errors?.codigo?.message}
-                        />
-
-                     </VStack>
-
-                     <Section.Root marginHorizontal='none'>
-                        <Section.Title>{cupom.descricao}</Section.Title>
-
-                        <HStack alignItems='center'>
-                           <Icon.CheckCircle size={40} color={colors.greenDark} />
-                           <Text
-                              textDecorationLine="line-through"
-                              color="black"
-                              fontWeight="light"
-                           >
-                              {Maskara.dinheiro(total)}
-                           </Text>
-
-                           <Text
-                              color="greenDark"
-                              variant='header'
-                              fontWeight="bold">
-                              {Maskara.dinheiro(total - cupom.valor)}
-                           </Text>
-                        </HStack>
-                     </Section.Root>
-
-                     <View style={{ marginBottom: insets.bottom }}>
-                        <Button
-                           loading={onSubmit.isPending}
-                           onPress={handleSubmit((data) => onSubmit.mutate(data))}>
-                           Buscar
-                        </Button>
-                     </View>
                   </VStack>
-               </Layout.Scroll>
-            </Layout.Keyboard>
+
+
+
+                  <View style={{ marginBottom: insets.bottom }}>
+                     <Button
+                        loading={onSubmit.isPending}
+                        onPress={handleSubmit((data) => onSubmit.mutate(data))}>
+                        Buscar
+                     </Button>
+                  </View>
+               </VStack>
+            </Layout.Scroll>
 
          </ModalApp>
 
