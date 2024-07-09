@@ -34,7 +34,7 @@ export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
    const { carrinhoId, setCupom, total, totalCalculado } = useCarrinho();
 
    const deletaCupom = useMutation({
-      mutationKey: ['handleAplicaCupom'],
+      mutationKey: ['handleRemoveCupom'],
       mutationFn: () => removeCupomDesconto(carrinhoId),
       onSuccess: () => {
          setCupom({} as PayloadCupomAplicado);

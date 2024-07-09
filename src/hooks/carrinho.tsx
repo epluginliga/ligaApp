@@ -139,6 +139,9 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          }]
       });
       setEvento(null);
+      setCarrinhoId('');
+      setCupom({} as PayloadCupomAplicado);
+      
       carrinhoStorage.delete("@carrinho");
       carrinhoStorage.delete("@evento");
    }, []);
