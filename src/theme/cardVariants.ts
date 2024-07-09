@@ -2,13 +2,14 @@ export const card = {
    shadow: {
       shadowColor: "bege_200",
       shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.25,
+      shadowOpacity: 1,
       shadowRadius: 20,
       elevation: 5,
+      borderColor: "bege_200",
    },
    border: {
       flexDirection: "row",
-      backgroundColor: "bege",
+      backgroundColor: "white",
       alignItems: "center",
       paddingHorizontal: "md",
       paddingVertical: "sm",
@@ -16,6 +17,6 @@ export const card = {
       overflow: 'hidden',
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: 'primary'
+      borderColor: 'primary',
    }
 }

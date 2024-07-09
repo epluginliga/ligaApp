@@ -13,7 +13,6 @@ export const buttonVariants = {
       alignItems: "center",
       justifyContent: 'center',
       paddingHorizontal: "lg",
-      padding: 'sm',
       flexDirection: "row",
       gap: "lg",
    },

@@ -89,7 +89,7 @@ export function CheckoutPagamento() {
 
             </Section.Root>
 
-            <Section.Root variant='shadow' mb='md'>
+            <Section.Root variant='shadow' >
                <Section.Title >Seu pedido</Section.Title>
 
                <VStack gap='sm'>
