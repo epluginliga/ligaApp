@@ -22,6 +22,7 @@ export type RouteApp = {
    Perfil: undefined;
    Carrinho: undefined;
    Ingressos: undefined;
+   CarrinhoCupomDesconto: undefined;
    IngressosDetalhe: {
       id: string;
    };

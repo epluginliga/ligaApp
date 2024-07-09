@@ -3,7 +3,7 @@ import Text from '../Text'
 import HStack from '../Views/Hstack';
 
 type Section = {
-   children: string,
+   children: string | React.ReactNode | React.ReactNode[],
    iconLeft?: React.ReactNode,
    iconRight?: React.ReactNode,
 }

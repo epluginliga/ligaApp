@@ -9,7 +9,6 @@ import Text from '../../Text'
 import VStack from '../Vstack'
 import { BoxProps } from '@shopify/restyle'
 import { Theme } from '../../../theme/default'
-import Circle from '../Circle'
 
 type LayoutHeader = BoxProps<Theme> & {
    title?: string;

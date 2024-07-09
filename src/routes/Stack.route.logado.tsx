@@ -16,6 +16,7 @@ import { CheckoutPix } from '../screens/Checkout/CheckoutPix';
 import { CheckoutCartao } from '../screens/Checkout/CheckoutCartao';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 import { TabRouteLogado } from './Tab.route.logado';
+import { CarrinhoCupomDesconto } from '../screens/Carrinho/CarrinhoCupomDesconto';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,22 +33,30 @@ export function RouteLogado() {
                   backgroundColor: "#fff",
                }
             }}>
-            <Stack.Screen name="Home" component={TabRouteLogado} />
 
-            <Stack.Screen name="Eventos" component={Eventos} />
-            <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
-            <Stack.Screen name="Ingressos" component={Ingressos} />
-            <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
+            <Stack.Group>
+               <Stack.Screen name="Home" component={TabRouteLogado} />
 
-            <Stack.Screen name="Carrinho" component={Carrinho} />
-            <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
-            <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
-            <Stack.Screen name="Perfil" component={Perfil} />
+               <Stack.Screen name="Eventos" component={Eventos} />
+               <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
+               <Stack.Screen name="Ingressos" component={Ingressos} />
+               <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
 
-            <Stack.Screen name="CheckoutEnderecoCobranca" component={CheckoutEnderecoCobranca} />
-            <Stack.Screen name="CheckoutPagamento" component={CheckoutPagamento} />
-            <Stack.Screen name="CheckoutPix" component={CheckoutPix} />
-            <Stack.Screen name="CheckoutCartao" component={CheckoutCartao} />
+               <Stack.Screen name="Carrinho" component={Carrinho} />
+               <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
+               <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
+               <Stack.Screen name="Perfil" component={Perfil} />
+
+               <Stack.Screen name="CheckoutEnderecoCobranca" component={CheckoutEnderecoCobranca} />
+               <Stack.Screen name="CheckoutPagamento" component={CheckoutPagamento} />
+               <Stack.Screen name="CheckoutPix" component={CheckoutPix} />
+               <Stack.Screen name="CheckoutCartao" component={CheckoutCartao} />
+            </Stack.Group>
+
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+               <Stack.Screen name="CarrinhoCupomDesconto" component={CarrinhoCupomDesconto} />
+            </Stack.Group>
+
          </Stack.Navigator>
       </>
    );
