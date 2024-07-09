@@ -25,8 +25,13 @@ import { useNavigation } from '@react-navigation/native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { Card } from '../../components/Card';
 
+const tipoDesconto: { [key: string]: string } = {
+   "percentual": "%",
+   "fixo": "R$"
+};
+
 export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
-   const { carrinhoId, setCupom, total } = useCarrinho();
+   const { carrinhoId, setCupom, total, totalCalculado } = useCarrinho();
 
    const deletaCupom = useMutation({
       mutationKey: ['handleAplicaCupom'],
@@ -56,10 +61,7 @@ export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
          </Section.Root>
       );
    };
-   const tipo: { [key: string]: string } = {
-      "percentual": "%",
-      "fixo": "R$"
-   };
+
 
    return (
       <Section.Root>
@@ -87,22 +89,29 @@ export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
          </HStack>
 
          <VStack>
-            <Section.Span>Você ganhou: <Text variant='header2' color='greenDark' textDecorationLine='underline'>{cupom.valor}{tipo[cupom.tipo_desconto]}</Text> de desconto</Section.Span>
+            <Section.Span>
+               Você ganhou:
+               <Text variant='header2'
+                  color='greenDark'
+                  textDecorationLine='underline'>
+                  {cupom.valor}{tipoDesconto[cupom.tipo_desconto]}
+               </Text> de desconto
+            </Section.Span>
+            
             <HStack alignItems='center'>
                <Section.SubTitle>
                   De: <Section.SubTitle textDecorationLine="line-through">{Maskara.dinheiro(total)}</Section.SubTitle>
                </Section.SubTitle>
-               <Section.Title color='greenDark'>{`Por: ${Maskara.dinheiro(total - cupom.valor)}`}</Section.Title>
+               <Section.Title color='greenDark'>{`Por: ${Maskara.dinheiro(totalCalculado)}`}</Section.Title>
             </HStack>
          </VStack>
-
+         
       </Section.Root>
    )
 }
 
 function Sucesso({ data }: { data: PayloadCupomAplicado }) {
    const { colors } = useTheme<Theme>();
-   const { total } = useCarrinho();
 
    if (!data) return;
 
@@ -118,15 +127,10 @@ function Sucesso({ data }: { data: PayloadCupomAplicado }) {
             <Section.SubTitle>{data.descricao}</Section.SubTitle>
 
             <HStack alignItems='center'>
-               <Section.SubTitle textDecorationLine="line-through">
-                  {Maskara.dinheiro(total)}
+
+               <Section.SubTitle>Você ganhou: <Text variant='header2' color='greenDark' textDecorationLine='underline'>
+                  {data.valor}{tipoDesconto[data.tipo_desconto]}</Text> de desconto
                </Section.SubTitle>
-               <Text
-                  color="greenDark"
-                  variant='header'
-                  fontWeight="bold">
-                  {Maskara.dinheiro(total - data.valor)}
-               </Text>
             </HStack>
          </Section.Root>
       </VStack>

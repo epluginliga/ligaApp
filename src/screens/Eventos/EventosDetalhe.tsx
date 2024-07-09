@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import {
    ImageBackground,
    Platform,
@@ -7,14 +7,14 @@ import {
    View
 } from 'react-native';
 
-import Animated,{
+import Animated, {
    interpolate,
    useAnimatedScrollHandler,
    useAnimatedStyle,
    useSharedValue
 } from 'react-native-reanimated';
-import { RouteProp,useNavigation,useRoute } from '@react-navigation/native';
-import { useMutation,useQuery } from '@tanstack/react-query';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
@@ -30,7 +30,7 @@ import Circle from '../../components/Views/Circle';
 import { useAuth } from '../../hooks/auth';
 import { fetchEventoDetalhe } from '../../services/eventos';
 import { useCarrinho } from '../../hooks/carrinho';
-import { deletaCarrinho,obtemCarrinho } from '../../services/carrinho';
+import { deletaCarrinho, obtemCarrinho } from '../../services/carrinho';
 import { EventosPayload } from '../../services/@eventos';
 import { useTheme } from '@shopify/restyle';
 import Text from '../../components/Text';
@@ -44,9 +44,9 @@ type ButtonComprarInfressosProps = {
    evento: EventosPayload
 }
 function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
-   const [mostraModal,setMostraModal] = useState(false);
+   const [mostraModal, setMostraModal] = useState(false);
    const { logado } = useAuth();
-   const { adicionaEvento,limpaCarrinho,setCupom } = useCarrinho();
+   const { adicionaEvento, limpaCarrinho, setCupom } = useCarrinho();
    const { colors } = useTheme<Theme>()
    const { navigate } = useNavigation();
 
@@ -102,7 +102,16 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
 
                         <Pressable onPress={() => {
                            setMostraModal(false);
-                           navigate("CarrinhoUtilizador");
+                           const ingresso = data.eventos.flatMap(ingresso => ingresso.ingressos);
+                           const usuarioAtribuidos = ingresso.filter(usuario => usuario.dados_atribuir.length > 0)
+                              .map(item => item.dados_atribuir)
+                              .map(item => item.filter(user => user.cpf && user.nome))
+                              .filter(item => item.length > 0);
+
+                           if (usuarioAtribuidos.length > 0) {
+                              return navigate("CarrinhoResumo");
+                           }
+                           return navigate("CarrinhoUtilizador");
                         }}>
                            <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
                               <Text variant='botaoLink' color='greenDark'>Ir para o Carrinho</Text>
@@ -132,7 +141,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                   }
 
                   adicionaEvento(evento);
-                  return navigate("Login",{
+                  return navigate("Login", {
                      redirect: "Carrinho",
                   });
 
@@ -145,7 +154,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    )
 }
 
-type EventoDetalheRouteProp = RouteProp<RouteApp,'EventosDetalhe'>;
+type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
@@ -155,7 +164,7 @@ export const EventosDetalhe = () => {
    const scrollY = useSharedValue(0);
 
    const { data: eventoDetalhe } = useQuery({
-      queryKey: ['eventosDetalhe',params?.id],
+      queryKey: ['eventosDetalhe', params?.id],
       queryFn: () => fetchEventoDetalhe(params?.id),
       enabled: !!params?.id
    });
@@ -167,19 +176,19 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value,[0,0],[300,250,0],"clamp");
-      const opacity = interpolate(scrollY.value,[0,80],[1,0],"clamp");
+      const height = interpolate(scrollY.value, [0, 0], [300, 250, 0], "clamp");
+      const opacity = interpolate(scrollY.value, [0, 80], [1, 0], "clamp");
 
-      return { opacity,height };
+      return { opacity, height };
    });
 
    const textStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value,[0,100],[0,1],'clamp');
+      const opacity = interpolate(scrollY.value, [0, 100], [0, 1], 'clamp');
       return { opacity };
    });
 
    const shareStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value,[1,50],[1,0],'clamp');
+      const opacity = interpolate(scrollY.value, [1, 50], [1, 0], 'clamp');
       return { opacity };
    });
 
@@ -207,8 +216,8 @@ export const EventosDetalhe = () => {
                position: "absolute",
                zIndex: 99,
                width: "100%"
-            },textStyles]}>
-            <View style={{ marginTop: Math.max(insets.top,16) }}>
+            }, textStyles]}>
+            <View style={{ marginTop: Math.max(insets.top, 16) }}>
                <Layout.Header title={eventoDetalhe?.nome}
                   rigth={(
                      <Pressable onPress={() => console.log("pre")}>
@@ -228,15 +237,15 @@ export const EventosDetalhe = () => {
                renderToHardwareTextureAndroid
                style={[animatedStyles]}>
                <ImageBackground
-                  style={{ position: "static",height: "100%",width: "100%" }}
+                  style={{ position: "static", height: "100%", width: "100%" }}
                   source={{ uri: eventoDetalhe?.path_imagem }} >
-                  <View style={{ marginTop: Math.max(insets.top,16) }}>
+                  <View style={{ marginTop: Math.max(insets.top, 16) }}>
                      <Layout.Header handleBack={() => navigate('Home')} variant="white" />
                   </View>
                </ImageBackground>
             </Animated.View>
 
-            <Animated.View style={[{ marginLeft: '85%',position: "absolute",top: 260,zIndex: 999 },shareStyles]}>
+            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 260, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
                   <Pressable onPress={() => console.log("pre")}>
                      <IconShare />
@@ -264,7 +273,7 @@ export const EventosDetalhe = () => {
 
                      <Html source={eventoDetalhe?.descricao} />
 
-                     <View style={{ marginBottom: Math.max(insets.bottom,100) }} />
+                     <View style={{ marginBottom: Math.max(insets.bottom, 100) }} />
 
                   </VStack>
                </Section.Root>

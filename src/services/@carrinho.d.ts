@@ -60,6 +60,9 @@ export type IngressoCarrinho = {
    taxa_conveniencia: number;
    dados_atribuir: {
       bilhete_id: string;
+      nome?: string;
+      cpf?: string;
+      restricao?: string;
    }[];
    bilhetes_id: [];
    permitir_cupom: true

@@ -12,6 +12,23 @@ export type EventosPayload = {
    nome_local: string;
    descricao: string;
    destaque: number;
+   taxas: string;
+}
+
+
+export type TaxasCheckout = {
+   taxaplataforma: number;
+   taxafixa: number;
+   taxaplataforma_pix: number;
+   taxafixa_pix: number;
+   taxaplataforma_boleto: number;
+   taxafixa_boleto: number;
+   dias_adiantamento: number;
+   dias_preautorizacao: number;
+   taxasparcelamento: number[];
+   taxaconveniencia: number;
+   taxaconveniencia_pix: number;
+   taxaconveniencia_boleto: number;
 }
 
 export type IngressosPayload = {
@@ -64,9 +81,9 @@ export type IngressoDisponivelProps = {
 
 }
 
-export type PayloadEventoAtletica =  {
+export type PayloadEventoAtletica = {
    id: string;
    nome: string;
    slug: string;
-   curso?: string; 
+   curso?: string;
 };

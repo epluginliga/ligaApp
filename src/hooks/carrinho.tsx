@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { MMKV } from "react-native-mmkv";
 
 import { vendaAplicativo } from "../utils/constantes";
-import { EventosPayload } from "../services/@eventos";
+import { EventosPayload, TaxasCheckout } from "../services/@eventos";
 import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso, PayloadCupomAplicado } from "../services/@carrinho";
 
 type CarrinhoContextProps = {
@@ -18,6 +18,7 @@ type CarrinhoContextProps = {
    carrinhoId: string;
    setCupom: (cupom: PayloadCupomAplicado) => void,
    cupom: PayloadCupomAplicado;
+   totalCalculado: number;
 }
 
 export type AdicionaIngressosAoEventoProps = {
@@ -35,6 +36,7 @@ type EventoHook = {
    numero: string;
    id: string;
    estado: string;
+   taxas: TaxasCheckout
 }
 
 const CarrinhoContext = createContext<CarrinhoContextProps>({} as CarrinhoContextProps);
@@ -65,6 +67,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          numero: evento.numero,
          id: evento.id,
          estado: evento.estado,
+         taxas: JSON.parse(evento?.taxas || '')
       };
 
       setEvento(storeEvento);
@@ -140,14 +143,6 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       carrinhoStorage.delete("@evento");
    }, []);
 
-   let total = carrinho.eventos
-      .flatMap((evento) => evento.ingressos)
-      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0), 0);
-
-   let totalItens = carrinho.eventos
-      .flatMap(item => item.ingressos)
-      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
-
    const obtemPedido = useCallback(() => {
       const store = carrinhoStorage.getString("@evento");
       if (store) {
@@ -159,6 +154,19 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          setCarrinho(JSON.parse(carrinhoStore));
       }
    }, []);
+
+   let total = carrinho.eventos
+      .flatMap((evento) => evento.ingressos)
+      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd * (ingresso.valor || 0), 0);
+
+   let totalItens = carrinho.eventos
+      .flatMap(item => item.ingressos)
+      .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
+
+   let totalCalculado = total - (cupom.valor || 0);
+   if (cupom.tipo_desconto === "percentual") {
+      totalCalculado = total - (total * (cupom.valor / 100));
+   }
 
    useEffect(() => obtemPedido(), [obtemPedido]);
 
@@ -176,6 +184,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          carrinhoId,
          setCupom,
          cupom,
+         totalCalculado
       }}>
          {children}
       </CarrinhoContext.Provider>

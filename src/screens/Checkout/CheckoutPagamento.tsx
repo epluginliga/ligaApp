@@ -51,18 +51,34 @@ function InputFormaPagamento({ formaPagamento, setFormaPagamento }: InputFormaPa
    )
 }
 
-
+const nomePagamento = {
+   CheckoutCartao: {
+      nome: 'Cartão',
+      icon: <Icon.CredtCard />
+   },
+   CheckoutPix: {
+      nome: 'Pix',
+      icon: <Icon.Pix />
+   }
+}
 export function CheckoutPagamento() {
    const { navigate } = useNavigation();
-   const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('' as FormasPagamento);
-   const { total, cupom } = useCarrinho();
+   const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('CheckoutCartao');
+   const { total, cupom, totalCalculado, evento } = useCarrinho();
+
+   const taxas = {
+      CheckoutCartao: totalCalculado * ((evento?.taxas?.taxaconveniencia || 1) / 100),
+      CheckoutPix: totalCalculado * ((evento?.taxas?.taxaconveniencia || 1) / 100),
+   }
+   let totalPedido = totalCalculado + taxas[formaPagamento];
+   const descontoObtido = total * (cupom.valor / 100);
 
    return (
       <Layout.Root>
          <Layout.Header title='Pagamento' />
          <VStack justifyContent='space-between' flex={1}>
 
-            <Section.Root>
+            <Section.Root gap='md'>
                <Section.Title>Método de pagamento</Section.Title>
 
                <Section.SubTitle iconLeft={<Icon.Warning />}>
@@ -76,13 +92,27 @@ export function CheckoutPagamento() {
             <Section.Root variant='shadow' mb='md'>
                <Section.Title >Seu pedido</Section.Title>
 
-               <VStack>
+               <VStack gap='sm'>
                   <Section.SubTitle iconLeft={<Icon.Ticket size={18} />}>Subtotal: {Maskara.dinheiro(total)}</Section.SubTitle>
-                  {cupom?.valor && <Section.SubTitle color='greenDark' fontWeight="bold" iconLeft={<Icon.CheckCircle color={theme.colors.greenDark} size={18} />}>
-                     Desconto: {Maskara.dinheiro(cupom.valor)}
-                  </Section.SubTitle>}
-                  <Section.SubTitle iconLeft={<Icon.Money size={18} />}>Taxas: {Maskara.dinheiro(total)}</Section.SubTitle>
-                  <Section.Title color='azul'>Total do pedido: {Maskara.dinheiro(total - (cupom.valor || 0))}</Section.Title>
+
+                  {
+                     cupom?.valor && <Section.SubTitle
+                        color='greenDark'
+                        fontWeight="bold"
+                        iconLeft={<Icon.CheckCircle color={theme.colors.greenDark} size={18} />}>
+                        Desconto: {Maskara.dinheiro(descontoObtido)}
+                     </Section.SubTitle>
+                  }
+
+                  <Section.SubTitle iconLeft={<Icon.Money size={18} />}>
+                     Taxas: {Maskara.dinheiro(taxas[formaPagamento])}
+                  </Section.SubTitle>
+
+                  <Section.SubTitle iconLeft={nomePagamento[formaPagamento].icon}>
+                     Pagamento via: {nomePagamento[formaPagamento].nome}
+                  </Section.SubTitle>
+
+                  <Section.Title color='azul'>Total do pedido: {Maskara.dinheiro(totalPedido)}</Section.Title>
                </VStack>
 
                <Button
