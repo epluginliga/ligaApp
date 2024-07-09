@@ -105,19 +105,39 @@ export function CarrinhoCupomDesconto() {
             <Layout.Keyboard>
                <Layout.Scroll contentContainerStyle={{ flex: 1 }}>
                   <VStack justifyContent='space-between' flex={1} m='sm'>
-                     <InputText
-                        label="Cupom"
-                        iconLeft={<Icon.Ticket size={24} />}
-                        name='codigo'
-                        placeholder='Digite o código do cupom'
-                        control={control}
-                        error={errors?.codigo?.message}
-                     />
+                     <VStack>
+                        <InputText
+                           label="Cupom"
+                           iconLeft={<Icon.Ticket size={24} />}
+                           name='codigo'
+                           placeholder='Digite o código do cupom'
+                           control={control}
+                           error={errors?.codigo?.message}
+                        />
 
-                     <HStack flex={1} position='relative'>
-                        <Icon.CheckCircle size={40} color={colors.greenDark} />
-                        <Text>{cupom.tipo_desconto === "percentual" ? total - cupom.valor : ""}</Text>
-                     </HStack>
+                     </VStack>
+
+                     <Section.Root marginHorizontal='none'>
+                        <Section.Title>{cupom.descricao}</Section.Title>
+
+                        <HStack alignItems='center'>
+                           <Icon.CheckCircle size={40} color={colors.greenDark} />
+                           <Text
+                              textDecorationLine="line-through"
+                              color="black"
+                              fontWeight="light"
+                           >
+                              {Maskara.dinheiro(total)}
+                           </Text>
+
+                           <Text
+                              color="greenDark"
+                              variant='header'
+                              fontWeight="bold">
+                              {Maskara.dinheiro(total - cupom.valor)}
+                           </Text>
+                        </HStack>
+                     </Section.Root>
 
                      <View style={{ marginBottom: insets.bottom }}>
                         <Button
