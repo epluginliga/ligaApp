@@ -1,4 +1,13 @@
+import { TokenCartaoProps } from "../services/tokenCartao";
+
 type ResponseProp = Record<TypeCard, RegExp>;
+
+type FormataBodyTokenCartao = {
+   number: string;
+   holder_name: string;
+   cvv: string;
+   validade: string;
+}
 
 export type TypeCard = 'electron'
    | 'maestro'
@@ -88,5 +97,56 @@ export class CartaoCredito {
       discover: {
          colors: ['#a2a2a2', '#F6CE92']
       }
+   }
+
+
+   static formataBodyTokenCartao(dados: FormataBodyTokenCartao): TokenCartaoProps {
+      const [exp_month, exp_year] = dados.validade.split("/");
+
+      return {
+         ...dados,
+         exp_month,
+         exp_year,
+         type: "credit_card",
+         index: 0
+      }
+   }
+
+   static formataNumeroCartao = (value: string) => {
+      if (!value) {
+         return ''
+      }
+
+      const newNumber = value.replace(/\D/g, '')
+
+      if (newNumber.length < 16) {
+         return newNumber
+            .replace(/(\d{4})(\d)/, '$1 $2')
+            .replace(/(\d{6})(\d)/, '$1 $2')
+            .replace(/(\d{5})(\d)/, '$1$2')
+      }
+
+      return newNumber
+         .replace(/(\d{4})(\d)/, '$1 $2')
+         .replace(/(\d{4})(\d)/, '$1 $2')
+         .replace(/(\d{4})(\d)/, '$1 $2')
+         .replace(/(\d{4})(\d)/, '$1')
+   }
+
+   static formataValidadeCartao = (value: string) => {
+      if (!value) {
+         return ''
+      }
+      return value
+         .replace(/\D/g, '')
+         .replace(/(\d{2})(\d+?)$/, '$1/$2')
+   }
+
+   static formataHoldName(value: string) {
+      if (!value) {
+         return ''
+      }
+
+      return value.replace(/[0-9]/g, '');
    }
 }
