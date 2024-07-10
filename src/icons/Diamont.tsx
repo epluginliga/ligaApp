@@ -39,7 +39,7 @@ export function Diamont() {
 
 export function DiamontDown() {
    return (
-      <Svg width="100%" height="8"
+      <Svg width="100%" style={{marginTop: -1}} height="8"
          viewBox="0 0 13805.5 248.25"  >
          <G id="Camada_x0020_1" fill="#F3EBEB">
             <G id="_1932483090192">

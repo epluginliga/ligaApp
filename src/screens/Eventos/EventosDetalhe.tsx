@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import Animated, {
+   Extrapolation,
    interpolate,
    useAnimatedScrollHandler,
    useAnimatedStyle,
@@ -159,7 +160,6 @@ type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 export const EventosDetalhe = () => {
    const { navigate } = useNavigation();
    const insets = useSafeAreaInsets();
-
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
 
@@ -176,19 +176,17 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 0], [300, 250, 0], "clamp");
-      const opacity = interpolate(scrollY.value, [0, 80], [1, 0], "clamp");
-
-      return { opacity, height };
+      const height = interpolate(scrollY.value, [0, 80], [350, 280, 0], Extrapolation.CLAMP);
+      return { height };
    });
 
    const textStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [0, 100], [0, 1], 'clamp');
+      const opacity = interpolate(scrollY.value, [0, 25], [0, 1], Extrapolation.CLAMP);
       return { opacity };
    });
 
    const shareStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [1, 50], [1, 0], 'clamp');
+      const opacity = interpolate(scrollY.value, [1, 50], [1, 0], Extrapolation.CLAMP);
       return { opacity };
    });
 
@@ -196,7 +194,7 @@ export const EventosDetalhe = () => {
       return (
          <VStack gap='md' flex={1}>
             <VStack backgroundColor='bege_200' height={300} />
-            <View style={{ marginTop: -20 }} >
+            <View style={{ marginTop: -30 }} >
                <Section.Root position='relative' zIndex={9}>
                   <VStack width={200} height={10} borderRadius={20} backgroundColor='bege_200'></VStack>
                   <VStack width={100} height={10} borderRadius={20} backgroundColor='bege_200'></VStack>
@@ -233,17 +231,15 @@ export const EventosDetalhe = () => {
             onScroll={scrollHandler}
             style={{ position: "relative" }}
          >
-            <Animated.View
-               renderToHardwareTextureAndroid
-               style={[animatedStyles]}>
-               <ImageBackground
-                  style={{ position: "static", height: "100%", width: "100%" }}
-                  source={{ uri: eventoDetalhe?.path_imagem }} >
-                  <View style={{ marginTop: Math.max(insets.top, 16) }}>
+
+            <Animated.Image
+               style={[animatedStyles]}
+               source={{ uri: eventoDetalhe?.path_imagem }} >
+               {/* <View style={{ marginTop: Math.max(insets.top, 16) }}>
                      <Layout.Header handleBack={() => navigate('Home')} variant="white" />
-                  </View>
-               </ImageBackground>
-            </Animated.View>
+                  </View> */}
+            </Animated.Image >
+
 
             <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 260, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
@@ -253,7 +249,7 @@ export const EventosDetalhe = () => {
                </Circle>
             </Animated.View>
 
-            <View style={{ marginTop: -10 }} >
+            <View style={{ marginTop: -20 }} >
                <Section.Root position='relative' zIndex={9}>
                   <Section.SubTitle iconLeft={<Icon.Calendario />}>
                      {formataData(eventoDetalhe?.data_evento).diaMesAnoTexto()}
