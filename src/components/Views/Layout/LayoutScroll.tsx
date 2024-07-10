@@ -10,7 +10,7 @@ export function LayoutScroll({ children, style,  ...rest }: LayoutScroll) {
 
    return (
       <ScrollView
-         contentInsetAdjustmentBehavior='always'
+         // contentInsetAdjustmentBehavior='always'
          showsHorizontalScrollIndicator={false}
          showsVerticalScrollIndicator={false}
          style={[{

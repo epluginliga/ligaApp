@@ -6,12 +6,12 @@ import React, {
    useState,
 } from 'react';
 
-import { login, LoginProps } from '../services/auth';
-import { useMutation } from '@tanstack/react-query';
+import { login, LoginProps, UserProps } from '../services/auth';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { MMKV } from 'react-native-mmkv'
 import api from '../services';
 interface AuthContextProps {
-   handleSignIn: (data: LoginProps, redirect?: string) => void;
+   handleSignIn: UseMutationResult<UserProps, Error, LoginProps, unknown>
    token: string;
    logado: boolean;
    loading: boolean;
@@ -31,21 +31,14 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const handleSignIn = useMutation({
       mutationKey: ['handleLogin'],
       mutationFn: (data: LoginProps) => login(data),
-       onSuccess(data) {
-         try {
-            if(!data) {
-               throw new Error("Dados inválidos!");
-            }
-
-            usuarioStorage.set('token', data.api_token);
-            api.defaults.headers.Authorization = data.api_token;
-            setToken(data.api_token);
-         } catch (e) {
-            
+      onSuccess(data) {
+         if (!data) {
+            throw new Error("Dados inválidos!");
          }
-      },
-      onError(error) {
-         console.log(error)
+
+         usuarioStorage.set('token', data.api_token);
+         api.defaults.headers.Authorization = data.api_token;
+         setToken(data.api_token);
       },
    });
 
@@ -68,7 +61,7 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    return (
       <AuthContext.Provider
          value={{
-            handleSignIn: (data) => handleSignIn.mutate(data),
+            handleSignIn,
             token,
             logado: !!token,
             loading: handleSignIn.isPending || loading,

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from '../icons';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import VStack from '../components/Views/Vstack';
-import { Platform } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 interface PropsTabs {
@@ -30,7 +29,7 @@ export function TabRouteDeslogado() {
                alignItems: 'center',
                contentStyle: {
                   backgroundColor: "#fff",
-               }    
+               }
             },
             tabBarIcon: ({ focused }: PropsTabs) => {
                switch (route.name) {
@@ -58,7 +57,7 @@ export function TabRouteDeslogado() {
             tabBarShowLabel: false,
          })}>
          <Tab.Screen name="EventosTab" component={Eventos} />
-         <Tab.Screen name="IngressosTab" component={Ingressos}  />
+         <Tab.Screen name="IngressosTab" component={Ingressos} />
       </Tab.Navigator>
    )
 }

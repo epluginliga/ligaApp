@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
 
 import { RouteDesLogado } from './Stack.route.deslogado';
 import { RouteLogado } from './Stack.route.logado';
@@ -16,9 +16,9 @@ type ErrorProps = {
 }
 
 export function Routes() {
-   const { logado,signOut } = useAuth();
-   const [loadingReq,setLoadingReq] = useState(false);
-   const [erro,setErro] = useState("");
+   const { logado, signOut } = useAuth();
+   const [loadingReq, setLoadingReq] = useState(false);
+   const [erro, setErro] = useState("");
 
    api.interceptors.request.use(
       (config) => {

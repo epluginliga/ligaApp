@@ -28,6 +28,5 @@ export type LoginProps = {
 export async function login(data: LoginProps): PayloadDefault<UserProps> {
    return await api
       .post('/login', { ...data })
-      .then(success => success.data)
-      .catch((err) => console.error(err));
+      .then(success => success.data);
 }
