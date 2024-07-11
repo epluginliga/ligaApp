@@ -176,11 +176,16 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 80], [350, 280, 0], Extrapolation.CLAMP);
-      return { height };
+      if (scrollY.value < 0) { };
+      const bottom = interpolate(scrollY.value, [0, 80], [0, -20], Extrapolation.EXTEND);
+      const height = interpolate(scrollY.value, [0, 80], [400, 350], Extrapolation.EXTEND);
+      const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
+
+      return {  bottom, height, opacity };
    });
 
    const textStyles = useAnimatedStyle(() => {
+      if (scrollY.value < 0) { };
       const opacity = interpolate(scrollY.value, [0, 25], [0, 1], Extrapolation.CLAMP);
       return { opacity };
    });
@@ -230,18 +235,17 @@ export const EventosDetalhe = () => {
             showsVerticalScrollIndicator={false}
             onScroll={scrollHandler}
             style={{ position: "relative" }}
+            maximumZoomScale={0}
+            minimumZoomScale={0}
          >
-
-            <Animated.Image
-               style={[animatedStyles]}
-               source={{ uri: eventoDetalhe?.path_imagem }} >
-               {/* <View style={{ marginTop: Math.max(insets.top, 16) }}>
-                     <Layout.Header handleBack={() => navigate('Home')} variant="white" />
-                  </View> */}
-            </Animated.Image >
+            <View style={{ position: "relative", height: 400, width: "100%", zIndex: -9 }}>
+               <Animated.Image
+                  style={[{ position: "absolute", width: "100%", height: "100%" }, animatedStyles]}
+                  source={{ uri: eventoDetalhe?.path_imagem }} />
+            </View>
 
 
-            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 260, zIndex: 999 }, shareStyles]}>
+            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 350, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
                   <Pressable onPress={() => console.log("pre")}>
                      <IconShare />
@@ -268,16 +272,16 @@ export const EventosDetalhe = () => {
                      </Section.SubTitle>
 
                      <Html source={eventoDetalhe?.descricao} />
-
-                     <View style={{ marginBottom: Math.max(insets.bottom, 100) }} />
-
                   </VStack>
                </Section.Root>
             </View>
 
+
+            <View style={{ marginBottom: insets.bottom +60 }} />
          </Animated.ScrollView>
 
          <ButtonComprarIngressos evento={eventoDetalhe} />
+
       </>
    );
 };

@@ -3,13 +3,12 @@ import { Icon } from ".";
 
 export function IconArrowLeft({ size = 21, color = "#F2385A" }: Icon) {
    return (
-      <Svg width={size} height={size} viewBox="0 0 600 600" fill="none" >
-
-
-         <Path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" fill={color} />
+      <Svg width={size} height={size} viewBox="0 0 24 24" strokeWidth={1.5} stroke={color}>
+         <Path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" fill="transparent"/>
       </Svg>
    );
 }
+
 
 export function IconArrowRight({ size = 21, color = "#F2385A" }: Icon) {
    return (

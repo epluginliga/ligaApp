@@ -20,6 +20,8 @@ import { CartaoCredito } from '../../utils/CartaoCredito'
 
 import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
 import { z } from 'zod'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
 const schema = z.object({
    number: z.string(),
@@ -48,9 +50,6 @@ function FormCartaoCredito() {
       onSuccess(data) {
          console.log(JSON.stringify(data, null, 1));
       },
-      onError(error) {
-         console.log(JSON.stringify(error, null, 1));
-      },
    })
 
    return (
@@ -59,6 +58,7 @@ function FormCartaoCredito() {
          gap='lg'
          flex={1}
          justifyContent='space-between'>
+
          <CartaoWidget ref={controlaWidgetCartao} item={watch()} />
 
          <VStack gap='md' mb='lg'>
@@ -122,26 +122,28 @@ function FormCartaoCredito() {
 }
 
 export function CheckoutCartao() {
+   const insets = useSafeAreaInsets();
+
    return (
-      <Layout.Root>
-         <Layout.Keyboard>
+      <Layout.Keyboard>
 
+         <View style={{ marginTop: insets.top }}>
             <Layout.Header title='Pagamento' />
+         </View>
 
-            <Layout.Scroll>
+         <Layout.Scroll>
 
-               <VStack gap='md' justifyContent='space-between' flex={1} marginBottom='lg'>
+            <VStack gap='md' justifyContent='space-between' flex={1} marginBottom='lg'>
 
-                  <ResumoPedido />
+               <ResumoPedido />
 
-                  <AnimateView delay={{ opacity: 300, offset: 150 }}>
-                     <FormCartaoCredito />
-                  </AnimateView>
-               </VStack>
+               <AnimateView delay={{ opacity: 300, offset: 150 }}>
+                  <FormCartaoCredito />
+               </AnimateView>
+            </VStack>
 
-            </Layout.Scroll>
-         </Layout.Keyboard>
-      </Layout.Root>
+         </Layout.Scroll>
+      </Layout.Keyboard>
 
    )
 }

@@ -29,6 +29,7 @@ export function Html({ source, size }: Html) {
                color: "#1F1F1F",
             }
          }}
+         enableCSSInlineProcessing
          contentWidth={size || width}
          source={{ html: source }}
       />

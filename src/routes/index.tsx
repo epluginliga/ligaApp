@@ -37,11 +37,22 @@ export function Routes() {
       },
       (error: ErrorProps) => {
          setLoadingReq(false);
+
          if (error.response?.data?.codigoretorno === 401) {
             signOut();
          }
 
-         setErro(error?.response?.data?.mensagenserro?.join(", ") || "");
+         if (error?.response?.data?.mensagenserro) {
+            setErro(error?.response?.data?.mensagenserro?.join(", "));
+         }
+
+         if (error.response.data.errors) {
+            const erroMensagem = Object.keys(error.response.data.errors).map(key => error.response.data.errors[key]);
+            if(erroMensagem) {
+               setErro(erroMensagem.join('\n'));
+            }
+         }
+         
          return Promise.reject(error);
       }
    );

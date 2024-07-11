@@ -207,12 +207,12 @@ export const CartaoWidget = forwardRef(({ item, children }: ItemCardProps, ref: 
 
                         <HStack gap="md" paddingBottom='xs'>
                            <Text
-                              color='bege_200'
+                              color='white'
                               fontWeight="bold">
                               {item?.validade || 'MM/AA'}
                            </Text>
                            <Text
-                              color="bege_200"
+                              color="white"
                               fontWeight="bold">
                               {item?.cvv || 'xxx'}
                            </Text>

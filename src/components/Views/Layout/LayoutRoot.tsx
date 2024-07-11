@@ -8,7 +8,7 @@ type Layout = {
 
 export function LayoutRoot({ children }: Layout) {
    return (
-      <SafeAreaView style={{flex:1}}>
+      <SafeAreaView style={{flexGrow:1}}>
          {children}
       </SafeAreaView>
    )

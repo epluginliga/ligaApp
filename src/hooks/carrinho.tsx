@@ -33,6 +33,7 @@ type EventoHook = {
    data_evento: string;
    nome: string;
    nome_local: string;
+   logradouro: string;
    numero: string;
    id: string;
    estado: string;
@@ -67,7 +68,8 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          numero: evento.numero,
          id: evento.id,
          estado: evento.estado,
-         taxas: JSON.parse(evento?.taxas || '')
+         taxas: JSON.parse(evento?.taxas || ''),
+         logradouro: evento.logradouro
       };
 
       setEvento(storeEvento);
@@ -141,7 +143,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       setEvento(null);
       setCarrinhoId('');
       setCupom({} as PayloadCupomAplicado);
-      
+
       carrinhoStorage.delete("@carrinho");
       carrinhoStorage.delete("@evento");
    }, []);

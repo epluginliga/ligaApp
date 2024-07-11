@@ -6,6 +6,10 @@ export type PayloadPaginacao<T> = {
 
 export type PayloadDefaultError = {
    codigoretorno: number,
+   errors: {
+      [key: string]: string[],
+      message: string;
+   }
    erro: boolean;
    id: string;
    mensagem: string;

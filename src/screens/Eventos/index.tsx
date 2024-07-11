@@ -1,4 +1,4 @@
-import React,{ useCallback,useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
@@ -15,8 +15,9 @@ import { formataData } from "../../utils/utils";
 import { Imagem } from "../../components/Imagem";
 import { Button } from "../../components/Button";
 import { useMMKVString } from "react-native-mmkv";
-import { useAuth,usuarioStorage } from "../../hooks/auth";
+import { useAuth, usuarioStorage } from "../../hooks/auth";
 import { EventosPayload } from "../../services/@eventos";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export type ItemData = {
    item: EventosPayload;
@@ -54,7 +55,7 @@ function Destaque({ evento }: DestaqueProps) {
 
                <Button
                   variant="link"
-                  onPress={() => navigate.navigate("EventosDetalhe",{
+                  onPress={() => navigate.navigate("EventosDetalhe", {
                      id: evento.id,
                   })}
                >
@@ -71,8 +72,9 @@ export function Eventos() {
    const navigate = useNavigation();
    const [route] = useMMKVString('route')
    const { logado } = useAuth();
+   const insets = useSafeAreaInsets();
 
-   const { data,isLoading } = useQuery({
+   const { data, isLoading } = useQuery({
       queryKey: ['eventos'],
       queryFn: fetchEventos,
    });
@@ -83,7 +85,7 @@ export function Eventos() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => navigate.navigate("EventosDetalhe",{ id: item.id })}>
+            onPress={() => navigate.navigate("EventosDetalhe", { id: item.id })}>
 
             <Card.Image
                flex={1}
@@ -125,7 +127,7 @@ export function Eventos() {
             </VStack>
          </Card.Root>
       )
-   },[]);
+   }, []);
 
    useEffect(() => {
       const time = setTimeout(() => {
@@ -133,11 +135,11 @@ export function Eventos() {
             navigate.navigate(route as any);
             usuarioStorage.delete('route');
          }
-      },500);
+      }, 500);
 
       return () => clearTimeout(time);
 
-   },[route,logado]);
+   }, [route, logado]);
 
    if (isLoading) {
       return null;
@@ -154,31 +156,30 @@ export function Eventos() {
    const destaque = data?.data?.find(evento => !!evento.destaque);
 
    return (
-      <Layout.Root>
-         <FlatList
-            ListHeaderComponent={(
-               <VStack gap="md" justifyContent="space-evenly" mb="md">
+      <FlatList
+         contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+         ListHeaderComponent={(
+            <VStack gap="md" justifyContent="space-evenly" mb="md">
 
-                  <Destaque evento={destaque} />
+               <Destaque evento={destaque} />
 
-                  <VStack
-                     borderTopColor="bege"
-                     marginVertical="md"
-                     pt="md"
-                     marginHorizontal="sm"
-                     borderTopWidth={1}>
-                     <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
-                  </VStack>
+               <VStack
+                  borderTopColor="bege"
+                  marginVertical="md"
+                  pt="md"
+                  marginHorizontal="sm"
+                  borderTopWidth={1}>
+                  <Text>Se <Text variant="header">LIGA</Text> no que está acontecendo</Text>
                </VStack>
-            )}
-            ListEmptyComponent={<ListEmptyComponent title="Nenhum evento disponível" />}
-            ItemSeparatorComponent={() => <VStack height={20} />}
-            data={data?.data}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            ListFooterComponent={<VStack height={20} />}
-            showsVerticalScrollIndicator={false}
-         />
-      </Layout.Root>
+            </VStack>
+         )}
+         ListEmptyComponent={<ListEmptyComponent title="Nenhum evento disponível" />}
+         ItemSeparatorComponent={() => <VStack height={20} />}
+         data={data?.data}
+         keyExtractor={(item) => item.id}
+         renderItem={renderItem}
+         ListFooterComponent={<VStack height={20} />}
+         showsVerticalScrollIndicator={false}
+      />
    );
 }
