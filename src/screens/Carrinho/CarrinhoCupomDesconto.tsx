@@ -31,7 +31,7 @@ const tipoDesconto: { [key: string]: string } = {
 };
 
 export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
-   const { carrinhoId, setCupom, total, totalCalculado } = useCarrinho();
+   const { carrinhoId, setCupom, total, totalComDesconto } = useCarrinho();
 
    const deletaCupom = useMutation({
       mutationKey: ['handleRemoveCupom'],
@@ -97,15 +97,16 @@ export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
                   {cupom.valor}{tipoDesconto[cupom.tipo_desconto]}
                </Text> de desconto
             </Section.Span>
-            
+
             <HStack alignItems='center'>
                <Section.SubTitle>
                   De: <Section.SubTitle textDecorationLine="line-through">{Maskara.dinheiro(total)}</Section.SubTitle>
                </Section.SubTitle>
-               <Section.Title color='greenDark'>{`Por: ${Maskara.dinheiro(totalCalculado)}`}</Section.Title>
+               <Section.Title color='greenDark'>{`Por: ${Maskara.dinheiro(totalComDesconto)}`}
+               </Section.Title>
             </HStack>
          </VStack>
-         
+
       </Section.Root>
    )
 }

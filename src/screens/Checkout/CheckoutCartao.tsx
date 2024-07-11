@@ -20,12 +20,17 @@ import { CartaoCredito } from '../../utils/CartaoCredito'
 
 import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
 import { z } from 'zod'
+import { InputSelecionar } from '../../components/Inputs/Selecionar'
+import { useCarrinho } from '../../hooks/carrinho'
+import { Maskara } from '../../utils/Maskara'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const schema = z.object({
    number: z.string(),
    holder_name: z.string(),
    cvv: z.string(),
    validade: z.string(),
+   parcelas: z.string(),
 
 });
 type Form = z.input<typeof schema>;
@@ -42,13 +47,25 @@ function FormCartaoCredito() {
    });
    const controlaWidgetCartao = useRef<ITemCardActions>(null);
    const { navigate } = useNavigation();
+   const { evento, totalComDesconto } = useCarrinho();
+   const insets = useSafeAreaInsets();
 
    const handleTokenCartao = useMutation({
       mutationFn: (cartao: Form) => tokenCartao(CartaoCredito.formataBodyTokenCartao(cartao)),
-      onSuccess(data) {
-         console.log(JSON.stringify(data, null, 1));
-      },
    })
+
+   if (!evento) return;
+
+   let totalPedido = totalComDesconto + totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100);
+   let parcelas = [{ name: '1', label: `1x de ${Maskara.dinheiro(totalPedido)}` }];
+
+   for (let index = 0; index < evento?.quantidade_parcelas; index++) {
+      const parcelaIndice = index + 1;
+      if (index > 0) {
+         const valorParcela = totalPedido * evento?.taxas?.taxasparcelamento[index] / parcelaIndice;
+         parcelas = [...parcelas, { name: `${parcelaIndice}`, label: `${parcelaIndice}x de ${Maskara.dinheiro(valorParcela)}` }]
+      }
+   }
 
    return (
       <VStack
@@ -106,9 +123,19 @@ function FormCartaoCredito() {
                   keyboardType='number-pad'
                />
             </HStack>
+
+            <InputSelecionar
+               placeholder='Selecione a parcela'
+               label='parcela'
+               name={`parcela`}
+               control={control}
+               option={parcelas}
+               error={errors?.parcelas?.message}
+            />
          </VStack>
 
          <Button
+            style={{ marginBottom: insets.bottom }}
             onPress={handleSubmit((form) => handleTokenCartao.mutate(form))}
             iconRight={<Icon.CheckCircle color='#fff' />}>
             FINALIZAR COMPRA

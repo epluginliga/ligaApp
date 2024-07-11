@@ -13,6 +13,7 @@ export type EventosPayload = {
    descricao: string;
    destaque: number;
    taxas: string;
+   quantidade_parcelas: number;
 }
 
 

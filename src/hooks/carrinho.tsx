@@ -6,7 +6,6 @@ import { EventosPayload } from "../services/@eventos";
 import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso, PayloadCupomAplicado } from "../services/@carrinho";
 import { CarrinhoContextProps, CarrinhoProviderProps, EventoHook } from "./@carrinho";
 
-
 const CarrinhoContext = createContext<CarrinhoContextProps>({} as CarrinhoContextProps);
 export const carrinhoStorage = new MMKV();
 
@@ -14,6 +13,8 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
    const [evento, setEvento] = useState<EventoHook | null>(null);
    const [carrinhoId, setCarrinhoId] = useState('');
    const [cupom, setCupom] = useState<PayloadCupomAplicado>({} as PayloadCupomAplicado);
+   const [taxa, setTaxa] = useState(0);
+
    const [carrinho, setCarrinho] = useState<CriaEditaCarrinhoProps>({
       ponto_venda_id: vendaAplicativo,
       eventos: [{
@@ -33,7 +34,9 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          id: evento.id,
          estado: evento.estado,
          taxas: JSON.parse(evento?.taxas || ''),
-         logradouro: evento.logradouro
+         logradouro: evento.logradouro,
+         quantidade_parcelas: evento.quantidade_parcelas,
+
       };
 
       setEvento(storeEvento);
@@ -132,10 +135,11 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       .flatMap(item => item.ingressos)
       .reduce((acumulador, ingresso) => acumulador + ingresso.qtd, 0);
 
-   let totalCalculado = total - (cupom.valor || 0);
+   let totalComDesconto = total - (cupom.valor || 0);
    if (cupom.tipo_desconto === "percentual") {
-      totalCalculado = total - (total * (cupom.valor / 100));
+      totalComDesconto = total - (total * (cupom.valor / 100));
    }
+   const valorFinal = totalComDesconto + taxa;
 
    useEffect(() => obtemPedido(), [obtemPedido]);
 
@@ -153,7 +157,10 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          carrinhoId,
          setCupom,
          cupom,
-         totalCalculado
+         totalComDesconto,
+         setTaxa,
+         taxa,
+         valorFinal
       }}>
          {children}
       </CarrinhoContext.Provider>

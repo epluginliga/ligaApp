@@ -14,7 +14,10 @@ export type CarrinhoContextProps = {
    carrinhoId: string;
    setCupom: (cupom: PayloadCupomAplicado) => void,
    cupom: PayloadCupomAplicado;
-   totalCalculado: number;
+   totalComDesconto: number;
+   taxa: number;
+   valorFinal: number;
+   setTaxa: (id: number) => void;
 }
 
 export type AdicionaIngressosAoEventoProps = {
@@ -34,6 +37,7 @@ export type EventoHook = {
    id: string;
    estado: string;
    taxas: TaxasCheckout
+   quantidade_parcelas: number;
 }
 
 export type CarrinhoProviderProps = {

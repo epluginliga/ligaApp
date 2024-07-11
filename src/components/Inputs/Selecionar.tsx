@@ -37,6 +37,8 @@ export function InputSelecionar({ name, label, option, ...rest }: InputText) {
          rules={{ required: true }}
          control={rest.control}
          render={({ field: { onChange, value } }) => {
+            const labelSelecionado = option.find(item => item.name == value);
+
             return (
                <ModalApp
                   ref={modalRef}
@@ -46,7 +48,7 @@ export function InputSelecionar({ name, label, option, ...rest }: InputText) {
                            <HStack alignItems='center'>
                               {value && <Icon.CheckCircle color="#0A906E" />}
                               <Text color='bege_900' fontSize={16}>
-                                 {value ? value : rest.placeholder ? rest.placeholder : "Selecione.."}
+                                 {value ? labelSelecionado?.label : (rest.placeholder || "Selecione..")}
                               </Text>
                            </HStack>
                            <Icon.Down />

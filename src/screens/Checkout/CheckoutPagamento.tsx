@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -64,14 +64,18 @@ const nomePagamento = {
 export function CheckoutPagamento() {
    const { navigate } = useNavigation();
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('CheckoutCartao');
-   const { total, cupom, totalCalculado, evento } = useCarrinho();
+   const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal } = useCarrinho();
 
    const taxas = {
-      CheckoutCartao: totalCalculado * ((evento?.taxas?.taxaconveniencia || 1) / 100),
-      CheckoutPix: totalCalculado * ((evento?.taxas?.taxaconveniencia || 1) / 100),
+      CheckoutCartao: totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100),
+      CheckoutPix: totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100),
    }
-   let totalPedido = totalCalculado + taxas[formaPagamento];
+
    const descontoObtido = total * (cupom.valor / 100);
+
+   useEffect(() => {
+      setTaxa(taxas[formaPagamento]);
+   }, [formaPagamento])
 
    return (
       <Layout.Root>
@@ -106,14 +110,14 @@ export function CheckoutPagamento() {
                   }
 
                   <Section.SubTitle iconLeft={<Icon.Money size={18} />}>
-                     Taxas: {Maskara.dinheiro(taxas[formaPagamento])}
+                     Taxas: {Maskara.dinheiro(taxa)}
                   </Section.SubTitle>
 
                   <Section.SubTitle iconLeft={nomePagamento[formaPagamento].icon}>
                      Pagamento via: {nomePagamento[formaPagamento].nome}
                   </Section.SubTitle>
 
-                  <Section.Title color='azul'>Total do pedido: {Maskara.dinheiro(totalPedido)}</Section.Title>
+                  <Section.Title color='azul'>Total do pedido: {Maskara.dinheiro(valorFinal)}</Section.Title>
                </VStack>
 
                <Button
