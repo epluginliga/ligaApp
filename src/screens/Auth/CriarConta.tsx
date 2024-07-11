@@ -11,29 +11,61 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputPassword } from '../../components/Inputs/Password';
+import { useMutation } from '@tanstack/react-query';
+import { criaUsuario } from '../../services/usuario';
+import { cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
+import { CriaUsuarioProps } from '../../services/@usuario';
+import { InputSelecionar } from '../../components/Inputs/Selecionar';
 
 const schema = z.object({
    nome: z.string(),
    email: z.string().email({
       message: "Email inválido",
    }),
-   cpf: z.string(),
+   documento: z.string(),
    telefone: z.string(),
    sexo: z.string(),
    nascimento: z.string(),
-   senha: z.string(),
+   password: z.string(),
    confirmar_senha: z.string(),
+}).superRefine(({ confirmar_senha, password }, ctx) => {
+   if (password !== confirmar_senha) {
+      ctx.addIssue({
+         code: 'custom',
+         message: 'Senhas devem ser iguais',
+         path: ['confirmar_senha']
+      })
+   }
 });
-
-type LoginFormInputs = z.input<typeof schema>;
 
 export function CriarConta() {
    const { control, handleSubmit, formState: { errors }
-   } = useForm<LoginFormInputs>({
-      resolver: zodResolver(schema)
+   } = useForm<CriaUsuarioProps>({
+      resolver: zodResolver(schema),
+      defaultValues: {
+         "nome": "Jean",
+         "password": "123456",
+         "email": "jean.silva552@gmail.com",
+         "documento": "755.403.551-72",
+         "telefone": "(62) 99480-7997",
+         "sexo": "feminino",
+         "nascimento": "20/02/1995",
+         "confirmar_senha": "123456"
+      }
    });
 
-   const onSubmit = (data: LoginFormInputs) => console.log(data);
+   const handleCriaConta = useMutation({
+      mutationFn: (form: CriaUsuarioProps) => {
+         return criaUsuario({ ...form, username: form.email });
+      },
+      mutationKey: ['criaUsuario'],
+      onSuccess(data, variables, context) {
+         console.log(JSON.stringify(data, null, 1))
+      },
+      onError(error, variables, context) {
+         console.log(JSON.stringify(error, null, 1))
+      },
+   });
 
    return (
       <Layout.Root>
@@ -53,6 +85,7 @@ export function CriarConta() {
                         error={errors?.nome?.message}
                      />
 
+
                      <InputText
                         label="E-mail"
                         iconLeft={<Icon.Envelope size={24} />}
@@ -60,15 +93,18 @@ export function CriarConta() {
                         placeholder='seu@email.com'
                         control={control}
                         error={errors?.email?.message}
+                        inputMode='email'
                      />
 
                      <InputText
                         label="CPF"
                         iconLeft={<Icon.AddressCard size={24} />}
-                        name='cpf'
+                        name='documento'
                         placeholder='xxx.xxx.xxx-xx'
                         control={control}
-                        error={errors?.cpf?.message}
+                        mask={cpfMask}
+                        error={errors?.documento?.message}
+                        inputMode='decimal'
                      />
 
                      <InputText
@@ -78,14 +114,29 @@ export function CriarConta() {
                         placeholder='(00) 00000-0000'
                         control={control}
                         error={errors?.telefone?.message}
+                        inputMode='tel'
+                        mask={telefoneMask}
                      />
 
-                     <InputText
-                        label="Sexo"
-                        iconLeft={<Icon.VenusMars size={24} />}
-                        name='sexo'
-                        placeholder='Selecione o Sexo'
+                     <InputSelecionar
+                        placeholder='Selecione o sexo'
+                        label='Sexo'
+                        name={`sexo`}
                         control={control}
+                        option={[
+                           {
+                              label: "Masculino",
+                              name: "masculino"
+                           },
+                           {
+                              label: "Feminino",
+                              name: "feminino"
+                           },
+                           {
+                              label: "Não informar",
+                              name: "naoinformar"
+                           }
+                        ]}
                         error={errors?.sexo?.message}
                      />
 
@@ -93,30 +144,36 @@ export function CriarConta() {
                         label="Data de nascimento"
                         iconLeft={<Icon.Calendario size={24} />}
                         name='nascimento'
-                        placeholder='00/00/0000'
+                        placeholder='dd/mm/yyyy'
+                        mask={dataMask}
                         control={control}
-                        error={errors?.email?.message}
+                        inputMode='decimal'
+                        maxLength={10}
+                        error={errors?.nascimento?.message}
                      />
+
                      <InputPassword
                         label="Senha"
                         iconLeft={<IconFingerPrint size={24} />}
-                        name='senha'
-                        placeholder='seu@email.com'
+                        name='password'
+                        placeholder='Escolha uma senha segura'
                         control={control}
-                        error={errors?.email?.message}
+                        error={errors?.password?.message}
                      />
                      <InputPassword
                         label="Confirme a sua senha"
                         iconLeft={<IconFingerPrint size={24} />}
                         name='confirmar_senha'
-                        placeholder='seu@email.com'
+                        placeholder='Confirma sua senha'
                         control={control}
-                        error={errors?.email?.message}
+                        error={errors?.confirmar_senha?.message}
                      />
                   </VStack>
 
                   <VStack gap="md">
-                     <Button onPress={handleSubmit(onSubmit)} >
+                     <Button
+                        loading={handleCriaConta.isPending}
+                        onPress={handleSubmit((form => handleCriaConta.mutate(form)))} >
                         CRIAR CONTA
                      </Button>
                   </VStack>

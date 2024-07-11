@@ -39,20 +39,22 @@ export function Routes() {
          setLoadingReq(false);
 
          if (error.response?.data?.codigoretorno === 401) {
+            setErro(error.response.data.mensagem);
             signOut();
+            return;
          }
 
          if (error?.response?.data?.mensagenserro) {
             setErro(error?.response?.data?.mensagenserro?.join(", "));
+            return;
          }
 
          if (error.response.data.errors) {
             const erroMensagem = Object.keys(error.response.data.errors).map(key => error.response.data.errors[key]);
-            if(erroMensagem) {
+            if (erroMensagem) {
                setErro(erroMensagem.join('\n'));
             }
          }
-         
          return Promise.reject(error);
       }
    );
