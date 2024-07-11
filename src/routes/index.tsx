@@ -10,6 +10,7 @@ import { PayloadDefaultError } from '../services/@index';
 import { ErroRequest } from '../components/ErroRequest';
 
 type ErrorProps = {
+   message: string;
    response: {
       data: PayloadDefaultError
    }
@@ -37,7 +38,7 @@ export function Routes() {
       },
       (error: ErrorProps) => {
          setLoadingReq(false);
-
+        
          if (error.response?.data?.codigoretorno === 401) {
             setErro(error.response.data.mensagem);
             signOut();
@@ -55,6 +56,12 @@ export function Routes() {
                setErro(erroMensagem.join('\n'));
             }
          }
+
+         if (error?.message) {
+            setErro(error.message);
+            return;
+         }
+
          return Promise.reject(error);
       }
    );

@@ -33,47 +33,46 @@ function FormEndereco() {
    return (
 
       <VStack gap='md'>
-         <Section.Root>
 
-            <InputText
-               label='CEP'
-               control={control}
-               name='cep'
-               placeholder='00000-00'
-               error={errors?.cep?.message}
-            />
+         <InputText
+            label='CEP'
+            control={control}
+            name='cep'
+            placeholder='00000-00'
+            error={errors?.cep?.message}
+         />
 
-            <InputText
-               label='Logradouro'
-               control={control}
-               name='logradouro'
-               placeholder='Rua 1...'
-               error={errors?.logradouro?.message}
-            />
+         <InputText
+            label='Logradouro'
+            control={control}
+            name='logradouro'
+            placeholder='Rua 1...'
+            error={errors?.logradouro?.message}
+         />
 
-            <InputText
-               label='Número'
-               control={control}
-               name='numero'
-               placeholder='Número'
-               error={errors?.numero?.message}
-            />
+         <InputText
+            label='Número'
+            control={control}
+            name='numero'
+            placeholder='Número'
+            error={errors?.numero?.message}
+         />
 
-            <InputText
-               label='Complemento'
-               control={control}
-               name='complemento'
-               error={errors?.complemento?.message}
-            />
+         <InputText
+            label='Complemento'
+            control={control}
+            name='complemento'
+            error={errors?.complemento?.message}
+         />
 
-            <InputText
-               label='Cidade'
-               control={control}
-               name='cidade'
-               placeholder='Goiânia'
-               error={errors?.cidade?.message}
-            />
-         </Section.Root>
+         <InputText
+            label='Cidade'
+            control={control}
+            name='cidade'
+            placeholder='Goiânia'
+            error={errors?.cidade?.message}
+         />
+
 
          <Button onPress={() => navigate('CheckoutPagamento')}
             marginHorizontal="md">

@@ -2,50 +2,14 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { MMKV } from "react-native-mmkv";
 
 import { vendaAplicativo } from "../utils/constantes";
-import { EventosPayload, TaxasCheckout } from "../services/@eventos";
+import { EventosPayload } from "../services/@eventos";
 import { CriaEditaCarrinhoProps, EventoCarrinhoIngresso, PayloadCupomAplicado } from "../services/@carrinho";
+import { CarrinhoContextProps, CarrinhoProviderProps, EventoHook } from "./@carrinho";
 
-type CarrinhoContextProps = {
-   evento: EventoHook | null;
-   adicionaEvento: (evento: EventosPayload) => void;
-   adicionaIngressoAoEvento: (ingresso: EventoCarrinhoIngresso) => void;
-   removeIngressoDoEvento: (eventoId: string, ingresso: EventoCarrinhoIngresso) => void;
-   limpaCarrinho: () => void;
-   total: number;
-   totalItens: number;
-   pedido?: CriaEditaCarrinhoProps;
-   setCarrinhoId: (id: string) => void,
-   carrinhoId: string;
-   setCupom: (cupom: PayloadCupomAplicado) => void,
-   cupom: PayloadCupomAplicado;
-   totalCalculado: number;
-}
-
-export type AdicionaIngressosAoEventoProps = {
-   id: string;
-   lote_id: string;
-   qtd: number;
-}
-
-type EventoHook = {
-   bairro: string;
-   cidade: string;
-   data_evento: string;
-   nome: string;
-   nome_local: string;
-   logradouro: string;
-   numero: string;
-   id: string;
-   estado: string;
-   taxas: TaxasCheckout
-}
 
 const CarrinhoContext = createContext<CarrinhoContextProps>({} as CarrinhoContextProps);
 export const carrinhoStorage = new MMKV();
 
-type CarrinhoProviderProps = {
-   children: React.ReactNode;
-}
 function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactElement {
    const [evento, setEvento] = useState<EventoHook | null>(null);
    const [carrinhoId, setCarrinhoId] = useState('');

@@ -20,6 +20,7 @@ import { Maskara } from '../../utils/Maskara';
 import { vendaAplicativo } from '../../utils/constantes';
 import { CriaEditaCarrinhoProps } from '../../services/@carrinho';
 import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -100,6 +101,7 @@ const itemTextSingular: { [key: number]: string } = {
 export function Carrinho() {
    const { navigate } = useNavigation();
    const { evento, pedido, total, totalItens } = useCarrinho();
+   const insets = useSafeAreaInsets();
 
    const { data } = useQuery({
       queryKey: ['fetchIngressoDisponivel', evento],
@@ -132,80 +134,82 @@ export function Carrinho() {
    }
 
    return (
-      <>
+      <Layout.Root>
+
          <StatusBar barStyle="dark-content" />
+         <Layout.Header title='Ingressos disponíveis' />
 
-         <Layout.Root>
-            <Layout.Header title='Ingressos disponíveis' />
 
-            <Layout.Scroll>
-               <VStack gap="lg">
 
-                  <ResumoPedido />
+         <Layout.Scroll>
+            <VStack gap="lg">
 
-                  {(data ?? []).map?.(data => (
-                     <VStack key={data.setor_id}>
-                        <Text color='azul' marginHorizontal='sm'>{data.setor_nome}</Text>
-                        {data?.ingressos?.map(ingresso => {
-                           if (ingresso?.quantidade_disponivel_ingresso > 0) {
-                              return (
-                                 <React.Fragment key={ingresso.id}>
-                                    <IngressosAdicionar
-                                       eventoId={evento.id}
-                                       ingresso={ingresso}
-                                    />
-                                    <View style={{ height: 10 }} />
+               <ResumoPedido />
 
-                                 </React.Fragment>
-                              );
-                           }
-
+               {(data ?? []).map?.(data => (
+                  <VStack key={data.setor_id}>
+                     <Text color='azul' marginHorizontal='sm'>{data.setor_nome}</Text>
+                     {data?.ingressos?.map(ingresso => {
+                        if (ingresso?.quantidade_disponivel_ingresso > 0) {
                            return (
-                              <>
-                                 <Card.Root key={ingresso.id} variant='border'>
-                                    <Card.Title>{ingresso.nome}</Card.Title>
-                                    <Card.Title variant='labelInput'>
-                                       {ingresso.valor}
-                                    </Card.Title>
-                                    <Card.Title variant='labelInput'>Esgotado</Card.Title>
-                                 </Card.Root>
+                              <React.Fragment key={ingresso.id}>
+                                 <IngressosAdicionar
+                                    eventoId={evento.id}
+                                    ingresso={ingresso}
+                                 />
                                  <View style={{ height: 10 }} />
-                              </>
-                           )
-                        })}
-                     </VStack>
-                  ))}
-               </VStack>
-               <View style={{ height: 20 }} />
 
-            </Layout.Scroll>
+                              </React.Fragment>
+                           );
+                        }
 
-            <VStack justifyContent='center' width="100%" bottom={10}>
-               <Button
-                  disabled={total === 0}
-                  iconRight={(
-                     <Text variant='header' color='white' verticalAlign='middle'>
-                        {totalItens > 0 && <Text variant='header3' color='white'>
-                           {totalItens} {itemTextSingular[totalItens] || 'itens'} por: {' '}
-                        </Text>}
-                        {Maskara.dinheiro(total)}
-                     </Text>
-                  )}
-                  marginHorizontal="md"
-                  onPress={() => {
-                     if (pedido) {
-                        return handleCriaCarrinho.mutate(pedido);
-                     }
-
-                     return;
-                  }}
-               >
-                  <Text color='white'>
-                     Comprar
-                  </Text>
-               </Button>
+                        return (
+                           <>
+                              <Card.Root key={ingresso.id} variant='border'>
+                                 <Card.Title>{ingresso.nome}</Card.Title>
+                                 <Card.Title variant='labelInput'>
+                                    {ingresso.valor}
+                                 </Card.Title>
+                                 <Card.Title variant='labelInput'>Esgotado</Card.Title>
+                              </Card.Root>
+                              <View style={{ height: 10 }} />
+                           </>
+                        )
+                     })}
+                  </VStack>
+               ))}
             </VStack>
-         </Layout.Root>
-      </>
+            <View style={{ height: 20 }} />
+
+         </Layout.Scroll>
+
+         <VStack justifyContent='center' width="100%" >
+            <Button
+               disabled={total === 0}
+               iconRight={(
+                  <Text variant='header' color='white' verticalAlign='middle'>
+                     {totalItens > 0 && <Text variant='header3' color='white'>
+                        {totalItens} {itemTextSingular[totalItens] || 'itens'} por: {' '}
+                     </Text>}
+                     {Maskara.dinheiro(total)}
+                  </Text>
+               )}
+               marginHorizontal="md"
+               onPress={() => {
+                  if (pedido) {
+                     return handleCriaCarrinho.mutate(pedido);
+                  }
+
+                  return;
+               }}
+            >
+               <Text color='white'>
+                  Comprar
+               </Text>
+            </Button>
+         </VStack>
+
+      </Layout.Root>
+
    )
 }

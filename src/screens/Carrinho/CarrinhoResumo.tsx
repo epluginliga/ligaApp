@@ -57,12 +57,12 @@ export function CarrinhoResumo() {
             <Pressable onPress={() => navigate("CarrinhoCupomDesconto")}>
                <TituloCardCupom cupom={cupom} />
             </Pressable>
-
-            <Button marginHorizontal="md" onPress={() => navigate("CheckoutPagamento")}>
-               Continuar
-            </Button>
-
          </VStack>
+
+         <Button marginHorizontal="md" onPress={() => navigate("CheckoutPagamento")}>
+            Continuar
+         </Button>
+
       </Layout.Root>
    )
 }

@@ -1,5 +1,6 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 
 type Layout = {
@@ -7,9 +8,10 @@ type Layout = {
 }
 
 export function LayoutRoot({ children }: Layout) {
+   const insets = useSafeAreaInsets();
    return (
-      <SafeAreaView style={{flexGrow:1}}>
+      <View style={{ flexGrow: 1, marginBottom: insets.bottom + 6 }}>
          {children}
-      </SafeAreaView>
+      </View>
    )
 }

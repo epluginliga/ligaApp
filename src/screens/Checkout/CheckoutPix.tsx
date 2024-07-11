@@ -16,7 +16,7 @@ export function CheckoutPix() {
    const { navigate } = useNavigation();
 
    return (
-      <Layout.Root>
+      <>
          <Layout.Header title='Checkout' />
          <Layout.Scroll>
 
@@ -42,7 +42,8 @@ export function CheckoutPix() {
 
                <VStack gap='md'>
                   <Text variant='header' marginLeft='md'>Resumo do pedido</Text>
-                  <ResumoPedido data={data} />
+                  
+                  <ResumoPedido />
 
                   <Card.Root variant='border'>
                      <VStack p='md'>
@@ -56,8 +57,7 @@ export function CheckoutPix() {
             </VStack>
 
          </Layout.Scroll>
-
-      </Layout.Root>
+      </>
 
    )
 }

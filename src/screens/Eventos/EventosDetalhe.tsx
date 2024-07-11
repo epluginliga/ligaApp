@@ -47,12 +47,13 @@ type ButtonComprarInfressosProps = {
 function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const [mostraModal, setMostraModal] = useState(false);
    const { logado } = useAuth();
-   const { adicionaEvento, limpaCarrinho, setCupom } = useCarrinho();
+   const { adicionaEvento, limpaCarrinho, setCupom, total, adicionaIngressoAoEvento, setCarrinhoId } = useCarrinho();
    const { colors } = useTheme<Theme>()
    const { navigate } = useNavigation();
 
    const handleVerificaSeExisteCarrinho = useMutation({
       mutationFn: obtemCarrinho,
+      mutationKey: ['EventoDetalheObtemCarrinho'],
       onSuccess(data) {
          const mostrarModal = data.status === "em_compra";
          if (!mostrarModal) {
@@ -64,6 +65,12 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
             setCupom(data.cupom)
          }
          setMostraModal(mostrarModal);
+      },
+      onError() {
+         limpaCarrinho();
+         adicionaEvento(evento);
+         setCarrinhoId('')
+         navigate('Carrinho');
       },
    });
 
@@ -104,6 +111,18 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                         <Pressable onPress={() => {
                            setMostraModal(false);
                            const ingresso = data.eventos.flatMap(ingresso => ingresso.ingressos);
+
+                           if (total === 0) {
+                              ingresso.forEach(ingr => {
+                                 adicionaIngressoAoEvento({
+                                    id: ingr.id,
+                                    lote_id: ingr.lote_id,
+                                    qtd: ingr.qtd,
+                                    valor: ingr.valor
+                                 })
+                              })
+                           }
+
                            const usuarioAtribuidos = ingresso.filter(usuario => usuario.dados_atribuir.length > 0)
                               .map(item => item.dados_atribuir)
                               .map(item => item.filter(user => user.cpf && user.nome))
@@ -181,7 +200,7 @@ export const EventosDetalhe = () => {
       const height = interpolate(scrollY.value, [0, 80], [400, 350], Extrapolation.EXTEND);
       const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
 
-      return {  bottom, height, opacity };
+      return { bottom, height, opacity };
    });
 
    const textStyles = useAnimatedStyle(() => {
@@ -220,15 +239,13 @@ export const EventosDetalhe = () => {
                zIndex: 99,
                width: "100%"
             }, textStyles]}>
-            <View style={{ marginTop: Math.max(insets.top, 16) }}>
-               <Layout.Header title={eventoDetalhe?.nome}
-                  rigth={(
-                     <Pressable onPress={() => console.log("pre")}>
-                        <IconShare />
-                     </Pressable>
-                  )}
-               />
-            </View>
+            <Layout.Header title={eventoDetalhe?.nome}
+               rigth={(
+                  <Pressable onPress={() => console.log("pre")}>
+                     <IconShare />
+                  </Pressable>
+               )}
+            />
          </Animated.View>
 
          <Animated.ScrollView
@@ -277,7 +294,7 @@ export const EventosDetalhe = () => {
             </View>
 
 
-            <View style={{ marginBottom: insets.bottom +60 }} />
+            <View style={{ marginBottom: insets.bottom + 60 }} />
          </Animated.ScrollView>
 
          <ButtonComprarIngressos evento={eventoDetalhe} />

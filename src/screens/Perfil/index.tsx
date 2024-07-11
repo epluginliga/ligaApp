@@ -5,13 +5,15 @@ import { Button } from '../../components/Button';
 import { useAuth } from '../../hooks/auth';
 
 export function Perfil() {
-   const {signOut } = useAuth();
+   const { signOut } = useAuth();
 
    return (
       <Layout.Root>
+         <Layout.Header title='Perfil' />
+
          <Section.Root>
             <Section.Title>Sair</Section.Title>
-            <Button onPress={signOut }>Sair</Button>
+            <Button onPress={signOut}>Sair</Button>
          </Section.Root>
       </Layout.Root>
    )

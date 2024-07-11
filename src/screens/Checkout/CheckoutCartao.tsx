@@ -20,8 +20,6 @@ import { CartaoCredito } from '../../utils/CartaoCredito'
 
 import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
 import { z } from 'zod'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { View } from 'react-native'
 
 const schema = z.object({
    number: z.string(),
@@ -111,7 +109,6 @@ function FormCartaoCredito() {
          </VStack>
 
          <Button
-            // onPress={() => navigate("Home")}
             onPress={handleSubmit((form) => handleTokenCartao.mutate(form))}
             iconRight={<Icon.CheckCircle color='#fff' />}>
             FINALIZAR COMPRA
@@ -122,17 +119,11 @@ function FormCartaoCredito() {
 }
 
 export function CheckoutCartao() {
-   const insets = useSafeAreaInsets();
-
    return (
       <Layout.Keyboard>
-
-         <View style={{ marginTop: insets.top }}>
-            <Layout.Header title='Pagamento' />
-         </View>
+         <Layout.Header title='Pagamento' />
 
          <Layout.Scroll>
-
             <VStack gap='md' justifyContent='space-between' flex={1} marginBottom='lg'>
 
                <ResumoPedido />
@@ -144,6 +135,5 @@ export function CheckoutCartao() {
 
          </Layout.Scroll>
       </Layout.Keyboard>
-
    )
 }

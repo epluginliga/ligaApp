@@ -9,6 +9,7 @@ import Text from '../../Text'
 import VStack from '../Vstack'
 import { BoxProps } from '@shopify/restyle'
 import { Theme } from '../../../theme/default'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 type LayoutHeader = BoxProps<Theme> & {
    title?: string;
@@ -18,15 +19,15 @@ type LayoutHeader = BoxProps<Theme> & {
    handleBack?: () => void;
 }
 
-export function LayoutHeader({ title,rigth,children,variant = "default",handleBack,...rest }: LayoutHeader) {
+export function LayoutHeader({ title, rigth, children, variant = "default", handleBack, ...rest }: LayoutHeader) {
    const { goBack } = useNavigation();
+   const insets = useSafeAreaInsets();
 
    return (
-      <Pressable onPress={() => handleBack ? handleBack() : goBack()}>
+      <Pressable style={{ marginTop: insets.top }} onPress={() => handleBack ? handleBack() : goBack()}>
 
          <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center' {...rest}>
             <IconArrowLeft />
-
 
             <VStack justifyContent='center' flex={1}>
                {children ? children : (

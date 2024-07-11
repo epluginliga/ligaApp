@@ -17,9 +17,10 @@ export async function obtemCarrinho(): PayloadDefault<PayloadCarrinho> {
    return await api
       .get(`/carrinho`)
       .then(success => {
-         if (success.status !== 200) {
-            throw new Error("Erro");
+         if(!success.data) {
+           return success;
          }
+
          return success.data;
       })
 }
@@ -40,10 +41,12 @@ export async function atribuiUtilizador(carrinho_id: string, body: object): Payl
    return await api
       .post(`/carrinho/atribui-dono-ingresso/${carrinho_id}`, { ...body })
       .then(success => {
-         if (success.status !== 200) {
-            throw new Error("Erro");
+         if (success.data) {
+            return success.data;
          }
-         return success.data;
+         
+         throw new Error("Erro");
+
       });
 }
 

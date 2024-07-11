@@ -76,13 +76,14 @@ export function CheckoutPagamento() {
    return (
       <Layout.Root>
          <Layout.Header title='Pagamento' />
-         <VStack justifyContent='space-between' flex={1}>
 
+         <VStack justifyContent='space-between' flex={1}>
             <Section.Root gap='md'>
                <Section.Title>Método de pagamento</Section.Title>
 
                <Section.SubTitle iconLeft={<Icon.Warning />}>
-                  <Text fontSize={14} fontWeight="bold">Atenção</Text>, você só garante seus ingressos após a conclusão da compra.
+                  <Text fontSize={14} fontWeight="bold">Atenção</Text>,
+                  você só garante seus ingressos após a conclusão da compra.
                </Section.SubTitle>
 
                <InputFormaPagamento formaPagamento={formaPagamento} setFormaPagamento={setFormaPagamento} />
