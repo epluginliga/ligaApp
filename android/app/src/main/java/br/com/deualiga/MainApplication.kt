@@ -1,4 +1,4 @@
-package com.ligaapp
+package br.com.deualiga
 
 import android.app.Application
 import com.facebook.react.PackageList

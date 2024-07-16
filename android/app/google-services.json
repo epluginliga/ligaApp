@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "99360869534",
+    "project_id": "liga-60472",
+    "storage_bucket": "liga-60472.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99360869534:android:d138a45a9bb29dae1f3f8f",
+        "android_client_info": {
+          "package_name": "br.com.deualiga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "99360869534-8bvab8g7qv8glcgq3o9ecms64uf3ag15.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfH9eO6Nt_Ii-QqoGt-xi9qI4O1zPX-1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "99360869534-8bvab8g7qv8glcgq3o9ecms64uf3ag15.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "99360869534-02a3baua7qan66i0qki4llm3tlaamap2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.deuliga"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
