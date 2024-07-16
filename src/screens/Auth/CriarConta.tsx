@@ -16,6 +16,16 @@ import { criaUsuario } from '../../services/usuario';
 import { cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { CriaUsuarioProps } from '../../services/@usuario';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
+import {
+   NOME,
+   PASSWORD,
+   EMAIL,
+   DOCUMENTO,
+   TELEFONE,
+   SEXO,
+   NASCIMENTO,
+   CONFIRMAR_SENHA
+} from "@env"
 
 const schema = z.object({
    nome: z.string(),
@@ -43,14 +53,14 @@ export function CriarConta() {
    } = useForm<CriaUsuarioProps>({
       resolver: zodResolver(schema),
       defaultValues: {
-         "nome": "Jean",
-         "password": "123456",
-         "email": "jean.silva552@gmail.com",
-         "documento": "755.403.551-72",
-         "telefone": "(62) 99480-7997",
-         "sexo": "feminino",
-         "nascimento": "20/02/1995",
-         "confirmar_senha": "123456"
+         "nome": NOME,
+         "password": PASSWORD,
+         "email": EMAIL,
+         "documento": DOCUMENTO,
+         "telefone": TELEFONE,
+         "sexo": SEXO,
+         "nascimento": NASCIMENTO,
+         "confirmar_senha": CONFIRMAR_SENHA,
       }
    });
 

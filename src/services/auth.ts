@@ -1,5 +1,5 @@
 import api from ".";
-import { PayloadDefault } from "./@index";
+import { PayloadDefault, PayloadDefaultError } from "./@index";
 
 export type UserProps = {
    mensagem: string;
@@ -28,5 +28,12 @@ export type LoginProps = {
 export async function login(data: LoginProps): PayloadDefault<UserProps> {
    return await api
       .post('/login', { ...data })
+      .then(success => success.data);
+}
+
+
+export async function resetarSenha(data: { email: string }): PayloadDefault<PayloadDefaultError> {
+   return await api
+      .post('/login/resetar_senha', { ...data })
       .then(success => success.data);
 }

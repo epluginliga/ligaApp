@@ -6,6 +6,14 @@ declare module '@env' {
    export const ADQUIRENCIA: string;
    export const PONTO_DE_VENDA: string;
 
+   export const NOME: string;
+   export const PASSWORD: string;
+   export const EMAIL: string;
+   export const DOCUMENTO: string;
+   export const TELEFONE: string;
+   export const SEXO: string;
+   export const NASCIMENTO: string;
+   export const CONFIRMAR_SENHA: string;
 
    export const NUMBER_CARD: string;
    export const HOLDER_NAME_CARD: string;
