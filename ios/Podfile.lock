@@ -1213,6 +1213,8 @@ PODS:
     - React-logger (= 0.74.1)
     - React-perflogger (= 0.74.1)
     - React-utils (= 0.74.1)
+  - rn-fetch-blob (0.12.0):
+    - React-Core
   - RNFBApp (20.1.0):
     - Firebase/CoreOnly (= 10.27.0)
     - React-Core
@@ -1280,7 +1282,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.2.0):
+  - RNShare (10.2.1):
+    - React-Core
+  - RNSVG (15.4.0):
     - React-Core
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
@@ -1345,10 +1349,12 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1479,6 +1485,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNGestureHandler:
@@ -1487,6 +1495,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -1557,11 +1567,13 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 86b9c5bccd239d91da33e08b4c58c6a40b7fdb48
   React-utils: 8e9c5cd66f0788e156a1fcb5cd69593ec8607611
   ReactCommon: eb4c4a9c43fcc0d93f922d0fdada24638429e515
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNFBApp: 9acbe359ef3559d6f8ca5c350db471f2b352f98a
   RNGestureHandler: 20a4307fd21cbff339abfcfa68192f3f0a6a518b
   RNReanimated: 82d44098f1640ac390d073bca26264d52a67dc7d
   RNScreens: 30249f9331c3b00ae7cb7922e11f58b3ed369c07
-  RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
+  RNShare: 0fad69ae2d71de9d1f7b9a43acf876886a6cb99c
+  RNSVG: cb24fb322de8c1ebf59904e7aca0447bb8dbed5a
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: dafebc41bc66910af33077aaa41078e89fd635bf
 

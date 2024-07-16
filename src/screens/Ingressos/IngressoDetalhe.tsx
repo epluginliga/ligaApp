@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ImageBackground, Pressable, StatusBar } from 'react-native';
+import { Image, ImageBackground, Pressable, StatusBar, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
@@ -16,6 +16,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { fetchIngressoDetalhe } from '../../services/eventos';
 import { Maskara } from '../../utils/Maskara';
+import QRCode from 'react-native-qrcode-svg'
+import { Card } from '../../components/Card';
+import { Icon } from '../../icons';
+import { formataData } from '../../utils/utils';
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'IngressosDetalhe'>;
 
@@ -67,14 +71,6 @@ export const IngressoDetalhe = () => {
       },
    });
 
-   const animatedStyles = useAnimatedStyle(() => {
-      if (scrollY.value < 0) { };
-      const height = interpolate(scrollY.value, [0, 80], [250, 200], Extrapolation.EXTEND);
-      const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
-
-      return { height, opacity };
-   });
-
    const textStyles = useAnimatedStyle(() => {
       if (scrollY.value < 0) { };
       const opacity = interpolate(scrollY.value, [0, 25], [0, 1], Extrapolation.CLAMP);
@@ -85,10 +81,13 @@ export const IngressoDetalhe = () => {
 
    const { dadosCompra, dadosUsuario } = data;
 
+   const dataISO = formataData().converteDataBRtoISO(dadosCompra.evento_data_evento)
+   const dataEvento = formataData(dataISO);
+
    return (
       <>
          <StatusBar barStyle={"dark-content"} />
-
+         <Layout.Header title='Detalhes do evento' />
          <Animated.View style={[
             {
                backgroundColor: "white",
@@ -96,7 +95,7 @@ export const IngressoDetalhe = () => {
                zIndex: 99,
                width: "100%"
             }, textStyles]}>
-            <Layout.Header title="Detalhe do ingresso"
+            <Layout.Header title={dadosCompra.evento_nome.slice(0, 18) + "..."}
                rigth={(
                   <Pressable onPress={() => console.log("pre")}>
                      <IconShare />
@@ -112,15 +111,31 @@ export const IngressoDetalhe = () => {
             automaticallyAdjustKeyboardInsets
             style={{ position: "relative" }}
          >
-            <Animated.View
-               renderToHardwareTextureAndroid
-               style={[{ height: 300 }, animatedStyles]}>
-               <ImageBackground
-                  style={{ height: "100%", width: "100%" }}
-                  source={{ uri: dadosCompra.evento_path_imagem }} >
-                  <Layout.Header />
-               </ImageBackground>
-            </Animated.View>
+            <Card.Root
+               mx="sm"
+               mt='lg'
+               pr="xs">
+               <Card.Image
+                  flex={1}
+                  height={88}
+                  source={{ uri: dadosCompra?.evento_path_imagem }} />
+
+               <VStack flex={2} justifyContent='space-around' pb='sm'>
+                  <Card.Title lineHeight={22.5} mt='sm'>{dadosCompra.evento_nome}</Card.Title>
+
+                  <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
+                     {dataEvento.diaSemana()}, {'\n'}
+                     {`${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
+                  </Card.SubTitle>
+
+                  <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
+                     <Card.Span>
+                        {dadosCompra.evento_cidade} | {dadosCompra.evento_estado} - {dataEvento.hora() || 'hora não definida'}
+                     </Card.Span>
+                  </Card.SubTitle>
+
+               </VStack>
+            </Card.Root>
 
             <LayoutTicket>
 
@@ -150,20 +165,28 @@ export const IngressoDetalhe = () => {
 
                <VStack alignItems='center' gap='md'>
                   <VStack backgroundColor='white' p='sm' borderRadius={100} overflow='hidden'>
-                     <Image source={{ uri: dadosCompra.usuario_path_avatar }} height={140} width={140} style={{
+                     <Image source={{ uri: dadosCompra.usuario_path_avatar }} height={120} width={120} style={{
                         borderRadius: 100
                      }} />
                   </VStack>
-                  <Image source={require('../../../assets/imagem/qrcode.png')} />
+                  <VStack p='sm' backgroundColor='white'>
+                     <QRCode
+                        size={160}
+                        value={dadosCompra.bilhete_codigo_barra}
+                     />
+                  </VStack>
                </VStack>
 
                <HStack justifyContent='space-between' mt='xl'>
-                  <Text variant='labelInput' color='black'>#codigobilhete</Text>
-                  {/* <Text variant='labelInput' color='black'>#{dadosCompra.usuario_path_avatar}</Text> */}
+                  <Text variant='labelInput' color='black'>#{dadosCompra.bilhete_codigo_barra}</Text>
                </HStack>
 
-
             </LayoutTicket>
+
+            <View style={{
+               flex: 1,
+               marginBottom: insets.bottom
+            }} />
 
          </Animated.ScrollView>
       </>

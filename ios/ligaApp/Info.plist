@@ -63,5 +63,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	
+	<key>NSPhotoLibraryAddUsageDescription</key>
+   <string>Este aplicativo deseja salvar imagens no seu dispositivo</string>
+
+	<key>NSPhotoLibraryUsageDescription</key>
+   <string>Este aplicativo deseja salvar imagens no seu dispositivo</string>
 </dict>
 </plist>

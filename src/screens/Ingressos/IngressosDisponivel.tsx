@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import VStack from '../../components/Views/Vstack'
 import { Card } from '../../components/Card'
 import { Icon } from '../../icons'
-import { FlatList } from 'react-native'
+import { FlatList, View } from 'react-native'
 import Text from '../../components/Text'
 import { Layout } from '../../components/Views/Layout'
 import { StepContext } from '.'
@@ -69,15 +69,17 @@ export function IngressosDisponivel() {
          exiting={FadeOutRight}
          style={[{ flex: 1 }]}
       >
+         <Layout.Header title='Ingressos disponíveis' />
          <FlatList
+            contentContainerStyle={{
+               marginTop: 16
+            }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<ListEmptyComponent title='Nenhum Ingresso disponível' />}
-            ListHeaderComponent={<Layout.Header title='Ingressos disponíveis'
-               mb='md'
-            />}
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
+            ListFooterComponent={<View style={{ marginBottom: 32 }} />}
             data={proximoEventos}
          />
       </Animated.View>

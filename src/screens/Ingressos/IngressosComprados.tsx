@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
@@ -71,13 +71,14 @@ export function IngressosComprados() {
          exiting={FadeOutRight}
          style={[{ flex: 1 }]}
       >
+         <Layout.Header
+            title='Ingressos Comprados'
+         />
          <FlatList
-            ListHeaderComponent={
-               <Layout.Header
-                  title='Ingressos Comprados'
-                  mb='md'
-               />
-            }
+            contentContainerStyle={{
+               marginTop: 16,
+            }}
+            showsVerticalScrollIndicator={false}
             ListEmptyComponent={
                <ListEmptyComponent title='Nenhum Ingresso utilizado' />
             }
@@ -85,6 +86,7 @@ export function IngressosComprados() {
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
             data={eventosPassados}
+            ListFooterComponent={<View style={{ marginBottom: 32 }} />}
          />
       </Animated.View>
    )
