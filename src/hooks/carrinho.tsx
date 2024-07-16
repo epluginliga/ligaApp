@@ -36,7 +36,6 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          taxas: JSON.parse(evento?.taxas || ''),
          logradouro: evento.logradouro,
          quantidade_parcelas: evento.quantidade_parcelas,
-
       };
 
       setEvento(storeEvento);

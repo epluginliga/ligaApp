@@ -9,13 +9,12 @@ import { Layout } from '../../components/Views/Layout'
 import VStack from '../../components/Views/Vstack'
 import { ResumoPedido } from '../../components/ResumoPedido'
 import { CartaoWidget, ITemCardActions } from '../../components/Cartao'
-import { InputText } from '../../components/Inputs/Text'
 import { Button } from '../../components/Button'
 import { Icon } from '../../icons'
 import HStack from '../../components/Views/Hstack'
 import { AnimateView } from '../../components/AnimateView'
 
-import { tokenCartao } from '../../services/tokenCartao'
+import { checkout, tokenCartao } from '../../services/checkout'
 import { CartaoCredito } from '../../utils/CartaoCredito'
 
 import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
@@ -24,6 +23,7 @@ import { InputSelecionar } from '../../components/Inputs/Selecionar'
 import { useCarrinho } from '../../hooks/carrinho'
 import { Maskara } from '../../utils/Maskara'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { InputText } from '../../components/Inputs/Text'
 
 const schema = z.object({
    number: z.string(),
@@ -35,7 +35,35 @@ const schema = z.object({
 });
 type Form = z.input<typeof schema>;
 
+type ParcelasProps = {
+   name: string;
+   control: any;
+   label?: string;
+   placeholder?: string;
+   error?: string
+}
+function Parcelas({ ...rest }: ParcelasProps) {
+   const { evento, valorFinal } = useCarrinho();
+   if (!evento) return;
+
+   let parcelas = [{ name: '1', label: `1x de ${Maskara.dinheiro(valorFinal)}` }];
+   for (let index = 0; index < evento?.quantidade_parcelas; index++) {
+      const parcelaIndice = index + 1;
+      if (index > 0) {
+         const valorParcela = valorFinal * evento?.taxas?.taxasparcelamento[index] / parcelaIndice;
+         parcelas = [...parcelas, { name: `${parcelaIndice}`, label: `${parcelaIndice}x de ${Maskara.dinheiro(valorParcela)}` }]
+      }
+   }
+
+   return <InputSelecionar option={parcelas} {...rest} />
+}
+
 function FormCartaoCredito() {
+   const controlaWidgetCartao = useRef<ITemCardActions>(null);
+   const { navigate } = useNavigation();
+   const insets = useSafeAreaInsets();
+   const { carrinhoId } = useCarrinho();
+
    const { control, handleSubmit, formState: { errors }, watch } = useForm<Form>({
       resolver: zodResolver(schema),
       defaultValues: {
@@ -45,28 +73,40 @@ function FormCartaoCredito() {
          validade: VALIDADE_CARD
       }
    });
-   const controlaWidgetCartao = useRef<ITemCardActions>(null);
-   const { navigate } = useNavigation();
-   const { evento, totalComDesconto } = useCarrinho();
-   const insets = useSafeAreaInsets();
 
    const handleTokenCartao = useMutation({
-      mutationFn: (cartao: Form) => tokenCartao(CartaoCredito.formataBodyTokenCartao(cartao)),
-   })
+      mutationFn: async (cartao: Form) => {
+         const cartaoToken = await tokenCartao(CartaoCredito.formataBodyTokenCartao(cartao));
 
-   if (!evento) return;
+         return checkout({
+            parcelas: +cartao.parcelas,
+            tipo_pagamento: "cartao_credito",
+            "pagarmetoken-0": cartaoToken.id,
+            cvc: cartao.cvv,
+            expiry: `${cartaoToken.card.exp_month} / ${cartaoToken.card.exp_year}`,
+            name: cartaoToken.card.holder_name,
+            number: cartao.number,
+            dados_pagamento: {
+               num_cartao: cartao.number,
+               cvc: cartao.cvv,
+               brand: cartaoToken.card.brand,
+               cardtoken: cartaoToken.id,
+               month: cartaoToken.card.exp_month,
+               year: cartaoToken.card.exp_year,
+               nome_cartao: cartaoToken.card.holder_name,
+            },
 
-   let totalPedido = totalComDesconto + totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100);
-   let parcelas = [{ name: '1', label: `1x de ${Maskara.dinheiro(totalPedido)}` }];
-
-   for (let index = 0; index < evento?.quantidade_parcelas; index++) {
-      const parcelaIndice = index + 1;
-      if (index > 0) {
-         const valorParcela = totalPedido * evento?.taxas?.taxasparcelamento[index] / parcelaIndice;
-         parcelas = [...parcelas, { name: `${parcelaIndice}`, label: `${parcelaIndice}x de ${Maskara.dinheiro(valorParcela)}` }]
-      }
-   }
-
+         }, carrinhoId)
+      },
+      onSuccess(success) {
+         console.log("success", JSON.stringify(success, null, 1))
+         // navigate("Ingressos");
+      },
+      onError(error, variables, context) {
+         console.log("error", JSON.stringify(error, null, 1))
+      },
+   });
+   0
    return (
       <VStack
          marginHorizontal='sm'
@@ -124,12 +164,11 @@ function FormCartaoCredito() {
                />
             </HStack>
 
-            <InputSelecionar
+            <Parcelas
                placeholder='Selecione a parcela'
                label='parcela'
-               name={`parcela`}
+               name={`parcelas`}
                control={control}
-               option={parcelas}
                error={errors?.parcelas?.message}
             />
          </VStack>

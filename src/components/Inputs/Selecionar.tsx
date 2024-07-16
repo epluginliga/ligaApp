@@ -12,7 +12,7 @@ import { useTheme } from '@shopify/restyle'
 import { Theme } from '../../theme/default'
 import { HandleModalApp, ModalApp } from '../Modal'
 
-type InputText = InputDefault & {
+export type InputSelecionarProps = InputDefault & {
    name: string;
    control: any;
    label?: string;
@@ -22,7 +22,7 @@ type InputText = InputDefault & {
    }[]
 }
 
-export function InputSelecionar({ name, label, option, ...rest }: InputText) {
+export function InputSelecionar({ name, label, option, ...rest }: InputSelecionarProps) {
    const { colors, spacing, fonts } = useTheme<Theme>();
    const [search, setSearch] = useState("");
    const modalRef = useRef<HandleModalApp>(null);

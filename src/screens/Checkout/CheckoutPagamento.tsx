@@ -100,14 +100,14 @@ export function CheckoutPagamento() {
                <VStack gap='sm'>
                   <Section.SubTitle iconLeft={<Icon.Ticket size={18} />}>Subtotal: {Maskara.dinheiro(total)}</Section.SubTitle>
 
-                  {
-                     cupom?.valor && <Section.SubTitle
+                  {cupom?.valor && (
+                     <Section.SubTitle
                         color='greenDark'
                         fontWeight="bold"
                         iconLeft={<Icon.CheckCircle color={theme.colors.greenDark} size={18} />}>
                         Desconto: {Maskara.dinheiro(descontoObtido)}
                      </Section.SubTitle>
-                  }
+                  )}
 
                   <Section.SubTitle iconLeft={<Icon.Money size={18} />}>
                      Taxas: {Maskara.dinheiro(taxa)}
