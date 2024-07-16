@@ -1,3 +1,5 @@
+import { IngressoDetalheProps } from "../services/@eventos";
+
 export type RouteApp = {
    Cadastro: undefined;
    Eventos: undefined;
@@ -31,9 +33,7 @@ export type RouteApp = {
    Carrinho: undefined;
    Ingressos: undefined;
    CarrinhoCupomDesconto: undefined;
-   IngressosDetalhe: {
-      id: string;
-   };
+   IngressosDetalhe: IngressoDetalheProps
 }
 
 declare global {

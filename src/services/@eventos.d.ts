@@ -88,3 +88,75 @@ export type PayloadEventoAtletica = {
    slug: string;
    curso?: string;
 };
+
+export type IngressoDetalheProps = {
+   bilhete_id: string;
+}
+
+export type IngressoDetalhePayload = {
+   dadosCompra: {
+      evento_id: string;
+      evento_nome: string;
+      evento_cidade: string;
+      evento_estado: string;
+      evento_data_evento: string;
+      evento_abertura_portoes: string;
+      evento_path_imagem: string;
+      evento_nome_local: string;
+      evento_path_imagem_topo?: string;
+      evento_path_imagem_rodape?: string;
+      evento_data_liberacao_ingresso: string;
+      evento_info_ingresso_impresso?: string,
+      ingresso_nome: string;
+      ingresso_descricao?: string;
+      bilhete_codigo_barra: string;
+      bilhete_status: string;
+      bilhete_valor_pago: number;
+      bilhete_valor_original: number;
+      bilhete_tipo_pagamento: string;
+      bilhete_nome_compra: string;
+      bilhete_cpf_compra: string;
+      bilhete_restricao_compra?: string;
+      ingresso_necessario_aprovacao_imagem: number;
+      usuario_path_avatar: string;
+      usuario_path_avatar_aprovado: string;
+      dia_semana: string;
+      hora_evento: string;
+      dia_evento: string;
+      mes_evento: string;
+   },
+   dadosUsuario: {
+      id: string;
+      name: string;
+      username: string;
+      email: string;
+      email_verified_at?: string;
+      path_avatar: string;
+      sexo: "masculino" | "feminino",
+      deleted_at?: string;
+      created_at: string;
+      updated_at: string;
+      data_nascimento: string;
+      status_aprovacao: "aprovado",
+      path_avatar_aprovado: string;
+      primeiro_acesso: number;
+      apelido?: string;
+      path_cracha?: string;
+      alojamento: number;
+      tamanho_camiseta?: string;
+      endereco_cep: string;
+      endereco_logradouro: string;
+      endereco_numero: string;
+      endereco_bairro: string;
+      endereco_complemento: string;
+      endereco_cidade: string;
+      endereco_estado: string;
+      endereco_padrao: boolean,
+      endereco_latitude: string;
+      endereco_longitude: string;
+      documento_tipo: string;
+      documento_numero: string;
+      telefone_ddd: string;
+      telefone_numero: string;
+   }
+}

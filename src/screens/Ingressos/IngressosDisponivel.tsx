@@ -25,7 +25,9 @@ export function IngressosDisponivel() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => navigate.navigate("IngressosDetalhe", { id: item.bilhete_id })}>
+            onPress={() => navigate.navigate("IngressosDetalhe", {
+               bilhete_id: item.bilhete_id,
+            })}>
             <Card.Image
                flex={1}
                height={88}
@@ -41,7 +43,6 @@ export function IngressosDisponivel() {
 
 
                <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
-                  item.local {'\n'}
                   <Card.Span>
                      {
                         item.evento_cidade} | {item.evento_estado} - {dataEvento.hora() || 'hora não definida'
@@ -69,6 +70,7 @@ export function IngressosDisponivel() {
          style={[{ flex: 1 }]}
       >
          <FlatList
+            showsVerticalScrollIndicator={false}
             ListEmptyComponent={<ListEmptyComponent title='Nenhum Ingresso disponível' />}
             ListHeaderComponent={<Layout.Header title='Ingressos disponíveis'
                mb='md'

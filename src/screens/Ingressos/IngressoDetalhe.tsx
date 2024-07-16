@@ -1,23 +1,23 @@
 import React from 'react';
-import { Image, ImageBackground, Platform, Pressable, SafeAreaView, StatusBar, View } from 'react-native';
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { Image, ImageBackground, Pressable, StatusBar } from 'react-native';
+import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { Section } from '../../components/Section';
-import { Icon } from '../../icons';
-import { formataData } from '../../utils/utils';
 import VStack from '../../components/Views/Vstack';
 import { Layout } from '../../components/Views/Layout';
 import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
-import { data } from '../../../store/ingressos';
 import Circle from '../../components/Views/Circle';
 import Text from '../../components/Text';
 import HStack from '../../components/Views/Hstack';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuery } from '@tanstack/react-query';
+import { fetchIngressoDetalhe } from '../../services/eventos';
+import { Maskara } from '../../utils/Maskara';
 
-type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
-const eventoDetalhe = data.data[0];
+type EventoDetalheRouteProp = RouteProp<RouteApp, 'IngressosDetalhe'>;
 
 function LayoutTicket({ children }: { children: React.ReactNode }) {
    return (
@@ -40,30 +40,54 @@ function LayoutTicket({ children }: { children: React.ReactNode }) {
    )
 }
 
+const enumeradoresPagaemnto: { [key: string]: string } = {
+   'pix': 'PIX',
+   'cartao_credito': 'Cartão de Crédito',
+   'cartao_debito': 'Cartão de Débito',
+   'dinheiro': 'Dinheiro',
+   'boleto': 'Boleto',
+   'default': 'Default',
+   "pagamento_manual": 'Pagamento Manual'
+}
+
 export const IngressoDetalhe = () => {
+   const insets = useSafeAreaInsets();
    const { params } = useRoute<EventoDetalheRouteProp>();
-   console.log(params.id);
    const scrollY = useSharedValue(0);
+
+   const { data } = useQuery({
+      queryKey: ['IngressoEventosDetalhe', params],
+      queryFn: () => fetchIngressoDetalhe(params),
+      enabled: !!params
+   });
 
    const scrollHandler = useAnimatedScrollHandler({
       onScroll: (event) => {
          scrollY.value = event.contentOffset.y;
       },
    });
-   const animatedStyles = useAnimatedStyle(() => {
-      const height = interpolate(scrollY.value, [0, 80], [300, 250,  0], "clamp");
 
-      return {  height };
+   const animatedStyles = useAnimatedStyle(() => {
+      if (scrollY.value < 0) { };
+      const height = interpolate(scrollY.value, [0, 80], [250, 200], Extrapolation.EXTEND);
+      const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
+
+      return { height, opacity };
    });
 
    const textStyles = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [0, 100], [0, 1], 'clamp');
+      if (scrollY.value < 0) { };
+      const opacity = interpolate(scrollY.value, [0, 25], [0, 1], Extrapolation.CLAMP);
       return { opacity };
    });
 
+   if (!data) return;
+
+   const { dadosCompra, dadosUsuario } = data;
+
    return (
       <>
-         <StatusBar barStyle={Platform.OS === "ios" ? "light-content" : "dark-content"} />
+         <StatusBar barStyle={"dark-content"} />
 
          <Animated.View style={[
             {
@@ -72,16 +96,13 @@ export const IngressoDetalhe = () => {
                zIndex: 99,
                width: "100%"
             }, textStyles]}>
-
-            <SafeAreaView>
-               <Layout.Header title={eventoDetalhe.evento_nome}
-                  rigth={(
-                     <Pressable onPress={() => console.log("pre")}>
-                        <IconShare />
-                     </Pressable>
-                  )}
-               />
-            </SafeAreaView>
+            <Layout.Header title="Detalhe do ingresso"
+               rigth={(
+                  <Pressable onPress={() => console.log("pre")}>
+                     <IconShare />
+                  </Pressable>
+               )}
+            />
          </Animated.View>
 
          <Animated.ScrollView
@@ -96,40 +117,49 @@ export const IngressoDetalhe = () => {
                style={[{ height: 300 }, animatedStyles]}>
                <ImageBackground
                   style={{ height: "100%", width: "100%" }}
-                  source={{ uri: eventoDetalhe.path_imagem }} >
-                  <SafeAreaView>
-                     <Layout.Header />
-                  </SafeAreaView>
+                  source={{ uri: dadosCompra.evento_path_imagem }} >
+                  <Layout.Header />
                </ImageBackground>
             </Animated.View>
 
             <LayoutTicket>
 
-               <Section.Title>{eventoDetalhe.evento_nome}</Section.Title>
+               <Section.Title>{dadosCompra.ingresso_nome}</Section.Title>
 
-               <VStack>
-                  <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                     {formataData(eventoDetalhe.evento_data_evento_format_db).diaMesAnoTexto()}
-                  </Section.SubTitle>
-
-                  <VStack gap="xs">
-                     <Section.SubTitle iconLeft={<Icon.Pin />}>
-                        eventoDetalhe.nome_local {'\n'}
-                        <Section.Span>
-                           {eventoDetalhe.evento_cidade}
-                        </Section.Span>
-                     </Section.SubTitle>
-                  </VStack>
+               <VStack
+                  p='sm'
+                  borderRadius={8}
+                  gap='sm'>
+                  <HStack>
+                     <Text variant='header2'>{dadosUsuario.documento_tipo}</Text>
+                     <Text variant='header3'>{dadosUsuario.documento_numero}</Text>
+                  </HStack>
+                  <HStack>
+                     <Text variant='header2'>Utilizador</Text>
+                     <Text variant='header3'>{dadosUsuario.name}</Text>
+                  </HStack>
+                  <HStack>
+                     <Text variant='header2'>Pagamento</Text>
+                     <Text variant='header3'>{enumeradoresPagaemnto[dadosCompra.bilhete_tipo_pagamento]}</Text>
+                  </HStack>
+                  <HStack>
+                     <Text variant='header2'>Valor</Text>
+                     <Text variant='header3'>{Maskara.dinheiro(dadosCompra.bilhete_valor_pago)}</Text>
+                  </HStack>
                </VStack>
 
-               <VStack alignItems='center' gap='lg' marginVertical='xl'>
+               <VStack alignItems='center' gap='md'>
+                  <VStack backgroundColor='white' p='sm' borderRadius={100} overflow='hidden'>
+                     <Image source={{ uri: dadosCompra.usuario_path_avatar }} height={140} width={140} style={{
+                        borderRadius: 100
+                     }} />
+                  </VStack>
                   <Image source={require('../../../assets/imagem/qrcode.png')} />
-                  <Text variant='header'>{eventoDetalhe.lote_nome}</Text>
                </VStack>
 
                <HStack justifyContent='space-between' mt='xl'>
                   <Text variant='labelInput' color='black'>#codigobilhete</Text>
-                  <Text variant='labelInput' color='black'>#codigobilhete</Text>
+                  {/* <Text variant='labelInput' color='black'>#{dadosCompra.usuario_path_avatar}</Text> */}
                </HStack>
 
 

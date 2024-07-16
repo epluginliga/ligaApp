@@ -1,7 +1,15 @@
 import api from ".";
 import { vendaAplicativo } from "../utils/constantes";
-import { EventosPayload, IngressoDisponivelProps, IngressosDisponivelPayloadProps, IngressosPayload, PayloadEventoAtletica } from "./@eventos";
 import { PayloadDefault, PayloadPaginacaoResponse } from "./@index";
+
+import {
+   EventosPayload,
+   IngressoDetalhePayload,
+   IngressoDetalheProps,
+   IngressoDisponivelProps,
+   IngressosDisponivelPayloadProps,
+   IngressosPayload, PayloadEventoAtletica
+} from "./@eventos";
 
 export async function fetchEventos(): PayloadPaginacaoResponse<EventosPayload> {
    return await api
@@ -46,6 +54,19 @@ export async function fetchEventoAtleticas(evento_id: string):
    PayloadDefault<PayloadEventoAtletica[]> {
    return await api
       .get(`/evento/acompanhar-evento/busca-atleticas/${evento_id}`)
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      })
+      .catch((err) => err);
+}
+
+export async function fetchIngressoDetalhe({ bilhete_id }: IngressoDetalheProps):
+   PayloadDefault<IngressoDetalhePayload> {
+   return await api
+      .get(`/venda/dados-pdf/${bilhete_id}`)
       .then(success => {
          if (success.status !== 200) {
             throw new Error("Erro");

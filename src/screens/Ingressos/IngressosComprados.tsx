@@ -26,7 +26,9 @@ export function IngressosComprados() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => navigate.navigate("IngressosDetalhe", { id: item.bilhete_id })}>
+            onPress={() => navigate.navigate("IngressosDetalhe", {
+               bilhete_id: item.bilhete_id,
+            })}>
 
             <Card.Image
                flex={1}

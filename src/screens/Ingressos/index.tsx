@@ -1,4 +1,4 @@
-import React,{ Dispatch,createContext,useState } from 'react'
+import React, { Dispatch, createContext, useState } from 'react'
 import { TouchableOpacity } from 'react-native';
 
 import { IngressosDisponivel } from './IngressosDisponivel';
@@ -33,7 +33,7 @@ type HeaderProps = {
    setStepAtual: Dispatch<React.SetStateAction<number>>;
    stepAtual: number;
 }
-function Tabs({ setStepAtual,stepAtual }: HeaderProps) {
+function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
    return (
       <HStack justifyContent='center' m='md' gap='none'>
          <TouchableOpacity
@@ -67,7 +67,7 @@ function Tabs({ setStepAtual,stepAtual }: HeaderProps) {
 
 export function Ingressos() {
    const { logado } = useAuth();
-   const [stepAtual,setStepAtual] = useState(() => 1);
+   const [stepAtual, setStepAtual] = useState(() => 1);
 
    if (logado) {
 
@@ -95,10 +95,8 @@ export function Ingressos() {
             eventosPassados,
             proximoEventos
          }}>
-            <Layout.Root>
-               {stepsIngressos[stepAtual]}
-               <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
-            </Layout.Root>
+            {stepsIngressos[stepAtual]}
+            <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
          </StepContext.Provider>
       )
    }
