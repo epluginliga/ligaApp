@@ -21,6 +21,7 @@ import { IconCredtCard, IconPix } from "./IconPayments";
 import { IconCopy } from "./IconCopy";
 import { IconTrashCan } from "./IconTrashCan";
 import { IconMoney } from "./IconMoney";
+import { IconArrowLeftCircle } from "./IconArrowCircle";
 
 export const Icon = {
    Eye: IconEye,
@@ -52,6 +53,7 @@ export const Icon = {
    Copy: IconCopy,
    Trash: IconTrashCan,
    Money: IconMoney,
+   ArrowLeftCircle: IconArrowLeftCircle
 }
 
 export type Icon = {

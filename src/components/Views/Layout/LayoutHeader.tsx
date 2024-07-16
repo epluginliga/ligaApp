@@ -4,12 +4,12 @@ import { Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import HStack from '../Hstack'
-import { IconArrowLeft } from '../../../icons/IconArrow'
 import Text from '../../Text'
 import VStack from '../Vstack'
 import { BoxProps } from '@shopify/restyle'
 import { Theme } from '../../../theme/default'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Icon } from '../../../icons'
 
 type LayoutHeader = BoxProps<Theme> & {
    title?: string;
@@ -27,7 +27,7 @@ export function LayoutHeader({ title, rigth, children, variant = "default", hand
       <Pressable style={{ marginTop: insets.top }} onPress={() => handleBack ? handleBack() : goBack()}>
 
          <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center' {...rest}>
-            <IconArrowLeft />
+            <Icon.ArrowLeft />
 
             <VStack justifyContent='center' flex={1}>
                {children ? children : (

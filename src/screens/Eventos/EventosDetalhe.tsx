@@ -36,7 +36,7 @@ import { EventosPayload } from '../../services/@eventos';
 import { useTheme } from '@shopify/restyle';
 import Text from '../../components/Text';
 import HStack from '../../components/Views/Hstack';
-import { Theme } from '../../theme/default';
+import theme, { Theme } from '../../theme/default';
 import { EventosModalEmCompra } from './EventosModalEmCompra';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -180,6 +180,7 @@ export const EventosDetalhe = () => {
    const insets = useSafeAreaInsets();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
+   const { goBack } = useNavigation();
 
    const { data: eventoDetalhe } = useQuery({
       queryKey: ['eventosDetalhe', params?.id],
@@ -238,7 +239,9 @@ export const EventosDetalhe = () => {
                zIndex: 99,
                width: "100%"
             }, textStyles]}>
-            <Layout.Header title={eventoDetalhe?.nome}
+            <Layout.Header
+
+               title={eventoDetalhe?.nome}
                rigth={(
                   <Pressable onPress={() => console.log("pre")}>
                      <IconShare />
@@ -260,6 +263,11 @@ export const EventosDetalhe = () => {
                   source={{ uri: eventoDetalhe?.path_imagem }} />
             </View>
 
+            <VStack position='absolute' paddingHorizontal='md'>
+               <Pressable style={{ marginTop: insets.top }} onPress={goBack}>
+                  <Icon.ArrowLeftCircle color={theme.colors.azul} />
+               </Pressable>
+            </VStack>
 
             <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 350, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
