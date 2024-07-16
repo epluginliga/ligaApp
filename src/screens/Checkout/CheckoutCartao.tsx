@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigation } from '@react-navigation/native'
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -10,20 +10,20 @@ import VStack from '../../components/Views/Vstack'
 import { ResumoPedido } from '../../components/ResumoPedido'
 import { CartaoWidget, ITemCardActions } from '../../components/Cartao'
 import { Button } from '../../components/Button'
-import { Icon } from '../../icons'
 import HStack from '../../components/Views/Hstack'
 import { AnimateView } from '../../components/AnimateView'
+import { InputSelecionar } from '../../components/Inputs/Selecionar'
+import { InputText } from '../../components/Inputs/Text'
+import { Icon } from '../../icons'
 
 import { checkout, tokenCartao } from '../../services/checkout'
 import { CartaoCredito } from '../../utils/CartaoCredito'
 
-import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
-import { z } from 'zod'
-import { InputSelecionar } from '../../components/Inputs/Selecionar'
 import { useCarrinho } from '../../hooks/carrinho'
 import { Maskara } from '../../utils/Maskara'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { InputText } from '../../components/Inputs/Text'
+import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
+import { z } from 'zod'
+import { CheckoutFalha } from './CheckoutFalha'
 
 const schema = z.object({
    number: z.string(),
@@ -99,11 +99,10 @@ function FormCartaoCredito() {
          }, carrinhoId)
       },
       onSuccess(success) {
-         console.log("success", JSON.stringify(success, null, 1))
-         // navigate("Ingressos");
-      },
-      onError(error, variables, context) {
-         console.log("error", JSON.stringify(error, null, 1))
+         return navigate(success?.status == "falha" ? "CheckoutFalha" : "CheckoutSucesso", {
+            codigo: success.mensagem_adquirencia.codigo,
+            mensagem: success.mensagem_adquirencia.mensagem
+         });
       },
    });
    0

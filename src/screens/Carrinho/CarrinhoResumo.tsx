@@ -47,9 +47,7 @@ export function CarrinhoResumo() {
                <ResumoPedido />
 
                <Card.Root title="Resumo" variant='border'>
-                  <VStack>
-                     <Text lineHeight={23} color='primary' variant='header'>{Maskara.dinheiro(total)}</Text>
-                  </VStack>
+                  <Text color='primary' variant='header'>{Maskara.dinheiro(total)}</Text>
                   <Card.Title variant='header'>{totalItens} ingresso</Card.Title>
                </Card.Root>
             </VStack>

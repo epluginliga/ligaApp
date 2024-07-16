@@ -17,6 +17,8 @@ import { CheckoutCartao } from '../screens/Checkout/CheckoutCartao';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 import { TabRouteLogado } from './Tab.route.logado';
 import { CarrinhoCupomDesconto } from '../screens/Carrinho/CarrinhoCupomDesconto';
+import { CheckoutFalha } from '../screens/Checkout/CheckoutFalha';
+import { CheckoutSucesso } from '../screens/Checkout/CheckoutSucesso';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +53,8 @@ export function RouteLogado() {
                <Stack.Screen name="CheckoutPagamento" component={CheckoutPagamento} />
                <Stack.Screen name="CheckoutPix" component={CheckoutPix} />
                <Stack.Screen name="CheckoutCartao" component={CheckoutCartao} />
+               <Stack.Screen name="CheckoutFalha" component={CheckoutFalha} />
+               <Stack.Screen name="CheckoutSucesso" component={CheckoutSucesso} />
             </Stack.Group>
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>

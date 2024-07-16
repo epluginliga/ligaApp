@@ -177,7 +177,6 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
-   const { navigate } = useNavigation();
    const insets = useSafeAreaInsets();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);

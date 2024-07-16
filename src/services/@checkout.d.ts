@@ -40,5 +40,16 @@ export type CheckoutProps = {
       cvc: string;
       brand: string;
    };
+}
+
+export type CheckoutPayload = {
+   status: "falha",
+   codigo_pagamento: string;
+   mensagens: [],
+   mensagem_adquirencia: {
+      codigo: string;
+      mensagem: string;
+      mensagemSolucao: string;
+   }
 
 }

@@ -1,7 +1,7 @@
 import { URL_TOKEN_CARTAO } from '@env';
 import { PayloadDefault } from "./@index";
 import api from ".";
-import { CheckoutProps, TokenCartaoPayload, TokenCartaoProps } from './@checkout';
+import { CheckoutPayload, CheckoutProps, TokenCartaoPayload, TokenCartaoProps } from './@checkout';
 import { ADQUIRENCIA } from "@env";
 
 
@@ -24,15 +24,14 @@ export async function tokenCartao(
 }
 
 
-export async function checkout(body: CheckoutProps, carrinho_id: string): PayloadDefault<TokenCartaoPayload> {
+export async function checkout(body: CheckoutProps, carrinho_id: string): PayloadDefault<CheckoutPayload> {
 
    return await api
       .post(`/carrinho/checkout/${carrinho_id}`, body)
       .then(success => {
-         if (success.data?.status === "falha") {
-            throw Error(`${success.data?.status.mensagem_adquirencia.codigo} ${success.data?.status.mensagem_adquirencia.mensagem}`);
+         if (success.status !== 200) {
+            throw Error("Erro interno!")
          }
-         
          return success.data;
       }).catch(err => err);
 }
