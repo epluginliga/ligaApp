@@ -73,12 +73,7 @@ export function CarrinhoUtilizador() {
 
    const handleAtribuirUtilizador = useMutation({
       mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""), data),
-      onSuccess(data) {
-         navigate('CarrinhoResumo');
-      },
-      onError(error, variables, context) {
-          console.log(JSON.stringify(error, null, 1))
-      },
+      onSuccess: () => navigate('CarrinhoResumo')
    });
 
    if (!evento) return;
@@ -133,7 +128,6 @@ export function CarrinhoUtilizador() {
          <StatusBar barStyle="dark-content" />
 
          <Layout.Keyboard>
-            {/* <Layout.Root> */}
             <Layout.Header title='Utilizador' />
             <Layout.Scroll>
                <VStack gap="lg" marginBottom='md'>
@@ -342,7 +336,6 @@ export function CarrinhoUtilizador() {
 
                </VStack>
             </Layout.Scroll>
-            {/* </Layout.Root> */}
          </Layout.Keyboard >
       </>
    )

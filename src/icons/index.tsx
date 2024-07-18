@@ -22,6 +22,8 @@ import { IconCopy } from "./IconCopy";
 import { IconTrashCan } from "./IconTrashCan";
 import { IconMoney } from "./IconMoney";
 import { IconArrowLeftCircle } from "./IconArrowCircle";
+import { IconFingerPrint } from "./IconFingerPrint";
+import { IconArrowLeftStart } from "./IconArrowLeftStart";
 
 export const Icon = {
    Eye: IconEye,
@@ -53,7 +55,9 @@ export const Icon = {
    Copy: IconCopy,
    Trash: IconTrashCan,
    Money: IconMoney,
-   ArrowLeftCircle: IconArrowLeftCircle
+   ArrowLeftCircle: IconArrowLeftCircle,
+   FingerPrint: IconFingerPrint,
+   ArrowLeftStart: IconArrowLeftStart
 }
 
 export type Icon = {

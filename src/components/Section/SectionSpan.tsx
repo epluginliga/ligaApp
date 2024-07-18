@@ -10,7 +10,7 @@ type Section = {
 export function SectionSpan({ children, iconLeft, iconRight }: Section) {
    if (iconLeft || iconRight) {
       return (
-         <HStack>
+         <HStack alignItems='center'>
             {iconLeft && iconLeft}
             <Text variant='header3'>{children}</Text>
             {iconRight && iconRight}

@@ -46,10 +46,11 @@ export function TabRouteDeslogado() {
                   case 'IngressosTab':
                      return focused ? (
                         <VStack backgroundColor='background_red_tab' borderRadius={12} p="sm">
-                           <Icon.Calendario />
+                           <Icon.Ticket />
                         </VStack>
                      ) : (
-                        <Icon.Calendario />
+                        <Icon.Ticket />
+
                      );
                }
             },

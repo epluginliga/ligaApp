@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 
@@ -18,6 +18,8 @@ import { useMMKVString } from "react-native-mmkv";
 import { useAuth, usuarioStorage } from "../../hooks/auth";
 import { EventosPayload } from "../../services/@eventos";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "../../theme/default";
 
 export type ItemData = {
    item: EventosPayload;
@@ -37,7 +39,6 @@ function Destaque({ evento }: DestaqueProps) {
       <VStack position='relative' alignItems="center" overflow='hidden' borderRadius={10}>
          <Imagem style={{ position: "relative" }} source={{ uri: evento.path_imagem }} >
             <VStack zIndex={999} justifyContent="space-between" flex={1}>
-
                <VStack gap="xs">
                   <Text color="white">{dataEvento.diaSemana()} - <Text color='white' fontWeight="900">
                      {dataEvento.diaMes()}</Text> de {dataEvento.nomeMes()}
@@ -63,7 +64,6 @@ function Destaque({ evento }: DestaqueProps) {
                </Button>
             </VStack>
          </Imagem>
-
       </VStack>
    )
 }
@@ -73,8 +73,9 @@ export function Eventos() {
    const [route] = useMMKVString('route')
    const { logado } = useAuth();
    const insets = useSafeAreaInsets();
+   const { colors } = useTheme<Theme>();
 
-   const { data, isLoading } = useQuery({
+   const { data, isLoading, isFetching, refetch, isRefetching } = useQuery({
       queryKey: ['eventos'],
       queryFn: fetchEventos,
    });
@@ -157,6 +158,15 @@ export function Eventos() {
 
    return (
       <FlatList
+         // onRefresh={}
+         refreshControl={
+            <RefreshControl
+               tintColor={colors.primary}
+               refreshing={isRefetching}
+               onRefresh={refetch}
+            />
+         }
+         bouncesZoom={false}
          contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
          ListHeaderComponent={(
             <VStack gap="md" justifyContent="space-evenly" mb="md">
