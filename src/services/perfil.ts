@@ -38,14 +38,8 @@ export async function usuarioAtualiza(usuario_id: string, body: UsuarioAtaulizaU
 
 export async function usuarioExcluirConta(usuario_id: string):
    PayloadDefault<PayloadDefaultResponse> {
-   return await api
-      .delete(`/usuario/${usuario_id}`,)
-      .then(success => {
-         if (success.status !== 200) {
-            throw new Error("Erro");
-         }
-         return success.data;
-      });
+   return await api.delete(`/usuario/${usuario_id}`)
+      .then(res => res.data)
 }
 
 export async function usuarioAlteraSenha(body: UsuarioExcluirContaProps):

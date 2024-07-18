@@ -1,23 +1,23 @@
-import Animated,{ FadeInUp,FadeOutDown,FadeOutUp } from "react-native-reanimated";
+import Animated, { FadeInUp, FadeOutDown, FadeOutUp } from "react-native-reanimated";
 import { Icon } from "../../icons";
 import Text from "../Text";
 import VStack from "../Views/Vstack";
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type ErroRequestProps = {
    erro: string;
    clear: () => void
 }
-export function ErroRequest({ erro,clear }: ErroRequestProps) {
+export function ErroRequest({ erro, clear }: ErroRequestProps) {
    const insets = useSafeAreaInsets();
 
    useEffect(() => {
       if (erro) {
-         const time = setTimeout(() => clear(),4000);
+         const time = setTimeout(() => clear(), 4000);
          return () => clearTimeout(time);
       }
-   },[erro]);
+   }, [erro]);
 
    if (!erro) return;
 

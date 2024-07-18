@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-   ImageBackground,
    Platform,
    Pressable,
    StatusBar,
@@ -37,8 +36,8 @@ import { useTheme } from '@shopify/restyle';
 import Text from '../../components/Text';
 import HStack from '../../components/Views/Hstack';
 import theme, { Theme } from '../../theme/default';
-import { EventosModalEmCompra } from './EventosModalEmCompra';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ModalSmall } from '../../components/Modal/ModalSmall';
 
 
 type ButtonComprarInfressosProps = {
@@ -87,9 +86,12 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
 
    return (
       <>
-         <EventosModalEmCompra ativo={mostraModal}>
+         <ModalSmall
+            minHeight="25%"
+            maxHeight={250}
+            ativo={mostraModal}>
             {data && (
-               <>
+               <VStack gap='xl' >
                   <Text textAlign='center' color='azul'>
                      Você já tem um carrinho
                      <Text variant='header' >{'\n'} {data?.status_str}</Text>
@@ -140,9 +142,9 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                         </Pressable>
                      </HStack>
                   </VStack>
-               </>
+               </VStack>
             )}
-         </EventosModalEmCompra>
+         </ModalSmall>
 
          <VStack
             position="absolute"

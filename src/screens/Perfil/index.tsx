@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { FlatList, Image, Pressable } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Pressable } from 'react-native';
 
 import { Layout } from '../../components/Views/Layout';
 import { Section } from '../../components/Section';
@@ -13,21 +13,34 @@ import { useAuth } from '../../hooks/auth';
 import { Theme } from '../../theme/default';
 import { useTheme } from '@shopify/restyle';
 import { DiamontDown } from '../../icons/Diamont';
+import { ModalSmall } from '../../components/Modal/ModalSmall';
+import { Card } from '../../components/Card';
+import Text from '../../components/Text';
+import { useMutation } from '@tanstack/react-query';
+import { usuarioExcluirConta } from '../../services/perfil';
 
 function Item({ item }: any) {
+   if (item.route) {
+      return (
+         <Pressable>
+            <HStack paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
+               <VStack>
+                  {item.icone}
+               </VStack>
+               <VStack flex={1}>
+                  <Section.Title>{item.nome}</Section.Title>
+                  <Section.SubTitle color='bege_900'>{item.descricao}</Section.SubTitle>
+               </VStack>
+               <Icon.ArrowRight />
+            </HStack>
+         </Pressable>
+      )
+   }
+
    return (
-      <Pressable>
-         <HStack paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
-            <VStack>
-               {item.icone}
-            </VStack>
-            <VStack flex={1}>
-               <Section.Title>{item.nome}</Section.Title>
-               <Section.SubTitle color='bege_900'>{item.descricao}</Section.SubTitle>
-            </VStack>
-            <Icon.ArrowRight />
-         </HStack>
-      </Pressable>
+      <>
+         {item.handleAction && item.handleAction}
+      </>
    )
 }
 
@@ -66,6 +79,142 @@ function Header() {
    )
 }
 
+function ContaExcluidaSucesso({ children }: { children: React.ReactNode }) {
+   const { colors } = useTheme<Theme>()
+
+   return (
+      <VStack justifyContent='center' alignItems='center' gap='lg' p='md'>
+         <VStack borderColor='greenDark' borderWidth={1} borderRadius={100} padding='sm'>
+            <Icon.CheckCircle color={colors.greenDark} size={30} />
+         </VStack>
+
+         <Text variant='header' color='greenDark' textAlign='center'>Registro excluido com sucesso</Text>
+
+         {children}
+      </VStack>
+   )
+}
+
+function ContaExcluidaErro({ children }: { children: React.ReactNode }) {
+   return (
+      <>
+         <VStack alignItems='center' gap='sm' p='md'>
+
+            <VStack borderColor='primary' borderWidth={1} borderRadius={100} padding='sm'>
+               <Icon.X size={30} />
+            </VStack>
+
+
+            <VStack alignItems='center' mb='xs'>
+               <Card.Title>Exclusão de conta</Card.Title>
+               <Card.SubTitle textAlign='center'>
+                  Deseja realmente excluir sua conta?
+               </Card.SubTitle>
+            </VStack>
+
+            <Card.SubTitle textAlign='center' fontWeight="300">
+               Essa ação não poderá ser revertida.
+               {'\n'}Você perderá o acesso a todos os históricos de compras, ingressos e outros.
+            </Card.SubTitle>
+         </VStack>
+         {children}
+      </>
+   );
+}
+
+
+function BotaoExcluirConta() {
+   const [mostraModal, setMostraModal] = useState(false);
+   const { user_id, signOut } = useAuth();
+
+   const handleExcluiConta = useMutation({
+      mutationFn: usuarioExcluirConta,
+      onSuccess() {
+         const time = setTimeout(() => {
+            setMostraModal(false);
+            signOut();
+         }, 2000);
+         return () => clearTimeout(time);
+      }
+   });
+
+   return (
+      <>
+         <Pressable onPress={() => setMostraModal(true)}>
+            <HStack paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
+               <VStack>
+                  <Icon.Trash size={20} />
+               </VStack>
+               <VStack flex={1}>
+                  <Section.Title>Excluir conta</Section.Title>
+                  <Section.SubTitle color='bege_900'>Exclua sua conta no aplicativo</Section.SubTitle>
+               </VStack>
+               <Icon.ArrowRight />
+            </HStack>
+         </Pressable>
+
+         <ModalSmall
+            minHeight="40%"
+            maxHeight={250}
+            ativo={mostraModal}>
+            {handleExcluiConta.data ? (
+               <ContaExcluidaSucesso>
+                  <VStack justifyContent='center' alignItems='center'>
+                     <Pressable
+                        onPress={() => setMostraModal(false)}>
+                        <HStack alignItems='center'
+                           justifyContent='center'
+                           backgroundColor='greenDark'
+                           py='sm'
+                           p='xs'
+                           borderRadius={10}
+                           px='md'>
+
+                           <Text color='white' variant='botaoLink'>
+                              Desconectando.. {' '} <ActivityIndicator size="small" color="#fff" />
+                           </Text>
+                        </HStack>
+                     </Pressable>
+                  </VStack>
+               </ContaExcluidaSucesso>
+
+            ) : (
+               <ContaExcluidaErro >
+                  <HStack justifyContent='space-between' gap='md'>
+                     <Pressable
+                        onPress={() => setMostraModal(false)}
+                        style={{ flex: 1 }}>
+                        <HStack alignItems='center' justifyContent='center' backgroundColor='greenDark' py='sm' p='xs' borderRadius={10} px='md'>
+                           <Icon.CheckCircle size={14} color='#fff' />
+                           <Text color='white' variant='botaoLink'>Cancelar</Text>
+                        </HStack>
+                     </Pressable>
+                     <Pressable style={{ flex: 1 }}
+                        onPress={() => handleExcluiConta.mutate(user_id)}
+                     >
+                        <HStack alignItems='center' justifyContent='center' backgroundColor='primary' py='sm' p='xs' borderRadius={10} px='md'>
+                           {!handleExcluiConta.isPending ? (
+                              <>
+                                 <Icon.Trash size={12} color='#fff' />
+                                 <Text color='white' variant='botaoLink'>
+                                    Excluir
+                                 </Text>
+                              </>
+                           ) : (
+                              <ActivityIndicator size="small" color="#fff" />
+                           )}
+
+                        </HStack>
+                     </Pressable>
+                  </HStack>
+               </ContaExcluidaErro>
+
+
+            )}
+         </ModalSmall >
+      </>
+   )
+}
 
 export function Perfil() {
    const { signOut } = useAuth();
@@ -103,10 +252,8 @@ export function Perfil() {
          route: signOut,
       },
       {
-         descricao: 'Exclua sua conta no aplicativo',
-         icone: <Icon.Trash size={20} />,
          nome: "Excluir conta",
-         route: signOut,
+         handleAction: <BotaoExcluirConta />,
       }
    ];
 

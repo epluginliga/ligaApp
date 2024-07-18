@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import {
    SpacingProps,
    VariantProps,
@@ -45,7 +45,7 @@ export function Button({ children, onPress, iconLeft, iconRight, disabled = fals
                children
             ) : (
                <Text variant={props.variant === "link" ? 'botaoLink' : "botaoDefault"} color='white'>
-                  {loading ? 'Carregando...' : children}
+                  {loading ? <ActivityIndicator size="small" color="#fff" /> : children}
                </Text>
             )}
 

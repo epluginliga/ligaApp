@@ -15,7 +15,8 @@ interface AuthContextProps {
    token: string;
    logado: boolean;
    loading: boolean;
-   signOut: () => void
+   signOut: () => void;
+   user_id: string;
 }
 interface AuthProviderProps {
    children: React.ReactNode;
@@ -27,6 +28,7 @@ const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const [token, setToken] = useState('');
    const [loading, setLoading] = useState(true);
+   const [user, setUser] = useState('');
 
    const handleSignIn = useMutation({
       mutationKey: ['handleLogin'],
@@ -37,23 +39,31 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
          }
 
          usuarioStorage.set('token', data.api_token);
+         usuarioStorage.set('user_id', data.user_id);
+
          api.defaults.headers.Authorization = data.api_token;
          setToken(data.api_token);
+         setUser(data.user_id)
       },
    });
 
    const signOut = useCallback(() => {
       usuarioStorage.clearAll();
       setToken('');
+      setUser('');
       delete api.defaults.headers.Authorization;
    }, []);
 
    useEffect(() => {
       let token = usuarioStorage.getString('token');
-      if (token) {
+      const user_id = usuarioStorage.getString('user_id');
+
+      if (token && user_id) {
          api.defaults.headers.Authorization = token;
          setToken(token);
+         setUser(user_id);
       }
+
       setLoading(false)
 
    }, []);
@@ -65,7 +75,8 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
             token,
             logado: !!token,
             loading: handleSignIn.isPending || loading,
-            signOut
+            signOut,
+            user_id: user
          }}>
          {children}
       </AuthContext.Provider>
