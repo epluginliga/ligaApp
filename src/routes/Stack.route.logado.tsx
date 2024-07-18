@@ -19,6 +19,10 @@ import { TabRouteLogado } from './Tab.route.logado';
 import { CarrinhoCupomDesconto } from '../screens/Carrinho/CarrinhoCupomDesconto';
 import { CheckoutFalha } from '../screens/Checkout/CheckoutFalha';
 import { CheckoutSucesso } from '../screens/Checkout/CheckoutSucesso';
+import { PerfilMeuPerfil } from '../screens/Perfil/PerfilMeuPerfil';
+import { PerfilMeusEndereco } from '../screens/Perfil/PerfilMeusEndereco';
+import { PerfilMeusPedidos } from '../screens/Perfil/PerfilMeusPedidos';
+import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,7 +51,12 @@ export function RouteLogado() {
                <Stack.Screen name="Carrinho" component={Carrinho} />
                <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
                <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
+
                <Stack.Screen name="Perfil" component={Perfil} />
+               <Stack.Screen name="PerfilMeuPerfil" component={PerfilMeuPerfil} />
+               <Stack.Screen name="PerfilMeusEndereco" component={PerfilMeusEndereco} />
+               <Stack.Screen name="PerfilMeusPedidos" component={PerfilMeusPedidos} />
+               <Stack.Screen name="PerfilAlterarSenha" component={PerfilAlterarSenha} />
 
                <Stack.Screen name="CheckoutEnderecoCobranca" component={CheckoutEnderecoCobranca} />
                <Stack.Screen name="CheckoutPagamento" component={CheckoutPagamento} />

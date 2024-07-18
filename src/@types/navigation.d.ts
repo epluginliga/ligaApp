@@ -30,6 +30,11 @@ export type RouteApp = {
 
    // private
    Perfil: undefined;
+   PerfilMeuPerfil: undefined;
+   PerfilMeusEndereco: undefined;
+   PerfilMeusPedidos: undefined;
+   PerfilAlterarSenha: undefined;
+   
    Carrinho: undefined;
    Ingressos: undefined;
    CarrinhoCupomDesconto: undefined;

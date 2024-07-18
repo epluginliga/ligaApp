@@ -18,11 +18,12 @@ import { Card } from '../../components/Card';
 import Text from '../../components/Text';
 import { useMutation } from '@tanstack/react-query';
 import { usuarioExcluirConta } from '../../services/perfil';
+import { useNavigation } from '@react-navigation/native';
 
 function Item({ item }: any) {
    if (item.route) {
       return (
-         <Pressable>
+         <Pressable onPress={() => item.route()}>
             <HStack paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
                <VStack>
                   {item.icone}
@@ -218,38 +219,38 @@ function BotaoExcluirConta() {
 
 export function Perfil() {
    const { signOut } = useAuth();
-
+   const { navigate } = useNavigation();
 
    const menuPerfil = [
       {
          nome: 'Meu Perfil',
          icone: <Icon.User />,
-         route: 'perfil',
+         route: () => navigate("PerfilMeuPerfil"),
          descricao: 'Confira e altere suas informações'
       },
       {
          nome: 'Meu Endereço',
          icone: <Icon.Pin size={30} />,
-         route: 'perfil_endereco',
+         route: () => navigate("PerfilMeusEndereco"),
          descricao: 'Confira altere seu endereço'
       },
       {
          nome: 'Meus Pedidos',
          icone: <Icon.Ticket />,
-         route: 'perfil_pedidos',
+         route: () => navigate("PerfilMeusPedidos"),
          descricao: 'Visualize seu histórico de pedidos'
       },
       {
          nome: 'Alterar senha',
          icone: <Icon.FingerPrint size={27} />,
-         route: 'perfil_alterar_senha',
-         descricao: 'Visualize seu histórico de pedidos'
+         route: () => navigate("PerfilAlterarSenha"),
+         descricao: 'Altere sua senha de acesso'
       },
       {
          descricao: 'Encerre sua sessão',
          icone: <Icon.ArrowLeftStart />,
+         route: () => signOut(),
          nome: "Sair",
-         route: signOut,
       },
       {
          nome: "Excluir conta",
