@@ -1,8 +1,8 @@
 import api from ".";
 import { CriaEditaCarrinhoProps, PayloadCarrinho } from "./@carrinho";
-import { PayloadDefault, PayloadDefaultError } from "./@index";
+import { PayloadDefault, PayloadDefaultResponse } from "./@index";
 
-export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<PayloadDefaultError> {
+export async function criaEditaCarrinho(body: CriaEditaCarrinhoProps): PayloadDefault<PayloadDefaultResponse> {
    return await api
       .post(`/carrinho`, { ...body })
       .then(success => {

@@ -6,13 +6,13 @@ import { useAuth } from '../hooks/auth';
 import { Loading } from '../components/Loading';
 import api from '../services';
 import { CarrinhoProvider } from '../hooks/carrinho';
-import { PayloadDefaultError } from '../services/@index';
+import { PayloadDefaultResponse } from '../services/@index';
 import { ErroRequest } from '../components/ErroRequest';
 
 type ErrorProps = {
    message: string;
    response: {
-      data: PayloadDefaultError
+      data: PayloadDefaultResponse
    }
 }
 

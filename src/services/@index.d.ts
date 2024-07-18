@@ -4,7 +4,7 @@ export type PayloadPaginacao<T> = {
    data: Array<T>;
 }
 
-export type PayloadDefaultError = {
+export type PayloadDefaultResponse = {
    codigoretorno: number,
    errors: {
       [key: string]: string[],
