@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useForm } from 'react-hook-form'
@@ -23,7 +23,8 @@ import { useCarrinho } from '../../hooks/carrinho'
 import { Maskara } from '../../utils/Maskara'
 import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
 import { z } from 'zod'
-import { CheckoutFalha } from './CheckoutFalha'
+import { TextInput } from 'react-native'
+import api from '../../services'
 
 const schema = z.object({
    number: z.string(),
@@ -76,7 +77,10 @@ function FormCartaoCredito() {
 
    const handleTokenCartao = useMutation({
       mutationFn: async (cartao: Form) => {
-         const cartaoToken = await tokenCartao(CartaoCredito.formataBodyTokenCartao(cartao));
+         const cartaoToken = await tokenCartao(CartaoCredito.formataBodyTokenCartao({
+            ...cartao,
+            number: cartao.number.replace(/\D/g, '')
+         }));
 
          return checkout({
             parcelas: +cartao.parcelas,
@@ -98,14 +102,14 @@ function FormCartaoCredito() {
 
          }, carrinhoId)
       },
-      onSuccess(success) {
+      onSuccess(success: any) {
          return navigate(success?.status == "falha" ? "CheckoutFalha" : "CheckoutSucesso", {
-            codigo: success.mensagem_adquirencia.codigo,
-            mensagem: success.mensagem_adquirencia.mensagem
+            codigo: success?.mensagem_adquirencia?.codigo,
+            mensagem: success?.mensagem_adquirencia?.mensagem
          });
-      },
+      }
    });
-   0
+
    return (
       <VStack
          marginHorizontal='sm'
@@ -173,6 +177,7 @@ function FormCartaoCredito() {
          </VStack>
 
          <Button
+            loading={handleTokenCartao.isPending}
             style={{ marginBottom: insets.bottom }}
             onPress={handleSubmit((form) => handleTokenCartao.mutate(form))}
             iconRight={<Icon.CheckCircle color='#fff' />}>

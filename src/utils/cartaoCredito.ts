@@ -1,4 +1,4 @@
-import { TokenCartaoProps } from "../services/tokenCartao";
+import { TokenCartaoProps } from "../services/@checkout";
 
 type ResponseProp = Record<TypeCard, RegExp>;
 
@@ -26,7 +26,6 @@ type Bandeiras = Record<string, {
    simbol?: React.ReactNode
    colors?: string[]
 }>
-
 
 export class CartaoCredito {
    private numeroCartao = '';
@@ -98,7 +97,6 @@ export class CartaoCredito {
          colors: ['#a2a2a2', '#F6CE92']
       }
    }
-
 
    static formataBodyTokenCartao(dados: FormataBodyTokenCartao): TokenCartaoProps {
       const [exp_month, exp_year] = dados.validade.split("/");

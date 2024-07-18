@@ -20,7 +20,7 @@ export type TokenCartaoProps = {
    cvv: string;
    exp_month: string;
    exp_year: string;
-   number: number;
+   number: string;
 }
 
 export type CheckoutProps = {

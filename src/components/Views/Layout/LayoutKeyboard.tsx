@@ -12,7 +12,6 @@ export function LayoutKeyboard({ children }: LayoutKeyboard) {
 
          behavior={Platform.OS === "ios" ? "padding" : "height"}
          style={styles.container}
-         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : StatusBar.currentHeight}
       >
          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <>
