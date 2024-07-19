@@ -5,6 +5,7 @@ import { card } from './cardVariants';
 
 const palette = {
    primary: '#F23E17',
+   warning: '#ffcc00',
    secondary: '#F2385A',
    botao_default: 'rgba(242, 56, 90, 0.65)',
    background_red_tab: 'rgba(242, 56, 90, 0.10)',
