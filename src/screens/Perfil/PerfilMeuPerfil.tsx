@@ -9,13 +9,14 @@ import { z } from 'zod';
 import { cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { Button } from '../../components/Button';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { obtemDadosLogado, usuarioAtualiza } from '../../services/perfil';
 import { Image, View } from 'react-native';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Text from '../../components/Text';
+import { useNavigation } from '@react-navigation/native';
 
 type HeaderProps = {
    status?: "aguardando_aprovacao" | "aprovado";
@@ -31,9 +32,10 @@ const textoStatus: { [key: string]: string } = {
    'aguardando_aprovacao': 'Aguardando aprovação',
    'aprovado': 'Aprovado',
 };
+
 function Header({ status, uri }: HeaderProps) {
    const { colors } = useTheme<Theme>();
-   
+
    if (!status) return;
 
    const background = status && bg[status] || 'bege';
@@ -68,47 +70,58 @@ function Header({ status, uri }: HeaderProps) {
 }
 
 const schema = z.object({
-   name: z.string(),
+   nome: z.string(),
    email: z.string().email({
       message: "Email inválido",
    }),
-   documento_numero: z.string(),
-   telefone_numero: z.string(),
-   sexo: z.string(),
+   documento: z.string(),
    data_nascimento: z.string(),
+   telefone: z.string(),
+   sexo: z.string(),
+
+   path_avatar: z.string().optional(),
+   status_aprovacao: z.enum(["aguardando_aprovacao", "aprovado"]).optional(),
+   user_id: z.string().optional(),
+   documento_tipo: z.string().optional()
 });
 
 type EditaPerfilProps = z.input<typeof schema>;
 
 export const PerfilMeuPerfil = () => {
    const insets = useSafeAreaInsets();
-   const { data, isPending } = useQuery({
-      queryFn: obtemDadosLogado,
-      queryKey: ["obtemDadosLogado"]
-   });
+   const { goBack } = useNavigation();
 
    const handleAtualizaPerfil = useMutation({
-      mutationFn: (form: EditaPerfilProps) => usuarioAtualiza(data?.user_id || '', form),
+      mutationFn: (form: EditaPerfilProps) => usuarioAtualiza(data?.user_id || '', {
+         data_nascimento: form.data_nascimento,
+         nome: form.nome,
+         documento: form.documento,
+         email: form.email,
+         sexo: form.sexo,
+         telefone: form.telefone
+      }),
       mutationKey: ['criaUsuario'],
       onSuccess(data) {
-         console.log(JSON.stringify(data, null, 1))
-      },
-      onError(error) {
-         console.log(JSON.stringify(error, null, 1))
-      },
-   });
-
-   const { control, handleSubmit, formState: { errors }
-   } = useForm<EditaPerfilProps>({
-      resolver: zodResolver(schema),
-      defaultValues: {
-         ...data,
-         documento_numero: data?.documento_tipo === "cpf" ? cpfMask(data.documento_numero) : data?.documento_numero,
-         telefone_numero: data && `${telefoneMask(data.telefone_ddd + data.telefone_numero)}`
+         goBack()
+         // console.log(JSON.stringify(data, null, 1))
       }
    });
 
-   if (isPending) return;
+   const { control, handleSubmit, formState: { errors }, getValues
+   } = useForm<EditaPerfilProps>({
+      resolver: zodResolver(schema),
+      async defaultValues() {
+         const user = await obtemDadosLogado()
+         return {
+            ...user,
+            nome: user.name,
+            documento: user?.documento_tipo === "cpf" ? cpfMask(user.documento_numero) : user?.documento_numero,
+            telefone: user && `${telefoneMask(user.telefone_ddd + user.telefone_numero)}`
+         }
+      },
+   });
+
+   const data = getValues();
 
    return (
       <>
@@ -125,10 +138,10 @@ export const PerfilMeuPerfil = () => {
                      <InputText
                         label="Nome"
                         iconLeft={<Icon.User size={24} />}
-                        name='name'
+                        name='nome'
                         placeholder='Digite seu nome'
                         control={control}
-                        error={errors?.name?.message}
+                        error={errors?.nome?.message}
                      />
 
                      <InputText
@@ -146,11 +159,11 @@ export const PerfilMeuPerfil = () => {
                         editable={false}
                         label={data?.documento_tipo === "cpf" ? "CPF" : "RG"}
                         iconLeft={<Icon.AddressCard size={24} />}
-                        name='documento_numero'
+                        name='documento'
                         placeholder='xxx.xxx.xxx-xx'
                         control={control}
                         mask={cpfMask}
-                        error={errors?.documento_numero?.message}
+                        error={errors?.documento?.message}
                         inputMode='decimal'
                      />
 
@@ -170,10 +183,10 @@ export const PerfilMeuPerfil = () => {
                      <InputText
                         label="Telefone"
                         iconLeft={<Icon.PhoneFlipe size={24} />}
-                        name='telefone_numero'
+                        name='telefone'
                         placeholder='(00) 00000-0000'
                         control={control}
-                        error={errors?.telefone_numero?.message}
+                        error={errors?.telefone?.message}
                         inputMode='tel'
                         mask={telefoneMask}
                      />

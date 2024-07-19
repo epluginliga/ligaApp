@@ -4,7 +4,7 @@ export type ObtemDadosLogadoPayload = {
    email: string;
    user_id: string;
    user_name: string;
-   status_aprovacao:  "aguardando_aprovacao" | "aprovado" | undefined;
+   status_aprovacao: "aguardando_aprovacao" | "aprovado" | undefined;
    data_nascimento: string;
    sexo: string;
    documento_numero: string;
@@ -33,12 +33,13 @@ export type UsuarioObtemDadosEnderecoPayload = {
 }
 
 export type UsuarioAtaulizaUsuariogeralProps = {
-   name: string;
+   nome: string;
+   username?: string;
    email: string;
-   documento_numero: string;
-   telefone_numero: string;
-   sexo: string;
+   documento: string;
    data_nascimento: string;
+   telefone: string;
+   sexo: string;
 }
 
 export type UsuarioExcluirContaProps = {

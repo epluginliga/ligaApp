@@ -29,6 +29,7 @@ export async function usuarioAtualiza(usuario_id: string, body: UsuarioAtaulizaU
    return await api
       .put(`/usuario/${usuario_id}`, body)
       .then(success => {
+         console.log("sucesso", success)
          if (success.status !== 200) {
             throw new Error("Erro");
          }
