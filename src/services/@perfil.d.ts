@@ -46,3 +46,15 @@ export type UsuarioExcluirContaProps = {
    senhaatual: string;
    novasenha: string;
 }
+
+export type UsuarioAtualizaGeralProps = {
+   endereco: {
+      cep: string;
+      logradouro: string;
+      numero: string;
+      bairro: string;
+      cidade: string;
+      complemento: string;
+      estado: string;
+   }
+}

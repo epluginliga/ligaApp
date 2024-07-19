@@ -1,6 +1,6 @@
 import api from ".";
 import { PayloadDefault, PayloadDefaultResponse } from "./@index";
-import { ObtemDadosLogadoPayload, UsuarioAtaulizaUsuariogeralProps, UsuarioExcluirContaProps, UsuarioObtemDadosEnderecoPayload } from "./@perfil";
+import { ObtemDadosLogadoPayload, UsuarioAtaulizaUsuariogeralProps, UsuarioAtualizaGeralProps, UsuarioExcluirContaProps, UsuarioObtemDadosEnderecoPayload } from "./@perfil";
 
 export async function obtemDadosLogado(): PayloadDefault<ObtemDadosLogadoPayload> {
    return await api
@@ -28,6 +28,19 @@ export async function usuarioAtualiza(usuario_id: string, body: UsuarioAtaulizaU
    PayloadDefault<PayloadDefaultResponse> {
    return await api
       .put(`/usuario/${usuario_id}`, body)
+      .then(success => {
+         console.log("sucesso", success)
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      });
+}
+
+export async function usuarioAtualizaGeral(usuario_id: string, body: UsuarioAtualizaGeralProps):
+   PayloadDefault<PayloadDefaultResponse> {
+   return await api
+      .put(`/usuario/atauliza-usuario-geral/${usuario_id}`, body)
       .then(success => {
          console.log("sucesso", success)
          if (success.status !== 200) {

@@ -16,8 +16,8 @@ import { DiamontDown } from '../../icons/Diamont';
 import { ModalSmall } from '../../components/Modal/ModalSmall';
 import { Card } from '../../components/Card';
 import Text from '../../components/Text';
-import { useMutation } from '@tanstack/react-query';
-import { usuarioExcluirConta } from '../../services/perfil';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { obtemDadosLogado, usuarioExcluirConta } from '../../services/perfil';
 import { useNavigation } from '@react-navigation/native';
 
 function Item({ item }: any) {
@@ -45,36 +45,52 @@ function Item({ item }: any) {
    )
 }
 
+const bg: { [key: string]: 'greenLight' | 'warning' } = {
+   'aguardando_aprovacao': 'warning',
+   'aprovado': 'greenLight',
+};
+
 function Header() {
    const { colors } = useTheme<Theme>();
+   const { data, isFetching } = useQuery({
+      queryFn: obtemDadosLogado,
+      queryKey: ['obtemDadosLogadoIndex']
+   });
+
+   if (isFetching) {
+      return;
+   }
+
+   const corStatus = data?.status_aprovacao && bg[data?.status_aprovacao] || 'bege';
 
    return (
       <VStack
          justifyContent='center'
          alignItems='center'
          mb='lg'
-         gap='sm'
+         mx='sm'
+         gap='xs'
       >
          <VStack
             borderRadius={100}
-            backgroundColor='greenLight'
-            width={130}
-            height={130}
+            backgroundColor={corStatus}
+            width={100}
+            height={100}
             mb='sm'
             justifyContent='center'
             alignItems='center'
             position='relative'>
             <Image
-               style={{ height: 120, width: 120, borderRadius: 100 }}
-               source={{ uri: "https://files.deualiga.com.br/storage/imagens-aprovadas/f4bed55c_23c4_4455_9dfc_d1635645edd7.jpg" }}
+               style={{ height: 90, width: 90, borderRadius: 100 }}
+               source={{ uri: data?.path_avatar }}
             />
             <VStack position='absolute' bottom={0} left="75%">
-               <Icon.CheckCircle color={colors.greenLight} />
+               <Icon.CheckCircle color={colors[corStatus]} />
             </VStack>
          </VStack>
          <VStack alignItems='center'>
-            <Section.Title>Jean marcos vieira da silva</Section.Title>
-            <Section.Span>jean.silva</Section.Span>
+            <Section.Title>{data?.name}</Section.Title>
+            <Section.Span>{data?.user_name}</Section.Span>
          </VStack>
       </VStack>
    )
@@ -257,7 +273,6 @@ export function Perfil() {
          handleAction: <BotaoExcluirConta />,
       }
    ];
-
 
    return (
       <>

@@ -8,6 +8,11 @@ export class Maskara {
 
 }
 
+
+export const cepMask = (value: string) => {
+   return value.replace(/\D/g, '').replace(/^(\d{5})(\d{3})+?$/, '$1-$2')
+ }
+
 export const cpfMask = (value: string) => {
    if (!value) {
       return ''

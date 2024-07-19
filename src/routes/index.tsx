@@ -33,12 +33,11 @@ export function Routes() {
 
    api.interceptors.response.use(
       (response) => {
-         setLoadingReq(false);         
+         setLoadingReq(false);
          return response;
       },
       (error: ErrorProps) => {
          setLoadingReq(false);
-
 
          if (error.response?.data?.codigoretorno === 401) {
             setErro(error.response.data.mensagem);
