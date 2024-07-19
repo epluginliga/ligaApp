@@ -75,7 +75,7 @@ export function Eventos() {
    const insets = useSafeAreaInsets();
    const { colors } = useTheme<Theme>();
 
-   const { data, isLoading, isFetching, refetch, isRefetching } = useQuery({
+   const { data, isLoading, refetch, isRefetching } = useQuery({
       queryKey: ['eventos'],
       queryFn: fetchEventos,
    });
@@ -162,7 +162,7 @@ export function Eventos() {
          refreshControl={
             <RefreshControl
                tintColor={colors.primary}
-               refreshing={isRefetching}
+               refreshing={false}
                onRefresh={refetch}
             />
          }

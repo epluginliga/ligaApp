@@ -1,6 +1,6 @@
 import api from ".";
 import { PayloadDefault, PayloadDefaultResponse } from "./@index";
-import { ObtemDadosLogadoPayload, UsuarioAtaulizaUsuariogeralProps, UsuarioAtualizaGeralProps, UsuarioExcluirContaProps, UsuarioObtemDadosEnderecoPayload } from "./@perfil";
+import { ObtemDadosLogadoPayload, UsuarioAlteraSenhaProps, UsuarioAtaulizaUsuariogeralProps, UsuarioAtualizaGeralProps, UsuarioObtemDadosEnderecoPayload } from "./@perfil";
 
 export async function obtemDadosLogado(): PayloadDefault<ObtemDadosLogadoPayload> {
    return await api
@@ -56,7 +56,7 @@ export async function usuarioExcluirConta(usuario_id: string):
       .then(res => res.data)
 }
 
-export async function usuarioAlteraSenha(body: UsuarioExcluirContaProps):
+export async function usuarioAlteraSenha(body: UsuarioAlteraSenhaProps):
    PayloadDefault<PayloadDefaultResponse> {
    return await api
       .post(`/usuario/altera-senha`, body)

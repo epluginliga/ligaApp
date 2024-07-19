@@ -23,18 +23,22 @@ import { useNavigation } from '@react-navigation/native';
 function Item({ item }: any) {
    if (item.route) {
       return (
-         <Pressable onPress={() => item.route()}>
-            <HStack paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
-               <VStack>
-                  {item.icone}
-               </VStack>
-               <VStack flex={1}>
-                  <Section.Title>{item.nome}</Section.Title>
-                  <Section.SubTitle color='bege_900'>{item.descricao}</Section.SubTitle>
-               </VStack>
-               <Icon.ArrowRight />
-            </HStack>
-         </Pressable>
+         <Pressable onPress={() => {
+            if (item?.disabled) return;
+
+            item.route();
+         }}>
+            <HStack opacity={item.disabled ? .4 : 1} paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
+            <VStack>
+               {item.icone}
+            </VStack>
+            <VStack flex={1}>
+               <Section.Title>{item.nome}</Section.Title>
+               <Section.SubTitle color='bege_900'>{item.descricao}</Section.SubTitle>
+            </VStack>
+            <Icon.ArrowRight />
+         </HStack>
+         </Pressable >
       )
    }
 
@@ -254,7 +258,8 @@ export function Perfil() {
          nome: 'Meus Pedidos',
          icone: <Icon.Ticket />,
          route: () => navigate("PerfilMeusPedidos"),
-         descricao: 'Visualize seu histórico de pedidos'
+         descricao: 'Visualize seu histórico de pedidos',
+         disabled: true
       },
       {
          nome: 'Alterar senha',

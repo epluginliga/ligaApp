@@ -42,7 +42,7 @@ export type UsuarioAtaulizaUsuariogeralProps = {
    sexo: string;
 }
 
-export type UsuarioExcluirContaProps = {
+export type UsuarioAlteraSenhaProps = {
    senhaatual: string;
    novasenha: string;
 }
