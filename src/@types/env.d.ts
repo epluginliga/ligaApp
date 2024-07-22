@@ -19,4 +19,5 @@ declare module '@env' {
    export const HOLDER_NAME_CARD: string;
    export const VALIDADE_CARD: string;
    export const CVV: string;
+   export const API_URL_CEP: string;
 }

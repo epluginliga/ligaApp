@@ -24,8 +24,6 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
       mutationKey: ['handleLogin'],
       mutationFn: (data: LoginProps) => login(data),
       onSuccess(data) {
-         console.log(JSON.stringify(data, null, 1));
-
          if (!data) {
             throw new Error("Dados inválidos!");
          }
