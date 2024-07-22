@@ -59,7 +59,7 @@ function Header() {
    const { user } = useAuth();
    const { data, isFetching } = useQuery({
       queryFn: obtemDadosLogado,
-      queryKey: ['obtemDadosLogadoIndex']
+      queryKey: ['obtemDadosLogadoIndex'],
    });
 
    if (isFetching) {

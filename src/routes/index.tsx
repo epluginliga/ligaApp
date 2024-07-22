@@ -37,7 +37,10 @@ export function Routes() {
    api.interceptors.response.use(
       (response) => {
          setLoadingReq(false);
-         setSucesso(response?.data?.mensagem || "");
+
+         if (response?.data?.mensagem !== "Usuário Logado com sucesso") {
+            setSucesso(response?.data?.mensagem || "");
+         }
 
          return response;
       },
