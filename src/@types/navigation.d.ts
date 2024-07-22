@@ -34,9 +34,12 @@ export type RouteApp = {
    PerfilMeusEndereco: undefined;
    PerfilMeusPedidos: undefined;
    PerfilAlterarSenha: undefined;
-   
+
    Carrinho: undefined;
    Ingressos: undefined;
+   IngressoTranserir: {
+      ingresso_id: string;
+   };
    CarrinhoCupomDesconto: undefined;
    IngressosDetalhe: IngressoDetalheProps
 }

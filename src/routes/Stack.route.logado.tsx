@@ -23,6 +23,7 @@ import { PerfilMeuPerfil } from '../screens/Perfil/PerfilMeuPerfil';
 import { PerfilMeusEndereco } from '../screens/Perfil/PerfilMeusEndereco';
 import { PerfilMeusPedidos } from '../screens/Perfil/PerfilMeusPedidos';
 import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
+import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +69,7 @@ export function RouteLogado() {
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
                <Stack.Screen name="CarrinhoCupomDesconto" component={CarrinhoCupomDesconto} />
+               <Stack.Screen name="IngressoTranserir" component={IngressoTransferir} />
             </Stack.Group>
 
          </Stack.Navigator>

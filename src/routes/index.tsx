@@ -45,29 +45,31 @@ export function Routes() {
          return response;
       },
       (error: ErrorProps) => {
+
          setLoadingReq(false);
 
          if (error.response?.data?.codigoretorno === 401) {
             setErro(error.response.data.mensagem);
             signOut();
-            return;
+            return Promise.reject(error);
          }
 
          if (error?.response?.data?.mensagenserro) {
             setErro(error?.response?.data?.mensagenserro?.join(", "));
-            return;
+            return Promise.reject(error);
          }
 
-         if (error.response.data.errors) {
+         if (error?.response?.data?.errors) {
             const erroMensagem = Object.keys(error.response.data.errors).map(key => error.response.data.errors[key]);
             if (erroMensagem) {
                setErro(erroMensagem.join('\n'));
             }
+            return Promise.reject(error);
          }
 
          if (error?.message) {
             setErro(error.message);
-            return;
+            return Promise.reject(error);
          }
 
          return Promise.reject(error);

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import VStack from '../../components/Views/Vstack'
 import { Card } from '../../components/Card'
 import { Icon } from '../../icons'
-import { FlatList, View } from 'react-native'
+import { FlatList, Pressable, TouchableOpacity, View } from 'react-native'
 import Text from '../../components/Text'
 import { Layout } from '../../components/Views/Layout'
 import { StepContext } from '.'
@@ -43,20 +43,13 @@ export function IngressosDisponivel() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => {
-               if (item.ingresso_necessario_aprovacao_imagem) return;
-
-               navigate.navigate("IngressosDetalhe", {
-                  bilhete_id: item.bilhete_id,
-               })
-            }}>
-               
+         >
             <Card.Image
                flex={1}
                height={88}
                source={{ uri: item?.evento_path_imagem }} />
 
-            <VStack flex={2} justifyContent='space-around' pb='sm'>
+            <VStack flex={2} justifyContent='space-around' >
                <Card.Title fontSize={18} lineHeight={22.5} my='sm'>{item.evento_nome}</Card.Title>
 
                <VStack gap='sm'>
@@ -74,15 +67,33 @@ export function IngressosDisponivel() {
                   </Card.Span>
                </VStack>
 
-               {!item.ingresso_necessario_aprovacao_imagem ? (
-                  <VStack alignItems='flex-start' marginVertical='sm' mt='md'>
-                     <HStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
-                        <Text textAlign='center' color='white' variant='header3'>
-                           Ver informações
-                        </Text>
-                     </HStack>
-                  </VStack>
-               ) : null}
+               <HStack alignItems='flex-start' mr='xs' justifyContent='space-evenly' marginVertical='sm' mt='md'>
+                  {item.pode_transferir ? (
+                     <TouchableOpacity
+                        onPress={() => navigate.navigate("IngressoTranserir", {
+                           ingresso_id: item.bilhete_id
+                        })}
+                     >
+                        <HStack backgroundColor='greenDark' paddingHorizontal='md' borderRadius={6}>
+                           <Text textAlign='center' color='white' variant='header3'>
+                              Transferir
+                           </Text>
+                        </HStack>
+                     </TouchableOpacity>
+                  ) : null}
+
+                  {!item.ingresso_necessario_aprovacao_imagem ? (
+                     <Pressable onPress={() => navigate.navigate("IngressosDetalhe", {
+                        bilhete_id: item.bilhete_id,
+                     })}>
+                        <HStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
+                           <Text textAlign='center' color='white' variant='header3'>
+                              Informações
+                           </Text>
+                        </HStack>
+                     </Pressable>
+                  ) : null}
+               </HStack>
 
             </VStack>
          </Card.Root>
