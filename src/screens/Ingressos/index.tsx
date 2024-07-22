@@ -35,7 +35,7 @@ type HeaderProps = {
 }
 function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
    return (
-      <HStack justifyContent='center' m='md' gap='none'>
+      <HStack justifyContent='center' m='md' gap='none' position='absolute' bottom={4}  right={0} left={0}>
          <TouchableOpacity
             onPress={() => setStepAtual(1)}
             activeOpacity={0.7}>
@@ -78,17 +78,18 @@ export function Ingressos() {
 
       if (!data) return null;
 
-      const proximoEventos = data?.data?.filter(eventos => {
-         const dataEvento = formataData();
-         const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
-         return new Date <= new Date(novaData);
-      });
+      let proximoEventos: IngressosPayload[] = [];
+      let eventosPassados: IngressosPayload[] = [];
 
-      const eventosPassados = data?.data?.filter(eventos => {
+      data?.data.forEach(eventos => {
          const dataEvento = formataData();
          const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
-         return new Date > new Date(novaData);
-      });
+         if (new Date <= new Date(novaData)) {
+            proximoEventos.push(eventos);
+         } else {
+            eventosPassados.push(eventos);
+         }
+      })
 
       return (
          <StepContext.Provider value={{

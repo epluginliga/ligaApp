@@ -12,6 +12,24 @@ import { StepContext } from '.'
 import { formataData } from '../../utils/utils'
 import { ListEmptyComponent } from '../../components/ListEmptyComponent'
 import { IngressosPayload } from '../../services/@eventos'
+import HStack from '../../components/Views/Hstack'
+
+type IconeTipoIngresso = {
+   [key: number]: {
+      icon: React.ReactNode,
+      nome: string;
+   }
+};
+const iconeTipoIngresso: IconeTipoIngresso = {
+   0: {
+      icon: <Icon.QRCode size={16} />,
+      nome: "Entrada com QR Code",
+   },
+   1: {
+      icon: <Icon.FaceID size={16} />,
+      nome: "Entrada com Leitura facial",
+   }
+}
 
 export function IngressosDisponivel() {
    const navigate = useNavigation();
@@ -25,38 +43,46 @@ export function IngressosDisponivel() {
          <Card.Root
             marginHorizontal="sm"
             pr="xs"
-            onPress={() => navigate.navigate("IngressosDetalhe", {
-               bilhete_id: item.bilhete_id,
-            })}>
+            onPress={() => {
+               if (item.ingresso_necessario_aprovacao_imagem) return;
+
+               navigate.navigate("IngressosDetalhe", {
+                  bilhete_id: item.bilhete_id,
+               })
+            }}>
+               
             <Card.Image
                flex={1}
                height={88}
                source={{ uri: item?.evento_path_imagem }} />
 
-            <VStack flex={2} justifyContent='space-around'>
-               <Card.Title lineHeight={22.5} mt='sm'>{item.evento_nome}</Card.Title>
+            <VStack flex={2} justifyContent='space-around' pb='sm'>
+               <Card.Title fontSize={18} lineHeight={22.5} my='sm'>{item.evento_nome}</Card.Title>
 
-               <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
-                  {dataEvento.diaSemana()}, {'\n'}
-                  {`${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
-               </Card.SubTitle>
+               <VStack gap='sm'>
+                  <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
+                     {dataEvento.diaSemana()}
+                     {`, ${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
+                  </Card.SubTitle>
 
-
-               <Card.SubTitle leftIcon={<Icon.Pin size={16} />} >
-                  <Card.Span>
-                     {
-                        item.evento_cidade} | {item.evento_estado} - {dataEvento.hora() || 'hora não definida'
-                     }
+                  <Card.Span leftIcon={<Icon.Pin size={16} />}>
+                     {item.evento_cidade} | {item.evento_estado} - {dataEvento.hora() || 'hora não definida'}
                   </Card.Span>
-               </Card.SubTitle>
 
-               <VStack alignItems='flex-start' marginVertical='sm' >
-                  <VStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
-                     <Text textAlign='center' color='white' variant='header3'>
-                        Ver informações
-                     </Text>
-                  </VStack>
+                  <Card.Span leftIcon={iconeTipoIngresso[item.ingresso_necessario_aprovacao_imagem].icon}>
+                     {iconeTipoIngresso[item.ingresso_necessario_aprovacao_imagem].nome}
+                  </Card.Span>
                </VStack>
+
+               {!item.ingresso_necessario_aprovacao_imagem ? (
+                  <VStack alignItems='flex-start' marginVertical='sm' mt='md'>
+                     <HStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
+                        <Text textAlign='center' color='white' variant='header3'>
+                           Ver informações
+                        </Text>
+                     </HStack>
+                  </VStack>
+               ) : null}
 
             </VStack>
          </Card.Root>
