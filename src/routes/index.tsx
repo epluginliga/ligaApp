@@ -7,7 +7,9 @@ import { Loading } from '../components/Loading';
 import api from '../services';
 import { CarrinhoProvider } from '../hooks/carrinho';
 import { PayloadDefaultResponse } from '../services/@index';
-import { ErroRequest } from '../components/ErroRequest';
+import { ResponseErro } from '../components/ResponsesRequest/ResponseErro';
+import { ResponseSucesso } from '../components/ResponsesRequest/ResponseSucesso';
+
 
 type ErrorProps = {
    message: string;
@@ -20,6 +22,7 @@ export function Routes() {
    const { logado, signOut } = useAuth();
    const [loadingReq, setLoadingReq] = useState(false);
    const [erro, setErro] = useState("");
+   const [sucesso, setSucesso] = useState("");
 
    api.interceptors.request.use(
       (config) => {
@@ -34,6 +37,8 @@ export function Routes() {
    api.interceptors.response.use(
       (response) => {
          setLoadingReq(false);
+         setSucesso(response?.data?.mensagem || "");
+
          return response;
       },
       (error: ErrorProps) => {
@@ -69,7 +74,8 @@ export function Routes() {
    return (
       <CarrinhoProvider>
 
-         {erro && <ErroRequest erro={erro} clear={() => setErro('')} />}
+         {erro && <ResponseErro erro={erro} clear={() => setErro('')} />}
+         {sucesso && <ResponseSucesso erro={sucesso} clear={() => setSucesso('')} />}
 
          {logado ? <RouteLogado /> : <RouteDesLogado />}
          {loadingReq && <Loading />}

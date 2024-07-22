@@ -6,32 +6,14 @@ import React, {
    useState,
 } from 'react';
 
-import { login, LoginProps, UserProps } from '../services/auth';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
+import { login, LoginProps } from '../services/auth';
+import { useMutation } from '@tanstack/react-query';
 import { MMKV } from 'react-native-mmkv'
 import api from '../services';
-
-export type UserAuthDados = {
-   id: string;
-   nome: string;
-}
-
-interface AuthContextProps {
-   handleSignIn: UseMutationResult<UserProps, Error, LoginProps, unknown>
-   token: string;
-   logado: boolean;
-   loading: boolean;
-   signOut: () => void;
-   user?: UserAuthDados;
-}
-interface AuthProviderProps {
-   children: React.ReactNode;
-}
+import { AuthContextProps, AuthProviderProps, UpdateUsuarioProps, UserAuthDados } from './@auth';
 
 export const usuarioStorage = new MMKV()
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
-
-
 
 function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
    const [token, setToken] = useState('');
@@ -69,6 +51,17 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
       delete api.defaults.headers.Authorization;
    }, []);
 
+   const updateUsuario = useCallback((novosDados: UpdateUsuarioProps) => {
+      const newUser = {
+         ...user,
+         ...novosDados
+      };
+
+      usuarioStorage.set('user_id', JSON.stringify(newUser));
+
+      setUser(newUser)
+   }, [user])
+
    useEffect(() => {
       let token = usuarioStorage.getString('token');
       let user = usuarioStorage.getString('user_id');
@@ -91,7 +84,8 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
             logado: !!token,
             loading: handleSignIn.isPending || loading,
             signOut,
-            user
+            user,
+            updateUsuario
          }}>
          {children}
       </AuthContext.Provider>

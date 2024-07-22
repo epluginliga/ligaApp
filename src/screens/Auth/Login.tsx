@@ -20,7 +20,7 @@ import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { RouteApp } from '../../@types/navigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { USUARIO, SENHA } from "@env";
-import { ErroRequest } from '../../components/ErroRequest';
+import { ResponseErro } from '../../components/ResponsesRequest/ResponseErro';
 
 const schema = z.object({
    user: z.string().email({
@@ -61,7 +61,7 @@ export function Login() {
    return (
       <>
          <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
-         {handleSignIn.isError ? <ErroRequest erro="Senha, ou usuário inválidos!" clear={handleSignIn.reset} /> : ''}
+         {handleSignIn.isError ? <ResponseErro erro="Senha, ou usuário inválidos!" clear={handleSignIn.reset} /> : ''}
          <GradienteApp>
             <Layout.Keyboard>
                <Layout.Scroll

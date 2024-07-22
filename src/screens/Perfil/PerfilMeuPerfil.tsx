@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { Button } from '../../components/Button';
-import { useMutation } from '@tanstack/react-query';
+import { QueryClient, useMutation } from '@tanstack/react-query';
 import { obtemDadosLogado, usuarioAtualiza } from '../../services/perfil';
 import { Image, View } from 'react-native';
 import { useTheme } from '@shopify/restyle';
@@ -17,6 +17,7 @@ import { Theme } from '../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Text from '../../components/Text';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../hooks/auth';
 
 type HeaderProps = {
    status?: "aguardando_aprovacao" | "aprovado";
@@ -87,10 +88,13 @@ const schema = z.object({
 
 type EditaPerfilProps = z.input<typeof schema>;
 
+const queryClient = new QueryClient()
+
 export const PerfilMeuPerfil = () => {
    const insets = useSafeAreaInsets();
    const { goBack } = useNavigation();
-
+   const { updateUsuario } = useAuth();
+   
    const handleAtualizaPerfil = useMutation({
       mutationFn: (form: EditaPerfilProps) => usuarioAtualiza(data?.user_id || '', {
          data_nascimento: form.data_nascimento,
@@ -100,10 +104,12 @@ export const PerfilMeuPerfil = () => {
          sexo: form.sexo,
          telefone: form.telefone
       }),
-      mutationKey: ['criaUsuario'],
-      onSuccess(data) {
+      mutationKey: ['usuarioAtualizaPerfil'],
+      onSuccess() {
+         queryClient.invalidateQueries({ queryKey: ['obtemDadosLogadoIndex'] })
+
+         updateUsuario({ nome: getValues("nome") })
          goBack()
-         // console.log(JSON.stringify(data, null, 1))
       }
    });
 

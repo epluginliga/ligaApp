@@ -21,6 +21,9 @@ import { Icon } from '../../icons';
 import { z } from 'zod';
 
 const schema = z.object({
+   usuario: z.object({
+      nome: z.string().optional(),
+   }),
    endereco: z.object({
       cep: z.string(),
       logradouro: z.string(),
@@ -37,16 +40,14 @@ type FormProps = z.input<typeof schema>;
 export const PerfilMeusEndereco = () => {
    const insets = useSafeAreaInsets();
    const { goBack } = useNavigation();
-   const { user_id } = useAuth();
+   const { user } = useAuth();
 
    const handleAction = useMutation({
-      mutationFn: (form: FormProps) => usuarioAtualizaGeral(user_id, form),
+      mutationFn: (form: FormProps) => usuarioAtualizaGeral(user?.id, form),
       mutationKey: ['criaUsuario'],
       onSuccess() {
          goBack()
-      }, onError(error) {
-         console.log(JSON.stringify(error, null, 1))
-      },
+      }
    });
 
    const { control, handleSubmit, formState: { errors }, getValues
@@ -55,6 +56,9 @@ export const PerfilMeusEndereco = () => {
       async defaultValues() {
          const endereco = await usuarioObtemDadosEndereco()
          return {
+            usuario: {
+               nome: user.nome
+            },
             endereco: {
                ...endereco,
                cep: cepMask(endereco.cep)

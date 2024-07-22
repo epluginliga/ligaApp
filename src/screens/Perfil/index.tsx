@@ -29,15 +29,15 @@ function Item({ item }: any) {
             item.route();
          }}>
             <HStack opacity={item.disabled ? .4 : 1} paddingHorizontal='md' backgroundColor='bege' gap='md' py='md' alignItems='center' justifyContent='space-between'>
-            <VStack>
-               {item.icone}
-            </VStack>
-            <VStack flex={1}>
-               <Section.Title>{item.nome}</Section.Title>
-               <Section.SubTitle color='bege_900'>{item.descricao}</Section.SubTitle>
-            </VStack>
-            <Icon.ArrowRight />
-         </HStack>
+               <VStack>
+                  {item.icone}
+               </VStack>
+               <VStack flex={1}>
+                  <Section.Title>{item.nome}</Section.Title>
+                  <Section.SubTitle color='bege_900'>{item.descricao}</Section.SubTitle>
+               </VStack>
+               <Icon.ArrowRight />
+            </HStack>
          </Pressable >
       )
    }
@@ -56,6 +56,7 @@ const bg: { [key: string]: 'greenLight' | 'warning' } = {
 
 function Header() {
    const { colors } = useTheme<Theme>();
+   const { user } = useAuth();
    const { data, isFetching } = useQuery({
       queryFn: obtemDadosLogado,
       queryKey: ['obtemDadosLogadoIndex']
@@ -93,7 +94,7 @@ function Header() {
             </VStack>
          </VStack>
          <VStack alignItems='center'>
-            <Section.Title>{data?.name}</Section.Title>
+            <Section.Title>{user.nome}</Section.Title>
             <Section.Span>{data?.user_name}</Section.Span>
          </VStack>
       </VStack>
@@ -146,7 +147,7 @@ function ContaExcluidaErro({ children }: { children: React.ReactNode }) {
 
 function BotaoExcluirConta() {
    const [mostraModal, setMostraModal] = useState(false);
-   const { user_id, signOut } = useAuth();
+   const { user, signOut } = useAuth();
 
    const handleExcluiConta = useMutation({
       mutationFn: usuarioExcluirConta,
@@ -211,7 +212,7 @@ function BotaoExcluirConta() {
                         </HStack>
                      </Pressable>
                      <Pressable style={{ flex: 1 }}
-                        onPress={() => handleExcluiConta.mutate(user_id)}
+                        onPress={() => handleExcluiConta.mutate(user.id)}
                      >
                         <HStack alignItems='center' justifyContent='center' backgroundColor='primary' py='sm' p='xs' borderRadius={10} px='md'>
                            {!handleExcluiConta.isPending ? (
