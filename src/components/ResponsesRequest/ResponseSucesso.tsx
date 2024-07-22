@@ -5,11 +5,11 @@ import VStack from "../Views/Vstack";
 import { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-type ErroRequestProps = {
+type ResponseSucessoProps = {
    erro: string;
    clear: () => void
 }
-export function ErroRequest({ erro, clear }: ErroRequestProps) {
+export function ResponseSucesso({ erro, clear }: ResponseSucessoProps) {
    const insets = useSafeAreaInsets();
 
    useEffect(() => {
@@ -32,8 +32,8 @@ export function ErroRequest({ erro, clear }: ErroRequestProps) {
          entering={FadeInUp}
          exiting={FadeOutUp}>
          <VStack justifyContent='center' alignItems='center' position='absolute' top={insets.top} zIndex={999} width="100%" >
-            <VStack width="100%" gap="sm" maxWidth="95%" backgroundColor='primary' borderRadius={14} alignItems='center' p="sm">
-               <Icon.Warning color='#fff' />
+            <VStack width="100%" gap="sm" maxWidth="95%" backgroundColor='greenDark' borderRadius={14} alignItems='center' p="sm">
+               <Icon.CheckCircle color='#fff' />
                <Text fontSize={14} color='white' textAlign='center'>{erro}</Text>
             </VStack>
          </VStack>
