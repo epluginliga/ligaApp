@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { ActivityIndicator, Image, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -12,10 +11,9 @@ import { Button } from '../../components/Button'
 import { ResumoPedido } from '../../components/ResumoPedido'
 import Temporizador from '../../components/Temporizador'
 
-import { RouteApp } from '../../@types/navigation'
 import { Icon } from '../../icons'
+import { useCheckout } from '../../hooks/checkout';
 
-type CheckoutPixRouteProp = RouteProp<RouteApp, 'CheckoutPix'>;
 
 function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
    const [codigoCopiado, setCodigoCopiado] = useState('');
@@ -45,9 +43,8 @@ function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
 }
 
 export function CheckoutPix() {
-   const { navigate } = useNavigation();
    const insets = useSafeAreaInsets();
-   const { params } = useRoute<CheckoutPixRouteProp>();
+   const { codigoPagamento } = useCheckout();
 
    return (
       <>
@@ -75,10 +72,10 @@ export function CheckoutPix() {
                      <Image
                         height={185}
                         width={185}
-                        source={{ uri: params.url_view }}
+                        source={{ uri: codigoPagamento.url_view }}
                      />
 
-                     <BotaoCopiarCodigoPix codigo={params.codigo} />
+                     <BotaoCopiarCodigoPix codigo={codigoPagamento.codigo} />
 
                   </Section.Root>
 
@@ -86,10 +83,7 @@ export function CheckoutPix() {
 
                <VStack gap='md'>
                   <Text variant='header' marginLeft='md'>Resumo do pedido</Text>
-
                   <ResumoPedido />
-
-
                </VStack>
             </VStack>
 

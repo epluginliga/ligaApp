@@ -38,7 +38,7 @@ import HStack from '../../components/Views/Hstack';
 import theme, { Theme } from '../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ModalSmall } from '../../components/Modal/ModalSmall';
-import { checkout } from '../../services/checkout';
+import { useCheckout } from '../../hooks/checkout';
 
 
 type ButtonComprarInfressosProps = {
@@ -50,7 +50,14 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const { adicionaEvento, limpaCarrinho, setCupom, total, adicionaIngressoAoEvento, setCarrinhoId } = useCarrinho();
    const { colors } = useTheme<Theme>()
    const { navigate } = useNavigation();
+   const { statusCodigoPix } = useCheckout();
 
+   function limpaCarrinhoLocal() {
+      limpaCarrinho();
+      adicionaEvento(evento);
+      setCarrinhoId('')
+      navigate('Carrinho');
+   }
 
    const handleVerificaSeExisteCarrinho = useMutation({
       mutationFn: obtemCarrinho,
@@ -58,11 +65,14 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
       async onSuccess(data) {
 
          if (data.status === "aguardando_pagamento_pix") {
+            if (statusCodigoPix === "pendente") {
+               setMostraModal(true);
+               return;
+            }
+
             cancelaCarrinho.mutate(data.id);
-            limpaCarrinho();
-            adicionaEvento(evento);
-            setCarrinhoId('')
-            navigate('Carrinho');
+            limpaCarrinhoLocal();
+            navigate("Carrinho");
             return;
          }
 
@@ -79,12 +89,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
          }
          setMostraModal(mostrarModal);
       },
-      onError() {
-         limpaCarrinho();
-         adicionaEvento(evento);
-         setCarrinhoId('')
-         navigate('Carrinho');
-      },
+      onError: () => limpaCarrinhoLocal(),
    });
 
    const cancelaCarrinho = useMutation({
@@ -126,6 +131,10 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
 
                         <Pressable onPress={() => {
                            setMostraModal(false);
+                           if (data.status === "aguardando_pagamento_pix") {
+                              return navigate("CheckoutPix");
+                           }
+
                            const ingresso = data.eventos.flatMap(ingresso => ingresso.ingressos);
 
                            if (total === 0) {
@@ -150,7 +159,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                            return navigate("CarrinhoUtilizador");
                         }}>
                            <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
-                              <Text variant='botaoLink' color='greenDark'>Ir para o Carrinho</Text>
+                              <Text variant='botaoLink' color='greenDark'>Continuar</Text>
                               <Icon.ArrowRight size={18} color={colors.greenDark} />
                            </HStack>
                         </Pressable>

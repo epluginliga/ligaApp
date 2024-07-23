@@ -9,6 +9,8 @@ import { CarrinhoProvider } from '../hooks/carrinho';
 import { PayloadDefaultResponse } from '../services/@index';
 import { ResponseErro } from '../components/ResponsesRequest/ResponseErro';
 import { ResponseSucesso } from '../components/ResponsesRequest/ResponseSucesso';
+import { CheckoutProvider } from '../hooks/checkout';
+import AppProvider from '../hooks';
 
 
 type ErrorProps = {
@@ -77,13 +79,14 @@ export function Routes() {
    );
 
    return (
-      <CarrinhoProvider>
+      <AppProvider>
 
          {erro && <ResponseErro erro={erro} clear={() => setErro('')} />}
          {sucesso && <ResponseSucesso erro={sucesso} clear={() => setSucesso('')} />}
 
          {logado ? <RouteLogado /> : <RouteDesLogado />}
          {loadingReq && <Loading />}
-      </CarrinhoProvider>
+
+      </AppProvider>
    )
 }
