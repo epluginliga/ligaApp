@@ -27,7 +27,9 @@ const Temporizador = ({ tempo = 20 }: Temporizador) => {
    const minutes = Math.floor(remainingTime / 60);
    const seconds = remainingTime % 60;
 
-   return <Text fontWeight="bold">{minutes}:{seconds}</Text>
+   return (
+      <Text fontWeight="bold">{'\n'}{minutes} minutos e {seconds} segundos {'\n'}</Text>
+   )
 }
 
 export default Temporizador;

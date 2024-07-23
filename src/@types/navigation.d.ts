@@ -15,19 +15,7 @@ export type RouteApp = {
    CarrinhoResumo: undefined;
    CheckoutEnderecoCobranca: undefined;
    CheckoutPagamento: undefined;
-   CheckoutPix: {
-      tipo_pagamento: string;
-      cobranca_id: string;
-      codigo: string;
-      nosso_numero: null,
-      url_view: string;
-      url_pdf_view: null,
-      url_view_codigo_barra: null,
-      vencimento: string;
-      id: string;
-      updated_at: string;
-      created_at: string;
-   };
+   CheckoutPix: undefined;
    CheckoutCartao: undefined;
    CheckoutSucesso: {
       codigo: string;
