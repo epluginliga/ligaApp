@@ -9,7 +9,7 @@ import { FlatList, Pressable, TouchableOpacity, View } from 'react-native'
 import Text from '../../components/Text'
 import { Layout } from '../../components/Views/Layout'
 import { StepContext } from '.'
-import { formataData } from '../../utils/utils'
+import { dataApp } from '../../utils/utils'
 import { ListEmptyComponent } from '../../components/ListEmptyComponent'
 import { IngressosPayload } from '../../services/@eventos'
 import HStack from '../../components/Views/Hstack'
@@ -36,8 +36,8 @@ export function IngressosDisponivel() {
    const { proximoEventos } = useContext(StepContext);
 
    function Item({ item }: { item: IngressosPayload }) {
-      const dataISO = formataData().converteDataBRtoISO(item.evento_data_evento)
-      const dataEvento = formataData(dataISO);
+      const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
+      const dataEvento = dataApp(dataISO);
 
       return (
          <Card.Root
@@ -74,7 +74,7 @@ export function IngressosDisponivel() {
                            ingresso_id: item.bilhete_id
                         })}
                      >
-                        <HStack backgroundColor='greenDark' paddingHorizontal='md' borderRadius={6}>
+                        <HStack backgroundColor='greenDark' paddingHorizontal='md' py='xs' borderRadius={6}>
                            <Text textAlign='center' color='white' variant='header3'>
                               Transferir
                            </Text>
@@ -86,7 +86,7 @@ export function IngressosDisponivel() {
                      <Pressable onPress={() => navigate.navigate("IngressosDetalhe", {
                         bilhete_id: item.bilhete_id,
                      })}>
-                        <HStack backgroundColor='black' paddingHorizontal='md' borderRadius={6}>
+                        <HStack backgroundColor='black' paddingHorizontal='md' py='xs' borderRadius={6}>
                            <Text textAlign='center' color='white' variant='header3'>
                               Informações
                            </Text>

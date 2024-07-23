@@ -7,15 +7,15 @@ import VStack from '../../components/Views/Vstack';
 import { Card } from '../../components/Card';
 import { Icon } from '../../icons';
 import { Layout } from '../../components/Views/Layout';
-import { formataData } from '../../utils/utils';
+import { dataApp } from '../../utils/utils';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
 import { StepContext } from '.';
 import { IngressosPayload } from '../../services/@eventos';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Item({ item }: { item: IngressosPayload }) {
-   const dataISO = formataData().converteDataBRtoISO(item.evento_data_evento)
-   const dataEvento = formataData(dataISO);
+   const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
+   const dataEvento = dataApp(dataISO);
 
    return (
       <Card.Root

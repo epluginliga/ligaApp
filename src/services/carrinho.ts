@@ -73,3 +73,14 @@ export async function removeCupomDesconto(carrinho: string): PayloadDefault<stri
          return success.data;
       });
 }
+
+export async function carrinhoStatusPagamento(carrinho_id: string): PayloadDefault<string> {
+   return await api
+      .delete(`/carrinho/statuspagamento/${carrinho_id}`)
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      });
+}

@@ -7,7 +7,7 @@ export async function criaUsuario(body: CriaUsuarioProps): PayloadPaginacaoRespo
    delete api.defaults.headers.common.Authorization;
 
    return await api
-      .post(`/usuario`, body)
+      .post(`/app/usuario`, body)
       .then(success => {
          if (success.status !== 200) {
             throw new Error("Erro");

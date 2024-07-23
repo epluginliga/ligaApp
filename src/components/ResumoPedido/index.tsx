@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Section } from '../Section'
-import { formataData } from '../../utils/utils'
+import { dataApp } from '../../utils/utils'
 import { Icon } from '../../icons'
 import VStack from '../Views/Vstack'
 import { useCarrinho } from '../../hooks/carrinho'
@@ -16,11 +16,11 @@ export function ResumoPedido() {
          <Section.Title>{evento?.nome}</Section.Title>
 
          <Section.SubTitle iconLeft={<Icon.Calendario />}>
-            {formataData(evento?.data_evento).diaMesAnoTexto()}
+            {dataApp(evento?.data_evento).diaMesAnoTexto()}
          </Section.SubTitle>
 
          <Section.SubTitle iconLeft={<Icon.Clock />}>
-            {formataData(evento.data_evento).hora()}
+            {dataApp(evento.data_evento).hora()}
          </Section.SubTitle>
 
          <VStack gap="xs">

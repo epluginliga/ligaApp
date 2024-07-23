@@ -12,7 +12,7 @@ import { useAuth } from '../../hooks/auth';
 import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
 import { useQuery } from '@tanstack/react-query';
 import { fetchIngressoComprado } from '../../services/eventos';
-import { formataData } from '../../utils/utils';
+import { dataApp } from '../../utils/utils';
 import { IngressosPayload } from '../../services/@eventos';
 
 type StepsIngressosProps = {
@@ -82,7 +82,7 @@ export function Ingressos() {
       let eventosPassados: IngressosPayload[] = [];
 
       data?.data.forEach(eventos => {
-         const dataEvento = formataData();
+         const dataEvento = dataApp();
          const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
          if (new Date <= new Date(novaData)) {
             proximoEventos.push(eventos);

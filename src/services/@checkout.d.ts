@@ -25,13 +25,13 @@ export type TokenCartaoProps = {
 
 export type CheckoutProps = {
    tipo_pagamento: "cartao_credito" | "pix";
-   parcelas: number;
-   "pagarmetoken-0": string;
-   number: string;
-   cvc: string;
-   name: string;
-   expiry: string;
-   dados_pagamento: {
+   parcelas?: number;
+   "pagarmetoken-0"?: string;
+   number?: string;
+   cvc?: string;
+   name?: string;
+   expiry?: string;
+   dados_pagamento?: {
       num_cartao: string;
       month: number;
       year: number;

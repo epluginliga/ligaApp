@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -9,11 +9,14 @@ import Text from '../../components/Text'
 import { Card } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { ResumoPedido } from '../../components/ResumoPedido'
-import { data } from '../../../store/eventoId'
 import { ActivityIndicator } from 'react-native'
+import { dataApp } from '../../utils/utils'
 
 export function CheckoutPix() {
    const { navigate } = useNavigation();
+   const [time, setTime] = useState(20)
+
+
 
    return (
       <>
@@ -33,7 +36,7 @@ export function CheckoutPix() {
 
                   <Section.Root alignItems='center'>
                      <Text textAlign='center'>
-                        Pague o seu PIX dentro de <Text fontWeight="bold">19:22</Text> e garanta a efetivação de sua compra.
+                        Pague o seu PIX dentro de <Text fontWeight="bold">d</Text> e garanta a efetivação de sua compra.
                      </Text>
                      <Section.Title>PIX COPIA E COLA</Section.Title>
                      <Button iconRight={<Icon.Copy color='#fff' />}>COPIAR</Button>
@@ -42,7 +45,7 @@ export function CheckoutPix() {
 
                <VStack gap='md'>
                   <Text variant='header' marginLeft='md'>Resumo do pedido</Text>
-                  
+
                   <ResumoPedido />
 
                   <Card.Root variant='border'>

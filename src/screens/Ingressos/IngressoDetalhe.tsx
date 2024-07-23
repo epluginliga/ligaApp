@@ -19,7 +19,7 @@ import { Maskara } from '../../utils/Maskara';
 import QRCode from 'react-native-qrcode-svg'
 import { Card } from '../../components/Card';
 import { Icon } from '../../icons';
-import { formataData } from '../../utils/utils';
+import { dataApp } from '../../utils/utils';
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'IngressosDetalhe'>;
 
@@ -81,8 +81,8 @@ export const IngressoDetalhe = () => {
 
    const { dadosCompra, dadosUsuario } = data;
 
-   const dataISO = formataData().converteDataBRtoISO(dadosCompra.evento_data_evento)
-   const dataEvento = formataData(dataISO);
+   const dataISO = dataApp().converteDataBRtoISO(dadosCompra.evento_data_evento)
+   const dataEvento = dataApp(dataISO);
 
    return (
       <>

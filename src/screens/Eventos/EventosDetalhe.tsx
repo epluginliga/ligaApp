@@ -18,7 +18,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
-import { formataData } from '../../utils/utils';
+import { dataApp } from '../../utils/utils';
 import VStack from '../../components/Views/Vstack';
 import { Html } from '../../components/Html';
 import { Button } from '../../components/Button';
@@ -282,11 +282,11 @@ export const EventosDetalhe = () => {
             <View style={{ marginTop: -20 }} >
                <Section.Root position='relative' zIndex={9}>
                   <Section.SubTitle iconLeft={<Icon.Calendario />}>
-                     {formataData(eventoDetalhe?.data_evento).diaMesAnoTexto()}
+                     {dataApp(eventoDetalhe?.data_evento).diaMesAnoTexto()}
                   </Section.SubTitle>
 
                   <Section.SubTitle iconLeft={<Icon.Clock />}>
-                     {formataData(eventoDetalhe?.data_evento).hora()}
+                     {dataApp(eventoDetalhe?.data_evento).hora()}
                   </Section.SubTitle>
 
                   <VStack gap="xs" >

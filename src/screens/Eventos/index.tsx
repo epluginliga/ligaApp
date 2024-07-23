@@ -11,7 +11,7 @@ import { Icon } from "../../icons";
 import { fetchEventos } from "../../services/eventos";
 import { ListEmptyComponent } from "../../components/ListEmptyComponent";
 import { Layout } from "../../components/Views/Layout";
-import { formataData } from "../../utils/utils";
+import { dataApp } from "../../utils/utils";
 import { Imagem } from "../../components/Imagem";
 import { Button } from "../../components/Button";
 import { useMMKVString } from "react-native-mmkv";
@@ -33,7 +33,7 @@ function Destaque({ evento }: DestaqueProps) {
 
    if (!evento) return null;
 
-   const dataEvento = formataData(evento.data_evento);
+   const dataEvento = dataApp(evento.data_evento);
 
    return (
       <VStack position='relative' alignItems="center" overflow='hidden' borderRadius={10}>
@@ -81,7 +81,7 @@ export function Eventos() {
    });
 
    const renderItem = useCallback(({ item }: ItemData) => {
-      const diaEvento = formataData(item.data_evento);
+      const diaEvento = dataApp(item.data_evento);
       return (
          <Card.Root
             marginHorizontal="sm"

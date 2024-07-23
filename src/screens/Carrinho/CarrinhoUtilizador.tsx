@@ -25,7 +25,7 @@ import { useCarrinho } from '../../hooks/carrinho';
 import { fetchEventoAtleticas } from '../../services/eventos';
 import { useNavigation } from '@react-navigation/native';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
-import { formataData } from '../../utils/utils';
+import { dataApp } from '../../utils/utils';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -41,7 +41,7 @@ export const schemaUtilizador = z.object({
                   data_nascimento: z.string().optional(),
                   sexo: z.string().optional(),
                   cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
-                     if (!Validacoes.validarCPF(val)) {
+                     if (!Validacoes.CPF(val)) {
                         ctx.addIssue({
                            code: "custom",
                            message: "CPF inválido",
@@ -188,7 +188,7 @@ export function CarrinhoUtilizador() {
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, usuario?.sexo);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, formataData(usuario?.data_nascimento).diaMesAnoISOBR());
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, dataApp(usuario?.data_nascimento).diaMesAnoISOBR());
                                        }}>
 
                                        <HStack alignItems='center' mb='md'>
