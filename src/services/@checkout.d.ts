@@ -43,13 +43,26 @@ export type CheckoutProps = {
 }
 
 export type CheckoutPayload = {
-   status: "falha",
-   codigo_pagamento: string;
+   status: "falha" | "pendente",
    mensagens: [],
    mensagem_adquirencia: {
       codigo: string;
       mensagem: string;
       mensagemSolucao: string;
    }
-
+   codigo_pagamento: {
+      tipo_pagamento: string;
+      cobranca_id: string;
+      codigo: string;
+      nosso_numero: null,
+      url_view: string;
+      url_pdf_view: null,
+      url_view_codigo_barra: null,
+      vencimento: string;
+      id: string;
+      updated_at: string;
+      created_at: string;
+   },
+   mensagens: [],
 }
+

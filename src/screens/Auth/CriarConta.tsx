@@ -38,6 +38,7 @@ const schema = z.object({
    nascimento: z.string(),
    password: z.string(),
    confirmar_senha: z.string(),
+   cadastro_app: z.string().optional(),
 }).superRefine(({ confirmar_senha, password }, ctx) => {
    if (password !== confirmar_senha) {
       ctx.addIssue({
@@ -61,6 +62,7 @@ export function CriarConta() {
          "sexo": SEXO,
          "nascimento": NASCIMENTO,
          "confirmar_senha": CONFIRMAR_SENHA,
+         cadastro_app: true,
       }
    });
 

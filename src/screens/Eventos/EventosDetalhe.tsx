@@ -38,6 +38,7 @@ import HStack from '../../components/Views/Hstack';
 import theme, { Theme } from '../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ModalSmall } from '../../components/Modal/ModalSmall';
+import { checkout } from '../../services/checkout';
 
 
 type ButtonComprarInfressosProps = {
@@ -50,10 +51,23 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const { colors } = useTheme<Theme>()
    const { navigate } = useNavigation();
 
+
    const handleVerificaSeExisteCarrinho = useMutation({
       mutationFn: obtemCarrinho,
       mutationKey: ['EventoDetalheObtemCarrinho'],
-      onSuccess(data) {
+      async onSuccess(data) {
+
+         if (data.status === "aguardando_pagamento_pix") {
+            cancelaCarrinho.mutate(data.id);
+            limpaCarrinho();
+            adicionaEvento(evento);
+            setCarrinhoId('')
+            navigate('Carrinho');
+            return;
+         }
+
+         setCarrinhoId(data.id);
+
          const mostrarModal = data.status === "em_compra";
          if (!mostrarModal) {
             adicionaEvento(evento);

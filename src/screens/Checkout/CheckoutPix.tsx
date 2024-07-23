@@ -1,22 +1,53 @@
 import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { ActivityIndicator, Image, View } from 'react-native'
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Layout } from '../../components/Views/Layout'
 import VStack from '../../components/Views/Vstack'
 import { Section } from '../../components/Section'
-import { Icon } from '../../icons'
 import Text from '../../components/Text'
-import { Card } from '../../components/Card'
 import { Button } from '../../components/Button'
 import { ResumoPedido } from '../../components/ResumoPedido'
-import { ActivityIndicator } from 'react-native'
-import { dataApp } from '../../utils/utils'
+import Temporizador from '../../components/Temporizador'
+
+import { RouteApp } from '../../@types/navigation'
+import { Icon } from '../../icons'
+
+type CheckoutPixRouteProp = RouteProp<RouteApp, 'CheckoutPix'>;
+
+function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
+   const [codigoCopiado, setCodigoCopiado] = useState('');
+
+   if (codigoCopiado) {
+      return (
+         <Button
+            variant='sucesso'
+            onPress={() => {
+               setCodigoCopiado(codigo)
+               Clipboard.setString(codigo);
+            }}
+            iconRight={<Icon.CheckCircle color='#fff' />}>Código copiado
+         </Button>
+      )
+   }
+
+   return (
+      <Button
+         onPress={() => {
+            setCodigoCopiado(codigo)
+            Clipboard.setString(codigo);
+         }}
+         iconRight={<Icon.Copy color='#fff' />}>COPIAR
+      </Button>
+   )
+}
 
 export function CheckoutPix() {
    const { navigate } = useNavigation();
-   const [time, setTime] = useState(20)
-
-
+   const insets = useSafeAreaInsets();
+   const { params } = useRoute<CheckoutPixRouteProp>();
 
    return (
       <>
@@ -36,11 +67,21 @@ export function CheckoutPix() {
 
                   <Section.Root alignItems='center'>
                      <Text textAlign='center'>
-                        Pague o seu PIX dentro de <Text fontWeight="bold">d</Text> e garanta a efetivação de sua compra.
+                        Pague o seu PIX dentro de <Temporizador /> e garanta a efetivação de sua compra.
                      </Text>
+
                      <Section.Title>PIX COPIA E COLA</Section.Title>
-                     <Button iconRight={<Icon.Copy color='#fff' />}>COPIAR</Button>
+
+                     <Image
+                        height={185}
+                        width={185}
+                        source={{ uri: params.url_view }}
+                     />
+
+                     <BotaoCopiarCodigoPix codigo={params.codigo} />
+
                   </Section.Root>
+
                </VStack>
 
                <VStack gap='md'>
@@ -48,16 +89,11 @@ export function CheckoutPix() {
 
                   <ResumoPedido />
 
-                  <Card.Root variant='border'>
-                     <VStack p='md'>
-                        <Text lineHeight={23} variant='header'>1 lote</Text>
-                        <Text lineHeight={23} color='primary' variant='header'>R$ 60,00</Text>
-                        <Card.SubTitle lineHeight={18} color='primary'>R$ 6 real taxas</Card.SubTitle>
-                     </VStack>
-                     <Card.Title variant='header'>1 unidade</Card.Title>
-                  </Card.Root>
+
                </VStack>
             </VStack>
+
+            <View style={{ height: insets.bottom }} />
 
          </Layout.Scroll>
       </>

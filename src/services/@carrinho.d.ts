@@ -2,7 +2,7 @@
 export type PayloadCarrinho = {
    id: string;
    valor: number;
-   status: "em_compra";
+   status: "em_compra" | "aguardando_pagamento_pix";
    status_str: string;
    eventos: [
       {

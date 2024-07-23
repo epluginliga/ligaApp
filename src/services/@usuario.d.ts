@@ -8,5 +8,6 @@ export type CriaUsuarioProps = {
    username: string;
    telefone: string;
    confirmar_senha?: string;
+   cadastro_app: boolean;
 
 }
