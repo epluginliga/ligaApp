@@ -4,6 +4,7 @@ import Text from "../Text";
 import VStack from "../Views/Vstack";
 import { useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 
 type ResponseErroProps = {
    erro: string;
@@ -25,7 +26,7 @@ export function ResponseErro({ erro, clear }: ResponseErroProps) {
       <Animated.View
          style={{
             position: "absolute",
-            top: 0,
+            top: Platform.OS === "android" ? 10 : 0,
             width: "100%",
             zIndex: 9999
          }}

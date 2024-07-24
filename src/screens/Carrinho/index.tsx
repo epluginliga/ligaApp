@@ -59,7 +59,13 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
 
          <HStack alignItems='center' gap="lg">
             <Pressable
-               style={{ opacity: quantidade === 0 ? 0.4 : 1 }}
+               style={{
+                  opacity: quantidade === 0 ? 0.4 : 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: 50,
+                  width: 30,
+               }}
                disabled={quantidade === 0}
                onPress={() => removeIngressoDoEvento(
                   eventoId,
@@ -77,7 +83,13 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
             </Card.Title>
 
             <Pressable
-               style={{ opacity: desabilitarBotao ? 0.4 : 1 }}
+               style={{
+                  opacity: desabilitarBotao ? 0.4 : 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: 50,
+                  width: 30,
+               }}
                disabled={desabilitarBotao}
                onPress={() => {
                   adicionaIngressoAoEvento({

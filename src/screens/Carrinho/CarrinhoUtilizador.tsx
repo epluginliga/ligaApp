@@ -230,6 +230,7 @@ export function CarrinhoUtilizador() {
                                        </VStack>
 
                                     </Animated.View>
+
                                     <Animated.View
                                        entering={FadeInDown}
                                        exiting={FadeOutUp}
@@ -281,7 +282,6 @@ export function CarrinhoUtilizador() {
 
                                        </Animated.View>
                                     )}
-
 
                                     {ingresso.sexo && (
                                        <Animated.View

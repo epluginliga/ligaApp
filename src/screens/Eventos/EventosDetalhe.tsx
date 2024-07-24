@@ -288,7 +288,7 @@ export const EventosDetalhe = () => {
             </View>
 
             <VStack position='absolute' paddingHorizontal='md'>
-               <Pressable style={{ marginTop: insets.top }} onPress={goBack}>
+               <Pressable style={{ marginTop: Platform.OS === "android" ? 10 : insets.top }} onPress={goBack}>
                   <Icon.ArrowLeftCircle color={theme.colors.azul} />
                </Pressable>
             </VStack>

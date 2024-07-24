@@ -38,7 +38,7 @@ const schema = z.object({
    nascimento: z.string(),
    password: z.string(),
    confirmar_senha: z.string(),
-   cadastro_app: z.string().optional(),
+   cadastro_app: z.boolean().optional(),
 }).superRefine(({ confirmar_senha, password }, ctx) => {
    if (password !== confirmar_senha) {
       ctx.addIssue({
