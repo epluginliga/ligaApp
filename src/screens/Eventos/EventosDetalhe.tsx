@@ -39,6 +39,7 @@ import theme, { Theme } from '../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ModalSmall } from '../../components/Modal/ModalSmall';
 import { useCheckout } from '../../hooks/checkout';
+import { ButtonShare } from '../../components/ButtonShare';
 
 
 type ButtonComprarInfressosProps = {
@@ -191,8 +192,6 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                   return navigate("Login", {
                      redirect: "Carrinho",
                   });
-
-
                }}>
                Comprar
             </Button>
@@ -255,6 +254,7 @@ export const EventosDetalhe = () => {
          </VStack>
       );
    }
+
    return (
       <>
          <StatusBar barStyle={"dark-content"} />
@@ -267,12 +267,9 @@ export const EventosDetalhe = () => {
                width: "100%"
             }, textStyles]}>
             <Layout.Header
-
                title={eventoDetalhe?.nome}
                rigth={(
-                  <Pressable onPress={() => console.log("pre")}>
-                     <IconShare />
-                  </Pressable>
+                  <ButtonShare url={eventoDetalhe.url_visualizacao} />
                )}
             />
          </Animated.View>
@@ -298,9 +295,7 @@ export const EventosDetalhe = () => {
 
             <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 350, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
-                  <Pressable onPress={() => console.log("pre")}>
-                     <IconShare />
-                  </Pressable>
+                  <ButtonShare url={eventoDetalhe.url_visualizacao} />
                </Circle>
             </Animated.View>
 

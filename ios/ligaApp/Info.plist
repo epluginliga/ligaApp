@@ -69,5 +69,14 @@
 
 	<key>NSPhotoLibraryUsageDescription</key>
    <string>Este aplicativo deseja salvar imagens no seu dispositivo</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>whatsapp</string>
+		<string>mailto</string>
+		<string>instagram</string>
+		<string>instagram-stories</string>
+		<string>fb</string>
+		<string>facebook-stories</string>
+	</array>
 </dict>
 </plist>
