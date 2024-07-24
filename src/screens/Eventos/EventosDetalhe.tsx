@@ -50,7 +50,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const { adicionaEvento, limpaCarrinho, setCupom, total, adicionaIngressoAoEvento, setCarrinhoId } = useCarrinho();
    const { colors } = useTheme<Theme>()
    const { navigate } = useNavigation();
-   const { statusCodigoPix } = useCheckout();
+   const { statusPagamento, updateStatus } = useCheckout();
 
    function limpaCarrinhoLocal() {
       limpaCarrinho();
@@ -66,7 +66,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
          setCarrinhoId(data.id);
 
          if (data.status === "aguardando_pagamento_pix") {
-            if (statusCodigoPix === "pendente") {
+            if (statusPagamento === "pendente") {
                setMostraModal(true);
 
                return;
@@ -182,6 +182,7 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
                onPress={() => {
 
                   if (logado) {
+                     updateStatus("");
                      handleVerificaSeExisteCarrinho.mutate();
                      return;
                   }

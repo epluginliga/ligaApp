@@ -21,6 +21,8 @@ import { vendaAplicativo } from '../../utils/constantes';
 import { CriaEditaCarrinhoProps } from '../../services/@carrinho';
 import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCheckout } from '../../hooks/checkout';
+import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -102,6 +104,7 @@ export function Carrinho() {
    const { navigate } = useNavigation();
    const { evento, pedido, total, totalItens } = useCarrinho();
    const insets = useSafeAreaInsets();
+   const { updateStatus, statusPagamento } = useCheckout();
 
    const { data } = useQuery({
       queryKey: ['fetchIngressoDisponivel', evento],
@@ -133,13 +136,20 @@ export function Carrinho() {
       return;
    }
 
+   if (statusPagamento != "pendente" && statusPagamento != "") {
+      return (
+         <Layout.Root>
+            <Layout.Header title={`Pedido ${statusPagamento}`} />
+            <PedidoConcluidoCancelado status={statusPagamento} />
+         </Layout.Root>
+      )
+   }
+
    return (
       <Layout.Root>
 
          <StatusBar barStyle="dark-content" />
          <Layout.Header title='Ingressos disponíveis' />
-
-
 
          <Layout.Scroll>
             <VStack gap="lg">
@@ -197,6 +207,7 @@ export function Carrinho() {
                marginHorizontal="md"
                onPress={() => {
                   if (pedido) {
+                     updateStatus("");
                      return handleCriaCarrinho.mutate(pedido);
                   }
 

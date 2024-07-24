@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -12,6 +12,7 @@ import { ResumoPedido } from '../../components/ResumoPedido'
 import { Maskara } from '../../utils/Maskara'
 import { useCarrinho } from '../../hooks/carrinho'
 import { RouteApp } from '../../@types/navigation'
+import { useCheckout } from '../../hooks/checkout'
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'CheckoutFalha'>;
 
@@ -19,6 +20,11 @@ export function CheckoutFalha() {
    const navigate = useNavigation();
    const { total, totalItens } = useCarrinho();
    const { params } = useRoute<EventoDetalheRouteProp>();
+   const { updateStatus } = useCheckout();
+
+   useEffect(() => {
+      updateStatus("expirado");
+   }, []);
 
    return (
       <>

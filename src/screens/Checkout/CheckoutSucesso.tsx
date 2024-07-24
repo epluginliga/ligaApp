@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import { Layout } from '../../components/Views/Layout'
@@ -13,15 +13,21 @@ import { Maskara } from '../../utils/Maskara'
 import { useCarrinho } from '../../hooks/carrinho'
 import { useTheme } from '@shopify/restyle'
 import { Theme } from '../../theme/default'
+import { useCheckout } from '../../hooks/checkout'
 
 export function CheckoutSucesso() {
    const { navigate } = useNavigation();
    const { colors } = useTheme<Theme>();
    const { total, totalItens } = useCarrinho();
+   const { updateStatus } = useCheckout();
+
+   useEffect(() => {
+      updateStatus("concluido");
+   }, []);
 
    return (
       <>
-         <Layout.Header title='Pagamento com Erro' />
+         <Layout.Header title='Sucesso' />
          <Layout.Scroll>
 
             <VStack gap='xl' justifyContent='space-between' flex={1} marginBottom='lg'>

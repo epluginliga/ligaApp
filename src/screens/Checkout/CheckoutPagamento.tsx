@@ -16,6 +16,7 @@ import { Maskara } from '../../utils/Maskara'
 import { useMutation } from '@tanstack/react-query'
 import { checkout } from '../../services/checkout'
 import { useCheckout } from '../../hooks/checkout'
+import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado'
 
 type FormasPagamento = 'CheckoutCartao' | 'CheckoutPix';
 
@@ -91,6 +92,7 @@ export function CheckoutPagamento() {
    const { navigate } = useNavigation();
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('CheckoutCartao');
    const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal } = useCarrinho();
+   const { statusPagamento } = useCheckout();
 
    const taxas = {
       CheckoutCartao: totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100),
@@ -102,6 +104,15 @@ export function CheckoutPagamento() {
    useEffect(() => {
       setTaxa(taxas[formaPagamento]);
    }, [formaPagamento])
+
+   if (statusPagamento != "pendente" && statusPagamento != "") {
+      return (
+         <Layout.Root>
+            <Layout.Header title={`Pedido ${statusPagamento}`} />
+            <PedidoConcluidoCancelado status={statusPagamento} />
+         </Layout.Root>
+      )
+   }
 
    return (
       <Layout.Root>

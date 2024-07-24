@@ -26,6 +26,8 @@ import { fetchEventoAtleticas } from '../../services/eventos';
 import { useNavigation } from '@react-navigation/native';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { dataApp } from '../../utils/utils';
+import { useCheckout } from '../../hooks/checkout';
+import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -66,6 +68,7 @@ export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
    const { total, evento, setCarrinhoId } = useCarrinho();
+   const { statusPagamento } = useCheckout();
    const { navigate } = useNavigation();
    const { control, handleSubmit, formState: { errors }, setValue, resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
@@ -122,6 +125,15 @@ export function CarrinhoUtilizador() {
       label: item.nome,
       name: item.slug
    })) || [];
+
+   if (statusPagamento != "pendente" && statusPagamento != "") {
+      return (
+         <Layout.Root>
+            <Layout.Header title={`Pedido ${statusPagamento}`} />
+            <PedidoConcluidoCancelado status={statusPagamento} />
+         </Layout.Root>
+      )
+   }
 
    return (
       <>

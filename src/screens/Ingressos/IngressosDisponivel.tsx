@@ -23,11 +23,11 @@ type IconeTipoIngresso = {
 const iconeTipoIngresso: IconeTipoIngresso = {
    0: {
       icon: <Icon.QRCode size={16} />,
-      nome: "Entrada com QR Code",
+      nome: "Entrada por QR Code",
    },
    1: {
       icon: <Icon.FaceID size={16} />,
-      nome: "Entrada com Leitura facial",
+      nome: "Entrada por reconhecimento facial",
    }
 }
 

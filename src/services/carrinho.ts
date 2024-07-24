@@ -82,7 +82,6 @@ export type CarrinhoStatusPagamentoPayload = {
    }
 }
 export async function carrinhoStatusPagamento(carrinho_id: string, token: string): PayloadDefault<CarrinhoStatusPagamentoPayload> {
-
    return await axios
       .get(`${API_URL}/carrinho/statuspagamento/${carrinho_id}`, {
          headers: {
@@ -91,5 +90,8 @@ export async function carrinhoStatusPagamento(carrinho_id: string, token: string
       })
       .then(success => {
          return success.data;
+      })
+      .catch(() => {
+         return false
       });
 }

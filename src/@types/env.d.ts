@@ -21,4 +21,5 @@ declare module '@env' {
    export const CVV: string;
    export const API_URL_CEP: string;
    export const CPF: string;
+   export const TEMPO_PIX: number;
 }

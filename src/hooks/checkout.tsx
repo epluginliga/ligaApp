@@ -1,13 +1,14 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { CodigoPagamento } from "../services/@checkout";
 import { MMKV } from "react-native-mmkv";
-import { format, isAfter, isBefore, parseISO, subHours, subMinutes } from "date-fns";
+import { subMinutes } from "date-fns";
 
-type StatusPix = "pendente" | "expirado" | "";
+export type StatusPagamento = "pendente" | "expirado" | "concluido" | "";
 type CheckoutContextProps = {
    codigoPagamento: CodigoPagamento;
    setCondigoPagamento: (data: CodigoPagamento) => void;
-   statusCodigoPix: StatusPix;
+   statusPagamento: StatusPagamento;
+   updateStatus: (status: StatusPagamento) => void
 }
 export type CheckoutProviderProps = {
    children: React.ReactNode;
@@ -18,7 +19,7 @@ export const checkoutStorage = new MMKV();
 
 function CheckoutProvider({ children }: CheckoutProviderProps): React.ReactElement {
    const [codigoPagamento, setCodigoPagamento] = useState<CodigoPagamento>({} as CodigoPagamento);
-   const [status, setStatus] = useState<StatusPix>("");
+   const [status, setStatus] = useState<StatusPagamento>("");
 
    const handleCondigoPagamento = useCallback((data: CodigoPagamento) => {
       setCodigoPagamento(data);
@@ -32,15 +33,16 @@ function CheckoutProvider({ children }: CheckoutProviderProps): React.ReactEleme
       const vencimento = new Date(codigoPagamento.vencimento);
       const codigoExpirou = vencimento.getTime() >= new Date(horaAtual).getTime() ? "pendente" : "expirado";
 
-      console.log(codigoExpirou);
-      
       if (codigoExpirou == "pendente") {
          setStatus(codigoExpirou);
          return;
       }
 
       limpaCodigoPagamento();
+   }, []);
 
+   const handleMarcarStatus = useCallback((status: StatusPagamento) => {
+      setStatus(status)
    }, []);
 
    const obtemTransacao = useCallback(() => {
@@ -65,7 +67,8 @@ function CheckoutProvider({ children }: CheckoutProviderProps): React.ReactEleme
       value={{
          codigoPagamento,
          setCondigoPagamento: handleCondigoPagamento,
-         statusCodigoPix: status
+         statusPagamento: status,
+         updateStatus: handleMarcarStatus
       }}
    >
       {children}

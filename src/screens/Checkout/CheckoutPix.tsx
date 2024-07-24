@@ -16,8 +16,10 @@ import Temporizador from '../../components/Temporizador'
 import { Icon } from '../../icons'
 import { useCheckout } from '../../hooks/checkout';
 import { useCarrinho } from '../../hooks/carrinho';
-import { carrinhoStatusPagamento } from '../../services/carrinho';
+import { carrinhoStatusPagamento, CarrinhoStatusPagamentoPayload } from '../../services/carrinho';
 import { useAuth } from '../../hooks/auth';
+import { TEMPO_PIX } from '@env';
+import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
 
 function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
    const [codigoCopiado, setCodigoCopiado] = useState('');
@@ -50,6 +52,18 @@ type CodigoPixProps = {
    uri: string;
    codigo: string;
 }
+
+function cancelaCarrinhoStatusPagamento(data?: CarrinhoStatusPagamentoPayload) {
+   if (!data) {
+      return false;
+   }
+   
+   if (data?.carrinho.status === "comprado" || data?.carrinho.status === "cancelado") {
+      return false;
+   }
+   return 10000;
+}
+
 function CodigoPix({ uri, codigo }: CodigoPixProps) {
    const { carrinhoId } = useCarrinho();
    const { token } = useAuth();
@@ -58,7 +72,7 @@ function CodigoPix({ uri, codigo }: CodigoPixProps) {
    const { data } = useQuery({
       queryFn: () => carrinhoStatusPagamento(carrinhoId, token),
       queryKey: ['carrinhoStatusPagamento'],
-      refetchInterval: data => (data.state.data?.carrinho.status === "comprado" ? false : 1000)
+      refetchInterval: data => cancelaCarrinhoStatusPagamento(data?.state?.data)
    });
 
    if (data?.carrinho?.status === "comprado") {
@@ -82,8 +96,16 @@ function CodigoPix({ uri, codigo }: CodigoPixProps) {
 
 export function CheckoutPix() {
    const insets = useSafeAreaInsets();
-   const { codigoPagamento } = useCheckout();
+   const { codigoPagamento, statusPagamento } = useCheckout();
 
+   if (statusPagamento != "pendente" && statusPagamento != "") {
+      return (
+         <Layout.Root>
+            <Layout.Header title={`Pedido ${statusPagamento}`} />
+            <PedidoConcluidoCancelado status={statusPagamento} />
+         </Layout.Root>
+      )
+   }
 
    return (
       <>
@@ -103,7 +125,7 @@ export function CheckoutPix() {
 
                   <Section.Root alignItems='center'>
                      <Text textAlign='center'>
-                        Pague o seu PIX dentro de <Temporizador tempo={20} /> e garanta a efetivação de sua compra.
+                        Pague o seu PIX dentro de <Temporizador tempo={TEMPO_PIX} /> e garanta a efetivação de sua compra.
                      </Text>
 
                      <Section.Title>PIX COPIA E COLA</Section.Title>
