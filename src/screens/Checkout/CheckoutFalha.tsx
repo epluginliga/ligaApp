@@ -16,7 +16,7 @@ import { RouteApp } from '../../@types/navigation'
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'CheckoutFalha'>;
 
 export function CheckoutFalha() {
-   const { goBack } = useNavigation();
+   const navigate = useNavigation();
    const { total, totalItens } = useCarrinho();
    const { params } = useRoute<EventoDetalheRouteProp>();
 
@@ -50,11 +50,17 @@ export function CheckoutFalha() {
                </VStack>
 
                <Button
-                  onPress={goBack}
+                  onPress={() => {
+                     if (params.codigo === "403" || params.codigo === "500") {
+                        return navigate.navigate("Home");
+                     }
+
+                     return navigate.goBack();
+                  }}
                   marginHorizontal="md"
                   iconRight={false}
                   iconLeft={<Icon.ArrowLeft color='#fff' />}>
-                  Retornar ao pagamento
+                  Voltar
                </Button>
 
             </VStack>

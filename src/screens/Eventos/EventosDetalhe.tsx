@@ -63,10 +63,12 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
       mutationFn: obtemCarrinho,
       mutationKey: ['EventoDetalheObtemCarrinho'],
       async onSuccess(data) {
+         setCarrinhoId(data.id);
 
          if (data.status === "aguardando_pagamento_pix") {
             if (statusCodigoPix === "pendente") {
                setMostraModal(true);
+
                return;
             }
 
@@ -76,7 +78,6 @@ function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
             return;
          }
 
-         setCarrinhoId(data.id);
 
          const mostrarModal = data.status === "em_compra";
          if (!mostrarModal) {

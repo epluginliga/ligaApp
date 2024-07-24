@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { ActivityIndicator, Image, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useQuery } from '@tanstack/react-query';
+import { useNavigation } from '@react-navigation/native';
 
 import { Layout } from '../../components/Views/Layout'
 import VStack from '../../components/Views/Vstack'
@@ -13,7 +15,9 @@ import Temporizador from '../../components/Temporizador'
 
 import { Icon } from '../../icons'
 import { useCheckout } from '../../hooks/checkout';
-
+import { useCarrinho } from '../../hooks/carrinho';
+import { carrinhoStatusPagamento } from '../../services/carrinho';
+import { useAuth } from '../../hooks/auth';
 
 function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
    const [codigoCopiado, setCodigoCopiado] = useState('');
@@ -42,9 +46,44 @@ function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
    )
 }
 
+type CodigoPixProps = {
+   uri: string;
+   codigo: string;
+}
+function CodigoPix({ uri, codigo }: CodigoPixProps) {
+   const { carrinhoId } = useCarrinho();
+   const { token } = useAuth();
+   const { navigate } = useNavigation();
+
+   const { data } = useQuery({
+      queryFn: () => carrinhoStatusPagamento(carrinhoId, token),
+      queryKey: ['carrinhoStatusPagamento'],
+      refetchInterval: data => (data.state.data?.carrinho.status === "comprado" ? false : 1000)
+   });
+
+   if (data?.carrinho?.status === "comprado") {
+      navigate("CheckoutSucesso", {
+         codigo: "200",
+         mensagem: "Pagamento Aprovado!"
+      });
+   };
+
+   return (
+      <>
+         <Image
+            height={185}
+            width={185}
+            source={{ uri }}
+         />
+         <BotaoCopiarCodigoPix codigo={codigo} />
+      </>
+   )
+}
+
 export function CheckoutPix() {
    const insets = useSafeAreaInsets();
    const { codigoPagamento } = useCheckout();
+
 
    return (
       <>
@@ -64,18 +103,25 @@ export function CheckoutPix() {
 
                   <Section.Root alignItems='center'>
                      <Text textAlign='center'>
-                        Pague o seu PIX dentro de <Temporizador /> e garanta a efetivação de sua compra.
+                        Pague o seu PIX dentro de <Temporizador tempo={20} /> e garanta a efetivação de sua compra.
                      </Text>
 
                      <Section.Title>PIX COPIA E COLA</Section.Title>
 
-                     <Image
-                        height={185}
-                        width={185}
-                        source={{ uri: codigoPagamento.url_view }}
-                     />
-
-                     <BotaoCopiarCodigoPix codigo={codigoPagamento.codigo} />
+                     {codigoPagamento.url_view ? (
+                        <CodigoPix codigo={codigoPagamento.codigo} uri={codigoPagamento.url_view} />
+                     ) : (
+                        <VStack
+                           backgroundColor='white'
+                           height={150}
+                           width={150}
+                           borderRadius={10}
+                           justifyContent='center'
+                           alignItems='center'
+                        >
+                           <Icon.X size={80} />
+                        </VStack>
+                     )}
 
                   </Section.Root>
 
@@ -91,6 +137,5 @@ export function CheckoutPix() {
 
          </Layout.Scroll>
       </>
-
    )
 }
