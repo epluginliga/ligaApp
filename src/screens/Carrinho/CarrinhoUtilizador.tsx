@@ -97,7 +97,7 @@ export function CarrinhoUtilizador() {
             refetchOnWindowFocus: true,
          },
          {
-            queryKey: ['fetchEventoAtleticas', evento?.id],
+            queryKey: ['fetchEventoAtleticas', evento.id],
             queryFn: () => fetchEventoAtleticas(evento.id),
             enabled: !!evento?.id,
          },
@@ -145,7 +145,7 @@ export function CarrinhoUtilizador() {
                <VStack gap="lg" marginBottom='md'>
 
                   <Section.Root>
-                     <Section.SubTitle>{evento?.nome} / {evento?.cidade} - {evento?.estado}</Section.SubTitle>
+                     <Section.SubTitle>{evento?.nome} / {evento?.nome_local}</Section.SubTitle>
                      <Section.Title color='primary'>
                         Informe quem irá utilizar os ingressos
                      </Section.Title>

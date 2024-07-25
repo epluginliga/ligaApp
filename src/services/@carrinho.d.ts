@@ -20,6 +20,7 @@ export type PayloadCarrinho = {
          data_limite_transferencia: string;
          info_ingresso_impresso: null,
          ingressos: IngressoCarrinho[]
+         taxas: string;
       }
    ];
    usuario: {
@@ -38,6 +39,7 @@ export type PayloadCarrinho = {
       }
    };
    parcelas_permitidas: number;
+   quantidade_parcelas: number;
    data_expiracao: string;
    cupom?: PayloadCupomAplicado
 };
@@ -94,3 +96,14 @@ export type PayloadCupomAplicado = {
    tipo_desconto: "percentual" | "fixo",
    valor: number,
 }
+
+// export enum  {
+
+// }  "novo" |
+//    "comprado" |
+//    "cancelado" |
+//    "em_compra" |
+//    "aguardando_pagamento" |
+//    "aguardando_pagamento_pix" |
+//    "aguardando_pagamento_boleto" |
+//    "aguardando_pagamento_cartao_credito"

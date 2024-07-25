@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
    Platform,
    Pressable,
@@ -14,191 +14,23 @@ import Animated, {
    useSharedValue
 } from 'react-native-reanimated';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { Section } from '../../components/Section';
 import { Icon } from '../../icons';
 import { dataApp } from '../../utils/utils';
 import VStack from '../../components/Views/Vstack';
 import { Html } from '../../components/Html';
-import { Button } from '../../components/Button';
 import { Layout } from '../../components/Views/Layout';
-import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
 import Circle from '../../components/Views/Circle';
-import { useAuth } from '../../hooks/auth';
+
 import { fetchEventoDetalhe } from '../../services/eventos';
-import { useCarrinho } from '../../hooks/carrinho';
-import { deletaCarrinho, obtemCarrinho } from '../../services/carrinho';
-import { EventosPayload } from '../../services/@eventos';
-import { useTheme } from '@shopify/restyle';
-import Text from '../../components/Text';
-import HStack from '../../components/Views/Hstack';
-import theme, { Theme } from '../../theme/default';
+import theme from '../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ModalSmall } from '../../components/Modal/ModalSmall';
-import { useCheckout } from '../../hooks/checkout';
 import { ButtonShare } from '../../components/ButtonShare';
-
-
-type ButtonComprarInfressosProps = {
-   evento: EventosPayload
-}
-function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
-   const [mostraModal, setMostraModal] = useState(false);
-   const { logado } = useAuth();
-   const { adicionaEvento, limpaCarrinho, setCupom, total, adicionaIngressoAoEvento, setCarrinhoId } = useCarrinho();
-   const { colors } = useTheme<Theme>()
-   const { navigate } = useNavigation();
-   const { statusPagamento, updateStatus } = useCheckout();
-
-   function limpaCarrinhoLocal() {
-      limpaCarrinho();
-      adicionaEvento(evento);
-      setCarrinhoId('')
-      navigate('Carrinho');
-   }
-
-   const handleVerificaSeExisteCarrinho = useMutation({
-      mutationFn: obtemCarrinho,
-      mutationKey: ['EventoDetalheObtemCarrinho'],
-      async onSuccess(data) {
-         setCarrinhoId(data.id);
-
-         if (data.status === "aguardando_pagamento_pix") {
-            if (statusPagamento === "pendente") {
-               setMostraModal(true);
-
-               return;
-            }
-
-            cancelaCarrinho.mutate(data.id);
-            limpaCarrinhoLocal();
-            navigate("Carrinho");
-            return;
-         }
-
-
-         const mostrarModal = data.status === "em_compra";
-         if (!mostrarModal) {
-            adicionaEvento(evento);
-            return navigate("Carrinho");
-         }
-
-         if (data.cupom) {
-            setCupom(data.cupom)
-         }
-         setMostraModal(mostrarModal);
-      },
-      onError: () => limpaCarrinhoLocal(),
-   });
-
-   const cancelaCarrinho = useMutation({
-      mutationFn: deletaCarrinho,
-      onSuccess() {
-         limpaCarrinho();
-         adicionaEvento(evento);
-         navigate('Carrinho');
-      },
-   });
-
-   const { data } = handleVerificaSeExisteCarrinho;
-
-   return (
-      <>
-         <ModalSmall
-            minHeight="25%"
-            maxHeight={250}
-            ativo={mostraModal}>
-            {data && (
-               <VStack gap='xl' >
-                  <Text textAlign='center' color='azul'>
-                     Você já tem um carrinho
-                     <Text variant='header' >{'\n'} {data?.status_str}</Text>
-                  </Text>
-
-                  <VStack gap="md">
-                     <Text textAlign='center' variant='header2'>O que Deseja fazer?</Text>
-
-                     <HStack width="100%" paddingHorizontal='md' justifyContent='space-between'>
-                        <Pressable onPress={() => {
-                           setMostraModal(false);
-                           cancelaCarrinho.mutate(data.id);
-                        }}>
-                           <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
-                              <Text variant='botaoLink' color='primary'>Limpar, e continuar</Text>
-                           </HStack>
-                        </Pressable>
-
-                        <Pressable onPress={() => {
-                           setMostraModal(false);
-                           if (data.status === "aguardando_pagamento_pix") {
-                              return navigate("CheckoutPix");
-                           }
-
-                           const ingresso = data.eventos.flatMap(ingresso => ingresso.ingressos);
-
-                           if (total === 0) {
-                              ingresso.forEach(ingr => {
-                                 adicionaIngressoAoEvento({
-                                    id: ingr.id,
-                                    lote_id: ingr.lote_id,
-                                    qtd: ingr.qtd,
-                                    valor: ingr.valor
-                                 })
-                              })
-                           }
-
-                           const usuarioAtribuidos = ingresso.filter(usuario => usuario.dados_atribuir.length > 0)
-                              .map(item => item.dados_atribuir)
-                              .map(item => item.filter(user => user.cpf && user.nome))
-                              .filter(item => item.length > 0);
-
-                           if (usuarioAtribuidos.length > 0) {
-                              return navigate("CarrinhoResumo");
-                           }
-                           return navigate("CarrinhoUtilizador");
-                        }}>
-                           <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
-                              <Text variant='botaoLink' color='greenDark'>Continuar</Text>
-                              <Icon.ArrowRight size={18} color={colors.greenDark} />
-                           </HStack>
-                        </Pressable>
-                     </HStack>
-                  </VStack>
-               </VStack>
-            )}
-         </ModalSmall>
-
-         <VStack
-            position="absolute"
-            justifyContent='center'
-            width="100%"
-            bottom={Platform.OS === "android" ? 10 : 30}
-         >
-            <Button
-               loading={handleVerificaSeExisteCarrinho.isPending}
-               marginHorizontal="md"
-               onPress={() => {
-
-                  if (logado) {
-                     updateStatus("");
-                     handleVerificaSeExisteCarrinho.mutate();
-                     return;
-                  }
-
-                  adicionaEvento(evento);
-                  return navigate("Login", {
-                     redirect: "Carrinho",
-                  });
-               }}>
-               Comprar
-            </Button>
-         </VStack>
-      </>
-   )
-}
+import { ButtonComprarIngressos } from './EventosDetalheVerificaCarrinho';
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
@@ -317,17 +149,15 @@ export const EventosDetalhe = () => {
                         </Section.Span>
                      </Section.SubTitle>
 
-                     <Html source={eventoDetalhe?.descricao} />
+                     <Html source={eventoDetalhe?.descricao || ''} />
                   </VStack>
                </Section.Root>
             </View>
-
 
             <View style={{ marginBottom: insets.bottom + 60 }} />
          </Animated.ScrollView>
 
          <ButtonComprarIngressos evento={eventoDetalhe} />
-
       </>
    );
 };

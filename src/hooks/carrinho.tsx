@@ -25,7 +25,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
 
    const adicionaEvento = useCallback((evento: EventosPayload) => {
       const storeEvento = {
-         bairro: evento.bairro,
+         bairro: evento?.bairro || '',
          cidade: evento.cidade,
          data_evento: evento.data_evento,
          nome: evento.nome,

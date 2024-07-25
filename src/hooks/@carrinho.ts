@@ -27,17 +27,17 @@ export type AdicionaIngressosAoEventoProps = {
 }
 
 export type EventoHook = {
-   bairro: string;
-   cidade: string;
-   data_evento: string;
-   nome: string;
-   nome_local: string;
-   logradouro: string;
-   numero: string;
+   bairro?: string;
+   cidade?: string;
+   data_evento?: string;
+   nome?: string;
+   nome_local?: string;
+   logradouro?: string;
+   numero?: string;
    id: string;
-   estado: string;
-   taxas: TaxasCheckout
-   quantidade_parcelas: number;
+   estado?: string;
+   taxas?: TaxasCheckout
+   quantidade_parcelas?: number;
 }
 
 export type CarrinhoProviderProps = {

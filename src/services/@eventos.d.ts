@@ -3,18 +3,18 @@ export type EventosPayload = {
    nome: string;
    data_evento: string;
    path_imagem: string;
-   logradouro: string;
-   numero: string;
-   bairro: string;
+   logradouro?: string;
+   numero?: string;
+   bairro?: string;
    complemento?: string,
-   cidade: string;
-   estado: string;
+   cidade?: string;
+   estado?: string;
    nome_local: string;
-   descricao: string;
-   destaque: number;
-   taxas: string;
-   quantidade_parcelas: number;
-   url_visualizacao: string;
+   descricao?: string;
+   destaque?: number;
+   taxas?: string;
+   quantidade_parcelas?: number;
+   url_visualizacao?: string;
 }
 
 
