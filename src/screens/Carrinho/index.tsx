@@ -36,9 +36,10 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
       .find(item => item.evento_id === eventoId)?.ingressos
       .find(ingr => ingr.id === ingresso.id)?.qtd || 0;
 
+   // totalItens >= ingresso.quantidade_por_usuario ||
+
    const desabilitarBotao = ingresso.quantidade_disponivel_ingresso <= 0 ||
       totalItens >= ingresso.quantidade_por_compra ||
-      totalItens >= ingresso.quantidade_por_usuario ||
       quantidade >= ingresso.quantidade_disponivel_ingresso ||
       quantidade >= ingresso.quantidade_disponivel_lote;
 
@@ -53,7 +54,7 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
             </Card.SubTitle>
          </VStack>
 
-         <Card.Title variant='labelInput'>
+         <Card.Title variant='labelInput' color='primary'>
             {Maskara.dinheiro(+ingresso.valor)}
          </Card.Title>
 
