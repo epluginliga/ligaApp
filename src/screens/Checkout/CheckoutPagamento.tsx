@@ -17,6 +17,14 @@ import { useMutation } from '@tanstack/react-query'
 import { checkout } from '../../services/checkout'
 import { useCheckout } from '../../hooks/checkout'
 import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado'
+import Temporizador from '../../components/Temporizador'
+import { ActivityIndicator, Pressable } from 'react-native'
+import { carrinhoStatusPagamento, CarrinhoStatusPagamentoPayload, deletaCarrinho } from '../../services/carrinho'
+import { useAuth } from '../../hooks/auth'
+import { ModalSmall } from '../../components/Modal/ModalSmall'
+import HStack from '../../components/Views/Hstack'
+import { EventosPayload } from '../../services/@eventos'
+import { CheckoutPagamentoModalPagamentoIniciado } from './CheckoutPagamentoModal'
 
 type FormasPagamento = 'CheckoutCartao' | 'CheckoutPix';
 
@@ -66,32 +74,85 @@ const nomePagamento = {
    }
 }
 
-function PagamentoPix() {
+const statusPagamento: { [key: string]: "aguardando_pagamento" | "aguardando_pagamento_pix" } = {
+   "CheckoutCartao": "aguardando_pagamento",
+   "CheckoutPix": "aguardando_pagamento_pix",
+}
+
+type PagamentoBotaoProps = {
+   formaPagamento: FormasPagamento
+}
+function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
+   const [mostraModal, setMostraModal] = useState(false);
+
    const { carrinhoId } = useCarrinho();
    const navigate = useNavigation();
    const { setCondigoPagamento } = useCheckout();
+   const { token } = useAuth()
+
+   const handleVerificaStatusPagamento = useMutation({
+      mutationFn: () => carrinhoStatusPagamento(carrinhoId, token),
+      onSuccess(data) {
+         if (data.carrinho.status === "em_compra") {
+            if (formaPagamento === "CheckoutCartao") {
+               navigate.navigate("CheckoutCartao");
+               return;
+            }
+
+            handleCheckout.mutate();
+            return;
+         }
+
+         if (statusPagamento[formaPagamento] !== data.carrinho.status) {
+            setMostraModal(true);
+            return;
+         }
+
+         if (data.carrinho.status === "aguardando_pagamento_pix") {
+            handleCheckout.mutate();
+            return;
+         }
+
+         if (data.carrinho.status === "aguardando_pagamento") {
+            navigate.navigate("CheckoutCartao");
+            return;
+         }
+      },
+   });
 
    const handleCheckout = useMutation({
       mutationFn: () => checkout({ tipo_pagamento: "pix" }, carrinhoId),
       onSuccess(data) {
          setCondigoPagamento(data.codigo_pagamento);
-         navigate.navigate("CheckoutPix",)
-      },
+         navigate.navigate(formaPagamento)
+      }
    });
 
+   const carrinho = handleVerificaStatusPagamento.data;
+
    return (
-      <Button
-         loading={handleCheckout.isPending}
-         onPress={() => handleCheckout.mutate()}
-         marginHorizontal="md">
-         Continuar
-      </Button>
+      <>
+
+         {carrinho && <CheckoutPagamentoModalPagamentoIniciado
+            carrinho={carrinho}
+            mostraModal={mostraModal}
+            setMostraModal={setMostraModal} />
+         }
+
+         <Button
+            loading={handleVerificaStatusPagamento.isPending}
+            onPress={() => handleVerificaStatusPagamento.mutate()}
+            marginHorizontal="md">
+            Continuar
+         </Button>
+      </>
    )
 }
+
 export function CheckoutPagamento() {
    const { navigate } = useNavigation();
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('CheckoutCartao');
-   const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal } = useCarrinho();
+   const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal, carrinhoId } = useCarrinho();
    const { statusPagamento } = useCheckout();
 
    const taxas = {
@@ -104,6 +165,13 @@ export function CheckoutPagamento() {
    useEffect(() => {
       setTaxa(taxas[formaPagamento]);
    }, [formaPagamento])
+
+   useEffect(() => {
+      if (statusPagamento != "pendente" && statusPagamento != "") {
+         const time = setTimeout(() => navigate("Ingressos"), 2000);
+         return () => clearTimeout(time);
+      }
+   }, [statusPagamento]);
 
    if (statusPagamento != "pendente" && statusPagamento != "") {
       return (
@@ -157,18 +225,8 @@ export function CheckoutPagamento() {
                   <Section.Title color='azul'>Total do pedido: {Maskara.dinheiro(valorFinal)}</Section.Title>
                </VStack>
 
-               {
-                  formaPagamento === "CheckoutCartao" ? (
-                     <Button
-                        disabled={!formaPagamento}
-                        onPress={() => navigate(formaPagamento)}
-                        marginHorizontal="md">
-                        Continuar
-                     </Button>
-                  ) : (
-                     <PagamentoPix />
-                  )
-               }
+               <PagamentoBotao formaPagamento={formaPagamento} />
+
             </Section.Root>
          </VStack>
 

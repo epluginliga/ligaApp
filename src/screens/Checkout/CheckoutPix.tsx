@@ -57,7 +57,7 @@ function cancelaCarrinhoStatusPagamento(data?: CarrinhoStatusPagamentoPayload) {
    if (!data) {
       return false;
    }
-   
+
    if (data?.carrinho.status === "comprado" || data?.carrinho.status === "cancelado") {
       return false;
    }
@@ -97,6 +97,7 @@ function CodigoPix({ uri, codigo }: CodigoPixProps) {
 export function CheckoutPix() {
    const insets = useSafeAreaInsets();
    const { codigoPagamento, statusPagamento } = useCheckout();
+   const { navigate } = useNavigation();
 
    if (statusPagamento != "pendente" && statusPagamento != "") {
       return (
@@ -107,9 +108,10 @@ export function CheckoutPix() {
       )
    }
 
+
    return (
       <>
-         <Layout.Header title='Checkout' />
+         <Layout.Header title='Checkout' handleBack={() => navigate("CheckoutPagamento")} />
          <Layout.Scroll>
 
             <VStack gap='xl' justifyContent='space-between' flex={1} marginBottom='lg'>

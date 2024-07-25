@@ -78,7 +78,15 @@ export async function removeCupomDesconto(carrinho: string): PayloadDefault<stri
 
 export type CarrinhoStatusPagamentoPayload = {
    carrinho: {
-      status: "comprado",
+      status: "novo"
+      | "comprado"
+      | "aguardando_pagamento_pix"
+      | "aguardando_pagamento"
+      | "cancelado"
+      | "em_compra"
+      | "aguardando_pagamento_boleto"
+      | "aguardando_pagamento_cartao_credito",
+      status_str: string;
    }
 }
 export async function carrinhoStatusPagamento(carrinho_id: string, token: string): PayloadDefault<CarrinhoStatusPagamentoPayload> {

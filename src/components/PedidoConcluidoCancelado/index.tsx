@@ -7,6 +7,8 @@ import { useTheme } from "@shopify/restyle";
 import { Theme } from "../../theme/default";
 import { Button } from "../Button";
 import { useNavigation } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native";
+import HStack from "../Views/Hstack";
 
 type PedidoConcluidoCanceladoProps = {
    status: StatusPagamento;
@@ -24,6 +26,10 @@ export function PedidoConcluidoCancelado({ status }: PedidoConcluidoCanceladoPro
                   Esse pedido está com o status: {'\n'}
                   <Text variant="header" color="greenDark">{status}</Text>
                </Text>
+               <HStack alignItems="center" justifyContent="center">
+                  <Text variant="header2">Redirecionando...</Text>
+                  <ActivityIndicator size="small" color={colors.primary} />
+               </HStack>
             </VStack>
             <VStack mx="lg">
                <Button
@@ -44,6 +50,11 @@ export function PedidoConcluidoCancelado({ status }: PedidoConcluidoCanceladoPro
                Esse pedido está com o status: {'\n'}
                <Text variant="header" color="warning">{status}</Text>
             </Text>
+            <HStack alignItems="center" justifyContent="center">
+               <Text variant="header2">Redirecionando...</Text>
+               <ActivityIndicator size="small" color={colors.primary} />
+            </HStack>
+
          </VStack>
          <VStack mx="lg">
             <Button
