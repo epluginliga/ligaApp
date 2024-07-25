@@ -90,11 +90,13 @@ export function TituloCardCupom({ cupom }: { cupom: PayloadCupomAplicado }) {
 
          <VStack>
             <Section.Span>
-               Você ganhou:
+               Você ganhou:{' '}
                <Text variant='header2'
-                  color='greenDark'
-                  textDecorationLine='underline'>
-                  {cupom.valor}{tipoDesconto[cupom.tipo_desconto]}
+                  color='greenDark'>
+                  {cupom.tipo_desconto === "percentual" ?
+                     `${cupom.valor}${tipoDesconto[cupom.tipo_desconto]}` :
+                     `${Maskara.dinheiro(cupom.valor)}`
+                  }
                </Text> de desconto
             </Section.Span>
 

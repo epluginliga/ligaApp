@@ -28,6 +28,7 @@ import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { dataApp } from '../../utils/utils';
 import { useCheckout } from '../../hooks/checkout';
 import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -70,6 +71,8 @@ export function CarrinhoUtilizador() {
    const { total, evento, setCarrinhoId } = useCarrinho();
    const { statusPagamento } = useCheckout();
    const { navigate } = useNavigation();
+   const insets = useSafeAreaInsets();
+
    const { control, handleSubmit, formState: { errors }, setValue, resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
@@ -176,8 +179,7 @@ export function CarrinhoUtilizador() {
                               key={indice}
                            >
                               <VStack gap='md'>
-                                 <Section.Root>
-                                    <Text color='azul' marginHorizontal='sm'>{ingresso.nome}</Text>
+                                 <Section.Root tituloFechar={ingresso.nome}>
 
                                     <Pressable
                                        disabled={atribuiUser !== undefined && !ativo}
@@ -188,6 +190,8 @@ export function CarrinhoUtilizador() {
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, "");
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, "");
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, "");
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, "");
+
                                              return serAtribuiUser(undefined);
                                           }
                                           serAtribuiUser({
@@ -203,7 +207,7 @@ export function CarrinhoUtilizador() {
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, dataApp(usuario?.data_nascimento).diaMesAnoISOBR());
                                        }}>
 
-                                       <HStack alignItems='center' mb='md'>
+                                       <HStack alignItems='center' >
                                           {ativo ? (
                                              <Icon.CheckCircle color={colors.greenDark} />
                                           ) : (
@@ -321,8 +325,9 @@ export function CarrinhoUtilizador() {
                   <Animated.View
                      entering={FadeInDown}
                      exiting={FadeOutUp}
+                     style={{ marginBottom: insets.bottom }}
                   >
-                     <Section.Root>
+                     <Section.Root gap='lg'>
                         <VStack>
                            <HStack alignItems='center' justifyContent='space-between'>
                               <Section.SubTitle>Total em ingressos: </Section.SubTitle>
@@ -336,13 +341,13 @@ export function CarrinhoUtilizador() {
                         {carrinho.data && (
                            <Button
                               onPress={handleSubmit((data) => {
-                                 // console.log(JSON.stringify(data,null,1));
                                  return handleAtribuirUtilizador.mutate(data);
                               })}
                            >
                               Continuar
                            </Button>
                         )}
+
                      </Section.Root>
                   </Animated.View>
 

@@ -3,7 +3,7 @@ import { CodigoPagamento } from "../services/@checkout";
 import { MMKV } from "react-native-mmkv";
 import { subMinutes } from "date-fns";
 
-export type StatusPagamento = "pendente" | "expirado" | "concluido" | "";
+export type StatusPagamento = "pendente" | "expirado" | "concluido" | "aguardando_pagamento_pix" | "";
 type CheckoutContextProps = {
    codigoPagamento: CodigoPagamento;
    setCondigoPagamento: (data: CodigoPagamento) => void;

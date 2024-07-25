@@ -27,7 +27,7 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
    }
 
    return (
-      <Input {...rest}>
+      <Input {...rest} editable={editable}>
          <Controller
             name={name}
             rules={{ required: true }}
@@ -39,8 +39,9 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
                         fontSize: theme.spacing.md,
                         fontFamily: theme.fonts.medium,
                         flex: 1,
-                        opacity: 0.4,
+
                         ...style[rest.variant || "transparent"],
+                        backgroundColor:"bege_200",
                      }}>
                         {value}
                      </Text>
@@ -49,7 +50,7 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
 
                return (
                   <TextInput
-                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
+                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_200}
                      onChangeText={(text) => mask ? onChange(mask(text)) : onChange(text)}
                      value={value}
                      onBlur={onBlur}

@@ -16,20 +16,31 @@ import { useCarrinho } from "../../hooks/carrinho";
 import { Button } from "../../components/Button";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "../../theme/default";
-import { PayloadCarrinho } from "../../services/@carrinho";
+import { IngressoCarrinho, PayloadCarrinho } from "../../services/@carrinho";
+
+
+function verificaSeCarrinhoTemUtilizador(ingresso: IngressoCarrinho[]): "CarrinhoResumo" | null {
+   const Temutilizadores = ingresso.filter(usuario => usuario.dados_atribuir.length > 0)
+      .map(item => item.dados_atribuir)
+      .map(item => item.filter(user => user.cpf && user.nome))
+      .filter(item => item.length > 0);
+
+   if (Temutilizadores.length > 0) {
+      return "CarrinhoResumo";
+   }
+
+   return null;
+}
 
 type ButtonComprarInfressosProps = {
    evento: EventosPayload
 }
-
-
-// const acao
 export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) {
    const [mostraModal, setMostraModal] = useState(false);
    const { logado } = useAuth();
-   const { adicionaEvento, limpaCarrinho, setCupom, total, adicionaIngressoAoEvento, setCarrinhoId, evento: eventoAtual } = useCarrinho();
+   const { adicionaEvento, limpaCarrinho, setCupom, setCarrinhoId, total, adicionaIngressoAoEvento } = useCarrinho();
    const { navigate } = useNavigation();
-   const { statusPagamento, updateStatus } = useCheckout();
+   const { updateStatus } = useCheckout();
    const { colors } = useTheme<Theme>()
 
    function limpaCarrinhoLocal() {
@@ -37,18 +48,23 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
       adicionaEvento(evento);
       setCarrinhoId('')
       navigate('Carrinho');
+      updateStatus("");
    }
 
-   function aguardandoPagamentoPix(id: string) {
-      if (statusPagamento === "pendente") {
-         setMostraModal(true);
-         return;
-      }
+   function atualizaIngressoAoEvento(ingresso: IngressoCarrinho[]) {
 
-      cancelaCarrinho.mutate(id);
-      limpaCarrinhoLocal();
-      navigate("Carrinho");
-      return;
+      console.log("ATUALIZOU");
+
+      if (total === 0) {
+         ingresso.forEach(ingr => {
+            adicionaIngressoAoEvento({
+               id: ingr.id,
+               lote_id: ingr.lote_id,
+               qtd: ingr.qtd,
+               valor: ingr.valor
+            })
+         })
+      }
    }
 
    function emCompra(data: PayloadCarrinho) {
@@ -74,10 +90,9 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
       mutationKey: ['EventoDetalheObtemCarrinho'],
       onSuccess(data) {
          setCarrinhoId(data.id);
-
          switch (data.status) {
             case "aguardando_pagamento_pix":
-               aguardandoPagamentoPix(data.id)
+               setMostraModal(true);
                break;
             case "em_compra":
                emCompra(data);
@@ -131,32 +146,17 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
 
                         <Pressable onPress={() => {
                            setMostraModal(false);
+
                            if (carrinho.status === "aguardando_pagamento_pix") {
                               return navigate("CheckoutPix");
                            }
 
                            const ingresso = carrinho.eventos.flatMap(ingresso => ingresso.ingressos);
-                           if (total === 0) {
-                              ingresso.forEach(ingr => {
-                                 console.log("atualizou o carrinho!")
-                                 adicionaIngressoAoEvento({
-                                    id: ingr.id,
-                                    lote_id: ingr.lote_id,
-                                    qtd: ingr.qtd,
-                                    valor: ingr.valor
-                                 })
-                              })
-                           }
 
-                           const usuarioAtribuidos = ingresso.filter(usuario => usuario.dados_atribuir.length > 0)
-                              .map(item => item.dados_atribuir)
-                              .map(item => item.filter(user => user.cpf && user.nome))
-                              .filter(item => item.length > 0);
+                           atualizaIngressoAoEvento(ingresso);
+                           const rota = verificaSeCarrinhoTemUtilizador(ingresso);
 
-                           if (usuarioAtribuidos.length > 0) {
-                              return navigate("CarrinhoResumo");
-                           }
-                           return navigate("CarrinhoUtilizador");
+                           return navigate(rota || "CarrinhoUtilizador");
                         }}>
                            <HStack alignItems='center' backgroundColor='white' p='sm' borderRadius={10}>
                               <Text variant='botaoLink' color='greenDark'>Continuar</Text>
@@ -167,7 +167,7 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
                   </VStack>
                </VStack>
             )}
-         </ModalSmall>
+         </ModalSmall >
 
          <VStack
             position="absolute"
@@ -179,7 +179,6 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
                loading={handleVerificaSeExisteCarrinho.isPending}
                marginHorizontal="md"
                onPress={() => {
-                  console.log(logado)
                   if (logado) {
                      updateStatus("");
                      handleVerificaSeExisteCarrinho.mutate();

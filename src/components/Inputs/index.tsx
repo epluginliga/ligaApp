@@ -18,7 +18,8 @@ type Input = InputDefault & {
    children: any;
 }
 
-export function Input({ children, iconLeft, iconRight, error, label, variant = "transparent" }: Input) {
+export function Input({ children, iconLeft, iconRight, error, label, variant = "transparent", editable = true }: Input) {
+
    if (variant === "solid") {
       return (
 
@@ -55,7 +56,7 @@ export function Input({ children, iconLeft, iconRight, error, label, variant = "
          <HStack
             alignItems="center"
             paddingHorizontal="md"
-            backgroundColor='white'
+            backgroundColor={!editable ? "bege" : 'white'}
             width="100%"
             overflow='hidden'
             borderRadius={12}
