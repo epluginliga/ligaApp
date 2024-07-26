@@ -93,6 +93,12 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
    const handleVerificaStatusPagamento = useMutation({
       mutationFn: () => carrinhoStatusPagamento(carrinhoId, token),
       onSuccess(data) {
+
+         if (data.carrinho.status === "comprado") {
+            navigate.navigate("IngressosTab");
+            return;
+         }
+
          if (data.carrinho.status === "em_compra") {
             if (formaPagamento === "CheckoutCartao") {
                navigate.navigate("CheckoutCartao");

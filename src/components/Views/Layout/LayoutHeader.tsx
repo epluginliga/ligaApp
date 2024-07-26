@@ -24,7 +24,7 @@ export function LayoutHeader({ title, rigth, children, variant = "default", hand
    const insets = useSafeAreaInsets();
 
    return (
-      <Pressable style={{ marginTop: insets.top }} onPress={() => handleBack ? handleBack() : goBack()}>
+      <Pressable style={{ marginTop: insets.top }} onPress={() => handleBack?.() || goBack()}>
 
          <HStack paddingHorizontal='md' paddingBottom='sm' alignItems='center' {...rest}>
             <Icon.ArrowLeft />

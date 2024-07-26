@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 import VStack from '../../components/Views/Vstack'
 import { Section } from '../../components/Section'
@@ -29,8 +29,8 @@ export function CheckoutProcessandoPagamento() {
    const { colors } = useTheme<Theme>();
    const [time, setTime] = useState(0);
    const { carrinhoId } = useCarrinho();
+   const { updateStatus } = useCheckout();
    const { token } = useAuth();
-   const { statusPagamento } = useCheckout();
 
    const widthScreen = Dimensions.get("screen").width;
    const partes = (widthScreen / frases.length) - 10;
@@ -41,27 +41,28 @@ export function CheckoutProcessandoPagamento() {
          return false;
       }
 
+      if (time === frases.length) {
+         return false;
+      }
+
       if (data?.carrinho.status === "comprado" || data?.carrinho.status === "cancelado") {
-         return false;
-      }
-
-      if (time >= frases.length) {
-         return false;
-      }
-
-      if (statusPagamento != "pendente" && statusPagamento != "") {
          return false;
       }
 
       return 10000;
    }
 
-   const { data, isFetching } = useQuery({
+   const { data, isFetching, refetch } = useQuery({
       queryFn: () => carrinhoStatusPagamento(carrinhoId, token),
       queryKey: ['CartaocarrinhoStatusPagamento'],
       refetchInterval: data => cancelaCarrinhoStatusPagamento(data?.state?.data),
-      enabled: statusPagamento === ""
    });
+
+   useFocusEffect(
+      useCallback(() => {
+         refetch()
+      }, [refetch])
+   )
 
    console.log(data?.carrinho.status, isFetching)
 
@@ -94,15 +95,15 @@ export function CheckoutProcessandoPagamento() {
          codigo: "200",
          mensagem: "Pagamento Aprovado!"
       });
-      return;
+      return () => { }
    };
 
-   if (time >= frases.length) {
+   if (time == frases.length) {
       navigate("CheckoutFalha", {
          codigo: "418",
          mensagem: "Tempo expirado!"
       });
-      return;
+      return () => { }
    };
 
    return (

@@ -13,17 +13,11 @@ import { Maskara } from '../../utils/Maskara'
 import { useCarrinho } from '../../hooks/carrinho'
 import { useTheme } from '@shopify/restyle'
 import { Theme } from '../../theme/default'
-import { useCheckout } from '../../hooks/checkout'
 
 export function CheckoutSucesso() {
    const { navigate } = useNavigation();
    const { colors } = useTheme<Theme>();
    const { total, totalItens } = useCarrinho();
-   const { updateStatus } = useCheckout();
-
-   useEffect(() => {
-      updateStatus("concluido");
-   }, []);
 
    return (
       <>
