@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 
 import HStack from '../../components/Views/Hstack';
 import VStack from '../../components/Views/Vstack';
@@ -17,7 +17,7 @@ import Circle from '../../components/Views/Circle';
 import { cpfMask } from '../../utils/Maskara';
 import { Icon } from '../../icons';
 import { Validacoes } from '../../utils/Validacoes';
-import { bilheteTransferir } from '../../services/bilhete';
+import { bilheteTransferir, usuarioConsultaUsuario, UsuarioConsultaUsuarioProps } from '../../services/bilhete';
 import { RouteApp } from '../../@types/navigation';
 import { PayloadDefaultResponse } from '../../services/@index';
 import { useTheme } from '@shopify/restyle';
@@ -26,6 +26,45 @@ import { Section } from '../../components/Section';
 
 import { CPF } from '@env';
 import { z } from 'zod';
+import { dataApp } from '../../utils/utils';
+import { ListEmptyComponent } from '../../components/ListEmptyComponent';
+import Text from '../../components/Text';
+
+type SucessoUsuario = {
+   user: UsuarioConsultaUsuarioProps;
+   children: React.ReactNode;
+}
+function SucessoUsuario({ user, children }: SucessoUsuario) {
+   return (
+      <VStack
+         justifyContent='center'
+         alignItems='center'
+         gap='md'
+      >
+         <VStack
+            borderRadius={100}
+            backgroundColor="bege"
+            width={100}
+            height={100}
+            mb='sm'
+            justifyContent='center'
+            alignItems='center'
+            position='relative'>
+            <Image
+               style={{ height: 90, width: 90, borderRadius: 100 }}
+               source={{ uri: user?.path_avatar_aprovado }}
+            />
+         </VStack>
+         <VStack alignItems='center'>
+            <Section.Title>{user.name}</Section.Title>
+            <Section.Span>{user?.username}</Section.Span>
+            <Section.Span>{dataApp(user?.data_nascimento).diaMesAnoISOBR()}</Section.Span>
+         </VStack>
+         {children}
+      </VStack>
+   )
+}
+
 
 function Sucesso({ data }: { data: PayloadDefaultResponse }) {
    const { colors } = useTheme<Theme>();
@@ -108,7 +147,14 @@ export function IngressoTransferir() {
       return () => clearTimeout(time);
    }, []);
 
-   console.log(params.ingresso_id)
+
+   const handleBuscarUsuario = useMutation({
+      mutationKey: ['bilheteTransferir'],
+      mutationFn: (body: IForm) => {
+         onSubmit.reset();
+         return usuarioConsultaUsuario(body.destinatario_cpf.replace(/\D/g, ''))
+      },
+   });
 
    const onSubmit = useMutation({
       mutationKey: ['bilheteTransferir'],
@@ -121,50 +167,71 @@ export function IngressoTransferir() {
       onSuccess: () => handleCloseModal(),
    });
 
+   console.log(JSON.stringify(handleBuscarUsuario, null, 1))
    const erro: any = onSubmit?.error;
 
    return (
-      <Layout.Scroll contentContainerStyle={{ flexGrow: 1 }}>
-         <HStack m="sm" justifyContent="flex-end">
-            <Pressable
-               onPress={goBack}>
-               <Circle
-                  variant="shadow"
-                  width={30}
-                  height={30}
-                  marginVertical="sm"
-                  justifyContent="center"
-               >
-                  <Icon.X />
-               </Circle>
-            </Pressable>
-         </HStack>
+      <Layout.Root>
+         <Layout.Scroll contentContainerStyle={{ flexGrow: 1 }}>
+            <HStack m="sm" justifyContent="flex-end">
+               <Pressable
+                  onPress={goBack}>
+                  <Circle
+                     variant="shadow"
+                     width={30}
+                     height={30}
+                     marginVertical="sm"
+                     justifyContent="center"
+                  >
+                     <Icon.X />
+                  </Circle>
+               </Pressable>
+            </HStack>
 
-         <VStack justifyContent='space-between' flex={1} mx='sm' gap='md'>
-            <VStack gap='md'>
-               <InputText
-                  inputMode='search'
-                  onSubmitEditing={handleSubmit((data) => onSubmit.mutate(data))}
-                  label="CPF"
-                  iconLeft={<Icon.User size={20} />}
-                  name='destinatario_cpf'
-                  mask={cpfMask}
-                  placeholder='Digite o CPF do novo utilizador'
-                  control={control}
-                  error={errors?.destinatario_cpf?.message}
-               />
+            <VStack justifyContent='space-between' flex={1} mx='sm' gap='md'>
+               <HStack gap='md' height={80} alignItems='center' justifyContent='center'>
+                  <InputText
+                     inputMode='search'
+                     onSubmitEditing={handleSubmit((data) => handleBuscarUsuario.mutate(data))}
+                     label="CPF"
+                     iconLeft={<Icon.User size={20} />}
+                     name='destinatario_cpf'
+                     mask={cpfMask}
+                     placeholder='Digite o CPF do novo utilizador'
+                     control={control}
+                     error={errors?.destinatario_cpf?.message}
+                     keyboardType='decimal-pad'
+                  />
+                  <VStack mt='lg'>
+                     <Button
+                        iconRight={false}
+                        loading={handleBuscarUsuario.isPending}
+                        onPress={handleSubmit((data) => handleBuscarUsuario.mutate(data))}>
+                        <Icon.Search color="#fff" />
+                     </Button>
+                  </VStack>
+               </HStack>
+
+               {onSubmit.data ? <Sucesso data={onSubmit.data} /> : <Error data={erro?.response?.data?.mensagenserro.join('\n')} />}
+
+               {!handleBuscarUsuario.data && !handleBuscarUsuario.isIdle && !handleBuscarUsuario.isPending && (
+                  <ListEmptyComponent title='Usuário não econtrado!' />
+               )}
+
+               <VStack flex={0.6}>
+                  {handleBuscarUsuario.data && (
+                     <SucessoUsuario user={handleBuscarUsuario.data} >
+                        <Button
+                           loading={onSubmit.isPending}
+                           onPress={handleSubmit((data) => onSubmit.mutate(data))}>
+                           Transferir
+                        </Button>
+                     </SucessoUsuario>
+                  )}
+               </VStack>
             </VStack>
+         </Layout.Scroll>
+      </Layout.Root>
 
-            {onSubmit.data ? <Sucesso data={onSubmit.data} /> : <Error data={erro?.response?.data?.mensagenserro.join('\n')} />}
-
-            <View style={{ justifyContent: "flex-end", marginBottom: insets.bottom + 8 }}>
-               <Button
-                  loading={onSubmit.isPending}
-                  onPress={handleSubmit((data) => onSubmit.mutate(data))}>
-                  Transferir
-               </Button>
-            </View>
-         </VStack>
-      </Layout.Scroll>
    )
 }

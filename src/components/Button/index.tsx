@@ -42,7 +42,8 @@ export function Button({ children, onPress, iconLeft, iconRight, disabled = fals
             {!loading && iconLeft && iconLeft}
 
             {typeof children !== "string" ? (
-               children
+               loading ? <ActivityIndicator size="small" color="#fff" /> : children
+               
             ) : (
                <Text variant={props.variant === "link" ? 'botaoLink' : "botaoDefault"} color='white'>
                   {loading ? <ActivityIndicator size="small" color="#fff" /> : children}
