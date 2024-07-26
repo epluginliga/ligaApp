@@ -15,14 +15,13 @@ import { useEffect } from "react";
 
 type CheckoutPagamentoModalPagamentoIniciadoProps = {
    mostraModal: boolean;
-   carrinho: CarrinhoStatusPagamentoPayload;
+   carrinho?: CarrinhoStatusPagamentoPayload;
    setMostraModal: (value: boolean) => void;
 }
 const rotaPagamento: { [key: string]: "CheckoutCartao" | "CheckoutPix" } = {
    "aguardando_pagamento": "CheckoutCartao",
    "aguardando_pagamento_pix": "CheckoutPix"
 }
-
 
 export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho, setMostraModal }: CheckoutPagamentoModalPagamentoIniciadoProps) {
    const { limpaCarrinho, adicionaEvento, carrinhoId } = useCarrinho()
@@ -49,13 +48,27 @@ export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho,
       }
    }, [handleCancelaCarrinho]);
 
+   if(!carrinho) return;
+
    return (
       <ModalSmall
          minHeight="25%"
          maxHeight={350}
          ativo={mostraModal}>
          {carrinho && (
-            <VStack gap='xl'>
+            <VStack gap='xl' position="relative">
+               <Pressable onPress={() => setMostraModal(false)}>
+                  <VStack
+                     position="absolute"
+                     top={-25}
+                     backgroundColor="white"
+                     variant="shadow"
+                     p="xs"
+                     borderRadius={100}
+                     right={0}>
+                     <Icon.X />
+                  </VStack>
+               </Pressable>
                {handleCancelaCarrinho.error ? (
                   <VStack justifyContent="center" alignItems="center" gap="md">
                      <Icon.Warning size={30} />
@@ -85,7 +98,7 @@ export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho,
                                  ) : (
                                     <>
                                        <Icon.Trash size={14} color={colors.primary} />
-                                       <Text variant='botaoLink' color='primary'>Cancelar</Text>
+                                       <Text variant='botaoLink' color='primary'>Excluir pedido</Text>
                                     </>
                                  )}
                               </HStack>

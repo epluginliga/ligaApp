@@ -133,11 +133,10 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
    return (
       <>
 
-         {carrinho && <CheckoutPagamentoModalPagamentoIniciado
+         <CheckoutPagamentoModalPagamentoIniciado
             carrinho={carrinho}
             mostraModal={mostraModal}
             setMostraModal={setMostraModal} />
-         }
 
          <Button
             loading={handleVerificaStatusPagamento.isPending}

@@ -22,7 +22,7 @@ export type InputSelecionarProps = InputDefault & {
    }[]
 }
 
-export function InputSelecionar({ name, label, option, ...rest }: InputSelecionarProps) {
+export function InputSelecionar({ name, label, option, editable,  ...rest }: InputSelecionarProps) {
    const { colors, spacing, fonts } = useTheme<Theme>();
    const [search, setSearch] = useState("");
    const modalRef = useRef<HandleModalApp>(null);
@@ -43,7 +43,7 @@ export function InputSelecionar({ name, label, option, ...rest }: InputSeleciona
                <ModalApp
                   ref={modalRef}
                   handleOpen={(
-                     <Input label={label} error={rest.error}>
+                     <Input editable={editable} label={label} error={rest.error}>
                         <HStack alignItems='center' justifyContent='space-between' width="100%">
                            <HStack alignItems='center'>
                               {value && <Icon.CheckCircle color="#0A906E" />}

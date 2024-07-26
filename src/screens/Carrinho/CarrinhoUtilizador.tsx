@@ -293,6 +293,7 @@ export function CarrinhoUtilizador() {
                                           exiting={FadeOutUp}
                                        >
                                           <InputSelecionar
+                                             editable={!ativo}
                                              placeholder='Selecione o sexo'
                                              label='Sexo'
                                              name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
