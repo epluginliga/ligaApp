@@ -25,6 +25,9 @@ export async function tokenCartao(
 }
 
 export async function checkout(body: CheckoutProps, carrinho_id: string): PayloadDefault<CheckoutPayload> {
+   const oldTimeout = api.defaults.timeout;
+
+   // api.defaults.timeout = 70000 // 1 minuto
    return await api
       .post(`/carrinho/checkout/${carrinho_id}`, body)
       .then(success => {
@@ -32,5 +35,7 @@ export async function checkout(body: CheckoutProps, carrinho_id: string): Payloa
             throw Error("Erro interno!")
          }
          return success.data;
+      }).finally(() => {
+         // api.defaults.timeout = oldTimeout;
       });
 }

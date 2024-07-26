@@ -36,8 +36,8 @@ export type EventoHook = {
    numero?: string;
    id: string;
    estado?: string;
-   taxas?: TaxasCheckout
-   quantidade_parcelas?: number;
+   taxas: TaxasCheckout
+   quantidade_parcelas: number;
 }
 
 export type CarrinhoProviderProps = {

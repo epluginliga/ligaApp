@@ -24,6 +24,7 @@ import { PerfilMeusEndereco } from '../screens/Perfil/PerfilMeusEndereco';
 import { PerfilMeusPedidos } from '../screens/Perfil/PerfilMeusPedidos';
 import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
+import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
 
 const Stack = createNativeStackNavigator();
 
@@ -65,6 +66,7 @@ export function RouteLogado() {
                <Stack.Screen name="CheckoutCartao" component={CheckoutCartao} />
                <Stack.Screen name="CheckoutFalha" component={CheckoutFalha} />
                <Stack.Screen name="CheckoutSucesso" component={CheckoutSucesso} />
+               <Stack.Screen name="CheckoutProcessandoPagamento" component={CheckoutProcessandoPagamento} />
             </Stack.Group>
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>

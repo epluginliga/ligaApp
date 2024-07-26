@@ -107,7 +107,10 @@ function FormCartaoCredito() {
             codigo: success?.mensagem_adquirencia?.codigo,
             mensagem: success?.mensagem_adquirencia?.mensagem
          });
-      }
+      },
+      onError() {
+         navigate("CheckoutProcessandoPagamento")
+      },
    });
 
    return (
