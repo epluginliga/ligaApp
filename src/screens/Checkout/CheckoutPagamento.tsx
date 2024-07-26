@@ -105,7 +105,7 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
                return;
             }
 
-            handleCheckout.mutate();
+            handleCheckoutPix.mutate();
             return;
          }
 
@@ -115,7 +115,7 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
          }
 
          if (data.carrinho.status === "aguardando_pagamento_pix") {
-            handleCheckout.mutate();
+            handleCheckoutPix.mutate();
             return;
          }
 
@@ -126,12 +126,15 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
       },
    });
 
-   const handleCheckout = useMutation({
+   const handleCheckoutPix = useMutation({
       mutationFn: () => checkout({ tipo_pagamento: "pix" }, carrinhoId),
       onSuccess(data) {
          setCondigoPagamento(data.codigo_pagamento);
          navigate.navigate(formaPagamento)
-      }
+      },
+      onError() {
+         navigate.navigate("CheckoutGerandoPix")
+      },
    });
 
    const carrinho = handleVerificaStatusPagamento.data;
@@ -155,10 +158,8 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
 }
 
 export function CheckoutPagamento() {
-   const { navigate } = useNavigation();
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('CheckoutCartao');
-   const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal, carrinhoId } = useCarrinho();
-   const { statusPagamento } = useCheckout();
+   const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal } = useCarrinho();
 
    const taxas = {
       CheckoutCartao: totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100),

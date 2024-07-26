@@ -60,7 +60,7 @@ function cancelaCarrinhoStatusPagamento(data?: CarrinhoStatusPagamentoPayload) {
    if (data?.carrinho.status === "comprado" || data?.carrinho.status === "cancelado") {
       return false;
    }
-   return 10000;
+   return 1000;
 }
 
 function CodigoPix({ uri, codigo }: CodigoPixProps) {

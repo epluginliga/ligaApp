@@ -25,6 +25,7 @@ import { PerfilMeusPedidos } from '../screens/Perfil/PerfilMeusPedidos';
 import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
+import { CheckoutGerandoPix } from '../screens/Checkout/CheckoutGerandoPix';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,7 +67,8 @@ export function RouteLogado() {
                <Stack.Screen name="CheckoutCartao" component={CheckoutCartao} />
                <Stack.Screen name="CheckoutFalha" component={CheckoutFalha} />
                <Stack.Screen name="CheckoutSucesso" component={CheckoutSucesso} />
-               <Stack.Screen name="CheckoutProcessandoPagamento" component={CheckoutProcessandoPagamento} />
+               <Stack.Screen name="CheckoutProcessandoPagamento" component={CheckoutProcessandoPagamento as any} />
+               <Stack.Screen name="CheckoutGerandoPix" component={CheckoutGerandoPix as any} />
             </Stack.Group>
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>

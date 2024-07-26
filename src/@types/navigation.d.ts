@@ -18,6 +18,7 @@ export type RouteApp = {
    CheckoutPix: undefined;
    CheckoutCartao: undefined;
    CheckoutProcessandoPagamento: undefined;
+   CheckoutGerandoPix: undefined;
    IngressosTab: undefined;
    CheckoutSucesso: {
       codigo: string;
