@@ -13,12 +13,9 @@ import { Maskara } from '../../utils/Maskara'
 import { TituloCardCupom } from './CarrinhoCupomDesconto'
 import { useQuery } from '@tanstack/react-query'
 import { obtemCarrinho } from '../../services/carrinho'
-import { useCheckout } from '../../hooks/checkout'
-import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado'
 
 export function CarrinhoResumo() {
    const { navigate } = useNavigation();
-   const { statusPagamento } = useCheckout();
    const { total, totalItens, cupom, setCarrinhoId, setCupom } = useCarrinho();
 
    useQuery({
@@ -35,14 +32,6 @@ export function CarrinhoResumo() {
       },
       refetchOnWindowFocus: true,
    },);
-
-   useEffect(() => {
-      if (statusPagamento != "pendente" && statusPagamento != "") {
-         return navigate("Home");
-      }
-   }, []);
-
-
 
    return (
       <Layout.Root>

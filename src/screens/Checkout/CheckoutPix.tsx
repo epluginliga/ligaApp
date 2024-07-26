@@ -19,7 +19,6 @@ import { useCarrinho } from '../../hooks/carrinho';
 import { carrinhoStatusPagamento, CarrinhoStatusPagamentoPayload } from '../../services/carrinho';
 import { useAuth } from '../../hooks/auth';
 import { TEMPO_PIX } from '@env';
-import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
 
 function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
    const [codigoCopiado, setCodigoCopiado] = useState('');
@@ -96,18 +95,8 @@ function CodigoPix({ uri, codigo }: CodigoPixProps) {
 
 export function CheckoutPix() {
    const insets = useSafeAreaInsets();
-   const { codigoPagamento, statusPagamento } = useCheckout();
+   const { codigoPagamento } = useCheckout();
    const { navigate } = useNavigation();
-
-   if (statusPagamento != "pendente" && statusPagamento != "") {
-      return (
-         <Layout.Root>
-            <Layout.Header title={`Pedido ${statusPagamento}`} />
-            <PedidoConcluidoCancelado status={statusPagamento} />
-         </Layout.Root>
-      )
-   }
-
 
    return (
       <>

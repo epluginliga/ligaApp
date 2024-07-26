@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useForm } from 'react-hook-form'
@@ -23,8 +23,6 @@ import { useCarrinho } from '../../hooks/carrinho'
 import { Maskara } from '../../utils/Maskara'
 import { CVV, HOLDER_NAME_CARD, NUMBER_CARD, VALIDADE_CARD } from '@env';
 import { z } from 'zod'
-import { useCheckout } from '../../hooks/checkout'
-import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado'
 
 const schema = z.object({
    number: z.string(),
@@ -192,16 +190,6 @@ function FormCartaoCredito() {
 }
 
 export function CheckoutCartao() {
-   const { statusPagamento } = useCheckout();
-
-   if (statusPagamento != "pendente" && statusPagamento != "") {
-      return (
-         <Layout.Root>
-            <Layout.Header title='Pagamento' />
-            <PedidoConcluidoCancelado status={statusPagamento} />
-         </Layout.Root>
-      )
-   }
 
    return (
       <Layout.Keyboard>

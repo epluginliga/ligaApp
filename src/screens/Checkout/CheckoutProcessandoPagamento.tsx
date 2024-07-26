@@ -12,8 +12,7 @@ import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { useQuery } from '@tanstack/react-query'
 import { carrinhoStatusPagamento, CarrinhoStatusPagamentoPayload } from '../../services/carrinho'
 import { useCarrinho } from '../../hooks/carrinho'
-import { useAuth } from '../../hooks/auth'
-import { useCheckout } from '../../hooks/checkout'
+import { useAuth } from '../../hooks/auth';
 
 const frases = [
    "Enviando requisicão..",
@@ -29,7 +28,6 @@ export function CheckoutProcessandoPagamento() {
    const { colors } = useTheme<Theme>();
    const [time, setTime] = useState(0);
    const { carrinhoId } = useCarrinho();
-   const { updateStatus } = useCheckout();
    const { token } = useAuth();
 
    const widthScreen = Dimensions.get("screen").width;
@@ -49,10 +47,10 @@ export function CheckoutProcessandoPagamento() {
          return false;
       }
 
-      return 10000;
+      return 1000;
    }
 
-   const { data, isFetching, refetch } = useQuery({
+   const { data, isFetching,  } = useQuery({
       queryFn: () => carrinhoStatusPagamento(carrinhoId, token),
       queryKey: ['CartaocarrinhoStatusPagamento'],
       refetchInterval: data => cancelaCarrinhoStatusPagamento(data?.state?.data),
@@ -60,8 +58,11 @@ export function CheckoutProcessandoPagamento() {
 
    useFocusEffect(
       useCallback(() => {
-         refetch()
-      }, [refetch])
+         setTime(0);
+         width.value = withSpring(0, {
+            damping: 100,
+         });
+      }, [])
    )
 
    console.log(data?.carrinho.status, isFetching)

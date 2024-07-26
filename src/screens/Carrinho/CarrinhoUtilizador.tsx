@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueries } from '@tanstack/react-query';
@@ -26,8 +26,6 @@ import { fetchEventoAtleticas } from '../../services/eventos';
 import { useNavigation } from '@react-navigation/native';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { dataApp } from '../../utils/utils';
-import { useCheckout } from '../../hooks/checkout';
-import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export const schemaUtilizador = z.object({
@@ -69,7 +67,6 @@ export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
    const { total, evento, setCarrinhoId } = useCarrinho();
-   const { statusPagamento } = useCheckout();
    const { navigate } = useNavigation();
    const insets = useSafeAreaInsets();
 
@@ -128,15 +125,6 @@ export function CarrinhoUtilizador() {
       label: item.nome,
       name: item.slug
    })) || [];
-
-   if (statusPagamento != "pendente" && statusPagamento != "") {
-      return (
-         <Layout.Root>
-            <Layout.Header title={`Pedido ${statusPagamento}`} />
-            <PedidoConcluidoCancelado status={statusPagamento} />
-         </Layout.Root>
-      )
-   }
 
    return (
       <>

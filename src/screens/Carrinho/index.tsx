@@ -22,7 +22,6 @@ import { CriaEditaCarrinhoProps } from '../../services/@carrinho';
 import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCheckout } from '../../hooks/checkout';
-import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
@@ -147,15 +146,6 @@ export function Carrinho() {
 
    if (!evento) {
       return;
-   }
-
-   if (statusPagamento != "pendente" && statusPagamento != "") {
-      return (
-         <Layout.Root>
-            <Layout.Header title={`Pedido ${statusPagamento}`} />
-            <PedidoConcluidoCancelado status={statusPagamento} />
-         </Layout.Root>
-      )
    }
 
    return (

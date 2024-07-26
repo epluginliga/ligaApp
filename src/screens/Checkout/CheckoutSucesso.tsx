@@ -18,7 +18,7 @@ export function CheckoutSucesso() {
    const { navigate } = useNavigation();
    const { colors } = useTheme<Theme>();
    const { total, totalItens } = useCarrinho();
-
+   
    return (
       <>
          <Layout.Header title='Sucesso' />

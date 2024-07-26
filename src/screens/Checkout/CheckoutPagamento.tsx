@@ -171,22 +171,6 @@ export function CheckoutPagamento() {
       setTaxa(taxas[formaPagamento]);
    }, [formaPagamento])
 
-   useEffect(() => {
-      if (statusPagamento != "pendente" && statusPagamento != "") {
-         const time = setTimeout(() => navigate("Ingressos"), 2000);
-         return () => clearTimeout(time);
-      }
-   }, [statusPagamento]);
-
-   if (statusPagamento != "pendente" && statusPagamento != "") {
-      return (
-         <Layout.Root>
-            <Layout.Header title={`Pedido ${statusPagamento}`} />
-            <PedidoConcluidoCancelado status={statusPagamento} />
-         </Layout.Root>
-      )
-   }
-
    return (
       <Layout.Root>
          <Layout.Header title='Pagamento' />
