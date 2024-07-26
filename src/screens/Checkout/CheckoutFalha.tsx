@@ -28,7 +28,7 @@ export function CheckoutFalha() {
 
    return (
       <>
-         <Layout.Header title='Pagamento com Erro' />
+         <Layout.Header title='Pagamento com Erro' handleBack={() => navigate.navigate("CheckoutPagamento")} />
          <Layout.Scroll>
 
             <VStack gap='xl' justifyContent='space-between' flex={1} marginBottom='lg'>

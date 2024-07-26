@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
@@ -36,14 +36,13 @@ export function CarrinhoResumo() {
       refetchOnWindowFocus: true,
    },);
 
-   if (statusPagamento != "pendente" && statusPagamento != "") {
-      return (
-         <Layout.Root>
-            <Layout.Header title={`Pedido ${statusPagamento}`} />
-            <PedidoConcluidoCancelado status={statusPagamento} />
-         </Layout.Root>
-      )
-   }
+   useEffect(() => {
+      if (statusPagamento != "pendente" && statusPagamento != "") {
+         return navigate("Home");
+      }
+   }, []);
+
+
 
    return (
       <Layout.Root>

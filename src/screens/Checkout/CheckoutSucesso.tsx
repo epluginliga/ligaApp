@@ -55,7 +55,7 @@ export function CheckoutSucesso() {
                </VStack>
 
                <Button
-                  onPress={() => navigate("Ingressos")}
+                  onPress={() => navigate("IngressosTab")}
                   marginHorizontal="md">
                   Continuar
                </Button>
