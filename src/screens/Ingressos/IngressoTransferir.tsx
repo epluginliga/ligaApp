@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image, Pressable, View } from 'react-native';
+import { Image, Pressable } from 'react-native';
 
 import HStack from '../../components/Views/Hstack';
 import VStack from '../../components/Views/Vstack';
