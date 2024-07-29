@@ -21,6 +21,7 @@ import theme, { Theme } from '../../theme/default'
 import { ModalSmallButton, ModalSmallButtonAction } from '../../components/Modal/ModalSmall';
 import { devolverIngresso } from '../../services/bilhete';
 import { Section } from '../../components/Section';
+import { useAuth } from '../../hooks/auth';
 
 type IconeTipoIngresso = {
    [key: number]: {
@@ -70,7 +71,8 @@ export function IngressosDisponivel() {
    const navigate = useNavigation();
    const { colors } = useTheme<Theme>();
    const modalDevolverPedido = useRef<ModalSmallButtonAction>(null);
-   const queryClient = useQueryClient()
+   const queryClient = useQueryClient();
+   const { user } = useAuth();
 
    const { data, refetch } = useQuery({
       queryKey: ['ingressosFuturosComprados'],
@@ -164,11 +166,11 @@ export function IngressosDisponivel() {
                   </Card.Span>
 
                   {usuarioRecebedor && (
-                  <Card.Span leftIcon={<Icon.ArrowPath />}>
-                     Ingresso transferido para: {'\n'}
-                     <Card.Span color='azul' fontWeight="500">{item.nome_compra}</Card.Span>
-                  </Card.Span>
-               )}
+                     <Card.Span leftIcon={<Icon.ArrowPath />}>
+                        Ingresso transferido para: {'\n'}
+                        <Card.Span color='azul' fontWeight="500">{item.nome_compra}</Card.Span>
+                     </Card.Span>
+                  )}
                </VStack>
 
                <HStack alignItems='flex-start' mr='xs' justifyContent='space-evenly' marginVertical='sm' mt='md'>
@@ -203,6 +205,8 @@ export function IngressosDisponivel() {
 
    if (!data) return;
 
+   const ingressosDisponiveis = data.data?.filter(item => user.documento === item.cpf_compra);
+
    return (
       <Animated.View
          entering={FadeInRight}
@@ -210,7 +214,6 @@ export function IngressosDisponivel() {
          style={[{ flex: 1 }]}
       >
          <Layout.Header title='Ingressos disponíveis' />
-
 
          <FlatList
             contentContainerStyle={{ marginTop: 16 }}
@@ -227,7 +230,7 @@ export function IngressosDisponivel() {
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
             ListFooterComponent={<View style={{ marginBottom: 32 }} />}
-            data={data.data}
+            data={ingressosDisponiveis}
          />
       </Animated.View>
 

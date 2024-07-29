@@ -4,6 +4,7 @@ import { LoginProps, UserProps } from "../services/auth";
 export type UserAuthDados = {
    id: string;
    nome: string;
+   documento: string;
 }
 
 export type UpdateUsuarioProps = {

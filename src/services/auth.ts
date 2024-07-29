@@ -8,6 +8,7 @@ export type UserProps = {
    erro: boolean;
    path_avatar: string;
    name: string;
+   documento: string;
    userName: string;
    email: string;
    user_id: string;

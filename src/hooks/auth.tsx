@@ -30,7 +30,8 @@ function AuthProvider({ children }: AuthProviderProps): React.ReactElement {
 
          const dadosUsuario = {
             id: data.user_id,
-            nome: data.name
+            nome: data.name,
+            documento: data.documento
          };
 
          usuarioStorage.set('token', data.api_token);
