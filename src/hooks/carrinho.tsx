@@ -24,7 +24,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
    });
 
    const adicionaEvento = useCallback((evento: EventosPayload) => {
-      const storeEvento = {
+      const storeEvento: EventoHook = {
          bairro: evento?.bairro || '',
          cidade: evento.cidade,
          data_evento: evento.data_evento,
@@ -106,7 +106,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
             ingressos: []
          }]
       });
-      setEvento(null);
+      setEvento({} as EventoHook);
       setCarrinhoId('');
       setCupom({} as PayloadCupomAplicado);
 

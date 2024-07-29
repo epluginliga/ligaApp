@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated'
 import { useNavigation } from '@react-navigation/native'
 
@@ -8,11 +8,12 @@ import { Icon } from '../../icons'
 import { FlatList, Pressable, TouchableOpacity, View } from 'react-native'
 import Text from '../../components/Text'
 import { Layout } from '../../components/Views/Layout'
-import { StepContext } from '.'
 import { dataApp } from '../../utils/utils'
 import { ListEmptyComponent } from '../../components/ListEmptyComponent'
 import { IngressosPayload } from '../../services/@eventos'
 import HStack from '../../components/Views/Hstack'
+import { useQuery } from '@tanstack/react-query'
+import { fetchProximoIngressoComprado } from '../../services/eventos'
 
 type IconeTipoIngresso = {
    [key: number]: {
@@ -33,7 +34,12 @@ const iconeTipoIngresso: IconeTipoIngresso = {
 
 export function IngressosDisponivel() {
    const navigate = useNavigation();
-   const { proximoEventos } = useContext(StepContext);
+
+   const { data } = useQuery({
+      queryKey: ['ingressosFuturosComprados'],
+      queryFn: fetchProximoIngressoComprado,
+      refetchOnMount: false
+   });
 
    function Item({ item }: { item: IngressosPayload }) {
       const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
@@ -117,7 +123,7 @@ export function IngressosDisponivel() {
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
             ListFooterComponent={<View style={{ marginBottom: 32 }} />}
-            data={proximoEventos}
+            data={data?.data}
          />
       </Animated.View>
 

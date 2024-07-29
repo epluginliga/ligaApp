@@ -24,7 +24,7 @@ const rotaPagamento: { [key: string]: "CheckoutCartao" | "CheckoutPix" } = {
 }
 
 export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho, setMostraModal }: CheckoutPagamentoModalPagamentoIniciadoProps) {
-   const { limpaCarrinho, adicionaEvento, carrinhoId } = useCarrinho()
+   const { limpaCarrinho, carrinhoId } = useCarrinho()
    const { navigate } = useNavigation();
    const { colors } = useTheme<Theme>()
 
@@ -34,7 +34,9 @@ export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho,
          limpaCarrinho();
          setMostraModal(false);
          navigate('Eventos');
-      }
+      }, onError(error) {
+         console.log(JSON.stringify(error, null, 1));
+      },
    });
 
    useEffect(() => {
@@ -48,7 +50,7 @@ export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho,
       }
    }, [handleCancelaCarrinho]);
 
-   if(!carrinho) return;
+   if (!carrinho) return;
 
    return (
       <ModalSmall

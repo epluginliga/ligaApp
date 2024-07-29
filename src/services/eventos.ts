@@ -37,6 +37,14 @@ export async function fetchIngressoComprado(): PayloadPaginacaoResponse<Ingresso
       .catch((err) => err);
 }
 
+export async function fetchProximoIngressoComprado(): PayloadPaginacaoResponse<IngressosPayload> {
+   return await api
+      .get(`/evento/ingresso/proximos-ingressos-comprados`)
+      .then(success => success.data)
+      .catch((err) => err);
+}
+
+
 export async function fetchIngressoDisponivel(
    { pontoVenda, evento_id }: IngressoDisponivelProps): PayloadDefault<IngressosDisponivelPayloadProps[]> {
    return await api

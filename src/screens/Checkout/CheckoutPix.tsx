@@ -96,11 +96,10 @@ function CodigoPix({ uri, codigo }: CodigoPixProps) {
 export function CheckoutPix() {
    const insets = useSafeAreaInsets();
    const { codigoPagamento } = useCheckout();
-   const { navigate } = useNavigation();
 
    return (
       <>
-         <Layout.Header title='Checkout' handleBack={() => navigate("CheckoutPagamento")} />
+         <Layout.Header title='Checkout' />
          <Layout.Scroll>
 
             <VStack gap='xl' justifyContent='space-between' flex={1} marginBottom='lg'>

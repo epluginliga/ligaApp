@@ -16,14 +16,8 @@ import { Maskara } from '../../utils/Maskara'
 import { useMutation } from '@tanstack/react-query'
 import { checkout } from '../../services/checkout'
 import { useCheckout } from '../../hooks/checkout'
-import { PedidoConcluidoCancelado } from '../../components/PedidoConcluidoCancelado'
-import Temporizador from '../../components/Temporizador'
-import { ActivityIndicator, Pressable } from 'react-native'
-import { carrinhoStatusPagamento, CarrinhoStatusPagamentoPayload, deletaCarrinho } from '../../services/carrinho'
+import { carrinhoStatusPagamento } from '../../services/carrinho'
 import { useAuth } from '../../hooks/auth'
-import { ModalSmall } from '../../components/Modal/ModalSmall'
-import HStack from '../../components/Views/Hstack'
-import { EventosPayload } from '../../services/@eventos'
 import { CheckoutPagamentoModalPagamentoIniciado } from './CheckoutPagamentoModal'
 
 type FormasPagamento = 'CheckoutCartao' | 'CheckoutPix';
@@ -160,7 +154,6 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
 export function CheckoutPagamento() {
    const [formaPagamento, setFormaPagamento] = useState<FormasPagamento>('CheckoutCartao');
    const { total, cupom, totalComDesconto, evento, setTaxa, taxa, valorFinal } = useCarrinho();
-
    const taxas = {
       CheckoutCartao: totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100),
       CheckoutPix: totalComDesconto * ((evento?.taxas?.taxaconveniencia || 1) / 100),

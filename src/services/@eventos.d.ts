@@ -13,7 +13,7 @@ export type EventosPayload = {
    descricao?: string;
    destaque?: number;
    taxas?: string;
-   quantidade_parcelas?: number;
+   quantidade_parcelas: number;
    url_visualizacao?: string;
 }
 

@@ -9,9 +9,10 @@ import { Icon } from '../../icons';
 import { Layout } from '../../components/Views/Layout';
 import { dataApp } from '../../utils/utils';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
-import { StepContext } from '.';
 import { IngressosPayload } from '../../services/@eventos';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuery } from '@tanstack/react-query';
+import { fetchIngressoComprado } from '../../services/eventos';
 
 function Item({ item }: { item: IngressosPayload }) {
    const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
@@ -50,8 +51,16 @@ function Item({ item }: { item: IngressosPayload }) {
 }
 
 export function IngressosComprados() {
-   const { eventosPassados } = useContext(StepContext)
+   const { data } = useQuery({
+      queryKey: ['ingressosComprados'],
+      queryFn: fetchIngressoComprado,
+      refetchOnMount: false
+
+   });
+
    const insets = useSafeAreaInsets();
+
+   if (!data) return null;
 
    return (
       <Animated.View
@@ -74,7 +83,7 @@ export function IngressosComprados() {
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
-            data={eventosPassados}
+            data={data.data}
             ListFooterComponent={<View style={{ height: insets.bottom + 60 }} />}
          />
       </Animated.View>

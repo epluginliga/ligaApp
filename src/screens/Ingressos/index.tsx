@@ -10,32 +10,23 @@ import { Layout } from '../../components/Views/Layout';
 import { useAuth } from '../../hooks/auth';
 
 import { UsuarioNaoLogado } from '../../components/UsuarioNaoLogado';
-import { useQuery } from '@tanstack/react-query';
-import { fetchIngressoComprado } from '../../services/eventos';
-import { dataApp } from '../../utils/utils';
-import { IngressosPayload } from '../../services/@eventos';
 
 type StepsIngressosProps = {
    [key: number]: React.ReactNode
 }
-type StepsIngressosContext = {
-   proximoEventos?: IngressosPayload[];
-   eventosPassados?: IngressosPayload[];
-}
-export const StepContext = createContext<StepsIngressosContext>({} as StepsIngressosContext);
 
 const stepsIngressos: StepsIngressosProps = {
    1: <IngressosDisponivel />,
    2: <IngressosComprados />,
 };
 
-type HeaderProps = {
+type TabsProps = {
    setStepAtual: Dispatch<React.SetStateAction<number>>;
    stepAtual: number;
 }
-function Tabs({ setStepAtual, stepAtual }: HeaderProps) {
+function Tabs({ setStepAtual, stepAtual }: TabsProps) {
    return (
-      <HStack justifyContent='center' m='md' gap='none' position='absolute' bottom={4}  right={0} left={0}>
+      <HStack justifyContent='center' m='md' gap='none' position='absolute' bottom={4} right={0} left={0}>
          <TouchableOpacity
             onPress={() => setStepAtual(1)}
             activeOpacity={0.7}>
@@ -70,35 +61,11 @@ export function Ingressos() {
    const [stepAtual, setStepAtual] = useState(() => 1);
 
    if (logado) {
-
-      const { data } = useQuery({
-         queryKey: ['ingressosComprados'],
-         queryFn: fetchIngressoComprado,
-      });
-
-      if (!data) return null;
-
-      let proximoEventos: IngressosPayload[] = [];
-      let eventosPassados: IngressosPayload[] = [];
-
-      data?.data.forEach(eventos => {
-         const dataEvento = dataApp();
-         const novaData = dataEvento.converteDataBRtoISO(eventos.evento_data_evento);
-         if (new Date <= new Date(novaData)) {
-            proximoEventos.push(eventos);
-         } else {
-            eventosPassados.push(eventos);
-         }
-      })
-
       return (
-         <StepContext.Provider value={{
-            eventosPassados,
-            proximoEventos
-         }}>
+         <>
             {stepsIngressos[stepAtual]}
             <Tabs setStepAtual={setStepAtual} stepAtual={stepAtual} />
-         </StepContext.Provider>
+         </>
       )
    }
 
