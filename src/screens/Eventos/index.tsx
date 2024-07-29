@@ -75,7 +75,7 @@ export function Eventos() {
    const insets = useSafeAreaInsets();
    const { colors } = useTheme<Theme>();
 
-   const { data, isLoading, refetch, isRefetching } = useQuery({
+   const { data, isLoading, refetch } = useQuery({
       queryKey: ['eventos'],
       queryFn: fetchEventos,
    });

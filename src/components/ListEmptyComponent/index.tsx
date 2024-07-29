@@ -14,10 +14,10 @@ export function ListEmptyComponent({ title = 'Nada encontrado!', icon }: ListEmp
          <Animated.View
             entering={FadeIn}
             exiting={FadeOut}>
-            <Card.Root gap='lg' paddingVertical='lg' flexDirection='column' justifyContent='center' alignItems='center'>
+            <VStack backgroundColor='white' m='md' borderRadius={12} gap='lg' paddingVertical='lg' flexDirection='column' justifyContent='center' alignItems='center'>
                {icon ?? <Icon.Warning size={30} />}
                <Card.Title color='bege_200'>{title}</Card.Title>
-            </Card.Root>
+            </VStack>
          </Animated.View>
       </VStack>
    )

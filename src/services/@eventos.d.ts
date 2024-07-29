@@ -42,7 +42,14 @@ export type IngressosPayload = {
    evento_data_evento: string;
    ingresso_transferido: boolean;
    ingresso_necessario_aprovacao_imagem: number;
+   bilhete_permite_transferencia: number;
    pode_transferir: boolean;
+   usuario_dono: boolean;
+   vezes_utilizado: number;
+   evento_data_limite_transferencia: string;
+   cpf_dono_original: string;
+   cpf_compra: string;
+   nome_compra: string;
 };
 
 

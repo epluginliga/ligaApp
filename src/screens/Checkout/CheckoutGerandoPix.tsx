@@ -63,9 +63,7 @@ export function CheckoutGerandoPix() {
             damping: 100,
          });
       }, [])
-   )
-
-   console.log(data?.carrinho.status, isFetching)
+   );
 
    useEffect(() => {
       const timer = setInterval(() => {

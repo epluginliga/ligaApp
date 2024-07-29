@@ -35,3 +35,15 @@ export async function usuarioConsultaUsuario(cpf: string): PayloadDefault<Usuari
       .get(`/v2/usuario/consulta-usuario/${cpf}`)
       .then(success => success.data);
 }
+
+export async function devolverIngresso(bilhete_id: string): PayloadDefault<PayloadDefaultResponse> {
+   return await api
+      .post(`/bilhete/devolver-bilhete/${bilhete_id}`)
+      .then(success => {
+         if (success.status !== 200) {
+            throw new Error("Erro");
+         }
+         return success.data;
+      })
+      .catch((err) => err);
+}

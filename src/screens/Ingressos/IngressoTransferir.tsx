@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image, Pressable } from 'react-native';
 
 import HStack from '../../components/Views/Hstack';
@@ -28,7 +27,6 @@ import { CPF } from '@env';
 import { z } from 'zod';
 import { dataApp } from '../../utils/utils';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
-import Text from '../../components/Text';
 
 type SucessoUsuario = {
    user: UsuarioConsultaUsuarioProps;
@@ -131,9 +129,9 @@ type IForm = z.input<typeof schema>;
 type IngressoTransferiRouteProp = RouteProp<RouteApp, 'IngressoTranserir'>;
 
 export function IngressoTransferir() {
-   const insets = useSafeAreaInsets();
    const { goBack } = useNavigation();
    const { params } = useRoute<IngressoTransferiRouteProp>();
+   const queryClient = useQueryClient()
 
    const { control, handleSubmit, formState: { errors } } = useForm<IForm>({
       resolver: zodResolver(schema),
@@ -146,7 +144,6 @@ export function IngressoTransferir() {
       const time = setTimeout(() => goBack(), 2000);
       return () => clearTimeout(time);
    }, []);
-
 
    const handleBuscarUsuario = useMutation({
       mutationKey: ['bilheteTransferir'],
@@ -164,10 +161,12 @@ export function IngressoTransferir() {
             destinatario_cpf: body.destinatario_cpf.replace(/\D/g, ''),
          }
       }),
-      onSuccess: () => handleCloseModal(),
+      onSuccess: () => {
+         queryClient.invalidateQueries({ queryKey: ['ingressosFuturosComprados'] })
+         handleCloseModal();
+      },
    });
 
-   console.log(JSON.stringify(handleBuscarUsuario, null, 1))
    const erro: any = onSubmit?.error;
 
    return (

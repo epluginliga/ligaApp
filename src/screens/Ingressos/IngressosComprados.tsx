@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { FlatList, View } from 'react-native';
+import React from 'react';
+import { FlatList, RefreshControl, View } from 'react-native';
 
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 
@@ -13,16 +13,22 @@ import { IngressosPayload } from '../../services/@eventos';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery } from '@tanstack/react-query';
 import { fetchIngressoComprado } from '../../services/eventos';
+import { useTheme } from '@shopify/restyle';
+import { Theme } from '../../theme/default';
 
 function Item({ item }: { item: IngressosPayload }) {
    const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
    const dataEvento = dataApp(dataISO);
 
+   const usuarioRecebedor = !item.pode_transferir &&
+      item.usuario_dono &&
+      item.cpf_compra != item.cpf_dono_original;
+
    return (
       <Card.Root
          marginHorizontal="sm"
          pr="xs"
-         opacity={0.4}
+         opacity={0.7}
       >
          <Card.Image
             flex={1}
@@ -45,17 +51,24 @@ function Item({ item }: { item: IngressosPayload }) {
                </Card.Span>
             </VStack>
 
+            {usuarioRecebedor && (
+               <Card.Span leftIcon={<Icon.ArrowPath />}>
+                  Ingresso transferido para: {'\n'}
+                  <Card.Span color='azul' fontWeight="500">{item.nome_compra}</Card.Span>
+               </Card.Span>
+            )}
+
          </VStack>
       </Card.Root>
    )
 }
 
 export function IngressosComprados() {
-   const { data } = useQuery({
+   const { colors } = useTheme<Theme>();
+   const { data, refetch } = useQuery({
       queryKey: ['ingressosComprados'],
       queryFn: fetchIngressoComprado,
       refetchOnMount: false
-
    });
 
    const insets = useSafeAreaInsets();
@@ -76,6 +89,13 @@ export function IngressosComprados() {
             contentContainerStyle={{
                marginTop: 16,
             }}
+            refreshControl={
+               <RefreshControl
+                  tintColor={colors.primary}
+                  refreshing={false}
+                  onRefresh={refetch}
+               />
+            }
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
                <ListEmptyComponent title='Nenhum Ingresso utilizado' />

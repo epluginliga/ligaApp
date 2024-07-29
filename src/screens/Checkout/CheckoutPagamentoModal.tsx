@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import { CarrinhoStatusPagamentoPayload, deletaCarrinho } from "../../services/carrinho";
 import { useCarrinho } from "../../hooks/carrinho";
 import { useMutation } from "@tanstack/react-query";
-import { EventosPayload } from "../../services/@eventos";
 import { ModalSmall } from "../../components/Modal/ModalSmall";
 import VStack from "../../components/Views/Vstack";
 import Text from "../../components/Text";

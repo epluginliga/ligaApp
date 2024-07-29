@@ -1,5 +1,5 @@
 import { IconEye, IconEyeSlash } from "./IconEye";
-import { IconArrowDown, IconArrowLeft, IconArrowRight } from "./IconArrow";
+import { IconArrowDown, IconArrowLeft, IconArrowPath, IconArrowRight } from "./IconArrow";
 import { IconHome } from "./IconHome";
 import { IconCalendario } from "./IconCalendario";
 import { IconPin } from "./IconPin";
@@ -32,6 +32,7 @@ export const Icon = {
    EyeSlash: IconEyeSlash,
    ArrowLeft: IconArrowLeft,
    ArrowRight: IconArrowRight,
+   ArrowPath: IconArrowPath,
    Home: IconHome,
    Calendario: IconCalendario,
    Pin: IconPin,

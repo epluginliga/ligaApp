@@ -52,9 +52,6 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
    }
 
    function atualizaIngressoAoEvento(ingresso: IngressoCarrinho[]) {
-
-      console.log("ATUALIZOU");
-
       if (total === 0) {
          ingresso.forEach(ingr => {
             adicionaIngressoAoEvento({
