@@ -75,7 +75,6 @@ export function IngressosDisponivel() {
    const { data, refetch } = useQuery({
       queryKey: ['ingressosFuturosComprados'],
       queryFn: fetchProximoIngressoComprado,
-      refetchOnMount: false
    });
 
    const handleDevolverIngresso = useMutation({
@@ -135,6 +134,10 @@ export function IngressosDisponivel() {
       const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
       const dataEvento = dataApp(dataISO);
 
+      const usuarioRecebedor = !item.pode_transferir &&
+         item.usuario_dono &&
+         item.cpf_compra != item.cpf_dono_original;
+
       return (
          <Card.Root marginHorizontal="sm" pr="xs">
             <Card.Image
@@ -159,6 +162,13 @@ export function IngressosDisponivel() {
                   <Card.Span leftIcon={iconeTipoIngresso[item.ingresso_necessario_aprovacao_imagem].icon}>
                      {iconeTipoIngresso[item.ingresso_necessario_aprovacao_imagem].nome}
                   </Card.Span>
+
+                  {usuarioRecebedor && (
+                  <Card.Span leftIcon={<Icon.ArrowPath />}>
+                     Ingresso transferido para: {'\n'}
+                     <Card.Span color='azul' fontWeight="500">{item.nome_compra}</Card.Span>
+                  </Card.Span>
+               )}
                </VStack>
 
                <HStack alignItems='flex-start' mr='xs' justifyContent='space-evenly' marginVertical='sm' mt='md'>
@@ -191,7 +201,7 @@ export function IngressosDisponivel() {
       )
    }
 
-   const ingressosFiltrados = data?.data.filter(item => item.pode_transferir && !item.usuario_dono && item.cpf_compra == item.cpf_dono_original);
+   if (!data) return;
 
    return (
       <Animated.View
@@ -217,7 +227,7 @@ export function IngressosDisponivel() {
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
             ListFooterComponent={<View style={{ marginBottom: 32 }} />}
-            data={data?.data}
+            data={data.data}
          />
       </Animated.View>
 

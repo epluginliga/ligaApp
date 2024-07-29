@@ -40,6 +40,7 @@ export type IngressosPayload = {
    evento_cidade: string;
    evento_estado: string;
    evento_data_evento: string;
+   evento_data_evento_format_db: string;
    ingresso_transferido: boolean;
    ingresso_necessario_aprovacao_imagem: number;
    bilhete_permite_transferencia: number;

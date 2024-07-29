@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchIngressoComprado } from '../../services/eventos';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
+import { format } from 'date-fns';
 
 function Item({ item }: { item: IngressosPayload }) {
    const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
@@ -68,12 +69,20 @@ export function IngressosComprados() {
    const { data, refetch } = useQuery({
       queryKey: ['ingressosComprados'],
       queryFn: fetchIngressoComprado,
-      refetchOnMount: false
    });
 
    const insets = useSafeAreaInsets();
 
    if (!data) return null;
+
+   const ingressosComprados = data.data?.filter(item => {
+      const data = format(new Date(item.evento_data_evento_format_db), "yyyy-MM-d'T'HH:mm:ss");
+      if(item.cpf_compra != item.cpf_dono_original) {
+         return item;
+      }
+
+      return new Date(data).getTime() < new Date().getTime();
+   });
 
    return (
       <Animated.View
@@ -103,7 +112,7 @@ export function IngressosComprados() {
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
-            data={data.data}
+            data={ingressosComprados}
             ListFooterComponent={<View style={{ height: insets.bottom + 60 }} />}
          />
       </Animated.View>
