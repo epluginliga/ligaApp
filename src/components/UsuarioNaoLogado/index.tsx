@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Image, Text, View } from 'react-native'
+import React from 'react'
+import { Image } from 'react-native'
 import VStack from '../Views/Vstack'
 import { Section } from '../Section'
 import { Button } from '../Button'
@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 
 export function UsuarioNaoLogado() {
    const { navigate } = useNavigation();
-   
+
    return (
       <VStack gap='lg' flex={1} justifyContent='center' alignItems='center'>
 
@@ -25,7 +25,9 @@ export function UsuarioNaoLogado() {
          </Section.Root>
 
          <Button
-            onPress={() => navigate("Login")}
+            onPress={() => navigate("Login", {
+               redirect: "IngressosTab",
+            })}
             iconRight={<Icon.User color='#fff' size={20} />}
          >
             Fazer Login

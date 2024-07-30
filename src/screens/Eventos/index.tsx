@@ -158,7 +158,6 @@ export function Eventos() {
 
    return (
       <FlatList
-         // onRefresh={}
          refreshControl={
             <RefreshControl
                tintColor={colors.primary}
