@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { RouteDesLogado } from './Stack.route.deslogado';
 import { RouteLogado } from './Stack.route.logado';
@@ -9,6 +9,7 @@ import { PayloadDefaultResponse } from '../services/@index';
 import { ResponseErro } from '../components/ResponsesRequest/ResponseErro';
 import { ResponseSucesso } from '../components/ResponsesRequest/ResponseSucesso';
 import AppProvider from '../hooks';
+import { Linking } from 'react-native';
 
 
 type ErrorProps = {

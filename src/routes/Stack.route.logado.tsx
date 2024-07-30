@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Perfil } from '../screens/Perfil';
@@ -8,7 +8,7 @@ import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { StatusBar } from 'react-native';
+import { Linking, StatusBar } from 'react-native';
 import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';
 import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
@@ -26,10 +26,18 @@ import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
 import { CheckoutGerandoPix } from '../screens/Checkout/CheckoutGerandoPix';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
 export function RouteLogado() {
+   const navigate = useNavigation();
+
+   useEffect(() => {
+      Linking.addEventListener("url", ({ url }) => {
+         navigate.navigate(url.replace("ligaapp://", "") as any);
+      });
+   }, [])
 
    return (
       <>

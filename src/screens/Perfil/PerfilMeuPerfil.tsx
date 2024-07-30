@@ -20,7 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
 
 type HeaderProps = {
-   status?: "aguardando_aprovacao" | "aprovado";
+   status?: "aguardando_aprovacao" | "aprovado" | "reprovado";
    uri?: string
 }
 
@@ -81,7 +81,7 @@ const schema = z.object({
    sexo: z.string(),
 
    path_avatar: z.string().optional(),
-   status_aprovacao: z.enum(["aguardando_aprovacao", "aprovado"]).optional(),
+   status_aprovacao: z.enum(["aguardando_aprovacao", "aprovado", "reprovado"]).optional(),
    user_id: z.string().optional(),
    documento_tipo: z.string().optional()
 });
@@ -127,6 +127,7 @@ export const PerfilMeuPerfil = () => {
       },
    });
 
+   console.log(errors)
    const data = getValues();
 
    return (
