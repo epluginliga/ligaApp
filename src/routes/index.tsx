@@ -9,8 +9,6 @@ import { PayloadDefaultResponse } from '../services/@index';
 import { ResponseErro } from '../components/ResponsesRequest/ResponseErro';
 import { ResponseSucesso } from '../components/ResponsesRequest/ResponseSucesso';
 import AppProvider from '../hooks';
-import { Linking } from 'react-native';
-
 
 type ErrorProps = {
    message: string;

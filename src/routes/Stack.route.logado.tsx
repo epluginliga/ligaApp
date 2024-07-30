@@ -26,19 +26,10 @@ import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
 import { CheckoutGerandoPix } from '../screens/Checkout/CheckoutGerandoPix';
-import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
 export function RouteLogado() {
-   const navigate = useNavigation();
-
-   useEffect(() => {
-      Linking.addEventListener("url", ({ url }) => {
-         navigate.navigate(url.replace("ligaapp://", "") as any);
-      });
-   }, [])
-
    return (
       <>
          <StatusBar barStyle="dark-content" backgroundColor="#fff" />

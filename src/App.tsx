@@ -13,8 +13,17 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
+
+  const config = {
+    screens: {
+      Home: 'evento',
+      // EventosDetalhe: 'evento/:id',
+    },
+  };
+
   const linking = {
-    prefixes: ['https://deualiga.com.br'],
+    prefixes: ['ligaApp://', 'https://deualiga.com.br'],
+    config
   };
 
   return (
