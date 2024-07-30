@@ -9,13 +9,18 @@ import { Routes } from './routes';
 import { AuthProvider } from './hooks/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
+  const linking = {
+    prefixes: ['https://deualiga.com.br'],
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
-        <NavigationContainer>
+        <NavigationContainer linking={linking}>
 
           <QueryClientProvider client={queryClient}>
             <AuthProvider>
