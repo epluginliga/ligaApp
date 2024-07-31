@@ -50,6 +50,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED347468FF090AD2046CAB2A /* Pods_ligaApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ligaApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0073D012C486566003A9F3C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "ligaApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F063811C2C5974B4009987FA /* ligaApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ligaApp.entitlements; path = ligaApp/ligaApp.entitlements; sourceTree = "<group>"; };
 		F0B2E4E65F3250A0D408B054 /* Pods-ligaApp-ligaAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp-ligaAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ligaApp-ligaAppTests/Pods-ligaApp-ligaAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F70F987BED63041A382CFC4B /* Pods-ligaApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ligaApp.debug.xcconfig"; path = "Target Support Files/Pods-ligaApp/Pods-ligaApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,6 +95,7 @@
 		13B07FAE1A68108700A75B9A /* ligaApp */ = {
 			isa = PBXGroup;
 			children = (
+				F063811C2C5974B4009987FA /* ligaApp.entitlements */,
 				F0073D012C486566003A9F3C /* GoogleService-Info.plist */,
 				823DFBF02BE1856400F8D45B /* LaunchScreen.storyboard */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -507,6 +509,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ligaApp/ligaApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 10;
@@ -546,6 +549,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ligaApp/ligaApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 10;

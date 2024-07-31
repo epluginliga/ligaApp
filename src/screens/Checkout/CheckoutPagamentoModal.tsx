@@ -32,7 +32,7 @@ export function CheckoutPagamentoModalPagamentoIniciado({ mostraModal, carrinho,
       onSuccess() {
          limpaCarrinho();
          setMostraModal(false);
-         navigate('Eventos');
+         navigate('Home');
       }, onError(error) {
          console.log(JSON.stringify(error, null, 1));
       },

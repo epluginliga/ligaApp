@@ -16,13 +16,16 @@ function App(): React.JSX.Element {
 
   const config = {
     screens: {
-      Home: 'evento',
+      Home: '/',
+      PerfilMeuPerfil: 'meu-perfil',
+      PerfilAlterarSenha: 'meu-perfil/meu-perfil-senha',
+      PerfilMeusEndereco: 'meu-perfil/meu-perfil-endereco',
       // EventosDetalhe: 'evento/:id',
     },
   };
 
   const linking = {
-    prefixes: ['ligaApp://', 'https://deualiga.com.br'],
+    prefixes: ['https://www.deualiga.com.br', 'ligaApp://'],
     config
   };
 

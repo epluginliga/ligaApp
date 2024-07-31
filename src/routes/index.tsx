@@ -47,6 +47,10 @@ export function Routes() {
 
          setLoadingReq(false);
 
+         if(!error.response) {
+            return Promise.reject(error);
+         }
+
          if (error.response?.data?.codigoretorno === 401) {
             setErro(error.response.data.mensagem);
             signOut();

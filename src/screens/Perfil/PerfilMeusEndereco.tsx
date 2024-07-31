@@ -14,7 +14,7 @@ import { InputText } from '../../components/Inputs/Text';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { Button } from '../../components/Button';
 
-import { usuarioAtualizaGeral, usuarioObtemDadosEndereco } from '../../services/perfil';
+import { usuarioAtualizaEndereco, usuarioObtemDadosEndereco } from '../../services/perfil';
 import { cepMask, cpfMask } from '../../utils/Maskara';
 import { estadosBrasileiros } from '../../utils/estadosBrasileiros';
 import { Icon } from '../../icons';
@@ -61,18 +61,13 @@ function InputCep({ name, control, handleCep, ...rest }: InputCepProps) {
    )
 }
 const schema = z.object({
-   usuario: z.object({
-      nome: z.string().optional(),
-   }),
-   endereco: z.object({
-      cep: z.string(),
-      logradouro: z.string(),
-      numero: z.string(),
-      bairro: z.string(),
-      cidade: z.string(),
-      complemento: z.string(),
-      estado: z.string(),
-   })
+   cep: z.string(),
+   logradouro: z.string(),
+   numero: z.string(),
+   bairro: z.string(),
+   cidade: z.string(),
+   complemento: z.string(),
+   estado: z.string(),
 });
 
 type FormProps = z.input<typeof schema>;
@@ -85,22 +80,17 @@ export const PerfilMeusEndereco = () => {
    const { control, handleSubmit, formState: { errors }, setValue } = useForm<FormProps>({
       resolver: zodResolver(schema),
       async defaultValues() {
-         const endereco = await usuarioObtemDadosEndereco()
+         const endereco = await usuarioObtemDadosEndereco();
          return {
-            usuario: {
-               nome: user.nome
-            },
-            endereco: {
-               ...endereco,
-               cep: cepMask(endereco.cep)
-            }
+            ...endereco,
+            cep: cepMask(endereco.cep)
          }
       },
    });
 
    const handleAction = useMutation({
-      mutationFn: (form: FormProps) => usuarioAtualizaGeral(user?.id, form),
-      mutationKey: ['criaUsuario'],
+      mutationFn: (form: FormProps) => usuarioAtualizaEndereco(user?.id, form),
+      mutationKey: ['usuarioAtualizaEndereco'],
       onSuccess() {
          goBack()
       }
@@ -110,14 +100,13 @@ export const PerfilMeusEndereco = () => {
       mutationFn: ObtemEnderecoCep,
       mutationKey: ['ObtemEnderecoCep'],
       onSuccess(data) {
-         console.log(JSON.stringify(data, null, 1))
          if (data) {
-            setValue("endereco.bairro", data.bairro);
-            setValue("endereco.cep", cepMask(data.cep));
-            setValue("endereco.cidade", data.localidade);
-            setValue("endereco.complemento", data.complemento);
-            setValue("endereco.estado", data.uf);
-            setValue("endereco.logradouro", data.logradouro);
+            setValue("bairro", data.bairro);
+            setValue("cep", cepMask(data.cep));
+            setValue("cidade", data.localidade);
+            setValue("complemento", data.complemento);
+            setValue("estado", data.uf);
+            setValue("logradouro", data.logradouro);
          }
       }
    })
@@ -135,10 +124,10 @@ export const PerfilMeusEndereco = () => {
                      <InputCep
                         label="CEP"
                         iconLeft={<Icon.Pin size={24} />}
-                        name='endereco.cep'
+                        name='cep'
                         placeholder='00000-000'
                         control={control}
-                        error={errors?.endereco?.cep?.message}
+                        error={errors?.cep?.message}
                         inputMode='numeric'
                         handleCep={handleCep}
                      />
@@ -146,48 +135,48 @@ export const PerfilMeusEndereco = () => {
                      <InputText
                         label="Logradouro"
                         iconLeft={<Icon.Pin size={24} />}
-                        name='endereco.logradouro'
+                        name='logradouro'
                         placeholder='Rua dona...'
                         control={control}
-                        error={errors?.endereco?.logradouro?.message}
+                        error={errors?.logradouro?.message}
                      />
 
                      <InputText
                         label="Número"
                         iconLeft={<Icon.Pin size={24} />}
-                        name='endereco.numero'
+                        name='numero'
                         placeholder='123..'
                         control={control}
                         mask={cpfMask}
-                        error={errors?.endereco?.numero?.message}
+                        error={errors?.numero?.message}
                         inputMode='decimal'
                      />
 
                      <InputText
                         label="Complemento"
                         iconLeft={<Icon.Pin size={24} />}
-                        name='endereco.complemento'
+                        name='complemento'
                         placeholder='Bloco X 123'
                         control={control}
-                        error={errors?.endereco?.complemento?.message}
+                        error={errors?.complemento?.message}
                      />
 
                      <InputText
                         label="Bairro"
                         iconLeft={<Icon.Pin size={24} />}
-                        name='endereco.bairro'
+                        name='bairro'
                         placeholder='Bairro Novo Mundo'
                         control={control}
-                        error={errors?.endereco?.bairro?.message}
+                        error={errors?.bairro?.message}
                      />
 
                      <InputSelecionar
                         placeholder='Estado onde moro'
                         label='Estado'
-                        name={`endereco.estado`}
+                        name={`estado`}
                         control={control}
                         option={estadosBrasileiros}
-                        error={errors?.endereco?.estado?.message}
+                        error={errors?.estado?.message}
                      />
 
                   </VStack>
@@ -195,10 +184,7 @@ export const PerfilMeusEndereco = () => {
                   <VStack gap="md">
                      <Button
                         loading={handleAction.isPending}
-                        onPress={handleSubmit((form => {
-                           // console.log(JSON.stringify(form))
-                           handleAction.mutate(form)
-                        }))} >
+                        onPress={handleSubmit((form => handleAction.mutate(form)))}>
                         SALVAR
                      </Button>
 

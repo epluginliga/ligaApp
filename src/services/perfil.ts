@@ -36,10 +36,10 @@ export async function usuarioAtualiza(usuario_id: string, body: UsuarioAtaulizaU
       });
 }
 
-export async function usuarioAtualizaGeral(usuario_id: string, body: UsuarioAtualizaGeralProps):
+export async function usuarioAtualizaEndereco(usuario_id: string, body: UsuarioAtualizaGeralProps):
    PayloadDefault<PayloadDefaultResponse> {
    return await api
-      .put(`/usuario/atauliza-usuario-geral/${usuario_id}`, body)
+      .put(`/usuario/atualiza-endereco/${usuario_id}`, body)
       .then(success => {
          if (success.status !== 200) {
             throw new Error("Erro");

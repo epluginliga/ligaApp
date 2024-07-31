@@ -48,13 +48,11 @@ export type UsuarioAlteraSenhaProps = {
 }
 
 export type UsuarioAtualizaGeralProps = {
-   endereco: {
-      cep: string;
-      logradouro: string;
-      numero: string;
-      bairro: string;
-      cidade: string;
-      complemento: string;
-      estado: string;
-   }
+   cep: string;
+   logradouro: string;
+   numero: string;
+   bairro: string;
+   cidade: string;
+   complemento: string;
+   estado: string;
 }

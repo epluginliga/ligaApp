@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>ligaApp</string>
+			<string>br.com.deualiga</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>ligaApp</string>
+				<string>https</string>
 			</array>
 		</dict>
 	</array>

@@ -145,15 +145,7 @@ export function Eventos() {
    if (isLoading) {
       return null;
    }
-
-   if (!data?.data?.length) {
-      return (
-         <Layout.Root>
-            <ListEmptyComponent title="Nenhum evento encontrado" />
-         </Layout.Root>
-      )
-   }
-
+  
    const destaque = data?.data?.find(evento => !!evento.destaque);
 
    return (
