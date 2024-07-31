@@ -22,6 +22,7 @@ import { ModalSmallButton, ModalSmallButtonAction } from '../../components/Modal
 import { devolverIngresso } from '../../services/bilhete';
 import { Section } from '../../components/Section';
 import { useAuth } from '../../hooks/auth';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type IconeTipoIngresso = {
    [key: number]: {
@@ -73,6 +74,7 @@ export function IngressosDisponivel() {
    const modalDevolverPedido = useRef<ModalSmallButtonAction>(null);
    const queryClient = useQueryClient();
    const { user } = useAuth();
+   const insets = useSafeAreaInsets();
 
    const { data, refetch } = useQuery({
       queryKey: ['ingressosFuturosComprados'],
@@ -148,14 +150,16 @@ export function IngressosDisponivel() {
                source={{ uri: item?.evento_path_imagem }}
             />
 
-            <VStack flex={1.6} justifyContent='space-around' >
+            <VStack flex={1.6} justifyContent='space-around'>
                <Card.Title fontSize={18} lineHeight={22.5} my='sm'>{item.evento_nome}</Card.Title>
 
                <VStack gap='sm'>
-                  <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
-                     {dataEvento.diaSemana()}
-                     {`, ${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
-                  </Card.SubTitle>
+                  <VStack maxWidth="92%">
+                     <Card.SubTitle leftIcon={<Icon.Calendario size={16} />} >
+                        {dataEvento.diaSemana()}
+                        {`, ${dataEvento.diaMes()} de ${dataEvento.nomeFullMes()}`}
+                     </Card.SubTitle>
+                  </VStack>
 
                   <Card.Span leftIcon={<Icon.Pin size={16} />}>
                      {item.evento_cidade} | {item.evento_estado} - {dataEvento.hora() || 'hora não definida'}
@@ -229,7 +233,7 @@ export function IngressosDisponivel() {
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
-            ListFooterComponent={<View style={{ marginBottom: 32 }} />}
+            ListFooterComponent={<View style={{ marginBottom: insets.bottom + 80 }} />}
             data={ingressosDisponiveis}
          />
       </Animated.View>

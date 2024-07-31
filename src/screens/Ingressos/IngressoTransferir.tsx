@@ -27,6 +27,7 @@ import { CPF } from '@env';
 import { z } from 'zod';
 import { dataApp } from '../../utils/utils';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
+import { AvatarUsuario } from '../../components/AvatarUsuario';
 
 type SucessoUsuario = {
    user: UsuarioConsultaUsuarioProps;
@@ -34,35 +35,18 @@ type SucessoUsuario = {
 }
 function SucessoUsuario({ user, children }: SucessoUsuario) {
    return (
-      <VStack
-         justifyContent='center'
-         alignItems='center'
-         gap='md'
-      >
-         <VStack
-            borderRadius={100}
-            backgroundColor="bege"
-            width={100}
-            height={100}
-            mb='sm'
-            justifyContent='center'
-            alignItems='center'
-            position='relative'>
-            <Image
-               style={{ height: 90, width: 90, borderRadius: 100 }}
-               source={{ uri: user?.path_avatar_aprovado }}
-            />
-         </VStack>
-         <VStack alignItems='center'>
+      <AvatarUsuario usuario={{
+         path_avatar: user.path_avatar_aprovado,
+      }}>
+         <VStack alignItems='center' mb='md'>
             <Section.Title>{user.name}</Section.Title>
             <Section.Span>{user?.username}</Section.Span>
             <Section.Span>{dataApp(user?.data_nascimento).diaMesAnoISOBR()}</Section.Span>
          </VStack>
          {children}
-      </VStack>
+      </AvatarUsuario>
    )
 }
-
 
 function Sucesso({ data }: { data: PayloadDefaultResponse }) {
    const { colors } = useTheme<Theme>();

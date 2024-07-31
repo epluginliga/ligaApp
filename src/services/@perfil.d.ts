@@ -4,7 +4,7 @@ export type ObtemDadosLogadoPayload = {
    email: string;
    user_id: string;
    user_name: string;
-   status_aprovacao: "aguardando_aprovacao" | "aprovado" | undefined;
+   status_aprovacao: StatusAprovacao;
    data_nascimento: string;
    sexo: string;
    documento_numero: string;
@@ -13,6 +13,8 @@ export type ObtemDadosLogadoPayload = {
    telefone_numero: string;
    possui_endereco_cadastrado: boolean;
 }
+
+export type StatusAprovacao = "aguardando_aprovacao" | "aprovado" | "reprovado" | "sem_imagem";
 
 export type UsuarioObtemDadosEnderecoPayload = {
    id: string;

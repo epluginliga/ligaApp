@@ -58,7 +58,6 @@ function Item({ item }: { item: IngressosPayload }) {
                   <Card.Span color='azul' fontWeight="500">{item.nome_compra}</Card.Span>
                </Card.Span>
             )}
-
          </VStack>
       </Card.Root>
    )
@@ -77,7 +76,7 @@ export function IngressosComprados() {
 
    const ingressosComprados = data.data?.filter(item => {
       const data = format(new Date(item.evento_data_evento_format_db), "yyyy-MM-d'T'HH:mm:ss");
-      if(item.cpf_compra != item.cpf_dono_original) {
+      if (item.cpf_compra != item.cpf_dono_original) {
          return item;
       }
 
@@ -97,6 +96,7 @@ export function IngressosComprados() {
          <FlatList
             contentContainerStyle={{
                marginTop: 16,
+               marginBottom: 16,
             }}
             refreshControl={
                <RefreshControl
@@ -113,7 +113,7 @@ export function IngressosComprados() {
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
             data={ingressosComprados}
-            ListFooterComponent={<View style={{ height: insets.bottom + 60 }} />}
+            ListFooterComponent={<View style={{ marginBottom: insets.bottom + 80 }} />}
          />
       </Animated.View>
    )

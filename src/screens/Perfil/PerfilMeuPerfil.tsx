@@ -5,70 +5,18 @@ import { InputText } from '../../components/Inputs/Text';
 import { Icon } from '../../icons';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { Button } from '../../components/Button';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { obtemDadosLogado, usuarioAtualiza } from '../../services/perfil';
-import { Image, View } from 'react-native';
-import { useTheme } from '@shopify/restyle';
-import { Theme } from '../../theme/default';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Text from '../../components/Text';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../hooks/auth';
+import { AvatarUsuario } from '../../components/AvatarUsuario';
+import { z } from 'zod';
 
-type HeaderProps = {
-   status?: "aguardando_aprovacao" | "aprovado" | "reprovado";
-   uri?: string
-}
-
-const bg: { [key: string]: 'greenLight' | 'warning' } = {
-   'aguardando_aprovacao': 'warning',
-   'aprovado': 'greenLight',
-};
-
-const textoStatus: { [key: string]: string } = {
-   'aguardando_aprovacao': 'Aguardando aprovação',
-   'aprovado': 'Aprovado',
-};
-
-function Header({ status, uri }: HeaderProps) {
-   const { colors } = useTheme<Theme>();
-
-   if (!status) return;
-
-   const background = status && bg[status] || 'bege';
-
-   return (
-      <VStack
-         justifyContent='center'
-         alignItems='center'
-         mb='lg'
-         gap='sm'
-      >
-         <VStack
-            borderRadius={100}
-            backgroundColor={background}
-            width={130}
-            height={130}
-            mb='sm'
-            justifyContent='center'
-            alignItems='center'
-            position='relative'>
-            <Image
-               style={{ height: 120, width: 120, borderRadius: 100 }}
-               source={{ uri }}
-            />
-            <VStack position='absolute' bottom={0} left="75%">
-               <Icon.CheckCircle color={colors[background]} />
-            </VStack>
-         </VStack>
-         <Text variant='header2' color={background}>{textoStatus[status]}</Text>
-      </VStack>
-   )
-}
 
 const schema = z.object({
    nome: z.string(),
@@ -81,7 +29,7 @@ const schema = z.object({
    sexo: z.string(),
 
    path_avatar: z.string().optional(),
-   status_aprovacao: z.enum(["aguardando_aprovacao", "aprovado", "reprovado"]).optional(),
+   status_aprovacao: z.enum(["aguardando_aprovacao", "aprovado", "reprovado", "sem_imagem"]).optional(),
    user_id: z.string().optional(),
    documento_tipo: z.string().optional()
 });
@@ -94,7 +42,7 @@ export const PerfilMeuPerfil = () => {
    const insets = useSafeAreaInsets();
    const { goBack } = useNavigation();
    const { updateUsuario } = useAuth();
-   
+
    const handleAtualizaPerfil = useMutation({
       mutationFn: (form: EditaPerfilProps) => usuarioAtualiza(data?.user_id || '', {
          data_nascimento: form.data_nascimento,
@@ -107,7 +55,6 @@ export const PerfilMeuPerfil = () => {
       mutationKey: ['usuarioAtualizaPerfil'],
       onSuccess() {
          queryClient.invalidateQueries({ queryKey: ['obtemDadosLogadoIndex'] })
-
          updateUsuario({ nome: getValues("nome") })
          goBack()
       }
@@ -127,7 +74,6 @@ export const PerfilMeuPerfil = () => {
       },
    });
 
-   console.log(errors)
    const data = getValues();
 
    return (
@@ -139,7 +85,7 @@ export const PerfilMeuPerfil = () => {
             <Layout.Scroll>
                <VStack gap="lg" p="sm">
 
-                  <Header uri={data?.path_avatar} status={data?.status_aprovacao} />
+                  <AvatarUsuario usuario={data} />
 
                   <VStack gap="lg" flex={1}>
                      <InputText

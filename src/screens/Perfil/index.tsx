@@ -19,6 +19,7 @@ import Text from '../../components/Text';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { obtemDadosLogado, usuarioExcluirConta } from '../../services/perfil';
 import { useNavigation } from '@react-navigation/native';
+import { AvatarUsuario } from '../../components/AvatarUsuario';
 
 function Item({ item }: any) {
    if (item.route) {
@@ -49,55 +50,22 @@ function Item({ item }: any) {
    )
 }
 
-const bg: { [key: string]: 'greenLight' | 'warning' } = {
-   'aguardando_aprovacao': 'warning',
-   'aprovado': 'greenLight',
-};
-
 function Header() {
-   const { colors } = useTheme<Theme>();
    const { user } = useAuth();
    const { data, isFetching } = useQuery({
       queryFn: obtemDadosLogado,
       queryKey: ['obtemDadosLogadoIndex'],
    });
 
-   if (isFetching) {
-      return;
-   }
-
-   const corStatus = data?.status_aprovacao && bg[data?.status_aprovacao] || 'bege';
+   if (!data && isFetching) return;
 
    return (
-      <VStack
-         justifyContent='center'
-         alignItems='center'
-         mb='lg'
-         mx='sm'
-         gap='xs'
-      >
-         <VStack
-            borderRadius={100}
-            backgroundColor={corStatus}
-            width={100}
-            height={100}
-            mb='sm'
-            justifyContent='center'
-            alignItems='center'
-            position='relative'>
-            <Image
-               style={{ height: 90, width: 90, borderRadius: 100 }}
-               source={{ uri: data?.path_avatar }}
-            />
-            <VStack position='absolute' bottom={0} left="75%">
-               <Icon.CheckCircle color={colors[corStatus]} />
-            </VStack>
-         </VStack>
+      <AvatarUsuario usuario={data}>
          <VStack alignItems='center'>
             <Section.Title>{user.nome}</Section.Title>
             <Section.Span>{data?.user_name}</Section.Span>
          </VStack>
-      </VStack>
+      </AvatarUsuario>
    )
 }
 
