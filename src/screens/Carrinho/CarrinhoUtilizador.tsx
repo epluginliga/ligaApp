@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutUp } from 'react-native-reanimated';
 import { Pressable, StatusBar } from 'react-native';
-import { z } from 'zod'
 
 import { Layout } from '../../components/Views/Layout'
 import { Section } from '../../components/Section'
@@ -19,7 +18,6 @@ import Text from '../../components/Text'
 import { Maskara, cpfMask, dataMask } from '../../utils/Maskara'
 import { Validacoes } from '../../utils/Validacoes'
 import { Icon } from '../../icons';
-import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { useCarrinho } from '../../hooks/carrinho';
 import { fetchEventoAtleticas } from '../../services/eventos';
@@ -27,6 +25,9 @@ import { useNavigation } from '@react-navigation/native';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { dataApp } from '../../utils/utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { z } from 'zod'
+import { useTheme } from '@shopify/restyle';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -131,7 +132,7 @@ export function CarrinhoUtilizador() {
          <StatusBar barStyle="dark-content" />
 
          <Layout.Keyboard>
-            <Layout.Header title='Utilizador' />
+            <Layout.Header title='Utilizador' handleBack={() => navigate("Home")} />
             <Layout.Scroll>
                <VStack gap="lg" marginBottom='md'>
 

@@ -25,13 +25,14 @@ export type UserProps = {
 export type LoginProps = {
    user: string;
    password: string;
+   versao?: number;
+   dispositivo: "app"
 }
 export async function login(data: LoginProps): PayloadDefault<UserProps> {
    return await api
       .post('/login', { ...data })
       .then(success => success.data);
 }
-
 
 export async function resetarSenha(data: { email: string }): PayloadDefault<PayloadDefaultResponse> {
    return await api

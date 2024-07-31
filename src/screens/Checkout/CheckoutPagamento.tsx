@@ -135,7 +135,6 @@ function PagamentoBotao({ formaPagamento }: PagamentoBotaoProps) {
 
    return (
       <>
-
          <CheckoutPagamentoModalPagamentoIniciado
             carrinho={carrinho}
             mostraModal={mostraModal}

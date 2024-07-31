@@ -35,8 +35,6 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
       .find(item => item.evento_id === eventoId)?.ingressos
       .find(ingr => ingr.id === ingresso.id)?.qtd || 0;
 
-   // totalItens >= ingresso.quantidade_por_usuario ||
-
    const desabilitarBotao = ingresso.quantidade_disponivel_ingresso <= 0 ||
       totalItens >= ingresso.quantidade_por_compra ||
       quantidade >= ingresso.quantidade_disponivel_ingresso ||
@@ -116,15 +114,12 @@ export function Carrinho() {
    const { navigate } = useNavigation();
    const { evento, pedido, total, totalItens } = useCarrinho();
    const insets = useSafeAreaInsets();
-   const { updateStatus, statusPagamento } = useCheckout();
+   const { updateStatus } = useCheckout();
 
    const { data } = useQuery({
       queryKey: ['fetchIngressoDisponivel', evento],
       queryFn: () => {
-         if (!evento?.id) {
-            return null;
-         }
-
+         if (!evento?.id) return null
          return fetchIngressoDisponivel({ evento_id: evento.id, pontoVenda: vendaAplicativo });
       },
       enabled: !!evento?.id,
@@ -137,21 +132,16 @@ export function Carrinho() {
          const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0)
          return criaEditaCarrinho({ ...pedido, eventos: newPedido });
       },
-      onError: (error: Error) => { },
-      onSuccess: (data) => {
-         console.log(data.mensagem);
+      onSuccess: () => {
          navigate('CarrinhoUtilizador')
       },
    });
 
-   if (!evento) {
-      return;
-   }
+   if (!evento) return;
 
    return (
-      <Layout.Root>
-
-         <StatusBar barStyle="dark-content" />
+      <>
+         <StatusBar barStyle="dark-content"  />
          <Layout.Header title='Ingressos disponíveis' />
 
          <Layout.Scroll>
@@ -192,11 +182,11 @@ export function Carrinho() {
                   </VStack>
                ))}
             </VStack>
-            <View style={{ height: 20 }} />
+            <View style={{ marginBottom: insets.bottom + 80 }} />
 
          </Layout.Scroll>
 
-         <VStack justifyContent='center' width="100%" >
+         <VStack justifyContent='center' width="100%" position='absolute' bottom={insets.bottom}>
             <Button
                disabled={total === 0}
                iconRight={(
@@ -207,7 +197,7 @@ export function Carrinho() {
                      {Maskara.dinheiro(total)}
                   </Text>
                )}
-               marginHorizontal="md"
+               marginHorizontal="lg"
                onPress={() => {
                   if (pedido) {
                      updateStatus("");
@@ -223,7 +213,7 @@ export function Carrinho() {
             </Button>
          </VStack>
 
-      </Layout.Root>
+      </>
 
    )
 }

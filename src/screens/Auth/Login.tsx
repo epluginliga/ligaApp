@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { GradienteApp } from '../../components/GradienteApp';
@@ -27,11 +27,12 @@ const schema = z.object({
       message: "Email inválido",
    }),
    password: z.string().min(4, "Mínimo 4 caracteres"),
+   versao: z.number().optional(),
+   dispositivo: z.enum(["app"])
 });
 
 type LoginFormInputs = z.input<typeof schema>;
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'Login'>;
-
 
 export function Login() {
    const { navigate } = useNavigation();
@@ -46,6 +47,8 @@ export function Login() {
       defaultValues: {
          user: USUARIO || '',
          password: SENHA || '',
+         versao: 2.0,
+         dispositivo: "app",
       }
    });
 
@@ -56,7 +59,6 @@ export function Login() {
 
       handleSignIn.mutate(data);
    };
-
 
    return (
       <>
