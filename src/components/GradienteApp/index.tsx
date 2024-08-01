@@ -10,7 +10,8 @@ export type GradienteApp = {
 }
 
 export function GradienteApp({ children, style = {
-   flex: 1
+   flex: 1,
+   flexGrow:1
 } }: GradienteApp) {
    const { colors } = useTheme<Theme>();
 

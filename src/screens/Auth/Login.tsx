@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Dimensions, Image, Pressable, StatusBar } from 'react-native';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +11,6 @@ import { InputPassword } from '../../components/Inputs/Password';
 import VStack from '../../components/Views/Vstack';
 import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputText } from '../../components/Inputs/Text';
-import { ResponseErro } from '../../components/ResponsesRequest/ResponseErro';
 import Text from '../../components/Text';
 
 import { Icon } from '../../icons';
@@ -38,7 +36,6 @@ export function Login() {
    const { handleSignIn, loading } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const { height } = Dimensions.get("screen");
-   const insets = useSafeAreaInsets();
 
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
@@ -59,15 +56,16 @@ export function Login() {
       handleSignIn.mutate(data);
    };
 
+   const minHeight = (0.92 * height) // 92% da tela
+
    return (
       <>
          <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
-         {handleSignIn.isError ? <ResponseErro erro="Senha, ou usuário inválidos!" clear={handleSignIn.reset} /> : ''}
          <GradienteApp>
             <Layout.Keyboard>
                <Layout.Scroll
                   scrollEnabled={false}
-                  contentContainerStyle={{ minHeight: height - insets.bottom, padding: 10 }}>
+                  contentContainerStyle={{ minHeight, padding: 10 }}>
 
                   <VStack flex={1} justifyContent='center' alignItems='center'>
                      <Image
@@ -100,7 +98,7 @@ export function Login() {
                      />
 
                      <Button onPress={handleSubmit(handleLogin)}>
-                        {!loading ? 'ENTRAR' : 'Autencicando...'}
+                        {!loading ? 'ENTRAR' : 'autenticando...'}
                      </Button>
 
                      <Pressable onPress={() => navigate('EsqueciSenha')}>
@@ -108,7 +106,7 @@ export function Login() {
                      </Pressable>
                   </VStack>
 
-                  <VStack gap="md" mb="lg">
+                  <VStack gap="md">
                      <Pressable onPress={() => navigate('CriarConta')}>
                         <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
                            <Text color='white' fontSize={16} fontWeight="900">

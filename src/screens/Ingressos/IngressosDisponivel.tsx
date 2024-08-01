@@ -210,7 +210,7 @@ export function IngressosDisponivel() {
    if (!data) return;
 
    const ingressosDisponiveis = data.data?.filter(item => user.documento === item.cpf_compra);
-   const marginBottom = Platform.OS === "ios" ? 80 : 100 + insets.bottom;
+   const marginBottom = insets.bottom + (Platform.OS === "ios" ? 80 : 100);
 
    return (
       <Animated.View

@@ -145,7 +145,7 @@ export function Eventos() {
    if (isLoading) {
       return null;
    }
-  
+
    const destaque = data?.data?.find(evento => !!evento.destaque);
 
    return (
@@ -158,7 +158,10 @@ export function Eventos() {
             />
          }
          bouncesZoom={false}
-         contentContainerStyle={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+         contentContainerStyle={{
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+         }}
          ListHeaderComponent={(
             <VStack gap="md" justifyContent="space-evenly" mb="md">
 

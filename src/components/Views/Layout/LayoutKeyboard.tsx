@@ -1,5 +1,5 @@
 import React from 'react'
-import { Keyboard,KeyboardAvoidingView,Platform,StatusBar,StyleSheet,TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 export type LayoutKeyboard = {
    children: React.ReactNode;
@@ -9,7 +9,6 @@ export function LayoutKeyboard({ children }: LayoutKeyboard) {
    return (
       <KeyboardAvoidingView
          removeClippedSubviews
-
          behavior={Platform.OS === "ios" ? "padding" : "height"}
          style={styles.container}
       >

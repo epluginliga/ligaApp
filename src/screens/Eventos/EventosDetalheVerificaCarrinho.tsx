@@ -41,7 +41,7 @@ export function ButtonComprarIngressos({ evento }: ButtonComprarInfressosProps) 
    const { adicionaEvento, limpaCarrinho, setCupom, setCarrinhoId, total, adicionaIngressoAoEvento } = useCarrinho();
    const { navigate } = useNavigation();
    const { updateStatus } = useCheckout();
-   const { colors } = useTheme<Theme>()
+   const { colors } = useTheme<Theme>();
 
    function limpaCarrinhoLocal() {
       limpaCarrinho();

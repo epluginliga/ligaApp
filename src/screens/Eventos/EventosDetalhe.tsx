@@ -56,9 +56,9 @@ export const EventosDetalhe = () => {
       if (scrollY.value < 0) { };
       const bottom = interpolate(scrollY.value, [0, 80], [0, -20], Extrapolation.EXTEND);
       const height = interpolate(scrollY.value, [0, 80], [400, 350], Extrapolation.EXTEND);
-      const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
+      // const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
 
-      return { bottom, height, opacity };
+      return { bottom, height };
    });
 
    const textStyles = useAnimatedStyle(() => {
@@ -154,7 +154,7 @@ export const EventosDetalhe = () => {
                </Section.Root>
             </View>
 
-            <View style={{ marginBottom: insets.bottom + 60 }} />
+            <View style={{ marginBottom: insets.bottom + 80 }} />
          </Animated.ScrollView>
 
          <ButtonComprarIngressos evento={eventoDetalhe} />

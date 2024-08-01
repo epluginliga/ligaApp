@@ -47,17 +47,14 @@ export function Routes() {
 
          setLoadingReq(false);
 
-         if(!error.response) {
-            return Promise.reject(error);
-         }
 
-         if (error.response?.data?.codigoretorno === 401) {
+         if (error?.response?.data?.codigoretorno === 401) {
             setErro(error.response.data.mensagem);
             signOut();
             return Promise.reject(error);
          }
 
-         if (error?.response?.data?.mensagenserro) {
+         if (error?.response?.data?.mensagenserro.length > 0) {
             setErro(error?.response?.data?.mensagenserro?.join(", "));
             return Promise.reject(error);
          }
@@ -67,6 +64,11 @@ export function Routes() {
             if (erroMensagem) {
                setErro(erroMensagem.join('\n'));
             }
+            return Promise.reject(error);
+         }
+
+         if (error?.response?.data?.mensagem) {
+            setErro(error?.response?.data?.mensagem);
             return Promise.reject(error);
          }
 

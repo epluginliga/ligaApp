@@ -240,7 +240,7 @@ export function CarrinhoUtilizador() {
                                     </Animated.View>
 
                                     <Animated.View
-                                       entering={FadeInDown.delay(indice * 500)}
+                                       entering={FadeInDown}
                                        exiting={FadeOutUp}
                                     >
                                        <InputText
@@ -258,7 +258,7 @@ export function CarrinhoUtilizador() {
 
                                     {ingresso.classificacao_idade !== "livre" && (
                                        <Animated.View
-                                          entering={FadeInDown.delay(indice * 500)}
+                                          entering={FadeInDown}
                                           exiting={FadeOutUp}
                                        >
                                           <InputText
@@ -278,7 +278,7 @@ export function CarrinhoUtilizador() {
 
                                     {ingresso.sexo && (
                                        <Animated.View
-                                          entering={FadeInDown.delay(indice * 500)}
+                                          entering={FadeInDown}
                                           exiting={FadeOutUp}
                                        >
                                           <InputSelecionar

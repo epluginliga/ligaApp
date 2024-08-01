@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { InputText } from '../../components/Inputs/Text';
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMutation } from '@tanstack/react-query';
 import { aplicaCupomDesconto, obtemCarrinho, removeCupomDesconto } from '../../services/carrinho';
@@ -155,7 +155,7 @@ function Error({ status }: { status: StatusCupom }) {
                entering={FadeIn}
                exiting={FadeOut}>
                <Card.Root gap='lg' paddingVertical='lg' flexDirection='column' justifyContent='center' alignItems='center'>
-                  <ActivityIndicator size="large" color={colors.primary} />
+                  {Platform.OS !== "android" && <ActivityIndicator size="large" color={colors.primary} />}
                   <Card.Title color='bege_200'>Buscando...</Card.Title>
                </Card.Root>
             </Animated.View>

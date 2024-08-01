@@ -186,7 +186,7 @@ export function Carrinho() {
 
          </Layout.Scroll>
 
-         <VStack justifyContent='center' width="100%" position='absolute' bottom={insets.bottom + Platform.OS === "ios" ? 0 : 10}>
+         <VStack justifyContent='center' width="100%" position='absolute' bottom={insets.bottom + (Platform.OS === "ios" ? 0 : 10)}>
             <Button
                disabled={total === 0}
                iconRight={(

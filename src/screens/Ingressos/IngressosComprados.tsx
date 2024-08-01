@@ -83,8 +83,8 @@ export function IngressosComprados() {
       return new Date(data).getTime() < new Date().getTime();
    });
 
-   const marginBottom = Platform.OS === "ios" ? 80 : 100 + insets.bottom;
-
+   const marginBottom = insets.bottom + (Platform.OS === "ios" ? 80 : 100);
+   
    return (
       <Animated.View
          entering={FadeInRight}
