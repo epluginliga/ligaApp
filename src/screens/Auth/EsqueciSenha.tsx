@@ -9,7 +9,7 @@ import { InputText } from '../../components/Inputs/Text';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Text from '../../components/Text';
-import { StatusBar, View } from 'react-native';
+import { Dimensions, StatusBar, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { z } from 'zod';
 import { useMutation } from '@tanstack/react-query';
@@ -33,6 +33,7 @@ export function EsqueciSenha() {
    });
    const navigate = useNavigation();
    const insets = useSafeAreaInsets();
+   const { width } = Dimensions.get("screen");
 
    const handleCriaConta = useMutation({
       mutationFn: (form: LoginFormInputs) => resetarSenha(form),
@@ -41,6 +42,8 @@ export function EsqueciSenha() {
          setSucesso(data.mensagem);
       },
    });
+
+   const size = width >= 1024 ? "80%" : "100%";
 
    return (
       <>
@@ -67,7 +70,7 @@ export function EsqueciSenha() {
                         </Text>
                      </VStack>
                   ) : (
-                     <VStack gap="xs" flex={1}>
+                     <VStack gap="xs" flex={1} maxWidth={size} alignSelf='center' width="100%">
                         <InputText
                            keyboardType='email-address'
                            autoCapitalize='none'

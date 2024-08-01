@@ -35,7 +35,7 @@ export function Login() {
    const { navigate } = useNavigation();
    const { handleSignIn, loading } = useAuth();
    const { params } = useRoute<EventoDetalheRouteProp>();
-   const { height } = Dimensions.get("screen");
+   const { height, width } = Dimensions.get("screen");
 
    const { control, handleSubmit, formState: { errors }
    } = useForm<LoginFormInputs>({
@@ -57,7 +57,8 @@ export function Login() {
    };
 
    const minHeight = (0.92 * height) // 92% da tela
-
+   const size = width >= 1024 ? "80%" : "100%";
+   
    return (
       <>
          <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
@@ -74,7 +75,7 @@ export function Login() {
                         source={require("../../../assets/imagem/logo-white.png")} />
                   </VStack>
 
-                  <VStack gap="md" flex={1}>
+                  <VStack gap="md" flex={1} maxWidth={size} width="100%" alignSelf='center'>
                      <InputText
                         variant='solid'
                         label="E-mail"

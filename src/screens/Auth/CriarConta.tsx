@@ -26,6 +26,7 @@ import {
    NASCIMENTO,
    CONFIRMAR_SENHA
 } from "@env"
+import { Dimensions } from 'react-native';
 
 const schema = z.object({
    nome: z.string(),
@@ -50,6 +51,7 @@ const schema = z.object({
 });
 
 export function CriarConta() {
+   const { width } = Dimensions.get("screen");
    const { control, handleSubmit, formState: { errors }
    } = useForm<CriaUsuarioProps>({
       resolver: zodResolver(schema),
@@ -79,6 +81,8 @@ export function CriarConta() {
       },
    });
 
+   const size = width >= 1024 ? "80%" : "100%";
+
    return (
       <Layout.Root>
          <Layout.Keyboard>
@@ -86,7 +90,7 @@ export function CriarConta() {
             <Layout.Header title='Criar Conta' />
 
             <Layout.Scroll>
-               <VStack gap="lg" p="sm">
+               <VStack gap="lg" p="sm" alignSelf='center' width={size}>
                   <VStack gap="lg" flex={1}>
                      <InputText
                         label="Nome"
