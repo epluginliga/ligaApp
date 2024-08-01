@@ -1,12 +1,11 @@
 import React from 'react';
-import { Image, ImageBackground, Pressable, StatusBar, View } from 'react-native';
+import { Image, StatusBar, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { Section } from '../../components/Section';
 import VStack from '../../components/Views/Vstack';
 import { Layout } from '../../components/Views/Layout';
-import { IconShare } from '../../icons/IconShare';
 import { RouteApp } from '../../@types/navigation';
 
 import Circle from '../../components/Views/Circle';
@@ -95,13 +94,7 @@ export const IngressoDetalhe = () => {
                zIndex: 99,
                width: "100%"
             }, textStyles]}>
-            <Layout.Header title={dadosCompra.evento_nome.slice(0, 18) + "..."}
-               rigth={(
-                  <Pressable onPress={() => console.log("pre")}>
-                     <IconShare />
-                  </Pressable>
-               )}
-            />
+            <Layout.Header title={dadosCompra.evento_nome.slice(0, 18) + "..."} />
          </Animated.View>
 
          <Animated.ScrollView

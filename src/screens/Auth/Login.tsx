@@ -1,5 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Dimensions, Image, Pressable, StatusBar } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { GradienteApp } from '../../components/GradienteApp';
 import { Layout } from '../../components/Views/Layout';
@@ -8,19 +12,14 @@ import { InputPassword } from '../../components/Inputs/Password';
 import VStack from '../../components/Views/Vstack';
 import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputText } from '../../components/Inputs/Text';
-
+import { ResponseErro } from '../../components/ResponsesRequest/ResponseErro';
 import Text from '../../components/Text';
-import { Dimensions, Image, Pressable, StatusBar } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Icon } from '../../icons';
 import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { RouteApp } from '../../@types/navigation';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { USUARIO, SENHA } from "@env";
-import { ResponseErro } from '../../components/ResponsesRequest/ResponseErro';
+import { z } from 'zod';
 
 const schema = z.object({
    user: z.string().email({
@@ -109,7 +108,7 @@ export function Login() {
                      </Pressable>
                   </VStack>
 
-                  <VStack gap="md" mb="sm">
+                  <VStack gap="md" mb="lg">
                      <Pressable onPress={() => navigate('CriarConta')}>
                         <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
                            <Text color='white' fontSize={16} fontWeight="900">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, StatusBar, View } from 'react-native';
+import { Platform, Pressable, StatusBar, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -141,7 +141,7 @@ export function Carrinho() {
 
    return (
       <>
-         <StatusBar barStyle="dark-content"  />
+         <StatusBar barStyle="dark-content" />
          <Layout.Header title='Ingressos disponíveis' />
 
          <Layout.Scroll>
@@ -186,7 +186,7 @@ export function Carrinho() {
 
          </Layout.Scroll>
 
-         <VStack justifyContent='center' width="100%" position='absolute' bottom={insets.bottom}>
+         <VStack justifyContent='center' width="100%" position='absolute' bottom={insets.bottom + Platform.OS === "ios" ? 0 : 10}>
             <Button
                disabled={total === 0}
                iconRight={(
@@ -199,12 +199,10 @@ export function Carrinho() {
                )}
                marginHorizontal="lg"
                onPress={() => {
-                  if (pedido) {
-                     updateStatus("");
-                     return handleCriaCarrinho.mutate(pedido);
-                  }
+                  if (!pedido) return;
 
-                  return;
+                  updateStatus("");
+                  return handleCriaCarrinho.mutate(pedido);
                }}
             >
                <Text color='white'>

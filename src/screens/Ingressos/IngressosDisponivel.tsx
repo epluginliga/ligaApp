@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import { FlatList, Pressable, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { FlatList, Platform, Pressable, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 
 import VStack from '../../components/Views/Vstack'
 import { Card } from '../../components/Card'
@@ -210,6 +210,7 @@ export function IngressosDisponivel() {
    if (!data) return;
 
    const ingressosDisponiveis = data.data?.filter(item => user.documento === item.cpf_compra);
+   const marginBottom = Platform.OS === "ios" ? 80 : 100 + insets.bottom;
 
    return (
       <Animated.View
@@ -233,7 +234,7 @@ export function IngressosDisponivel() {
             renderItem={Item}
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
-            ListFooterComponent={<View style={{ marginBottom: insets.bottom + 80 }} />}
+            ListFooterComponent={<View style={{ marginBottom }} />}
             data={ingressosDisponiveis}
          />
       </Animated.View>

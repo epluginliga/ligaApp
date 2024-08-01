@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, RefreshControl, View } from 'react-native';
+import { FlatList, Platform, RefreshControl, View } from 'react-native';
 
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 
@@ -83,6 +83,8 @@ export function IngressosComprados() {
       return new Date(data).getTime() < new Date().getTime();
    });
 
+   const marginBottom = Platform.OS === "ios" ? 80 : 100 + insets.bottom;
+
    return (
       <Animated.View
          entering={FadeInRight}
@@ -113,7 +115,7 @@ export function IngressosComprados() {
             keyExtractor={(item) => item.bilhete_id}
             ItemSeparatorComponent={() => <VStack height={20} />}
             data={ingressosComprados}
-            ListFooterComponent={<View style={{ marginBottom: insets.bottom + 80 }} />}
+            ListFooterComponent={<View style={{ marginBottom }} />}
          />
       </Animated.View>
    )
