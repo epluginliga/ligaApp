@@ -51,6 +51,7 @@ function Item({ item }: any) {
 }
 
 function Header() {
+   const navigate = useNavigation();
    const { user } = useAuth();
    const { data, isFetching } = useQuery({
       queryFn: obtemDadosLogado,
@@ -60,7 +61,7 @@ function Header() {
    if (!data && isFetching) return;
 
    return (
-      <AvatarUsuario usuario={data}>
+      <AvatarUsuario onPress={() => navigate.navigate("Camera")} usuario={data}>
          <VStack alignItems='center'>
             <Section.Title>{user.nome}</Section.Title>
             <Section.Span>{data?.user_name}</Section.Span>

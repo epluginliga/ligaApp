@@ -44,7 +44,8 @@ export type RouteApp = {
       ingresso_id: string;
    };
    CarrinhoCupomDesconto: undefined;
-   IngressosDetalhe: IngressoDetalheProps
+   IngressosDetalhe: IngressoDetalheProps;
+   Camera: undefined;
 }
 
 declare global {

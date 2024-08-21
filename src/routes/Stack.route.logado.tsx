@@ -26,6 +26,7 @@ import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
 import { CheckoutGerandoPix } from '../screens/Checkout/CheckoutGerandoPix';
+import { CameraApp } from '../components/Camera';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,11 +69,13 @@ export function RouteLogado() {
                <Stack.Screen name="CheckoutSucesso" component={CheckoutSucesso} />
                <Stack.Screen name="CheckoutProcessandoPagamento" component={CheckoutProcessandoPagamento as any} />
                <Stack.Screen name="CheckoutGerandoPix" component={CheckoutGerandoPix as any} />
+
             </Stack.Group>
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
                <Stack.Screen name="CarrinhoCupomDesconto" component={CarrinhoCupomDesconto} />
                <Stack.Screen name="IngressoTranserir" component={IngressoTransferir} />
+               <Stack.Screen name="Camera" component={CameraApp} />
             </Stack.Group>
 
          </Stack.Navigator>

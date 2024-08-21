@@ -55,9 +55,7 @@ export const EventosDetalhe = () => {
    const animatedStyles = useAnimatedStyle(() => {
       if (scrollY.value < 0) { };
       const bottom = interpolate(scrollY.value, [0, 80], [0, -20], Extrapolation.EXTEND);
-      const height = interpolate(scrollY.value, [0, 80], [400, 350], Extrapolation.EXTEND);
-      // const opacity = interpolate(scrollY.value, [1, 300], [1, 0], Extrapolation.EXTEND);
-
+      const height = interpolate(scrollY.value, [0, 80], [250, 180], Extrapolation.EXTEND);
       return { bottom, height };
    });
 
@@ -113,7 +111,7 @@ export const EventosDetalhe = () => {
             maximumZoomScale={0}
             minimumZoomScale={0}
          >
-            <View style={{ position: "relative", height: 400, width: "100%", zIndex: -9 }}>
+            <View style={{ position: "relative", height: 250, width: "100%", zIndex: -9 }}>
                <Animated.Image
                   style={[{ position: "absolute", width: "100%", height: "100%" }, animatedStyles]}
                   source={{ uri: eventoDetalhe?.path_imagem }} />
@@ -125,7 +123,7 @@ export const EventosDetalhe = () => {
                </Pressable>
             </VStack>
 
-            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 350, zIndex: 999 }, shareStyles]}>
+            <Animated.View style={[{ marginLeft: '85%', position: "absolute", top: 200, zIndex: 999 }, shareStyles]}>
                <Circle variant='shadow' borderColor='white' justifyContent='center' width={52} height={52}>
                   <ButtonShare url={eventoDetalhe.url_visualizacao} />
                </Circle>
