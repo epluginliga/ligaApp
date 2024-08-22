@@ -3,16 +3,17 @@ import { buttonVariants } from './buttonVariants';
 import { textVariants } from './textVariants';
 import { card } from './cardVariants';
 
-const palette = {
+export const palette = {
    primary: '#F23E17',
    warning: '#ffcc00',
    secondary: '#F2385A',
    botao_default: 'rgba(242, 56, 90, 0.65)',
    background_red_tab: 'rgba(242, 56, 90, 0.10)',
 
-   vermelho_100: '#F23E17',
-   vermelho_200: '#F23E18',
-   vermelho_300: '#F23E20',
+   vermelho_200: '#fee2e2',
+   vermelho_300: '#fecaca',
+   vermelho_400: '#fca5a5',
+   vermelho_500: '#f87171',
 
    azul: '#232C79',
    purple: '#6400DD',

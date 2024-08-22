@@ -1,14 +1,42 @@
 import React, { useContext } from "react";
 import { Icon } from "../../../icons";
-import VStack from "../../../components/Views/Vstack";
-import { StatusBar } from "react-native";
+import VStack, { VStackProps } from "../../../components/Views/Vstack";
 import { StepsContext } from ".";
 import { Button } from "../../../components/Button";
-import Animated, { FadeInRight, FadeOutRight } from "react-native-reanimated";
+import Animated, { Easing, FadeIn, FadeInRight, FadeOutRight } from "react-native-reanimated";
+import Text from "../../../components/Text";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View } from "react-native";
 
+type BordasProps = VStackProps & {
+   children: React.ReactNode;
+   size: number;
+   delay: number;
+}
+
+function Bordas({ children, size, delay, ...rest }: BordasProps) {
+   
+   return (
+      <Animated.View
+         entering={FadeIn.delay(delay).easing(Easing.linear)}
+         exiting={FadeOutRight.delay(delay)}
+      >
+         <VStack
+            height={size}
+            width={size}
+            alignItems="center"
+            justifyContent="center"
+            borderRadius={300}
+            {...rest}>
+            {children}
+         </VStack>
+      </Animated.View>
+   )
+}
 
 export function PerfilFotoDescricao() {
    const { step, nextStep } = useContext(StepsContext);
+   const insets = useSafeAreaInsets();
 
    return (
       <Animated.View
@@ -16,15 +44,27 @@ export function PerfilFotoDescricao() {
          exiting={FadeOutRight}
          style={[{ flex: 1 }]}
       >
-         <VStack flex={1} justifyContent="center" alignItems="center">
-            <VStack height={80} width={80} backgroundColor="background_red_tab">
-               <VStack height={80} width={80} backgroundColor="primary" borderRadius={100}>
-                  <Icon.FaceID color="#fff" />
-               </VStack>
+         <VStack p="sm" flex={1} justifyContent="center" gap="xl" alignItems="center">
+            <VStack flex={1} justifyContent="center" gap="xl" alignItems="center">
+               <Text variant="header" fontSize={15} textAlign="center">
+                  Faça o seu reconhecimento para ter acesso aos eventos com mais Segurança
+               </Text>
+
+               <Bordas size={350} delay={500} backgroundColor="vermelho_200">
+                  <Bordas size={250} delay={600} backgroundColor="vermelho_300">
+                     <Bordas size={175} delay={700} backgroundColor="vermelho_500">
+                        <Icon.FaceID size={40} color="#fff" />
+                     </Bordas>
+                  </Bordas>
+               </Bordas>
             </VStack>
 
-            <Button onPress={() => nextStep()}>Proximo</Button>
+            <View style={{
+               marginBottom: insets.bottom + 6
+            }}>
+               <Button onPress={() => nextStep()}>Proximo</Button>
+            </View>
          </VStack>
-      </Animated.View>
+      </Animated.View >
    )
 }

@@ -31,7 +31,7 @@ export function PerfilFotoEnviar() {
          exiting={FadeOutRight}
          style={[{ flex: 1 }]}
       >
-         <CameraApp flex={1} justifyContent='flex-end'>
+         <CameraApp>
             <View style={{ bottom: insets.bottom + 16 }} >
                <Button iconRight={false} iconLeft={<Icon.ArrowLeft color='#fff' />} onPress={backStep}>Voltar</Button>
             </View>
