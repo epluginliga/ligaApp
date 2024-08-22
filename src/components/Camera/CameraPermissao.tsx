@@ -68,11 +68,8 @@ export const CameraPermissao = () => {
                   if (!resp) {
                      setPermissaoMensagem(1);
                   }
-
-                  console.log(JSON.stringify(resp, null, 1))
                } catch (error: any) {
                   console.log(JSON.stringify(error, null, 1))
-
                }
             }} >Abrir câmera</Button>
          ) : (

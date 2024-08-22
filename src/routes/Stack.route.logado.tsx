@@ -8,7 +8,7 @@ import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import { Linking, StatusBar } from 'react-native';
+import {  StatusBar } from 'react-native';
 import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';
 import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
@@ -26,7 +26,7 @@ import { PerfilAlterarSenha } from '../screens/Perfil/PerfilAlterarSenha';
 import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
 import { CheckoutGerandoPix } from '../screens/Checkout/CheckoutGerandoPix';
-import { CameraApp } from '../components/Camera';
+import { PerfilFoto } from '../screens/Perfil/PerfilFoto';
 
 const Stack = createNativeStackNavigator();
 
@@ -75,7 +75,7 @@ export function RouteLogado() {
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
                <Stack.Screen name="CarrinhoCupomDesconto" component={CarrinhoCupomDesconto} />
                <Stack.Screen name="IngressoTranserir" component={IngressoTransferir} />
-               <Stack.Screen name="Camera" component={CameraApp} />
+               <Stack.Screen name="PerfilFoto" component={PerfilFoto} />
             </Stack.Group>
 
          </Stack.Navigator>

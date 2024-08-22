@@ -10,6 +10,10 @@ const palette = {
    botao_default: 'rgba(242, 56, 90, 0.65)',
    background_red_tab: 'rgba(242, 56, 90, 0.10)',
 
+   vermelho_100: '#F23E17',
+   vermelho_200: '#F23E18',
+   vermelho_300: '#F23E20',
+
    azul: '#232C79',
    purple: '#6400DD',
    purple_200: '#37007A',

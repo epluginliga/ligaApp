@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { ActivityIndicator, FlatList, Image, Pressable } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable } from 'react-native';
 
 import { Layout } from '../../components/Views/Layout';
 import { Section } from '../../components/Section';
@@ -61,7 +61,7 @@ function Header() {
    if (!data && isFetching) return;
 
    return (
-      <AvatarUsuario onPress={() => navigate.navigate("Camera")} usuario={data}>
+      <AvatarUsuario onPress={() => navigate.navigate("PerfilFoto")} usuario={data}>
          <VStack alignItems='center'>
             <Section.Title>{user.nome}</Section.Title>
             <Section.Span>{data?.user_name}</Section.Span>
