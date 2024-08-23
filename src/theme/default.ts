@@ -15,6 +15,10 @@ export const palette = {
    vermelho_400: '#fca5a5',
    vermelho_500: '#f87171',
 
+   verde_200: '#dcfce7',
+   verde_300: '#bbf7d0',
+   verde_400: '#86efac',
+
    azul: '#232C79',
    purple: '#6400DD',
    purple_200: '#37007A',

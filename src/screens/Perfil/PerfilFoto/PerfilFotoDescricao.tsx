@@ -1,21 +1,20 @@
 import React, { useContext } from "react";
-import { Icon } from "../../../icons";
-import VStack, { VStackProps } from "../../../components/Views/Vstack";
-import { StepsContext } from ".";
-import { Button } from "../../../components/Button";
-import Animated, { Easing, FadeIn, FadeInRight, FadeOutRight } from "react-native-reanimated";
-import Text from "../../../components/Text";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { View } from "react-native";
+import Animated, { Easing, FadeIn, FadeInRight, FadeOutRight } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import VStack, { VStackProps } from "../../../components/Views/Vstack";
+import { Button } from "../../../components/Button";
+import Text from "../../../components/Text";
+import { Icon } from "../../../icons";
+import { StepsContext } from ".";
 
 type BordasProps = VStackProps & {
    children: React.ReactNode;
    size: number;
    delay: number;
 }
-
 function Bordas({ children, size, delay, ...rest }: BordasProps) {
-   
    return (
       <Animated.View
          entering={FadeIn.delay(delay).easing(Easing.linear)}
@@ -35,7 +34,7 @@ function Bordas({ children, size, delay, ...rest }: BordasProps) {
 }
 
 export function PerfilFotoDescricao() {
-   const { step, nextStep } = useContext(StepsContext);
+   const { nextStep } = useContext(StepsContext);
    const insets = useSafeAreaInsets();
 
    return (
@@ -62,7 +61,9 @@ export function PerfilFotoDescricao() {
             <View style={{
                marginBottom: insets.bottom + 6
             }}>
-               <Button onPress={() => nextStep()}>Proximo</Button>
+               <Button onPress={() => nextStep()}>
+                  Proximo
+               </Button>
             </View>
          </VStack>
       </Animated.View >

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useCameraPermission } from 'react-native-vision-camera';
 import { Image, PressableProps } from "react-native";
-import Text from "../Text";
-import { Button } from '../Button';
-import VStack from '../Views/Vstack';
-import { Icon } from '../../icons';
+import VStack from '../../../../components/Views/Vstack';
+import Text from '../../../../components/Text';
+import { Button } from '../../../../components/Button';
+import { Icon } from '../../../../icons';
 
 export type ICameraPermision = {
    text?: string;
@@ -32,7 +32,7 @@ function SolicitaPermissaoCamera({
                   marginHorizontal: "auto"
                }}
                alt="Permission camera image"
-               source={require('../../../assets/imagem/permission_camera.png')}
+               source={require('../../../../../assets/imagem/permission_camera.png')}
             />
 
             <Text textAlign="center">
@@ -71,7 +71,9 @@ export const CameraPermissao = () => {
                } catch (error: any) {
                   console.log(JSON.stringify(error, null, 1))
                }
-            }} >Abrir câmera</Button>
+            }} >
+               Abrir câmera
+            </Button>
          ) : (
             <Button>Voltar</Button>
          )}

@@ -21,7 +21,7 @@ export const buttonVariants = {
       borderRadius: 10,
       justifyContent: 'center',
       alignItems: "center",
-      maxWidth: '75%',
+
       fontSize: 'sm'
    }
 

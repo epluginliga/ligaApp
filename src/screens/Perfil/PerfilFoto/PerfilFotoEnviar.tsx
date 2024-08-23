@@ -1,15 +1,15 @@
 import React, { useContext } from 'react'
 import { z } from "zod";
-import { CameraApp } from '../../../components/Camera';
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '../../../components/Button';
-import VStack from '../../../components/Views/Vstack';
 import { StepsContext } from '.';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import Animated, { FadeInRight, FadeOutRight } from 'react-native-reanimated';
 import { Icon } from '../../../icons';
+import { CameraApp } from './PerfilFotoCamera';
 
 const schema = z.object({
    foto: z.string(),
