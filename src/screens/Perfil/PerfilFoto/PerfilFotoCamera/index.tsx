@@ -1,47 +1,60 @@
 import React, { useCallback, useRef, useState } from "react";
-import { ListEmptyComponent } from "../../../../components/ListEmptyComponent";
-import { Dimensions, Image, Platform, StyleSheet, View } from "react-native";
+import { Dimensions, Platform, StyleSheet, View } from "react-native";
 import { Camera, useCameraDevice, useCameraFormat, useCameraPermission, PhotoFile } from "react-native-vision-camera";
-import Animated, { FadeInUp, FadeOutDown } from "react-native-reanimated";
 import { CameraPermissao } from "./PerfilFotoCameraPermissao";
-import VStack, { VStackProps } from "../../../../components/Views/Vstack";
-import { Icon } from "../../../../icons";
-import Text from "../../../../components/Text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { ListEmptyComponent } from "../../../../components/ListEmptyComponent";
+import VStack from "../../../../components/Views/Vstack";
 import { Button } from "../../../../components/Button";
+import { Icon } from "../../../../icons";
 import { Ovo } from "../../../../icons/ovo";
 import { PerfilFotoCameraSucesso } from "./PerfilFotoCameraSucesso";
+import { imagemApp } from "../../../../utils/utils";
 
-export type CameraProps = VStackProps & {
-   children?: React.ReactNode | React.ReactNode[]
-}
-
-export function CameraApp({ children, ...rest }: CameraProps) {
+export function CameraApp() {
    const device = useCameraDevice('front');
    const { hasPermission } = useCameraPermission();
    const camera = useRef<Camera>(null);
+   const [imagem, setImagem] = useState<PhotoFile | null>();
+
    const { height } = Dimensions.get("screen");
    const insets = useSafeAreaInsets();
-   const [imagem, setImagem] = useState<PhotoFile | null>();
 
    const handleLimpaFoto = useCallback(() => setImagem(null), []);
 
    const handleTakePhoto = useCallback(async () => {
       const file = await camera?.current?.takePhoto();
+
       if (!file) return;
 
-      setImagem({
+      const newFile = {
          ...file,
-         path: Platform.OS === "android" ? `file://${file?.path}` : file?.path
-      })
+         path: Platform.OS === "android" ? `file://${file?.path}` : file?.path,
+      };
 
+      let base64Image = await imagemApp(newFile.path).base64File();
+
+      const jsonData = {
+         path_camera_web: false,
+         path_avatar_camera: base64Image,
+         tipo_imagem_camera: "image/jpg"
+      };
+
+      setImagem(newFile);
    }, []);
 
    const format = useCameraFormat(device, [
-      { photoResolution: { width: 200, height: 200 } }
+      {
+         photoResolution: {
+            width: 200,
+            height: 200,
+         },
+
+      }
    ]);
 
-   if (!hasPermission) return <CameraPermissao />;
+   if (!hasPermission) return <CameraPermissao />
    if (device == null) return <ListEmptyComponent title="Acesso á câmera foi negada!" />
    if (imagem) return <PerfilFotoCameraSucesso clean={handleLimpaFoto} uri={imagem.path} />
 
