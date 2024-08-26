@@ -6,7 +6,7 @@ export class ImagemApp {
       this.path = data;
    }
 
-    async base64File(): Promise<string | ArrayBuffer> {
+   async base64File(): Promise<string | ArrayBuffer> {
       const result = await fetch(this.path)
       const blob = await result.blob();
 

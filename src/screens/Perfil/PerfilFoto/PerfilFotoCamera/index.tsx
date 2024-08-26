@@ -10,15 +10,15 @@ import { Button } from "../../../../components/Button";
 import { Icon } from "../../../../icons";
 import { Ovo } from "../../../../icons/ovo";
 import { PerfilFotoCameraSucesso } from "./PerfilFotoCameraSucesso";
-import { imagemApp } from "../../../../utils/utils";
+import Animated, { FadeIn, FadeOutRight } from "react-native-reanimated";
 
-export function CameraApp() {
+export function PerfilFotoCamera() {
    const device = useCameraDevice('front');
    const { hasPermission } = useCameraPermission();
    const camera = useRef<Camera>(null);
    const [imagem, setImagem] = useState<PhotoFile | null>();
 
-   const { height } = Dimensions.get("screen");
+   const { height, width } = Dimensions.get("screen");
    const insets = useSafeAreaInsets();
 
    const handleLimpaFoto = useCallback(() => setImagem(null), []);
@@ -33,13 +33,6 @@ export function CameraApp() {
          path: Platform.OS === "android" ? `file://${file?.path}` : file?.path,
       };
 
-      let base64Image = await imagemApp(newFile.path).base64File();
-
-      const jsonData = {
-         path_camera_web: false,
-         path_avatar_camera: base64Image,
-         tipo_imagem_camera: "image/jpg"
-      };
 
       setImagem(newFile);
    }, []);
@@ -51,6 +44,7 @@ export function CameraApp() {
             height: 200,
          },
 
+
       }
    ]);
 
@@ -60,24 +54,41 @@ export function CameraApp() {
 
    return (
       <>
-         <Camera
-            ref={camera}
-            style={StyleSheet.absoluteFill}
-            format={format}
-            photo={true}
-            device={device}
-            isActive={true}
-         />
+         <Animated.View
+            entering={FadeIn}
+            exiting={FadeOutRight}
+            style={[{
+               position: "relative",
+               width,
+               justifyContent: "center"
+            }]}
+         >
+            <Camera
+               ref={camera}
+               style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+               }}
+               format={format}
+               photo={true}
+               device={device}
+               isActive={true}
+               isMirrored={false}
+            />
 
-         <VStack backgroundColor="white"
-            position="absolute"
-            top={0}
-            width="100%"
-            height={0.1853 * height}
-         />
-         <VStack backgroundColor="white" position="absolute" top={0} right={0} width={52} height={height} />
+            <VStack backgroundColor="white"
+               position="absolute"
+               top={0}
+               width="100%"
+               height={0.1853 * height}
+            />
 
-         <Ovo />
+            <Ovo />
+
+         </Animated.View>
 
          <View style={{
             position: "absolute",

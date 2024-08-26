@@ -1,6 +1,7 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
-import { PerfilFotoEnviar } from './PerfilFotoEnviar';
+import React, { createContext, useCallback, useState } from 'react';
+
 import { PerfilFotoDescricao } from './PerfilFotoDescricao';
+import { PerfilFotoCamera } from './PerfilFotoCamera';
 
 type StepsProviderContextProps = {
    step: number;
@@ -11,12 +12,11 @@ export const StepsContext = createContext<StepsProviderContextProps>({} as Steps
 
 const StepsComponents: { [key: number]: React.ReactNode } = {
    0: <PerfilFotoDescricao />,
-   1: <PerfilFotoEnviar />,
+   1: <PerfilFotoCamera />,
 };
 
 export const PerfilFoto = () => {
    const [step, setStep] = useState(0);
-   console.log(step)
    const nextStep = useCallback(() => setStep(step + 1), [step]);
    const backStep = useCallback(() => setStep(step - 1), [step]);
 

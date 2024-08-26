@@ -10,6 +10,9 @@ import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../../../theme/default';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation } from '@tanstack/react-query';
+import { usuarioCadastraImagem } from '../../../../services/perfil';
+import { imagemApp } from '../../../../utils/utils';
 
 type PerfilFotoCameraSucessoProps = {
    uri: string;
@@ -46,6 +49,25 @@ export function PerfilFotoCameraSucesso({ uri, clean }: PerfilFotoCameraSucessoP
    const insets = useSafeAreaInsets();
    const navigate = useNavigation();
 
+
+   const handleUploadImagem = useMutation({
+      mutationFn: async () => {
+         let base64Image = await imagemApp(uri).base64File();
+
+         const jsonData = {
+            path_camera_web: false,
+            path_avatar_camera: base64Image,
+            tipo_imagem_camera: "image/jpg"
+         };
+
+         return usuarioCadastraImagem(jsonData);
+      },
+      onSuccess(data) {
+         clean();
+         navigate.navigate("Perfil");
+      },
+   });
+
    return (
       <View style={{
          marginBottom: insets.bottom,
@@ -67,12 +89,16 @@ export function PerfilFotoCameraSucesso({ uri, clean }: PerfilFotoCameraSucessoP
                </Bordas>
 
                <Pressable onPress={() => clean()}>
-                  <Image source={{ uri }}
+
+                  <Image
+                     source={{ uri }}
                      style={{
                         width: 300,
                         height: 300,
                         borderRadius: 30
-                     }} />
+                     }}
+                  />
+
                   <VStack position='absolute'
                      p='md'
                      variant='shadow'
@@ -118,12 +144,10 @@ export function PerfilFotoCameraSucesso({ uri, clean }: PerfilFotoCameraSucessoP
             </HStack>
 
             <Button
+               loading={handleUploadImagem.isPending}
                iconRight={<Icon.CheckCircle color='#fff' />}
                variant='sucesso'
-               onPress={() => {
-                  clean();
-                  navigate.navigate('Perfil');
-               }}>
+               onPress={() => handleUploadImagem.mutate()}>
                Salvar
             </Button>
          </Animated.View>

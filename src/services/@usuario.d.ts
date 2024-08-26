@@ -11,3 +11,9 @@ export type CriaUsuarioProps = {
    cadastro_app: boolean;
 
 }
+
+export type UsuarioCadastraImagemProps = {
+   path_camera_web: boolean;
+   path_avatar_camera: string | ArrayBuffer;
+   tipo_imagem_camera: string;
+}
