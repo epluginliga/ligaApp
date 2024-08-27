@@ -51,6 +51,10 @@ function Item({ item }: any) {
 }
 
 function Header() {
+   const apbrirCamera = [
+      "sem_imagem",
+      "reprovado"
+   ];
    const navigate = useNavigation();
    const { user } = useAuth();
    const { data, isFetching } = useQuery({
@@ -58,10 +62,16 @@ function Header() {
       queryKey: ['obtemDadosLogadoIndex'],
    });
 
-   if (!data && isFetching) return;
+   if (!data || isFetching) return;
 
    return (
-      <AvatarUsuario onPress={() => navigate.navigate("PerfilFoto")} usuario={data}>
+      <AvatarUsuario onPress={() => {
+         if (!apbrirCamera.includes(data.status_aprovacao)) {
+            return;
+         }
+         return navigate.navigate("PerfilFoto")
+      }}
+         usuario={data}>
          <VStack alignItems='center'>
             <Section.Title>{user.nome}</Section.Title>
             <Section.Span>{data?.user_name}</Section.Span>
