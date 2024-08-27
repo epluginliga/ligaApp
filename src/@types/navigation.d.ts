@@ -32,12 +32,15 @@ export type RouteApp = {
 
 
    // private
-   Perfil: undefined;
+   PerfilTab: undefined;
    PerfilMeuPerfil: undefined;
    PerfilMeusEndereco: undefined;
    PerfilMeusPedidos: undefined;
    PerfilAlterarSenha: undefined;
-
+   PerfilFoto: undefined;
+   PerfilFotoCameraSucesso: {
+      path: string
+   }
    Carrinho: undefined;
    Ingressos: undefined;
    IngressoTranserir: {
@@ -45,7 +48,7 @@ export type RouteApp = {
    };
    CarrinhoCupomDesconto: undefined;
    IngressosDetalhe: IngressoDetalheProps;
-   PerfilFoto: undefined;
+ 
 }
 
 declare global {

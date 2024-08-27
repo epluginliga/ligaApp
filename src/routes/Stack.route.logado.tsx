@@ -1,14 +1,13 @@
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Perfil } from '../screens/Perfil';
 import { Carrinho } from '../screens/Carrinho';
 import { CarrinhoUtilizador } from '../screens/Carrinho/CarrinhoUtilizador';
 import { Ingressos } from '../screens/Ingressos';
 import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
-import {  StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { CarrinhoResumo } from '../screens/Carrinho/CarrinhoResumo';
 import { CheckoutEnderecoCobranca } from '../screens/Checkout/CheckoutEnderecoCobranca';
 import { CheckoutPagamento } from '../screens/Checkout/CheckoutPagamento';
@@ -27,6 +26,7 @@ import { IngressoTransferir } from '../screens/Ingressos/IngressoTransferir';
 import { CheckoutProcessandoPagamento } from '../screens/Checkout/CheckoutProcessandoPagamento';
 import { CheckoutGerandoPix } from '../screens/Checkout/CheckoutGerandoPix';
 import { PerfilFoto } from '../screens/Perfil/PerfilFoto';
+import { PerfilFotoCameraSucesso } from '../screens/Perfil/PerfilFoto/PerfilFotoCamera/PerfilFotoCameraSucesso';
 
 const Stack = createNativeStackNavigator();
 
@@ -55,7 +55,6 @@ export function RouteLogado() {
                <Stack.Screen name="CarrinhoUtilizador" component={CarrinhoUtilizador} />
                <Stack.Screen name="CarrinhoResumo" component={CarrinhoResumo} />
 
-               <Stack.Screen name="Perfil" component={Perfil} />
                <Stack.Screen name="PerfilMeuPerfil" component={PerfilMeuPerfil} />
                <Stack.Screen name="PerfilMeusEndereco" component={PerfilMeusEndereco} />
                <Stack.Screen name="PerfilMeusPedidos" component={PerfilMeusPedidos} />
@@ -76,6 +75,7 @@ export function RouteLogado() {
                <Stack.Screen name="CarrinhoCupomDesconto" component={CarrinhoCupomDesconto} />
                <Stack.Screen name="IngressoTranserir" component={IngressoTransferir} />
                <Stack.Screen name="PerfilFoto" component={PerfilFoto} />
+               <Stack.Screen name="PerfilFotoCameraSucesso" component={PerfilFotoCameraSucesso} />
             </Stack.Group>
 
          </Stack.Navigator>

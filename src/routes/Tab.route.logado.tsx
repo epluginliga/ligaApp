@@ -52,7 +52,7 @@ export function TabRouteLogado() {
                      ) : (
                         <Icon.Ticket />
                      );
-                  case 'Perfil':
+                  case 'PerfilTab':
                      return focused ? (
                         <VStack backgroundColor='background_red_tab' borderRadius={12} p="sm">
                            <Icon.User />
@@ -67,7 +67,7 @@ export function TabRouteLogado() {
          })}>
          <Tab.Screen name="EventosTab" component={Eventos} />
          <Tab.Screen name="IngressosTab" component={Ingressos} />
-         <Tab.Screen name="Perfil" component={Perfil} />
+         <Tab.Screen name="PerfilTab" component={Perfil} />
       </Tab.Navigator>
    )
 }

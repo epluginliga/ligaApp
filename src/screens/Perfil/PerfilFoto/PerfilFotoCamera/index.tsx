@@ -1,56 +1,65 @@
-import React, { useCallback, useRef, useState } from "react";
-import { Dimensions, Platform, StyleSheet, View } from "react-native";
-import { Camera, useCameraDevice, useCameraFormat, useCameraPermission, PhotoFile } from "react-native-vision-camera";
+import React, { useCallback, useRef } from "react";
+import { Dimensions, Platform, View } from "react-native";
+import { Camera, useCameraDevice, useCameraFormat, useCameraPermission } from "react-native-vision-camera";
 import { CameraPermissao } from "./PerfilFotoCameraPermissao";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import ImagePicker from 'react-native-image-crop-picker';
+import { useTheme } from "@shopify/restyle";
+import Animated, { FadeIn, FadeOutRight } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 
 import { ListEmptyComponent } from "../../../../components/ListEmptyComponent";
 import VStack from "../../../../components/Views/Vstack";
 import { Button } from "../../../../components/Button";
 import { Icon } from "../../../../icons";
 import { Ovo } from "../../../../icons/ovo";
-import { PerfilFotoCameraSucesso } from "./PerfilFotoCameraSucesso";
-import Animated, { FadeIn, FadeOutRight } from "react-native-reanimated";
+import { Theme } from "../../../../theme/default";
 
 export function PerfilFotoCamera() {
    const device = useCameraDevice('front');
    const { hasPermission } = useCameraPermission();
    const camera = useRef<Camera>(null);
-   const [imagem, setImagem] = useState<PhotoFile | null>();
+   const { colors } = useTheme<Theme>();
+   const navigate = useNavigation();
 
    const { height, width } = Dimensions.get("screen");
    const insets = useSafeAreaInsets();
-
-   const handleLimpaFoto = useCallback(() => setImagem(null), []);
 
    const handleTakePhoto = useCallback(async () => {
       const file = await camera?.current?.takePhoto();
 
       if (!file) return;
 
-      const newFile = {
+      let newFile = {
          ...file,
          path: Platform.OS === "android" ? `file://${file?.path}` : file?.path,
       };
 
-
-      setImagem(newFile);
+      ImagePicker.openCropper({
+         path: newFile.path,
+         width: 200,
+         height: 200,
+         mediaType: "photo",
+         enableRotationGesture: true,
+         cropperChooseText: "Selecionar",
+         cropperCancelText: "Cancelar",
+         cropperChooseColor: colors.greenDark
+      }).then(image => navigate.navigate("PerfilFotoCameraSucesso", {
+         path: image.path
+      }));
    }, []);
 
    const format = useCameraFormat(device, [
       {
          photoResolution: {
-            width: 200,
-            height: 200,
+            width: 400,
+            height: 400,
          },
-
-
       }
    ]);
 
    if (!hasPermission) return <CameraPermissao />
    if (device == null) return <ListEmptyComponent title="Acesso á câmera foi negada!" />
-   if (imagem) return <PerfilFotoCameraSucesso clean={handleLimpaFoto} uri={imagem.path} />
 
    return (
       <>
@@ -76,7 +85,8 @@ export function PerfilFotoCamera() {
                photo={true}
                device={device}
                isActive={true}
-               isMirrored={false}
+               resizeMode="cover"
+               outputOrientation="preview"
             />
 
             <VStack backgroundColor="white"
@@ -101,7 +111,6 @@ export function PerfilFotoCamera() {
                onPress={handleTakePhoto}>
                Tirar foto
             </Button>
-
          </View>
       </>
    );

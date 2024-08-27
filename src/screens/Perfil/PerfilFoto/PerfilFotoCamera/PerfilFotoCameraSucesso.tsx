@@ -1,23 +1,23 @@
 import React from 'react';
+import { Image, Pressable, View } from 'react-native';
 import Animated, { Easing, FadeIn, FadeInRight, FadeInUp, FadeOutDown, FadeOutRight } from 'react-native-reanimated';
+import { useTheme } from '@shopify/restyle';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { useMutation } from '@tanstack/react-query';
+import { useQueryClient } from "@tanstack/react-query";
+
 import VStack, { VStackProps } from '../../../../components/Views/Vstack';
 import { Icon } from '../../../../icons';
-import { Image, Pressable, View } from 'react-native';
 import Text from '../../../../components/Text';
 import HStack from '../../../../components/Views/Hstack';
 import { Button } from '../../../../components/Button';
-import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../../../theme/default';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { useMutation } from '@tanstack/react-query';
 import { usuarioCadastraImagem } from '../../../../services/perfil';
 import { imagemApp } from '../../../../utils/utils';
+import { RouteApp } from '../../../../@types/navigation';
 
-type PerfilFotoCameraSucessoProps = {
-   uri: string;
-   clean: Function
-}
+const queryClient = useQueryClient()
 
 type BordasProps = VStackProps & {
    children: React.ReactNode;
@@ -43,16 +43,17 @@ function Bordas({ children, size, delay, ...rest }: BordasProps) {
    )
 }
 
+type PerfilFotoCameraSucessoRouteProp = RouteProp<RouteApp, 'PerfilFotoCameraSucesso'>;
 
-export function PerfilFotoCameraSucesso({ uri, clean }: PerfilFotoCameraSucessoProps) {
+export function PerfilFotoCameraSucesso() {
    const { colors } = useTheme<Theme>();
    const insets = useSafeAreaInsets();
    const navigate = useNavigation();
-
+   const { params } = useRoute<PerfilFotoCameraSucessoRouteProp>()
 
    const handleUploadImagem = useMutation({
       mutationFn: async () => {
-         let base64Image = await imagemApp(uri).base64File();
+         let base64Image = await imagemApp(params.path).base64File();
 
          const jsonData = {
             path_camera_web: false,
@@ -62,9 +63,9 @@ export function PerfilFotoCameraSucesso({ uri, clean }: PerfilFotoCameraSucessoP
 
          return usuarioCadastraImagem(jsonData);
       },
-      onSuccess(data) {
-         clean();
-         navigate.navigate("Perfil");
+      onSuccess() {
+         queryClient.invalidateQueries({ queryKey: ['obtemDadosLogadoIndex'] })
+         navigate.navigate("PerfilTab");
       },
    });
 
@@ -88,10 +89,10 @@ export function PerfilFotoCameraSucesso({ uri, clean }: PerfilFotoCameraSucessoP
                   </Bordas>
                </Bordas>
 
-               <Pressable onPress={() => clean()}>
+               <Pressable onPress={() => navigate.goBack()}>
 
                   <Image
-                     source={{ uri }}
+                     source={{ uri: params.path }}
                      style={{
                         width: 300,
                         height: 300,
