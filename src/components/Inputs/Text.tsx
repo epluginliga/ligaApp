@@ -50,7 +50,7 @@ export function InputText({ name, control, mask, editable = true, ...rest }: Inp
 
                return (
                   <TextInput
-                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_200}
+                     placeholderTextColor={rest.variant ? theme.colors.bege_900 : theme.colors.bege_200}
                      onChangeText={(text) => mask ? onChange(mask(text)) : onChange(text)}
                      value={value}
                      onBlur={onBlur}

@@ -42,7 +42,7 @@ export function InputPassword({ name, ...rest }: InputPassworld) {
             render={({ field: { onBlur, onChange, value } }) => {
                return (
                   <TextInput
-                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
+                     placeholderTextColor={rest.variant ? theme.colors.bege_900 : theme.colors.bege_200}
                      secureTextEntry={hidde}
                      onChangeText={(text) => onChange(text)}
                      value={value}

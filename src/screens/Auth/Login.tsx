@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Dimensions, Image, Pressable, StatusBar } from 'react-native';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Dimensions, Image, Pressable, StatusBar , Linking} from 'react-native';
+import {  RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { GradienteApp } from '../../components/GradienteApp';
@@ -9,10 +9,10 @@ import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
 import { InputPassword } from '../../components/Inputs/Password';
 import VStack from '../../components/Views/Vstack';
-import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputText } from '../../components/Inputs/Text';
 import Text from '../../components/Text';
 
+import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { Icon } from '../../icons';
 import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { RouteApp } from '../../@types/navigation';
@@ -108,7 +108,7 @@ export function Login() {
                   </VStack>
 
                   <VStack gap="md">
-                     <Pressable onPress={() => navigate('CriarConta')}>
+                     <Pressable onPress={() => Linking.openURL("https://deualiga.com.br/cadastre-se")}>
                         <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
                            <Text color='white' fontSize={16} fontWeight="900">
                               Cadastre-se
