@@ -48,7 +48,10 @@ export type RouteApp = {
    };
    CarrinhoCupomDesconto: undefined;
    IngressosDetalhe: IngressoDetalheProps;
- 
+   Web: {
+      uri: string
+   };
+
 }
 
 declare global {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Dimensions, Image, Pressable, StatusBar , Linking} from 'react-native';
-import {  RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import { Dimensions, Image, Pressable, StatusBar, Linking } from 'react-native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { GradienteApp } from '../../components/GradienteApp';
@@ -58,7 +58,7 @@ export function Login() {
 
    const minHeight = (0.92 * height) // 92% da tela
    const size = width >= 1024 ? "80%" : "100%";
-   
+
    return (
       <>
          <StatusBar barStyle="light-content" translucent={true} backgroundColor={'transparent'} />
@@ -107,15 +107,17 @@ export function Login() {
                      </Pressable>
                   </VStack>
 
-                  <VStack gap="md">
-                     <Pressable onPress={() => Linking.openURL("https://deualiga.com.br/cadastre-se")}>
+                  {/* <VStack gap="md">
+                     <Pressable onPress={() => navigate("Web", {
+                        uri: 'https://deualiga.com.br/cadastre-se'
+                     })}>
                         <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
                            <Text color='white' fontSize={16} fontWeight="900">
                               Cadastre-se
                            </Text>
                         </Text>
                      </Pressable>
-                  </VStack>
+                  </VStack> */}
 
                </Layout.Scroll>
             </Layout.Keyboard>
