@@ -11,6 +11,7 @@ import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
 import { CriarConta } from '../screens/Auth/CriarConta';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 import { TabRouteDeslogado } from './Tab.route.deslogado';
+import { Web } from '../screens/Web';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,18 +25,23 @@ export function RouteDesLogado() {
                headerShown: false,
                contentStyle: {
                   backgroundColor: "#fff",
-               }               
+               }
             }}>
 
-            <Stack.Screen name="Home" component={TabRouteDeslogado} />
+            <Stack.Group>
+               <Stack.Screen name="Home" component={TabRouteDeslogado} />
+               <Stack.Screen name="Eventos" component={Eventos} />
+               <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
+               <Stack.Screen name="Ingressos" component={Ingressos} />
+               <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
+               <Stack.Screen name="Login" component={Login} />
+               <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+               <Stack.Screen name="CriarConta" component={CriarConta} />
+            </Stack.Group>
 
-            <Stack.Screen name="Eventos" component={Eventos} />
-            <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
-            <Stack.Screen name="Ingressos" component={Ingressos} />
-            <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
-            <Stack.Screen name="CriarConta" component={CriarConta} />
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+               <Stack.Screen name="Web" component={Web} />
+            </Stack.Group>
          </Stack.Navigator>
       </>
    );

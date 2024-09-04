@@ -4361,7 +4361,7 @@ internal-slot@^1.0.7:
     hasown "^2.0.0"
     side-channel "^1.0.4"
 
-invariant@^2.2.4:
+invariant@2.2.4, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -6270,6 +6270,14 @@ react-native-vision-camera@^4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-4.5.2.tgz#1d97c53275261146e7be4a485d9f66e56f36fb53"
   integrity sha512-k5iITx10jmAPofVnz8S5/ZHyJYgHw/7MQ58M6S3z7TBlCqRu7D9dz4HSJrQcCpV8rBE3a5xyMqxTZ4Hth/h+2g==
+
+react-native-webview@^13.12.1:
+  version "13.12.1"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.12.1.tgz#6a6724ea95cd623ebd0a311488fede9a4721eece"
+  integrity sha512-S/14tuAFFPMiWUYX8Fh3aChGA2iemOs9y80byqAzHdHeOVKXc0Lzn43GnFRSQlcMXG5HOK4C1wO/Mb23s6H8VA==
+  dependencies:
+    escape-string-regexp "^4.0.0"
+    invariant "2.2.4"
 
 react-native@0.74.1:
   version "0.74.1"
