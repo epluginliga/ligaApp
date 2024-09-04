@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextInput, View } from 'react-native';
+import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation, UseMutationResult } from '@tanstack/react-query';
-import { Controller, useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useAuth } from '../../hooks/auth';
@@ -19,47 +19,9 @@ import { cepMask, cpfMask } from '../../utils/Maskara';
 import { estadosBrasileiros } from '../../utils/estadosBrasileiros';
 import { Icon } from '../../icons';
 import { z } from 'zod';
-import { ObtemEnderecoCep, PayloadObtemEnderecoCep } from '../../services/sercicosExternos';
-import { Input, InputDefault } from '../../components/Inputs';
-import theme from '../../theme/default';
+import { ObtemEnderecoCep } from '../../services/sercicosExternos';
+import { InputCep } from '../../components/Inputs/inputCep';
 
-type InputCepProps = InputDefault & {
-   name: string;
-   control: any;
-   mask?: (val: string) => string;
-   editable?: boolean;
-   handleCep: UseMutationResult<PayloadObtemEnderecoCep, Error, number, unknown>;
-}
-
-function InputCep({ name, control, handleCep, ...rest }: InputCepProps) {
-   return (
-      <Input {...rest}>
-         <Controller
-            name={name}
-            rules={{ required: true }}
-            control={control}
-            render={({ field: { onChange, value } }) => {
-               return (
-                  <TextInput
-                     placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
-                     onChangeText={(text) => onChange(cepMask(text))}
-                     value={value}
-                     onBlur={() => handleCep.mutate(value.replace(/\D/g, ''))}
-                     style={{
-                        fontSize: theme.spacing.md,
-                        fontFamily: theme.fonts.medium,
-                        color: theme.colors.bege_900,
-                        borderColor: theme.colors.primary,
-                        flex: 1,
-                     }}
-                     {...rest}
-                  />
-               )
-            }}
-         />
-      </Input>
-   )
-}
 const schema = z.object({
    cep: z.string(),
    logradouro: z.string(),
