@@ -1,5 +1,5 @@
 import { Data } from "./Data";
-import { CartaoCredito } from "./CartaoCredito";
+import { CartaoCredito } from "./cartaoCredito";
 import { ImagemApp } from "./Imagem";
 
 export function dataApp(data?: string) {

@@ -17,7 +17,7 @@ import { InputText } from '../../components/Inputs/Text'
 import { Icon } from '../../icons'
 
 import { checkout, tokenCartao } from '../../services/checkout'
-import { CartaoCredito } from '../../utils/CartaoCredito'
+import { CartaoCredito } from '../../utils/cartaoCredito'
 
 import { useCarrinho } from '../../hooks/carrinho'
 import { Maskara } from '../../utils/Maskara'
@@ -97,7 +97,6 @@ function FormCartaoCredito() {
                year: cartaoToken.card.exp_year,
                nome_cartao: cartaoToken.card.holder_name,
             },
-
          }, carrinhoId)
       },
       onSuccess(success: any) {
