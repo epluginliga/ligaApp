@@ -41,6 +41,11 @@ export type RouteApp = {
    PerfilFotoCameraSucesso: {
       path: string
    }
+   AuthCriarContaFoto:undefined;
+   AuthCriarContaFotoSucesso: {
+      path: string
+   };
+
    Carrinho: undefined;
    Ingressos: undefined;
    IngressoTranserir: {

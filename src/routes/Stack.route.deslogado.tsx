@@ -12,6 +12,8 @@ import { CriarConta } from '../screens/Auth/CriarConta';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 import { TabRouteDeslogado } from './Tab.route.deslogado';
 import { Web } from '../screens/Web';
+import { AuthCriarContaFotoSucesso } from '../screens/Auth/AuthCriarContaFoto/AuthCriarContaFotoCameraSucesso';
+import { AuthCriarContaFoto } from '../screens/Auth/AuthCriarContaFoto';
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +39,8 @@ export function RouteDesLogado() {
                <Stack.Screen name="Login" component={Login} />
                <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
                <Stack.Screen name="CriarConta" component={CriarConta} />
+               <Stack.Screen name="AuthCriarContaFotoSucesso" component={AuthCriarContaFotoSucesso} />
+               <Stack.Screen name="AuthCriarContaFoto" component={AuthCriarContaFoto} />
             </Stack.Group>
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>

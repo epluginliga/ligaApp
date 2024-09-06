@@ -11,7 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputPassword } from '../../components/Inputs/Password';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { criaUsuario } from '../../services/usuario';
 import { cepMask, cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { CriaUsuarioProps } from '../../services/@usuario';
@@ -31,6 +31,21 @@ import { InputCep } from '../../components/Inputs/inputCep';
 import { ObtemEnderecoCep } from '../../services/sercicosExternos';
 import { InputDefault } from '../../components/Inputs';
 import { estadosBrasileiros } from '../../utils/estadosBrasileiros';
+import { useNavigation } from '@react-navigation/native';
+import { AvatarUsuario } from '../../components/AvatarUsuario';
+import Text from '../../components/Text';
+
+function Header() {
+   const navigate = useNavigation();
+
+   return (
+      <AvatarUsuario onPress={() => {
+         return navigate.navigate("AuthCriarContaFoto")
+      }} >
+         <Text variant='labelInput' fontWeight="400">*Envie sua foto para reconhecimento facial</Text>
+      </AvatarUsuario>
+   )
+}
 
 const schema = z.object({
    nome: z.string(),
@@ -203,6 +218,9 @@ export function CriarConta() {
             <Layout.Scroll>
                <VStack gap="lg" p="sm" alignSelf='center' width={size}>
                   <VStack gap="lg" flex={1}>
+
+                     <Header />
+
                      <InputText
                         label="Nome"
                         iconLeft={<Icon.User size={24} />}

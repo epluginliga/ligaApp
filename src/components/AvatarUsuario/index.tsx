@@ -32,7 +32,6 @@ export type AvatarUsuarioProps = PressableProps & {
 export function AvatarUsuario({ children, usuario, ...rest }: AvatarUsuarioProps) {
    const { colors } = useTheme<Theme>();
 
-   if (!usuario) return;
 
    const corStatus = usuario?.status_aprovacao && corStatusUsuario[usuario?.status_aprovacao] || 'bege_200';
 
@@ -62,10 +61,14 @@ export function AvatarUsuario({ children, usuario, ...rest }: AvatarUsuarioProps
                justifyContent='center'
                alignItems='center'
                position='relative'>
-               <Image
-                  style={{ height: 90, width: 90, borderRadius: 100 }}
-                  source={{ uri: usuario?.path_avatar }}
-               />
+               
+               {usuario?.path_avatar && (
+                  <Image
+                     style={{ height: 90, width: 90, borderRadius: 100 }}
+                     source={{ uri: usuario?.path_avatar }}
+                  />
+               )}
+
                <VStack
                   position='absolute'
                   bottom={0}
@@ -74,11 +77,11 @@ export function AvatarUsuario({ children, usuario, ...rest }: AvatarUsuarioProps
                   borderRadius={100}
                   p='xs'
                >
-                  {iconeStatus}
+                  {iconeStatus ? iconeStatus : <Icon.Warning />}
                </VStack>
             </VStack>
 
-            {usuario.status_aprovacao && (
+            {usuario?.status_aprovacao && (
                <Text variant='header2' color={corStatus}>{textoStatus[usuario.status_aprovacao]}</Text>
             )}
 
