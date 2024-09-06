@@ -107,17 +107,15 @@ export function Login() {
                      </Pressable>
                   </VStack>
 
-                  {/* <VStack gap="md">
-                     <Pressable onPress={() => navigate("Web", {
-                        uri: 'https://deualiga.com.br/cadastre-se'
-                     })}>
+                  <VStack gap="md">
+                     <Pressable onPress={() => navigate("CriarConta")}>
                         <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
                            <Text color='white' fontSize={16} fontWeight="900">
-                              Cadastre-se
+                              cadastre-se
                            </Text>
                         </Text>
                      </Pressable>
-                  </VStack> */}
+                  </VStack>
 
                </Layout.Scroll>
             </Layout.Keyboard>

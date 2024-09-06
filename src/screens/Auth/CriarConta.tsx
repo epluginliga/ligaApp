@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormSetValue } from 'react-hook-form';
 
 import { Layout } from '../../components/Views/Layout';
 import { Button } from '../../components/Button';
@@ -13,7 +13,7 @@ import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputPassword } from '../../components/Inputs/Password';
 import { useMutation } from '@tanstack/react-query';
 import { criaUsuario } from '../../services/usuario';
-import { cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
+import { cepMask, cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { CriaUsuarioProps } from '../../services/@usuario';
 import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import {
@@ -27,6 +27,10 @@ import {
    CONFIRMAR_SENHA
 } from "@env"
 import { Dimensions } from 'react-native';
+import { InputCep } from '../../components/Inputs/inputCep';
+import { ObtemEnderecoCep } from '../../services/sercicosExternos';
+import { InputDefault } from '../../components/Inputs';
+import { estadosBrasileiros } from '../../utils/estadosBrasileiros';
 
 const schema = z.object({
    nome: z.string(),
@@ -40,6 +44,7 @@ const schema = z.object({
    password: z.string(),
    confirmar_senha: z.string(),
    cadastro_app: z.boolean().optional(),
+   cep: z.string(),
 }).superRefine(({ confirmar_senha, password }, ctx) => {
    if (password !== confirmar_senha) {
       ctx.addIssue({
@@ -50,9 +55,111 @@ const schema = z.object({
    }
 });
 
+
+type CepProps = InputDefault & {
+   name: string;
+   control: any;
+   editable?: boolean;
+   setValue: UseFormSetValue<CriaUsuarioProps>;
+
+}
+
+
+
+export function Cep({ setValue, control, error, ...rest }: CepProps) {
+   const handleCep = useMutation({
+      mutationFn: ObtemEnderecoCep,
+      mutationKey: ['ObtemEnderecoCep'],
+      onSuccess(data) {
+         if (data) {
+            setValue("bairro", data.bairro);
+            setValue("cep", cepMask(data.cep));
+            setValue("cidade", data.localidade);
+            setValue("complemento", data.complemento);
+            setValue("estado", data.uf);
+            setValue("logradouro", data.logradouro);
+         }
+      }
+   })
+
+   return (
+      <>
+         <InputCep
+            label='CEP'
+            iconLeft={<Icon.Pin size={24} />}
+            placeholder='00000-000'
+            inputMode='numeric'
+            handleCep={handleCep}
+            control={control}
+            error={error?.cep?.message}
+            {...rest}
+         />
+
+         {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.logradouro && (
+            <InputText
+               label="Rua ou Logradouro"
+               iconLeft={<Icon.Pin size={24} />}
+               name='logradouro'
+               editable={!handleCep.data?.logradouro}
+               placeholder='Digite o estado'
+               control={control}
+               error={error?.logradouro?.message}
+            />)
+         }
+
+         {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.bairro && (
+            <InputText
+               label="Bairro"
+               iconLeft={<Icon.Pin size={24} />}
+               name='bairro'
+               editable={!handleCep.data?.bairro}
+               placeholder='Digite seu bairro'
+               control={control}
+               error={error?.bairro?.message}
+            />
+         )}
+
+         {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.localidade && (
+            <InputText
+               label="Cidade"
+               iconLeft={<Icon.Pin size={24} />}
+               name='cidade'
+               editable={!handleCep.data?.localidade}
+               placeholder='Digite sua cidade'
+               control={control}
+               error={error?.cidade?.message}
+            />
+         )}
+
+         {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.complemento && (
+            <InputText
+               label="Complemento"
+               iconLeft={<Icon.Pin size={24} />}
+               name='complemento'
+               editable={!handleCep.data?.complemento}
+               placeholder='Digite o complemento'
+               control={control}
+               error={error?.complemento?.message}
+            />
+         )}
+
+         {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.uf && (
+            <InputSelecionar
+               placeholder='Estado onde moro'
+               label='Estado'
+               name={`estado`}
+               control={control}
+               option={estadosBrasileiros}
+               error={error?.estado?.message}
+            />
+         )}
+      </>
+   );
+}
+
 export function CriarConta() {
    const { width } = Dimensions.get("screen");
-   const { control, handleSubmit, formState: { errors }
+   const { control, handleSubmit, formState: { errors }, setValue
    } = useForm<CriaUsuarioProps>({
       resolver: zodResolver(schema),
       defaultValues: {
@@ -166,6 +273,13 @@ export function CriarConta() {
                         inputMode='decimal'
                         maxLength={10}
                         error={errors?.nascimento?.message}
+                     />
+
+                     <Cep
+                        name='cep'
+                        setValue={setValue}
+                        control={control}
+                        error={errors}
                      />
 
                      <InputPassword

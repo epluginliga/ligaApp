@@ -8,7 +8,7 @@ import { TextInput } from 'react-native';
 import theme from '../../theme/default';
 import { cepMask } from '../../utils/Maskara';
 
-type InputCepProps = InputDefault & {
+export type InputCepProps = InputDefault & {
    name: string;
    control: any;
    mask?: (val: string) => string;
