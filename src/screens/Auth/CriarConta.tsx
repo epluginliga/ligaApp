@@ -45,6 +45,11 @@ const schema = z.object({
    confirmar_senha: z.string(),
    cadastro_app: z.boolean().optional(),
    cep: z.string(),
+   bairro: z.string(),
+   cidade: z.string(),
+   complemento: z.string(),
+   estado: z.string(),
+   logradouro: z.string(),
 }).superRefine(({ confirmar_senha, password }, ctx) => {
    if (password !== confirmar_senha) {
       ctx.addIssue({
@@ -55,16 +60,13 @@ const schema = z.object({
    }
 });
 
-
 type CepProps = InputDefault & {
    name: string;
    control: any;
    editable?: boolean;
    setValue: UseFormSetValue<CriaUsuarioProps>;
-
+   reset?: Function;
 }
-
-
 
 export function Cep({ setValue, control, error, ...rest }: CepProps) {
    const handleCep = useMutation({
@@ -159,7 +161,7 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
 
 export function CriarConta() {
    const { width } = Dimensions.get("screen");
-   const { control, handleSubmit, formState: { errors }, setValue
+   const { control, handleSubmit, formState: { errors }, reset, setValue
    } = useForm<CriaUsuarioProps>({
       resolver: zodResolver(schema),
       defaultValues: {
@@ -177,13 +179,15 @@ export function CriarConta() {
 
    const handleCriaConta = useMutation({
       mutationFn: (form: CriaUsuarioProps) => {
+         console.log(JSON.stringify(form, null, 1));
+         return Promise.reject();
          return criaUsuario({ ...form, username: form.email });
       },
       mutationKey: ['criaUsuario'],
-      onSuccess(data, variables, context) {
+      onSuccess(data) {
          console.log(JSON.stringify(data, null, 1))
       },
-      onError(error, variables, context) {
+      onError(error) {
          console.log(JSON.stringify(error, null, 1))
       },
    });
@@ -280,6 +284,7 @@ export function CriarConta() {
                         setValue={setValue}
                         control={control}
                         error={errors}
+                        reset={reset}
                      />
 
                      <InputPassword

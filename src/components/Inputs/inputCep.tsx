@@ -14,9 +14,10 @@ export type InputCepProps = InputDefault & {
    mask?: (val: string) => string;
    editable?: boolean;
    handleCep: UseMutationResult<PayloadObtemEnderecoCep, Error, number, unknown>;
+   reset?: Function;
 }
 
-export function InputCep({ name, control, handleCep, ...rest }: InputCepProps) {
+export function InputCep({ name, control, handleCep, reset, ...rest }: InputCepProps) {
    return (
       <Input {...rest}>
          <Controller
@@ -29,7 +30,11 @@ export function InputCep({ name, control, handleCep, ...rest }: InputCepProps) {
                      placeholderTextColor={rest.variant ? theme.colors.white : theme.colors.bege_900}
                      onChangeText={(text) => onChange(cepMask(text))}
                      value={value}
-                     onBlur={() => handleCep.mutate(value.replace(/\D/g, ''))}
+                     onBlur={() => {
+                        reset?.();
+                        handleCep.reset();
+                        return handleCep.mutate(value.replace(/\D/g, ''));
+                     }}
                      style={{
                         fontSize: theme.spacing.md,
                         fontFamily: theme.fonts.medium,
