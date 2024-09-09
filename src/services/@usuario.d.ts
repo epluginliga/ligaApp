@@ -4,6 +4,7 @@ export type CriaUsuarioProps = {
    sexo: string;
    nascimento: string;
    password: string;
+   numero:string;
    documento: string;
    username: string;
    telefone: string;

@@ -11,7 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { IconFingerPrint } from '../../icons/IconFingerPrint';
 import { InputPassword } from '../../components/Inputs/Password';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { criaUsuario } from '../../services/usuario';
 import { cepMask, cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { CriaUsuarioProps } from '../../services/@usuario';
@@ -26,14 +26,15 @@ import {
    NASCIMENTO,
    CONFIRMAR_SENHA
 } from "@env"
-import { Dimensions } from 'react-native';
+import { ActivityIndicator, Dimensions } from 'react-native';
 import { InputCep } from '../../components/Inputs/inputCep';
 import { ObtemEnderecoCep } from '../../services/sercicosExternos';
-import { InputDefault } from '../../components/Inputs';
+import { Input, InputDefault } from '../../components/Inputs';
 import { estadosBrasileiros } from '../../utils/estadosBrasileiros';
 import { useNavigation } from '@react-navigation/native';
 import { AvatarUsuario } from '../../components/AvatarUsuario';
 import Text from '../../components/Text';
+import theme from '../../theme/default';
 
 function Header() {
    const navigate = useNavigation();
@@ -62,9 +63,9 @@ const schema = z.object({
    cep: z.string(),
    bairro: z.string(),
    cidade: z.string(),
-   complemento: z.string(),
    estado: z.string(),
    logradouro: z.string(),
+   numero: z.string().optional(),
 }).superRefine(({ confirmar_senha, password }, ctx) => {
    if (password !== confirmar_senha) {
       ctx.addIssue({
@@ -87,12 +88,11 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
    const handleCep = useMutation({
       mutationFn: ObtemEnderecoCep,
       mutationKey: ['ObtemEnderecoCep'],
-      onSuccess(data) {
+      onSuccess(data) {         
          if (data) {
             setValue("bairro", data.bairro);
             setValue("cep", cepMask(data.cep));
             setValue("cidade", data.localidade);
-            setValue("complemento", data.complemento);
             setValue("estado", data.uf);
             setValue("logradouro", data.logradouro);
          }
@@ -101,16 +101,22 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
 
    return (
       <>
-         <InputCep
-            label='CEP'
-            iconLeft={<Icon.Pin size={24} />}
-            placeholder='00000-000'
-            inputMode='numeric'
-            handleCep={handleCep}
-            control={control}
-            error={error?.cep?.message}
-            {...rest}
-         />
+         {handleCep.isPending ? (
+            <Input label='CEP'>
+               <ActivityIndicator size="small" color={theme.colors.primary} />
+            </Input>
+         ) : (
+            <InputCep
+               label='CEP'
+               iconLeft={<Icon.Pin size={24} />}
+               placeholder='00000-000'
+               inputMode='numeric'
+               handleCep={handleCep}
+               control={control}
+               error={error?.cep?.message}
+               {...rest}
+            />
+         )}
 
          {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.logradouro && (
             <InputText
@@ -118,7 +124,7 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
                iconLeft={<Icon.Pin size={24} />}
                name='logradouro'
                editable={!handleCep.data?.logradouro}
-               placeholder='Digite o estado'
+               placeholder='Rua xx...'
                control={control}
                error={error?.logradouro?.message}
             />)
@@ -148,18 +154,6 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
             />
          )}
 
-         {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.complemento && (
-            <InputText
-               label="Complemento"
-               iconLeft={<Icon.Pin size={24} />}
-               name='complemento'
-               editable={!handleCep.data?.complemento}
-               placeholder='Digite o complemento'
-               control={control}
-               error={error?.complemento?.message}
-            />
-         )}
-
          {!handleCep.isPending && !handleCep.isIdle && !handleCep.data?.uf && (
             <InputSelecionar
                placeholder='Estado onde moro'
@@ -176,7 +170,7 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
 
 export function CriarConta() {
    const { width } = Dimensions.get("screen");
-   const { control, handleSubmit, formState: { errors }, reset, setValue
+   const { control, handleSubmit, formState: { errors }, resetField, setValue
    } = useForm<CriaUsuarioProps>({
       resolver: zodResolver(schema),
       defaultValues: {
@@ -189,15 +183,14 @@ export function CriarConta() {
          "nascimento": NASCIMENTO,
          "confirmar_senha": CONFIRMAR_SENHA,
          cadastro_app: true,
+         numero: "000",
       }
    });
 
+   console.log(JSON.stringify(errors, null, 1));
+
    const handleCriaConta = useMutation({
-      mutationFn: (form: CriaUsuarioProps) => {
-         console.log(JSON.stringify(form, null, 1));
-         return Promise.reject();
-         return criaUsuario({ ...form, username: form.email });
-      },
+      mutationFn: (form: CriaUsuarioProps) => criaUsuario({ ...form, username: form.email }),
       mutationKey: ['criaUsuario'],
       onSuccess(data) {
          console.log(JSON.stringify(data, null, 1))
@@ -219,7 +212,7 @@ export function CriarConta() {
                <VStack gap="lg" p="sm" alignSelf='center' width={size}>
                   <VStack gap="lg" flex={1}>
 
-                     <Header />
+                     {/* <Header /> */}
 
                      <InputText
                         label="Nome"
@@ -229,7 +222,6 @@ export function CriarConta() {
                         control={control}
                         error={errors?.nome?.message}
                      />
-
 
                      <InputText
                         label="E-mail"
@@ -302,7 +294,12 @@ export function CriarConta() {
                         setValue={setValue}
                         control={control}
                         error={errors}
-                        reset={reset}
+                        reset={() => {
+                           resetField("bairro");
+                           resetField("cidade");
+                           resetField("estado");
+                           resetField("logradouro");
+                        }}
                      />
 
                      <InputPassword

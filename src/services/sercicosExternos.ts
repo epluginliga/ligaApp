@@ -5,7 +5,7 @@ import { API_URL_CEP } from '@env';
 export type PayloadObtemEnderecoCep = {
    cep: string;
    logradouro: string;
-   complemento: string;
+   numero: string;
    unidade: string;
    bairro: string;
    localidade: string;

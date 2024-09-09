@@ -31,9 +31,11 @@ export function InputCep({ name, control, handleCep, reset, ...rest }: InputCepP
                      onChangeText={(text) => onChange(cepMask(text))}
                      value={value}
                      onBlur={() => {
-                        reset?.();
-                        handleCep.reset();
-                        return handleCep.mutate(value.replace(/\D/g, ''));
+                        if (value) {
+                           reset?.();
+                           handleCep.reset();
+                           return handleCep.mutate?.(value?.replace(/\D/g, ''));
+                        }
                      }}
                      style={{
                         fontSize: theme.spacing.md,
