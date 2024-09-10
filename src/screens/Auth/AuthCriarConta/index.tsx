@@ -110,6 +110,10 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
 
    return (
       <>
+         <Text variant='header3'>
+            {JSON.stringify(handleCep.error, null, 1)}
+         </Text>
+
          {handleCep.isPending ? (
             <Input label='CEP'>
                <ActivityIndicator size="small" color={theme.colors.primary} />

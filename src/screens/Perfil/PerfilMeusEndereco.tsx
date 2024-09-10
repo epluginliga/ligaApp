@@ -60,13 +60,12 @@ export const PerfilMeusEndereco = () => {
 
    const handleCep = useMutation({
       mutationFn: ObtemEnderecoCep,
-      mutationKey: ['ObtemEnderecoCep'],
+      mutationKey: ['PerfilObtemEnderecoCep'],
       onSuccess(data) {
          if (data) {
             setValue("bairro", data.bairro);
             setValue("cep", cepMask(data.cep));
             setValue("cidade", data.localidade);
-            setValue("complemento", data.complemento);
             setValue("estado", data.uf);
             setValue("logradouro", data.logradouro);
          }
