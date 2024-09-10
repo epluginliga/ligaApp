@@ -35,6 +35,7 @@ import { AvatarUsuario } from '../../../components/AvatarUsuario';
 import Text from '../../../components/Text';
 import theme from '../../../theme/default';
 import { AuthCriarContaFoto } from './AuthCriarContaFoto';
+import { useNavigation } from '@react-navigation/native';
 
 type HeaderProps = {
    setValue: any
@@ -110,10 +111,6 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
 
    return (
       <>
-         <Text variant='header3'>
-            {JSON.stringify(handleCep.error, null, 1)}
-         </Text>
-
          {handleCep.isPending ? (
             <Input label='CEP'>
                <ActivityIndicator size="small" color={theme.colors.primary} />
@@ -182,6 +179,7 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
 }
 
 export function AuthCriarConta() {
+   const navigate = useNavigation();
    const { width } = Dimensions.get("screen");
    const { control, handleSubmit, formState: { errors }, watch, resetField, setValue
    } = useForm<CriaUsuarioProps>({
@@ -203,11 +201,8 @@ export function AuthCriarConta() {
    const handleCriaConta = useMutation({
       mutationFn: (form: CriaUsuarioProps) => criaUsuario({ ...form, username: form.email }),
       mutationKey: ['criaUsuario'],
-      onSuccess(data) {
-         console.log(JSON.stringify(data, null, 1))
-      },
-      onError(error) {
-         console.log(JSON.stringify(error, null, 1))
+      onSuccess() {
+         navigate.navigate("Login")
       },
    });
 
@@ -343,7 +338,6 @@ export function AuthCriarConta() {
                         <VStack gap="md">
                            <Button
                               loading={handleCriaConta.isPending}
-                              // onPress={handleSubmit(form => console.log(JSON.stringify(form, null, 1)))}
                               onPress={handleSubmit((form => handleCriaConta.mutate(form)))}
                            >
                               CRIAR CONTA
