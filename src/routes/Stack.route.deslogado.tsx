@@ -8,12 +8,10 @@ import { Eventos } from '../screens/Eventos';
 import { EventosDetalhe } from '../screens/Eventos/EventosDetalhe';
 import { Login } from '../screens/Auth/Login';
 import { EsqueciSenha } from '../screens/Auth/EsqueciSenha';
-import { CriarConta } from '../screens/Auth/CriarConta';
 import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 import { TabRouteDeslogado } from './Tab.route.deslogado';
 import { Web } from '../screens/Web';
-import { AuthCriarContaFotoSucesso } from '../screens/Auth/AuthCriarContaFoto/AuthCriarContaFotoCameraSucesso';
-import { AuthCriarContaFoto } from '../screens/Auth/AuthCriarContaFoto';
+import { AuthCriarConta } from '../screens/Auth/AuthCriarConta';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,9 +36,8 @@ export function RouteDesLogado() {
                <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
                <Stack.Screen name="Login" component={Login} />
                <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
-               <Stack.Screen name="CriarConta" component={CriarConta} />
-               <Stack.Screen name="AuthCriarContaFotoSucesso" component={AuthCriarContaFotoSucesso} />
-               <Stack.Screen name="AuthCriarContaFoto" component={AuthCriarContaFoto} />
+
+               <Stack.Screen name="AuthCriarConta" component={AuthCriarConta} />
             </Stack.Group>
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>

@@ -16,6 +16,9 @@ export type CriaUsuarioProps = {
    complemento: string;
    estado: string;
    logradouro: string;
+   path_camera_web: boolean;
+   path_avatar_camera: string;
+   tipo_imagem_camera: string;
 
 }
 

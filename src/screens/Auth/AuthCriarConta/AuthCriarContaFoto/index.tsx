@@ -1,26 +1,29 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Dimensions, Platform, View } from "react-native";
 import { Camera, useCameraDevice, useCameraFormat, useCameraPermission } from "react-native-vision-camera";
 
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker, { Image } from 'react-native-image-crop-picker';
 import { useTheme } from "@shopify/restyle";
 import Animated, { FadeIn, FadeOutRight } from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
-import { Theme } from "../../../theme/default";
-import { ListEmptyComponent } from "../../../components/ListEmptyComponent";
-import VStack from "../../../components/Views/Vstack";
-import { Ovo } from "../../../icons/ovo";
-import { Button } from "../../../components/Button";
-import { Icon } from "../../../icons";
+import { Theme } from "../../../../theme/default";
+import { ListEmptyComponent } from "../../../../components/ListEmptyComponent";
+import VStack from "../../../../components/Views/Vstack";
+import { Ovo } from "../../../../icons/ovo";
+import { Button } from "../../../../components/Button";
+import { Icon } from "../../../../icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AuthCriarContaFotoCameraPermissao } from "./AuthCriarContaFotoCameraPermissao";
+import { AuthCriarContaFotoSucesso } from "./AuthCriarContaFotoCameraSucesso";
 
-export function AuthCriarContaFoto() {
+type AuthCriarContaFotoProps = {
+   setValue: any
+}
+export function AuthCriarContaFoto({ ...rest }: AuthCriarContaFotoProps) {
    const device = useCameraDevice('front');
    const { hasPermission } = useCameraPermission();
    const camera = useRef<Camera>(null);
    const { colors } = useTheme<Theme>();
-   const navigate = useNavigation();
+   const [fotoSucesso, setFotoSucesso] = useState<Image>();
 
    const { height, width } = Dimensions.get("screen");
    const insets = useSafeAreaInsets();
@@ -44,9 +47,7 @@ export function AuthCriarContaFoto() {
          cropperChooseText: "Selecionar",
          cropperCancelText: "Cancelar",
          cropperChooseColor: colors.greenDark
-      }).then(image => navigate.navigate("PerfilFotoCameraSucesso", {
-         path: image.path
-      }));
+      }).then(image => setFotoSucesso(image));
    }, []);
 
    const format = useCameraFormat(device, [
@@ -58,18 +59,20 @@ export function AuthCriarContaFoto() {
       }
    ]);
 
+   if (fotoSucesso) return <AuthCriarContaFotoSucesso {...rest} {...fotoSucesso} />
    if (!hasPermission) return <AuthCriarContaFotoCameraPermissao />
    if (device == null) return <ListEmptyComponent title="Acesso á câmera foi negada!" />
 
    return (
-      <>
+      <VStack flex={1} backgroundColor="white">
          <Animated.View
             entering={FadeIn}
             exiting={FadeOutRight}
             style={[{
                position: "relative",
                width,
-               justifyContent: "center"
+               justifyContent: "center",
+               backgroundColor: "#fff"
             }]}
          >
             <Camera
@@ -102,7 +105,7 @@ export function AuthCriarContaFoto() {
 
          <View style={{
             position: "absolute",
-            bottom: insets.bottom + 6,
+            bottom: insets.bottom + 26,
             alignSelf: "center",
             justifyContent: "space-between",
          }}>
@@ -112,7 +115,7 @@ export function AuthCriarContaFoto() {
                Tirar foto
             </Button>
          </View>
-      </>
+      </VStack>
    );
 }
 

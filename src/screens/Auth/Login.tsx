@@ -108,7 +108,7 @@ export function Login() {
                   </VStack>
 
                   <VStack gap="md">
-                     <Pressable onPress={() => navigate("CriarConta")}>
+                     <Pressable onPress={() => navigate("AuthCriarConta")}>
                         <Text textAlign="center" fontSize={14} color='white'>Ainda não tem conta:{' '}
                            <Text color='white' fontSize={16} fontWeight="900">
                               cadastre-se

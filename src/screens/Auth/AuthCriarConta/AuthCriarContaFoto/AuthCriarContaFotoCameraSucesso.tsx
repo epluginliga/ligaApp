@@ -1,23 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Image, Pressable, View } from 'react-native';
 import Animated, { Easing, FadeIn, FadeInRight, FadeInUp, FadeOutDown, FadeOutRight } from 'react-native-reanimated';
+import { Image as ImageProps } from 'react-native-image-crop-picker';
+
 import { useTheme } from '@shopify/restyle';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useMutation } from '@tanstack/react-query';
-import { useQueryClient } from "@tanstack/react-query";
-import VStack, { VStackProps } from '../../../components/Views/Vstack';
-import { RouteApp } from '../../../@types/navigation';
-import { imagemApp } from '../../../utils/utils';
-import { usuarioCadastraImagem } from '../../../services/perfil';
-import { Icon } from '../../../icons';
-import HStack from '../../../components/Views/Hstack';
-import Text from '../../../components/Text';
-import { Button } from '../../../components/Button';
-import { Theme } from '../../../theme/default';
-
-
-const queryClient = useQueryClient()
+import { useNavigation } from '@react-navigation/native';
+import VStack, { VStackProps } from '../../../../components/Views/Vstack';
+import { imagemApp } from '../../../../utils/utils';
+import { Icon } from '../../../../icons';
+import HStack from '../../../../components/Views/Hstack';
+import Text from '../../../../components/Text';
+import { Button } from '../../../../components/Button';
+import { Theme } from '../../../../theme/default';
 
 type BordasProps = VStackProps & {
    children: React.ReactNode;
@@ -43,31 +38,21 @@ function Bordas({ children, size, delay, ...rest }: BordasProps) {
    )
 }
 
-type AuthCriarContaFotoSucessoRouteProp = RouteProp<RouteApp, 'AuthCriarContaFotoSucesso'>;
 
-export function AuthCriarContaFotoSucesso() {
+type AuthCriarContaFotoSucessoProps = ImageProps & {
+   setValue: any
+}
+export function AuthCriarContaFotoSucesso({ path , setValue}: AuthCriarContaFotoSucessoProps) {
    const { colors } = useTheme<Theme>();
    const insets = useSafeAreaInsets();
    const navigate = useNavigation();
-   const { params } = useRoute<AuthCriarContaFotoSucessoRouteProp>()
 
-   const handleUploadImagem = useMutation({
-      mutationFn: async () => {
-         let base64Image = await imagemApp(params.path).base64File();
-
-         const jsonData = {
-            path_camera_web: false,
-            path_avatar_camera: base64Image,
-            tipo_imagem_camera: "image/jpg"
-         };
-
-         return usuarioCadastraImagem(jsonData);
-      },
-      onSuccess() {
-         queryClient.invalidateQueries({ queryKey: ['obtemDadosLogadoIndex'] })
-         navigate.navigate("PerfilTab");
-      },
-   });
+   const handleSetValue = useCallback(async () => {
+      let base64Image = await imagemApp(path).base64File();
+      setValue("path_camera_web", false);
+      setValue("path_avatar_camera", base64Image);
+      setValue("tipo_imagem_camera", "image/jpg");
+   }, []);
 
    return (
       <View style={{
@@ -91,7 +76,7 @@ export function AuthCriarContaFotoSucesso() {
 
                <Pressable onPress={() => navigate.goBack()}>
                   <Image
-                     source={{ uri: params.path }}
+                     source={{ uri: path }}
                      style={{
                         width: 300,
                         height: 300,
@@ -144,10 +129,9 @@ export function AuthCriarContaFotoSucesso() {
             </HStack>
 
             <Button
-               loading={handleUploadImagem.isPending}
                iconRight={<Icon.CheckCircle color='#fff' />}
                variant='sucesso'
-               onPress={() => handleUploadImagem.mutate()}>
+               onPress={handleSetValue}>
                Salvar
             </Button>
          </Animated.View>

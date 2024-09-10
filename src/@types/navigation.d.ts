@@ -10,7 +10,6 @@ export type RouteApp = {
       redirect: RootParamList;
    };
    EsqueciSenha: undefined;
-   CriarConta: undefined;
    CarrinhoUtilizador: undefined;
    CarrinhoResumo: undefined;
    CheckoutEnderecoCobranca: undefined;
@@ -41,6 +40,7 @@ export type RouteApp = {
    PerfilFotoCameraSucesso: {
       path: string
    }
+   AuthCriarConta: undefined;
    AuthCriarContaFoto:undefined;
    AuthCriarContaFotoSucesso: {
       path: string

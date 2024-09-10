@@ -1,9 +1,15 @@
 import api from ".";
-import { PayloadPaginacaoResponse } from "./@index";
 import { CriaUsuarioProps } from "./@usuario";
 
+type PayloadCriaConta = {
+   mensagem: string;
+   erro: boolean;
+   mensagenserro: string[];
+   id: string;
+   codigoretorno: number;
+}
 
-export async function criaUsuario(body: CriaUsuarioProps): PayloadPaginacaoResponse<any> {
+export async function criaUsuario(body: CriaUsuarioProps): Promise<PayloadCriaConta> {
    delete api.defaults.headers.common.Authorization;
 
    return await api
@@ -13,5 +19,5 @@ export async function criaUsuario(body: CriaUsuarioProps): PayloadPaginacaoRespo
             throw new Error("Erro");
          }
          return success.data;
-      })
+      });
 }
