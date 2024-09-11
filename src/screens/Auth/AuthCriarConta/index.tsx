@@ -62,7 +62,7 @@ const schema = z.object({
    documento: z.string(),
    telefone: z.string(),
    sexo: z.string(),
-   nascimento: z.string(),
+   data_nascimento: z.string(),
    password: z.string(),
    confirmar_senha: z.string(),
    cadastro_app: z.boolean().optional(),
@@ -75,7 +75,7 @@ const schema = z.object({
    path_camera_web: z.boolean(),
    path_avatar_camera: z.string(),
    tipo_imagem_camera: z.string(),
-
+   habilitar_endereco: z.number(),
 }).superRefine(({ confirmar_senha, password }, ctx) => {
    if (password !== confirmar_senha) {
       ctx.addIssue({
@@ -118,7 +118,7 @@ export function Cep({ setValue, control, error, ...rest }: CepProps) {
          ) : (
             <InputCep
                label='CEP'
-               iconLeft={<Icon.Pin size={24} />}
+               iconLeft={handleCep.isSuccess ? <Icon.CheckCircle color={theme.colors.greenDark} size={24} /> :<Icon.Pin size={24} />}
                placeholder='00000-000'
                inputMode='numeric'
                handleCep={handleCep}
@@ -191,10 +191,11 @@ export function AuthCriarConta() {
          "documento": DOCUMENTO,
          "telefone": TELEFONE,
          "sexo": SEXO,
-         "nascimento": NASCIMENTO,
+         "data_nascimento": NASCIMENTO,
          "confirmar_senha": CONFIRMAR_SENHA,
-         cadastro_app: true,
+         cadastro_app: false,
          numero: "000",
+         habilitar_endereco: 1,
       }
    });
 
@@ -296,13 +297,13 @@ export function AuthCriarConta() {
                         <InputText
                            label="Data de nascimento"
                            iconLeft={<Icon.Calendario size={24} />}
-                           name='nascimento'
+                           name='data_nascimento'
                            placeholder='dd/mm/yyyy'
                            mask={dataMask}
                            control={control}
                            inputMode='decimal'
                            maxLength={10}
-                           error={errors?.nascimento?.message}
+                           error={errors?.data_nascimento?.message}
                         />
 
                         <Cep
@@ -350,6 +351,5 @@ export function AuthCriarConta() {
             </Layout.Scroll>
          </Layout.Keyboard>
       </Layout.Root>
-
    );
 };

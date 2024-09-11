@@ -2,7 +2,7 @@ export type CriaUsuarioProps = {
    nome: string;
    email: string;
    sexo: string;
-   nascimento: string;
+   data_nascimento: string;
    password: string;
    numero:string;
    documento: string;
@@ -19,6 +19,7 @@ export type CriaUsuarioProps = {
    path_camera_web: boolean;
    path_avatar_camera: string;
    tipo_imagem_camera: string;
+   habilitar_endereco: number;
 
 }
 

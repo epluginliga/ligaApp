@@ -64,7 +64,7 @@ export function AuthCriarContaFoto({ ...rest }: AuthCriarContaFotoProps) {
    if (device == null) return <ListEmptyComponent title="Acesso á câmera foi negada!" />
 
    return (
-      <VStack flex={1} backgroundColor="white">
+      <VStack flex={1}>
          <Animated.View
             entering={FadeIn}
             exiting={FadeOutRight}
