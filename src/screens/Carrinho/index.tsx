@@ -33,7 +33,7 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
 
    const quantidade = pedido?.eventos
       .find(item => item.evento_id === eventoId)?.ingressos
-      .find(ingr => ingr.id === ingresso.id)?.qtd || 0;
+      .find(ingr => ingr.lote_id === ingresso.lote_id)?.qtd || 0;
 
    const desabilitarBotao = ingresso.quantidade_disponivel_ingresso <= 0 ||
       totalItens >= ingresso.quantidade_por_compra ||
@@ -41,7 +41,7 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
       quantidade >= ingresso.quantidade_disponivel_lote;
 
    return (
-      <Card.Root key={ingresso.id} variant='border'>
+      <Card.Root variant='border'>
          <VStack width="100%" maxWidth="30%">
             <Card.Span>
                {ingresso.nome_lote}
@@ -155,7 +155,7 @@ export function Carrinho() {
                      {data?.ingressos?.map(ingresso => {
                         if (ingresso?.quantidade_disponivel_ingresso > 0) {
                            return (
-                              <React.Fragment key={ingresso.id}>
+                              <React.Fragment key={ingresso.lote_id}>
                                  <IngressosAdicionar
                                     eventoId={evento.id}
                                     ingresso={ingresso}
@@ -168,7 +168,7 @@ export function Carrinho() {
 
                         return (
                            <>
-                              <Card.Root key={ingresso.id} variant='border'>
+                              <Card.Root key={ingresso.lote_id} variant='border'>
                                  <Card.Title>{ingresso.nome}</Card.Title>
                                  <Card.Title variant='labelInput'>
                                     {ingresso.valor}

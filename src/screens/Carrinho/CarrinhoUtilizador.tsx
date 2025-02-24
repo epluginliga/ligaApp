@@ -42,6 +42,7 @@ export const schemaUtilizador = z.object({
                   nome: z.string({ message: "Obrigatório!" }).min(3, { message: "Obrigatório!" }),
                   data_nascimento: z.string().optional(),
                   sexo: z.string().optional(),
+                  email: z.string().email({ message: "Email inválido" }).optional(),
                   cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
                      if (!Validacoes.CPF(val)) {
                         ctx.addIssue({
@@ -71,7 +72,7 @@ export function CarrinhoUtilizador() {
    const { navigate } = useNavigation();
    const insets = useSafeAreaInsets();
 
-   const { control, handleSubmit, formState: { errors }, setValue, resetField } = useForm<FormUtilizador>({
+   const { control, handleSubmit, formState: { errors, isValid }, setValue, resetField } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
@@ -109,7 +110,7 @@ export function CarrinhoUtilizador() {
       return;
    }
 
-   if (atleticas.data?.length === 1) {
+   if (atleticas.data?.length === 0) {
       setValue("atletica_slug", "nenhuma");
    }
 
@@ -126,6 +127,7 @@ export function CarrinhoUtilizador() {
       label: item.nome,
       name: item.slug
    })) || [];
+
 
    return (
       <>
@@ -147,7 +149,7 @@ export function CarrinhoUtilizador() {
                      entering={FadeIn}
                      exiting={FadeOut}>
                      <Card.Root>
-                        {atleticaFormulario?.length > 1 && (
+                        {atleticaFormulario?.length > 0 && (
                            <InputSelecionar
                               name="atletica_slug"
                               control={control}
@@ -161,6 +163,7 @@ export function CarrinhoUtilizador() {
                   {ingresso?.map((ingresso, ingresso_indice) => {
                      return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
                         const ativo = atribuiUser?.[ingresso_indice]?.[indice];
+                        
                         return (
                            <Animated.View
                               entering={FadeIn}
@@ -180,6 +183,7 @@ export function CarrinhoUtilizador() {
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, "");
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, "");
                                              setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, "");
+                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`, "");
 
                                              return serAtribuiUser(undefined);
                                           }
@@ -193,6 +197,7 @@ export function CarrinhoUtilizador() {
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, usuario?.sexo);
+                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`, usuario?.email);
                                           setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, dataApp(usuario?.data_nascimento).diaMesAnoISOBR());
                                        }}>
 
@@ -205,7 +210,6 @@ export function CarrinhoUtilizador() {
                                           <Text variant='labelInput'>Esse ingresso é pra mim</Text>
                                        </HStack>
                                     </Pressable>
-
                                     <Animated.View
                                        entering={FadeInDown.delay(indice * 500)}
                                        exiting={FadeOutUp}
@@ -237,6 +241,22 @@ export function CarrinhoUtilizador() {
                                           error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
                                        />
 
+                                    </Animated.View>
+
+                                    <Animated.View
+                                       entering={FadeInDown}
+                                       exiting={FadeOutUp}
+                                    >
+                                       <InputText
+                                          editable={!ativo}
+                                          label='E-mail'
+                                          keyboardType='decimal-pad'
+                                          returnKeyType='done'
+                                          control={control}
+                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`}
+                                          placeholder='E-mail do utilizador'
+                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.email?.message}
+                                       />
                                     </Animated.View>
 
                                     <Animated.View
@@ -330,6 +350,7 @@ export function CarrinhoUtilizador() {
                         </VStack>
                         {carrinho.data && (
                            <Button
+                              disabled={isValid}
                               onPress={handleSubmit((data) => {
                                  return handleAtribuirUtilizador.mutate(data);
                               })}

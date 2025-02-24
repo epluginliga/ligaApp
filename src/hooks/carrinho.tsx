@@ -61,7 +61,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
          eventos.evento_id = evento?.id;
       }
 
-      let existeIngresso = eventos?.ingressos.find(item => item.id === ingresso.id);
+      let existeIngresso = eventos?.ingressos.find(item => item.lote_id === ingresso.lote_id);
       if (existeIngresso) {
          existeIngresso.qtd += 1;
       } else {
@@ -80,7 +80,7 @@ function CarrinhoProvider({ children }: CarrinhoProviderProps): React.ReactEleme
       let [eventos] = copyPedido.eventos;
 
 
-      let existeIngresso = eventos?.ingressos.find(item => item.id === ingresso.id);
+      let existeIngresso = eventos?.ingressos.find(item => item.lote_id === ingresso.lote_id);
       if (existeIngresso) {
          existeIngresso.qtd -= 1;
       }

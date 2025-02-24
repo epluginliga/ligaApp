@@ -49,13 +49,7 @@ export async function fetchIngressoDisponivel(
    { pontoVenda, evento_id }: IngressoDisponivelProps): PayloadDefault<IngressosDisponivelPayloadProps[]> {
    return await api
       .get(`/venda/ingressos/${pontoVenda}/${evento_id}`)
-      .then(success => {
-         if (success.status !== 200) {
-            throw new Error("Erro");
-         }
-         return success.data;
-      })
-      .catch((err) => err);
+      .then(success => success.data);
 }
 
 export async function fetchEventoAtleticas(evento_id: string):
