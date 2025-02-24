@@ -13,13 +13,7 @@ export const ButtonShare = ({ ...rest }: ButtonShareProps) => {
 
    const handleShare = useCallback(async () => {
       setLoading(true)
-      await Share.open(rest)
-         .then((res) => {
-            console.log(res);
-         })
-         .catch((err) => {
-            err && console.log(err);
-         });
+      await Share.open(rest);
 
       setLoading(false)
    }, [])

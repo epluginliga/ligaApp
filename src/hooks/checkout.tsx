@@ -54,7 +54,6 @@ function CheckoutProvider({ children }: CheckoutProviderProps): React.ReactEleme
    }, []);
 
    function limpaCodigoPagamento() {
-      console.log("limpaCodigoPagamento")
       checkoutStorage.delete("@checkout");
       setCodigoPagamento({} as CodigoPagamento);
    };

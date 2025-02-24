@@ -65,8 +65,6 @@ export function CheckoutProcessandoPagamento() {
       }, [])
    )
 
-   console.log(data?.carrinho.status, isFetching)
-
    useEffect(() => {
       const timer = setInterval(() => {
          setTime((prevTime) => {
