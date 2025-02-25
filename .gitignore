@@ -75,3 +75,4 @@ yarn-error.log
 .env.production
 .env.development
 android/app/release/*
+.bundle/*
