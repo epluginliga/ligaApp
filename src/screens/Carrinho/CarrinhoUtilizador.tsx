@@ -210,6 +210,7 @@ export function CarrinhoUtilizador() {
                                           <Text variant='labelInput'>Esse ingresso é pra mim</Text>
                                        </HStack>
                                     </Pressable>
+                                    
                                     <Animated.View
                                        entering={FadeInDown.delay(indice * 500)}
                                        exiting={FadeOutUp}
@@ -220,7 +221,7 @@ export function CarrinhoUtilizador() {
                                                 label={ingresso.restricao}
                                                 control={control}
                                                 name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
-                                                placeholder={`${ingresso.restricao} do utilizador.`}
+                                                placeholder={`${ingresso.restricao}`}
                                                 error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
                                              />
                                           ) : null}
@@ -350,7 +351,6 @@ export function CarrinhoUtilizador() {
                         </VStack>
                         {carrinho.data && (
                            <Button
-                              disabled={isValid}
                               onPress={handleSubmit((data) => {
                                  return handleAtribuirUtilizador.mutate(data);
                               })}
