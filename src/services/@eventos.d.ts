@@ -6,7 +6,7 @@ export type EventosPayload = {
    logradouro?: string;
    numero?: string;
    bairro?: string;
-   complemento?: string,
+   complemento?: string;
    cidade?: string;
    estado?: string;
    nome_local: string;
@@ -15,8 +15,10 @@ export type EventosPayload = {
    taxas?: string;
    quantidade_parcelas: number;
    url_visualizacao?: string;
-}
-
+   data_inicio: string;
+   latitude?: string;
+   longitude?: string;
+};
 
 export type TaxasCheckout = {
    taxaplataforma: number;
@@ -31,7 +33,7 @@ export type TaxasCheckout = {
    taxaconveniencia: number;
    taxaconveniencia_pix: number;
    taxaconveniencia_boleto: number;
-}
+};
 
 export type IngressosPayload = {
    bilhete_id: string;
@@ -53,7 +55,6 @@ export type IngressosPayload = {
    nome_compra: string;
 };
 
-
 export type IngressosDisponivelIngressoPayloadProps = {
    id: string;
    nome: string;
@@ -62,7 +63,7 @@ export type IngressosDisponivelIngressoPayloadProps = {
    permitir_compra: number;
    lote_id: string;
    nome_lote: string;
-   quantidade_por_compra: number,
+   quantidade_por_compra: number;
    quantidade_disponivel_ingresso: number;
    quantidade_disponivel_lote: number;
    disponivel_data_ingresso: boolean;
@@ -76,23 +77,22 @@ export type IngressosDisponivelIngressoPayloadProps = {
    dia_fim_vendas_ingresso: string;
    mes_fim_vendas_ingresso: string;
    ano_fim_vendas_ingresso: string;
-   taxa_conveniencia?: any,
+   taxa_conveniencia?: any;
    status_lote: string;
    mostrar_data_encerramento_lote: number;
-   descricao?: string,
+   descricao?: string;
    nome_atletica?: string;
-}
+};
 
 export type IngressosDisponivelPayloadProps = {
    setor_id: string;
    setor_nome: string;
-   ingressos: IngressosDisponivelIngressoPayloadProps[]
-}
+   ingressos: IngressosDisponivelIngressoPayloadProps[];
+};
 export type IngressoDisponivelProps = {
    pontoVenda: string;
    evento_id: string;
-
-}
+};
 
 export type PayloadEventoAtletica = {
    id: string;
@@ -103,7 +103,7 @@ export type PayloadEventoAtletica = {
 
 export type IngressoDetalheProps = {
    bilhete_id: string;
-}
+};
 
 export type IngressoDetalhePayload = {
    dadosCompra: {
@@ -118,7 +118,7 @@ export type IngressoDetalhePayload = {
       evento_path_imagem_topo?: string;
       evento_path_imagem_rodape?: string;
       evento_data_liberacao_ingresso: string;
-      evento_info_ingresso_impresso?: string,
+      evento_info_ingresso_impresso?: string;
       ingresso_nome: string;
       ingresso_descricao?: string;
       bilhete_codigo_barra: string;
@@ -136,7 +136,7 @@ export type IngressoDetalhePayload = {
       hora_evento: string;
       dia_evento: string;
       mes_evento: string;
-   },
+   };
    dadosUsuario: {
       id: string;
       name: string;
@@ -144,12 +144,12 @@ export type IngressoDetalhePayload = {
       email: string;
       email_verified_at?: string;
       path_avatar: string;
-      sexo: "masculino" | "feminino",
+      sexo: 'masculino' | 'feminino';
       deleted_at?: string;
       created_at: string;
       updated_at: string;
       data_nascimento: string;
-      status_aprovacao: "aprovado",
+      status_aprovacao: 'aprovado';
       path_avatar_aprovado: string;
       primeiro_acesso: number;
       apelido?: string;
@@ -163,12 +163,12 @@ export type IngressoDetalhePayload = {
       endereco_complemento: string;
       endereco_cidade: string;
       endereco_estado: string;
-      endereco_padrao: boolean,
+      endereco_padrao: boolean;
       endereco_latitude: string;
       endereco_longitude: string;
       documento_tipo: string;
       documento_numero: string;
       telefone_ddd: string;
       telefone_numero: string;
-   }
-}
+   };
+};
