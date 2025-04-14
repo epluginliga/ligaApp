@@ -31,8 +31,6 @@ export function Slide<T>({ data, ...rest }: SlideProps<T>) {
          horizontal
          pagingEnabled
          ItemSeparatorComponent={() => <View style={styles.spacer} />}
-         // renderItem={ItemBannerTurma}
-         // keyExtractor={item => item.id.toString()}
          showsHorizontalScrollIndicator={false}
          {...rest}
       />

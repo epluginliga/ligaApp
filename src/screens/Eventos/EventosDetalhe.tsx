@@ -28,6 +28,39 @@ import { ButtonShare } from '../../components/ButtonShare';
 import { ButtonComprarIngressos } from './EventosDetalheVerificaCarrinho';
 import { EventosPayload } from '../../services/@eventos';
 
+function NavigateMapaEvento({
+   eventoDetalhe,
+}: {
+   eventoDetalhe: EventosPayload;
+}) {
+   const { latitude, longitude, nome_local } = eventoDetalhe;
+
+   const LATITUDE = latitude != '0' ? latitude : '-16.6502548';
+   const LONGITUDE = longitude != '0' ? longitude : '-49.2259161';
+
+   const handleRedirect = () => {
+      const scheme = Platform.select({
+         ios: `maps://?q=${nome_local}&ll=${LATITUDE},${LONGITUDE}`,
+         android: `geo:${LATITUDE},${LONGITUDE}?q=${LATITUDE},${LONGITUDE}(${nome_local})`,
+      });
+      if (scheme) {
+         Linking.openURL(scheme).catch(err =>
+            console.error('Error opening map: ', err),
+         );
+      }
+   };
+
+   return (
+      <Pressable onPress={handleRedirect} >
+         <Section.SubTitle textDecorationLine='underline' iconLeft={<Icon.Pin />}>
+            {eventoDetalhe?.nome_local + '\n'}
+            <Section.Span >{eventoDetalhe?.logradouro}</Section.Span>
+         </Section.SubTitle>
+      </Pressable>
+   );
+}
+
+
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
 export const EventosDetalhe = () => {
@@ -221,34 +254,3 @@ export const EventosDetalhe = () => {
    );
 };
 
-function NavigateMapaEvento({
-   eventoDetalhe,
-}: {
-   eventoDetalhe: EventosPayload;
-}) {
-   const { latitude, longitude, nome_local } = eventoDetalhe;
-
-   const LATITUDE = latitude != '0' ? latitude : '-16.6502548';
-   const LONGITUDE = longitude != '0' ? longitude : '-49.2259161';
-
-   const handleRedirect = () => {
-      const scheme = Platform.select({
-         ios: `maps://?q=${nome_local}&ll=${LATITUDE},${LONGITUDE}`,
-         android: `geo:${LATITUDE},${LONGITUDE}?q=${LATITUDE},${LONGITUDE}(${nome_local})`,
-      });
-      if (scheme) {
-         Linking.openURL(scheme).catch(err =>
-            console.error('Error opening map: ', err),
-         );
-      }
-   };
-
-   return (
-      <Pressable onPress={handleRedirect} >
-         <Section.SubTitle textDecorationLine='underline' iconLeft={<Icon.Pin />}>
-            {eventoDetalhe?.nome_local + '\n'}
-            <Section.Span >{eventoDetalhe?.logradouro}</Section.Span>
-         </Section.SubTitle>
-      </Pressable>
-   );
-}
