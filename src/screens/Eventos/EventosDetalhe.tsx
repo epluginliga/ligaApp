@@ -67,7 +67,7 @@ export const EventosDetalhe = () => {
    const insets = useSafeAreaInsets();
    const { params } = useRoute<EventoDetalheRouteProp>();
    const scrollY = useSharedValue(0);
-   const { goBack, navigate } = useNavigation();
+   const { goBack } = useNavigation();
 
    const { data: eventoDetalhe } = useQuery({
       queryKey: ['eventosDetalhe', params?.id],

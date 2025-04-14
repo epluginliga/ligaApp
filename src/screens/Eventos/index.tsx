@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { FlatList, Pressable, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 
@@ -10,10 +10,8 @@ import HStack from '../../components/Views/Hstack';
 import { Icon } from '../../icons';
 import { fetchEventos } from '../../services/eventos';
 import { ListEmptyComponent } from '../../components/ListEmptyComponent';
-import { Layout } from '../../components/Views/Layout';
 import { dataApp } from '../../utils/utils';
 import { Imagem } from '../../components/Imagem';
-import { Button } from '../../components/Button';
 import { useMMKVString } from 'react-native-mmkv';
 import { useAuth, usuarioStorage } from '../../hooks/auth';
 import { EventosPayload } from '../../services/@eventos';
@@ -21,6 +19,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { Slide } from '../../components/Slide';
+import { Navigate } from '../../components/Navigate';
 
 export type ItemData = {
    item: EventosPayload;
@@ -28,11 +27,16 @@ export type ItemData = {
 
 function Item({ item }: { item: EventosPayload }) {
    return (
-      <Pressable onPress={() => console.log('')}>
+      <Navigate
+         url="EventosDetalhe"
+         params={{
+            id: item.id,
+         }}
+      >
          <VStack overflow="hidden" px="xs">
             <Imagem source={{ uri: item.path_imagem }} />
          </VStack>
-      </Pressable>
+      </Navigate>
    );
 }
 
@@ -40,7 +44,6 @@ type DestaqueProps = {
    evento?: EventosPayload[];
 };
 function Destaque({ evento }: DestaqueProps) {
-
    if (!evento) return null;
 
    return <Slide data={evento} renderItem={Item} />;
