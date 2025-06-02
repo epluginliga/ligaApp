@@ -159,7 +159,7 @@ function FormCartaoCredito() {
                   label='CVV'
                   control={control}
                   name='cvv'
-                  maxLength={3}
+                  maxLength={4}
                   placeholder='000'
                   error={errors?.cvv?.message}
                   onPress={() => controlaWidgetCartao.current?.back?.()}

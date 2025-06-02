@@ -5,7 +5,8 @@ import { card } from './cardVariants';
 
 export const palette = {
    primary: '#F23E17',
-   warning: '#ffcc00',
+   warning: '#FFE066', // amarelo mais suave
+   warning_secondary: '#FFDE7A', // amarelo secundário mais suave
    secondary: '#F2385A',
    botao_default: 'rgba(242, 56, 90, 0.65)',
    background_red_tab: 'rgba(242, 56, 90, 0.10)',

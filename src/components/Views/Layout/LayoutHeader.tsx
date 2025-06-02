@@ -31,7 +31,7 @@ export function LayoutHeader({ title, rigth, children, variant = "default", hand
 
             <VStack justifyContent='center' flex={1}>
                {children ? children : (
-                  <Text variant={variant === "default" ? 'header' : "headerWhite"} textAlign="center">{title}</Text>
+                  <Text variant={variant === "default" ? 'header' : "headerWhite"} fontSize={14} textAlign="center">{title}</Text>
                )}
 
             </VStack>

@@ -26,6 +26,7 @@ import { IconFingerPrint } from "./IconFingerPrint";
 import { IconArrowLeftStart } from "./IconArrowLeftStart";
 import { IconQRCode } from "./IconQRCode";
 import { IconFaceID } from "./IconFaceID";
+import { IconUpRightFromSquare } from "./IconUpRightFromSquare";
 
 export const Icon = {
    Eye: IconEye,
@@ -62,7 +63,8 @@ export const Icon = {
    FingerPrint: IconFingerPrint,
    ArrowLeftStart: IconArrowLeftStart,
    QRCode: IconQRCode,
-   FaceID: IconFaceID
+   FaceID: IconFaceID,
+   UpRightFromSquare: IconUpRightFromSquare,
 }
 
 export type Icon = {

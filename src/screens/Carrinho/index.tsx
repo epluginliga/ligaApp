@@ -22,69 +22,71 @@ import { CriaEditaCarrinhoProps } from '../../services/@carrinho';
 import { IngressosDisponivelIngressoPayloadProps } from '../../services/@eventos';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCheckout } from '../../hooks/checkout';
+import { useAuth } from '../../hooks/auth';
 
 type IngressosAdicionarProps = {
    ingresso: IngressosDisponivelIngressoPayloadProps;
    eventoId: string;
-}
+};
 
 function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
-   const { adicionaIngressoAoEvento, removeIngressoDoEvento, pedido, totalItens } = useCarrinho()
+   const {
+      adicionaIngressoAoEvento,
+      removeIngressoDoEvento,
+      pedido,
+      totalItens,
+   } = useCarrinho();
 
-   const quantidade = pedido?.eventos
-      .find(item => item.evento_id === eventoId)?.ingressos
-      .find(ingr => ingr.lote_id === ingresso.lote_id)?.qtd || 0;
+   const quantidade =
+      pedido?.eventos
+         .find(item => item.evento_id === eventoId)
+         ?.ingressos.find(ingr => ingr.lote_id === ingresso.lote_id)?.qtd || 0;
 
-   const desabilitarBotao = ingresso.quantidade_disponivel_ingresso <= 0 ||
+   const desabilitarBotao =
+      ingresso.quantidade_disponivel_ingresso <= 0 ||
       totalItens >= ingresso.quantidade_por_compra ||
       quantidade >= ingresso.quantidade_disponivel_ingresso ||
       quantidade >= ingresso.quantidade_disponivel_lote;
 
    return (
-      <Card.Root variant='border'>
+      <Card.Root variant="border">
          <VStack width="100%" maxWidth="30%">
-            <Card.Span>
-               {ingresso.nome_lote}
-            </Card.Span>
-            <Card.SubTitle>
-               {ingresso.nome}
-            </Card.SubTitle>
+            <Card.Span>{ingresso.nome_lote}</Card.Span>
+            <Card.SubTitle>{ingresso.nome}</Card.SubTitle>
          </VStack>
 
-         <Card.Title variant='labelInput' color='primary'>
+         <Card.Title variant="labelInput" color="primary">
             {Maskara.dinheiro(+ingresso.valor)}
          </Card.Title>
 
-         <HStack alignItems='center' gap="lg">
+         <HStack alignItems="center" gap="lg">
             <Pressable
                style={{
                   opacity: quantidade === 0 ? 0.4 : 1,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   height: 50,
                   width: 30,
                }}
                disabled={quantidade === 0}
-               onPress={() => removeIngressoDoEvento(
-                  eventoId,
-                  {
+               onPress={() =>
+                  removeIngressoDoEvento(eventoId, {
                      id: ingresso.id,
                      lote_id: ingresso.lote_id,
-                     qtd: 1
-                  })}
+                     qtd: 1,
+                  })
+               }
             >
-               <Icon.Minus color='#232C79' />
+               <Icon.Minus color="#232C79" />
             </Pressable>
 
-            <Card.Title variant='header'>
-               {quantidade}
-            </Card.Title>
+            <Card.Title variant="header">{quantidade}</Card.Title>
 
             <Pressable
                style={{
                   opacity: desabilitarBotao ? 0.4 : 1,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   height: 50,
                   width: 30,
                }}
@@ -94,33 +96,36 @@ function IngressosAdicionar({ ingresso, eventoId }: IngressosAdicionarProps) {
                      id: ingresso.id,
                      lote_id: ingresso.lote_id,
                      qtd: 1,
-                     valor: +ingresso.valor
+                     valor: +ingresso.valor,
                   });
                }}
             >
-               <Icon.Plus color='#232C79' />
+               <Icon.Plus color="#232C79" />
             </Pressable>
-
          </HStack>
       </Card.Root>
    );
 }
 
 const itemTextSingular: { [key: number]: string } = {
-   1: 'item'
-}
+   1: 'item',
+};
 
 export function Carrinho() {
    const { navigate } = useNavigation();
    const { evento, pedido, total, totalItens } = useCarrinho();
    const insets = useSafeAreaInsets();
    const { updateStatus } = useCheckout();
+   const { logado } = useAuth();
 
    const { data } = useQuery({
       queryKey: ['fetchIngressoDisponivel', evento],
       queryFn: () => {
-         if (!evento?.id) return null
-         return fetchIngressoDisponivel({ evento_id: evento.id, pontoVenda: vendaAplicativo });
+         if (!evento?.id) return null;
+         return fetchIngressoDisponivel({
+            evento_id: evento.id,
+            pontoVenda: vendaAplicativo,
+         });
       },
       enabled: !!evento?.id,
    });
@@ -129,11 +134,13 @@ export function Carrinho() {
       mutationKey: ['criaCarrinho'],
       mutationFn: (pedido: CriaEditaCarrinhoProps) => {
          const copyPedido = Object.assign({}, pedido);
-         const newPedido = copyPedido.eventos?.filter(item => item.ingressos.length !== 0)
+         const newPedido = copyPedido.eventos?.filter(
+            item => item.ingressos.length !== 0,
+         );
          return criaEditaCarrinho({ ...pedido, eventos: newPedido });
       },
       onSuccess: () => {
-         navigate('CarrinhoUtilizador')
+         navigate('CarrinhoUtilizador');
       },
    });
 
@@ -142,16 +149,17 @@ export function Carrinho() {
    return (
       <>
          <StatusBar barStyle="dark-content" />
-         <Layout.Header title='Ingressos disponíveis' />
+         <Layout.Header title="Ingressos disponíveis" />
 
          <Layout.Scroll>
             <VStack gap="lg">
-
                <ResumoPedido />
 
                {(data ?? []).map?.(data => (
                   <VStack key={data.setor_id}>
-                     <Text color='azul' marginHorizontal='sm'>{data.setor_nome}</Text>
+                     <Text color="azul" marginHorizontal="sm">
+                        {data.setor_nome}
+                     </Text>
                      {data?.ingressos?.map(ingresso => {
                         if (ingresso?.quantidade_disponivel_ingresso > 0) {
                            return (
@@ -161,57 +169,69 @@ export function Carrinho() {
                                     ingresso={ingresso}
                                  />
                                  <View style={{ height: 10 }} />
-
                               </React.Fragment>
                            );
                         }
 
                         return (
                            <>
-                              <Card.Root key={ingresso.lote_id} variant='border'>
+                              <Card.Root
+                                 key={ingresso.lote_id}
+                                 variant="border"
+                              >
                                  <Card.Title>{ingresso.nome}</Card.Title>
-                                 <Card.Title variant='labelInput'>
+                                 <Card.Title variant="labelInput">
                                     {ingresso.valor}
                                  </Card.Title>
-                                 <Card.Title variant='labelInput'>Esgotado</Card.Title>
+                                 <Card.Title variant="labelInput">
+                                    Esgotado
+                                 </Card.Title>
                               </Card.Root>
                               <View style={{ height: 10 }} />
                            </>
-                        )
+                        );
                      })}
                   </VStack>
                ))}
             </VStack>
             <View style={{ marginBottom: insets.bottom + 80 }} />
-
          </Layout.Scroll>
 
-         <VStack justifyContent='center' width="100%" position='absolute' bottom={insets.bottom + (Platform.OS === "ios" ? 0 : 10)}>
+         <VStack
+            justifyContent="center"
+            width="100%"
+            position="absolute"
+            bottom={insets.bottom + (Platform.OS === 'ios' ? 0 : 10)}
+         >
             <Button
                disabled={total === 0}
-               iconRight={(
-                  <Text variant='header' color='white' verticalAlign='middle'>
-                     {totalItens > 0 && <Text variant='header3' color='white'>
-                        {totalItens} {itemTextSingular[totalItens] || 'itens'} por: {' '}
-                     </Text>}
+               iconRight={
+                  <Text variant="header" color="white" verticalAlign="middle">
+                     {totalItens > 0 && (
+                        <Text variant="header3" color="white">
+                           {totalItens}{' '}
+                           {itemTextSingular[totalItens] || 'itens'} por:{' '}
+                        </Text>
+                     )}
                      {Maskara.dinheiro(total)}
                   </Text>
-               )}
+               }
                marginHorizontal="lg"
                onPress={() => {
+                  if (!logado) {
+                     return navigate('Login', {
+                        redirect: 'CarrinhoUtilizador',
+                     });
+                  }
                   if (!pedido) return;
 
-                  updateStatus("");
+                  updateStatus('');
                   return handleCriaCarrinho.mutate(pedido);
                }}
             >
-               <Text color='white'>
-                  Comprar
-               </Text>
+               <Text color="white">{logado ? 'Comprar' : 'Continuar'}</Text>
             </Button>
          </VStack>
-
       </>
-
-   )
+   );
 }

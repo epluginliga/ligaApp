@@ -1,5 +1,4 @@
-
-import React from 'react'
+import React from 'react';
 import { StatusBar } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,6 +11,7 @@ import { IngressoDetalhe } from '../screens/Ingressos/IngressoDetalhe';
 import { TabRouteDeslogado } from './Tab.route.deslogado';
 import { Web } from '../screens/Web';
 import { AuthCriarConta } from '../screens/Auth/AuthCriarConta';
+import { Carrinho } from '../screens/Carrinho';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,18 +24,23 @@ export function RouteDesLogado() {
             screenOptions={{
                headerShown: false,
                contentStyle: {
-                  backgroundColor: "#fff",
-               }
-            }}>
-
+                  backgroundColor: '#fff',
+               },
+            }}
+         >
             <Stack.Group>
                <Stack.Screen name="Home" component={TabRouteDeslogado} />
                <Stack.Screen name="Eventos" component={Eventos} />
                <Stack.Screen name="EventosDetalhe" component={EventosDetalhe} />
                <Stack.Screen name="Ingressos" component={Ingressos} />
-               <Stack.Screen name="IngressosDetalhe" component={IngressoDetalhe} />
+               <Stack.Screen
+                  name="IngressosDetalhe"
+                  component={IngressoDetalhe}
+               />
                <Stack.Screen name="Login" component={Login} />
                <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} />
+
+               <Stack.Screen name="Carrinho" component={Carrinho} />
 
                <Stack.Screen name="AuthCriarConta" component={AuthCriarConta} />
             </Stack.Group>

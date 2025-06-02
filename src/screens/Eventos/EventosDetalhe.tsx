@@ -33,16 +33,17 @@ function NavigateMapaEvento({
 }: {
    eventoDetalhe: EventosPayload;
 }) {
-   const { latitude, longitude, nome_local } = eventoDetalhe;
+   const { nome_local, cep } = eventoDetalhe;
 
-   const LATITUDE = latitude != '0' ? latitude : '-16.6502548';
-   const LONGITUDE = longitude != '0' ? longitude : '-49.2259161';
+   const LATITUDE = cep === '74673060' ? '-16.6502548' : 0;
+   const LONGITUDE = cep === '74673060' ? '-49.2233412' : 0;
 
    const handleRedirect = () => {
       const scheme = Platform.select({
          ios: `maps://?q=${nome_local}&ll=${LATITUDE},${LONGITUDE}`,
          android: `geo:${LATITUDE},${LONGITUDE}?q=${LATITUDE},${LONGITUDE}(${nome_local})`,
       });
+
       if (scheme) {
          Linking.openURL(scheme).catch(err =>
             console.error('Error opening map: ', err),
@@ -50,16 +51,43 @@ function NavigateMapaEvento({
       }
    };
 
+   const getLatLongFromGoogle = async () => {
+      try {
+         const apiKey = 'AIzaSyAHnvmUp5i5Uvk4dzbXtQmEE7e_LN5V46o';
+         const response = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+               nome_local,
+            )}&key=${apiKey}`,
+         );
+
+         const data = await response.json();
+         if (data.status === 'OK' && data.results && data.results.length > 0) {
+            const location = data.results[0].geometry.location;
+            return {
+               latitude: location.lat,
+               longitude: location.lng,
+            };
+         }
+      } catch (error) {
+         console.error('Erro ao buscar latitude/longitude:', error);
+      }
+
+      return { latitude: 0, longitude: 0 };
+   };
+
    return (
-      <Pressable onPress={handleRedirect} >
-         <Section.SubTitle textDecorationLine='underline' iconLeft={<Icon.Pin />}>
+      <Pressable onPress={handleRedirect}>
+         <Section.SubTitle
+            textDecorationLine="underline"
+            iconLeft={<Icon.Pin />}
+            iconRight={<Icon.UpRightFromSquare />}
+         >
             {eventoDetalhe?.nome_local + '\n'}
-            <Section.Span >{eventoDetalhe?.logradouro}</Section.Span>
+            <Section.Span>{eventoDetalhe?.logradouro}</Section.Span>
          </Section.SubTitle>
       </Pressable>
    );
 }
-
 
 type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 
@@ -253,4 +281,3 @@ export const EventosDetalhe = () => {
       </>
    );
 };
-

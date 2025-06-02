@@ -19,6 +19,7 @@ import { useCheckout } from '../../hooks/checkout'
 import { carrinhoStatusPagamento } from '../../services/carrinho'
 import { useAuth } from '../../hooks/auth'
 import { CheckoutPagamentoModalPagamentoIniciado } from './CheckoutPagamentoModal'
+import HStack from '../../components/Views/Hstack'
 
 type FormasPagamento = 'CheckoutCartao' | 'CheckoutPix';
 
@@ -169,13 +170,16 @@ export function CheckoutPagamento() {
          <Layout.Header title='Pagamento' />
 
          <VStack justifyContent='space-between' flex={1}>
-            <Section.Root gap='md'>
-               <Section.Title>Método de pagamento</Section.Title>
+            <Section.Root gap='md' justifyContent='space-between' >
+               <VStack>
+                  <Section.Title>Método de pagamento</Section.Title>
+               </VStack>
 
-               <Section.SubTitle iconLeft={<Icon.Warning />}>
-                  <Text fontSize={14} fontWeight="bold">Atenção</Text>,
-                  você só garante seus ingressos após a conclusão da compra.
+               <HStack backgroundColor='warning_secondary' justifyContent="space-between" p='sm' borderRadius={8} gap='xs'>
+                  <Section.SubTitle iconLeft={<Icon.Warning />}>
+                  <Text fontSize={14} fontWeight="bold">Atenção</Text>{'\n'}você só garante seus ingressos após a conclusão da compra.
                </Section.SubTitle>
+               </HStack>
 
                <InputFormaPagamento formaPagamento={formaPagamento} setFormaPagamento={setFormaPagamento} />
 

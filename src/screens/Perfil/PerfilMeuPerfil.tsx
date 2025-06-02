@@ -80,7 +80,7 @@ export const PerfilMeuPerfil = () => {
       <>
          <Layout.Keyboard>
 
-            <Layout.Header title='Criar Conta' />
+            <Layout.Header title='Meu Perfil' />
 
             <Layout.Scroll>
                <VStack gap="lg" p="sm">

@@ -237,9 +237,9 @@ export function Perfil() {
       {
          nome: 'Meus Pedidos',
          icone: <Icon.Ticket />,
-         route: () => navigate("PerfilMeusPedidos"),
+         route: () => navigate("IngressosTab"),
          descricao: 'Visualize seu histórico de pedidos',
-         disabled: true
+         disabled: false
       },
       {
          nome: 'Alterar senha',

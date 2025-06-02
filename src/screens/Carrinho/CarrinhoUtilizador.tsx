@@ -2,21 +2,26 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueries } from '@tanstack/react-query';
-import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutUp } from 'react-native-reanimated';
+import Animated, {
+   FadeIn,
+   FadeInDown,
+   FadeOut,
+   FadeOutUp,
+} from 'react-native-reanimated';
 import { Pressable, StatusBar } from 'react-native';
 
-import { Layout } from '../../components/Views/Layout'
-import { Section } from '../../components/Section'
-import VStack from '../../components/Views/Vstack'
-import { InputText } from '../../components/Inputs/Text'
-import { Button } from '../../components/Button'
-import { Card } from '../../components/Card'
-import { atribuiUtilizador, obtemCarrinho } from '../../services/carrinho'
-import HStack from '../../components/Views/Hstack'
-import Circle from '../../components/Views/Circle'
-import Text from '../../components/Text'
-import { Maskara, cpfMask, dataMask } from '../../utils/Maskara'
-import { Validacoes } from '../../utils/Validacoes'
+import { Layout } from '../../components/Views/Layout';
+import { Section } from '../../components/Section';
+import VStack from '../../components/Views/Vstack';
+import { InputText } from '../../components/Inputs/Text';
+import { Button } from '../../components/Button';
+import { Card } from '../../components/Card';
+import { atribuiUtilizador, obtemCarrinho } from '../../services/carrinho';
+import HStack from '../../components/Views/Hstack';
+import Circle from '../../components/Views/Circle';
+import Text from '../../components/Text';
+import { Maskara, cpfMask, dataMask } from '../../utils/Maskara';
+import { Validacoes } from '../../utils/Validacoes';
 import { Icon } from '../../icons';
 import { Theme } from '../../theme/default';
 import { useCarrinho } from '../../hooks/carrinho';
@@ -26,7 +31,7 @@ import { InputSelecionar } from '../../components/Inputs/Selecionar';
 import { dataApp } from '../../utils/utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { z } from 'zod'
+import { z } from 'zod';
 import { useTheme } from '@shopify/restyle';
 
 export const schemaUtilizador = z.object({
@@ -39,32 +44,39 @@ export const schemaUtilizador = z.object({
                restricao: z.string().optional(),
                usuario_proprio: z.boolean().optional(),
                dono_ingresso: z.object({
-                  nome: z.string({ message: "Obrigatório!" }).min(3, { message: "Obrigatório!" }),
+                  nome: z
+                     .string({ message: 'Obrigatório!' })
+                     .min(3, { message: 'Obrigatório!' }),
                   data_nascimento: z.string().optional(),
                   sexo: z.string().optional(),
-                  email: z.string().email({ message: "Email inválido" }).optional(),
-                  cpf: z.string({ message: "Obrigatório!" }).superRefine((val, ctx) => {
-                     if (!Validacoes.CPF(val)) {
-                        ctx.addIssue({
-                           code: "custom",
-                           message: "CPF inválido",
-                        })
-                     }
-                  }),
+                  email: z
+                     .string()
+                     .email({ message: 'Email inválido' })
+                     .optional(),
+                  cpf: z
+                     .string({ message: 'Obrigatório!' })
+                     .superRefine((val, ctx) => {
+                        if (!Validacoes.CPF(val)) {
+                           ctx.addIssue({
+                              code: 'custom',
+                              message: 'CPF inválido',
+                           });
+                        }
+                     }),
                }),
             }),
          ),
       }),
    ),
    atletica_slug: z.string({
-      message: "Obrigatório!"
+      message: 'Obrigatório!',
    }),
 });
 
 export type FormUtilizador = z.infer<typeof schemaUtilizador>;
 type AtribuirUserProps = {
-   [key: number]: any
-}
+   [key: number]: any;
+};
 export function CarrinhoUtilizador() {
    const { colors } = useTheme<Theme>();
    const [atribuiUser, serAtribuiUser] = useState<AtribuirUserProps | null>();
@@ -72,13 +84,20 @@ export function CarrinhoUtilizador() {
    const { navigate } = useNavigation();
    const insets = useSafeAreaInsets();
 
-   const { control, handleSubmit, formState: { errors, isValid }, setValue, resetField } = useForm<FormUtilizador>({
+   const {
+      control,
+      handleSubmit,
+      formState: { errors, isValid },
+      setValue,
+      resetField,
+   } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
    });
 
    const handleAtribuirUtilizador = useMutation({
-      mutationFn: (data: FormUtilizador) => atribuiUtilizador((carrinho.data?.id || ""), data),
-      onSuccess: () => navigate('CarrinhoResumo')
+      mutationFn: (data: FormUtilizador) =>
+         atribuiUtilizador(carrinho.data?.id || '', data),
+      onSuccess: () => navigate('CarrinhoResumo'),
    });
 
    if (!evento) return;
@@ -88,7 +107,7 @@ export function CarrinhoUtilizador() {
          {
             queryKey: ['obtemCarrinhoPaginaCarrinho'],
             queryFn: async () => {
-               resetField("lotes");
+               resetField('lotes');
                const carrinho = await obtemCarrinho();
                if (carrinho.id) {
                   setCarrinhoId(carrinho?.id);
@@ -111,226 +130,318 @@ export function CarrinhoUtilizador() {
    }
 
    if (atleticas.data?.length === 0) {
-      setValue("atletica_slug", "nenhuma");
+      setValue('atletica_slug', 'nenhuma');
    }
 
-   carrinho.data?.eventos.flatMap(item => item.ingressos).forEach((ingresso, ingresso_key: number) => {
-      for (let i = 1; i <= ingresso.qtd; i++) {
-         setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
-         setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
-      }
-   });
+   carrinho.data?.eventos
+      .flatMap(item => item.ingressos)
+      .forEach((ingresso, ingresso_key: number) => {
+         for (let i = 1; i <= ingresso.qtd; i++) {
+            setValue(`lotes.${ingresso_key}.id`, ingresso.lote_id);
+            setValue(`lotes.${ingresso_key}.evento_ingresso_id`, ingresso.id);
+         }
+      });
 
    const ingresso = carrinho?.data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = carrinho?.data?.usuario;
-   const atleticaFormulario = atleticas.data?.map(item => ({
-      label: item.nome,
-      name: item.slug
-   })) || [];
+   const atleticaFormulario =
+      atleticas.data?.map(item => ({
+         label: item.nome,
+         name: item.slug,
+      })) || [];
 
-
+   console.log('atribuiUser', atleticaFormulario?.length);
    return (
       <>
          <StatusBar barStyle="dark-content" />
 
          <Layout.Keyboard>
-            <Layout.Header title='Utilizador' handleBack={() => navigate("Home")} />
+            <Layout.Header
+               title="Utilizador"
+               handleBack={() => navigate('Home')}
+            />
             <Layout.Scroll>
-               <VStack gap="lg" marginBottom='md'>
-
+               <VStack gap="lg" marginBottom="md">
                   <Section.Root>
-                     <Section.SubTitle>{evento?.nome} / {evento?.nome_local}</Section.SubTitle>
-                     <Section.Title color='primary'>
+                     <Section.SubTitle>
+                        {evento?.nome} / {evento?.nome_local}
+                     </Section.SubTitle>
+                     <Section.Title color="primary">
                         Informe quem irá utilizar os ingressos
                      </Section.Title>
                   </Section.Root>
 
-                  <Animated.View
-                     entering={FadeIn}
-                     exiting={FadeOut}>
-                     <Card.Root>
-                        {atleticaFormulario?.length > 0 && (
+                  {atleticaFormulario?.length > 0 && (
+                     <Animated.View entering={FadeIn} exiting={FadeOut}>
+                        <Card.Root>
                            <InputSelecionar
                               name="atletica_slug"
                               control={control}
                               option={atleticaFormulario || []}
                               error={errors?.atletica_slug?.message}
                            />
-                        )}
-                     </Card.Root>
-                  </Animated.View>
+                        </Card.Root>
+                     </Animated.View>
+                  )}
 
                   {ingresso?.map((ingresso, ingresso_indice) => {
-                     return new Array(ingresso.qtd).fill(null).map((_key, indice) => {
-                        const ativo = atribuiUser?.[ingresso_indice]?.[indice];
-                        
-                        return (
-                           <Animated.View
-                              entering={FadeIn}
-                              exiting={FadeOut}
-                              key={indice}
-                           >
-                              <VStack gap='md'>
-                                 <Section.Root tituloFechar={ingresso.nome}>
+                     return new Array(ingresso.qtd)
+                        .fill(null)
+                        .map((_key, indice) => {
+                           const ativo =
+                              atribuiUser?.[ingresso_indice]?.[indice];
 
-                                    <Pressable
-                                       disabled={atribuiUser !== undefined && !ativo}
-                                       onPress={() => {
-                                          if (!usuario) return;
-                                          if (ativo) {
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, false);
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, "");
-                                             setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`, "");
-
-                                             return serAtribuiUser(undefined);
+                           return (
+                              <Animated.View
+                                 entering={FadeIn}
+                                 exiting={FadeOut}
+                                 key={indice}
+                              >
+                                 <VStack gap="md">
+                                    <Section.Root tituloFechar={ingresso.nome}>
+                                       <Pressable
+                                          disabled={
+                                             atribuiUser !== undefined && !ativo
                                           }
-                                          serAtribuiUser({
-                                             [ingresso_indice]: {
-                                                [indice]: true
+                                          onPress={() => {
+                                             if (!usuario) return;
+                                             if (ativo) {
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,
+                                                   false,
+                                                );
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,
+                                                   '',
+                                                );
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,
+                                                   '',
+                                                );
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`,
+                                                   '',
+                                                );
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`,
+                                                   '',
+                                                );
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`,
+                                                   '',
+                                                );
+
+                                                return serAtribuiUser(
+                                                   undefined,
+                                                );
                                              }
-                                          });
+                                             serAtribuiUser({
+                                                [ingresso_indice]: {
+                                                   [indice]: true,
+                                                },
+                                             });
 
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`, true);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`, usuario?.nome);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`, cpfMask(usuario?.cpf));
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`, usuario?.sexo);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`, usuario?.email);
-                                          setValue(`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`, dataApp(usuario?.data_nascimento).diaMesAnoISOBR());
-                                       }}>
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.usuario_proprio`,
+                                                true,
+                                             );
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`,
+                                                usuario?.nome,
+                                             );
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`,
+                                                cpfMask(usuario?.cpf),
+                                             );
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`,
+                                                usuario?.sexo,
+                                             );
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`,
+                                                usuario?.email,
+                                             );
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`,
+                                                dataApp(
+                                                   usuario?.data_nascimento,
+                                                ).diaMesAnoISOBR(),
+                                             );
+                                          }}
+                                       >
+                                          <HStack alignItems="center">
+                                             {ativo ? (
+                                                <Icon.CheckCircle
+                                                   color={colors.greenDark}
+                                                />
+                                             ) : (
+                                                <Circle
+                                                   variant="shadow"
+                                                   width={25}
+                                                   height={25}
+                                                />
+                                             )}
+                                             <Text variant="labelInput">
+                                                Esse ingresso é pra mim
+                                             </Text>
+                                          </HStack>
+                                       </Pressable>
 
-                                       <HStack alignItems='center' >
-                                          {ativo ? (
-                                             <Icon.CheckCircle color={colors.greenDark} />
-                                          ) : (
-                                             <Circle variant='shadow' width={25} height={25} />
-                                          )}
-                                          <Text variant='labelInput'>Esse ingresso é pra mim</Text>
-                                       </HStack>
-                                    </Pressable>
-                                    
-                                    <Animated.View
-                                       entering={FadeInDown.delay(indice * 500)}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <VStack gap='md'>
-                                          {ingresso.possui_restricao ? (
-                                             <InputText
-                                                label={ingresso.restricao}
-                                                control={control}
-                                                name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
-                                                placeholder={`${ingresso.restricao}`}
-                                                error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.restricao?.message}
-                                             />
-                                          ) : null}
-                                       </VStack>
+                                       {/* RESTRICAO */}
+                                       {ingresso.restricao && (
+                                          <Animated.View
+                                             entering={FadeInDown.delay(
+                                                indice * 500,
+                                             )}
+                                             exiting={FadeOutUp}
+                                          >
+                                             <VStack gap="md">
+                                                {ingresso.possui_restricao ? (
+                                                   <InputText
+                                                      label={ingresso.restricao}
+                                                      control={control}
+                                                      name={`lotes.${ingresso_indice}.donos.${indice}.restricao`}
+                                                      placeholder={`${ingresso.restricao}`}
+                                                      error={
+                                                         errors?.lotes?.[
+                                                            ingresso_indice
+                                                         ]?.donos?.[indice]
+                                                            ?.restricao?.message
+                                                      }
+                                                   />
+                                                ) : null}
+                                             </VStack>
+                                          </Animated.View>
+                                       )}
 
-                                    </Animated.View>
-
-                                    <Animated.View
-                                       entering={FadeInDown}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <InputText
-                                          editable={!ativo}
-                                          label='Nome'
-                                          control={control}
-                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
-                                          placeholder='Nome completo do utilizador'
-                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.nome?.message}
-                                       />
-
-                                    </Animated.View>
-
-                                    <Animated.View
-                                       entering={FadeInDown}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <InputText
-                                          editable={!ativo}
-                                          label='E-mail'
-                                          keyboardType='decimal-pad'
-                                          returnKeyType='done'
-                                          control={control}
-                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`}
-                                          placeholder='E-mail do utilizador'
-                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.email?.message}
-                                       />
-                                    </Animated.View>
-
-                                    <Animated.View
-                                       entering={FadeInDown}
-                                       exiting={FadeOutUp}
-                                    >
-                                       <InputText
-                                          editable={!ativo}
-                                          label='CPF'
-                                          keyboardType='decimal-pad'
-                                          returnKeyType='done'
-                                          mask={cpfMask}
-                                          control={control}
-                                          name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
-                                          placeholder='CPF do utilizador'
-                                          error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.cpf?.message}
-                                       />
-                                    </Animated.View>
-
-                                    {ingresso.classificacao_idade !== "livre" && (
+                                       {/* Nome */}
                                        <Animated.View
                                           entering={FadeInDown}
                                           exiting={FadeOutUp}
                                        >
                                           <InputText
                                              editable={!ativo}
-                                             label='Data de nascimento'
-                                             keyboardType='decimal-pad'
-                                             returnKeyType='done'
-                                             mask={dataMask}
+                                             label="Nome"
                                              control={control}
-                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`}
-                                             placeholder='dd/mm/aaaa'
-                                             error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.data_nascimento?.message}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.nome`}
+                                             placeholder="Nome completo do utilizador"
+                                             error={
+                                                errors?.lotes?.[ingresso_indice]
+                                                   ?.donos?.[indice]
+                                                   ?.dono_ingresso?.nome
+                                                   ?.message
+                                             }
                                           />
-
                                        </Animated.View>
-                                    )}
 
-                                    {ingresso.sexo && (
                                        <Animated.View
                                           entering={FadeInDown}
                                           exiting={FadeOutUp}
                                        >
-                                          <InputSelecionar
+                                          <InputText
                                              editable={!ativo}
-                                             placeholder='Selecione o sexo'
-                                             label='Sexo'
-                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
+                                             label="E-mail"
+                                             keyboardType="email-address"
+                                             returnKeyType="done"
                                              control={control}
-                                             option={[
-                                                {
-                                                   label: "Masculino",
-                                                   name: "masculino"
-                                                },
-                                                {
-                                                   label: "Feminino",
-                                                   name: "feminino"
-                                                },
-                                                {
-                                                   label: "Não informar",
-                                                   name: "naoinformar"
-                                                }
-                                             ]}
-                                             error={errors?.lotes?.[ingresso_indice]?.donos?.[indice]?.dono_ingresso?.sexo?.message}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`}
+                                             placeholder="E-mail do utilizador"
+                                             error={
+                                                errors?.lotes?.[ingresso_indice]
+                                                   ?.donos?.[indice]
+                                                   ?.dono_ingresso?.email
+                                                   ?.message
+                                             }
                                           />
                                        </Animated.View>
-                                    )}
-                                 </Section.Root>
-                              </VStack>
-                           </Animated.View>
-                        )
-                     })
+
+                                       <Animated.View
+                                          entering={FadeInDown}
+                                          exiting={FadeOutUp}
+                                       >
+                                          <InputText
+                                             editable={!ativo}
+                                             label="CPF"
+                                             keyboardType="decimal-pad"
+                                             returnKeyType="done"
+                                             mask={cpfMask}
+                                             control={control}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.cpf`}
+                                             placeholder="CPF do utilizador"
+                                             error={
+                                                errors?.lotes?.[ingresso_indice]
+                                                   ?.donos?.[indice]
+                                                   ?.dono_ingresso?.cpf?.message
+                                             }
+                                          />
+                                       </Animated.View>
+
+                                       {ingresso.classificacao_idade !==
+                                          'livre' && (
+                                          <Animated.View
+                                             entering={FadeInDown}
+                                             exiting={FadeOutUp}
+                                          >
+                                             <InputText
+                                                editable={!ativo}
+                                                label="Data de nascimento"
+                                                keyboardType="decimal-pad"
+                                                returnKeyType="done"
+                                                mask={dataMask}
+                                                control={control}
+                                                name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`}
+                                                placeholder="dd/mm/aaaa"
+                                                error={
+                                                   errors?.lotes?.[
+                                                      ingresso_indice
+                                                   ]?.donos?.[indice]
+                                                      ?.dono_ingresso
+                                                      ?.data_nascimento?.message
+                                                }
+                                             />
+                                          </Animated.View>
+                                       )}
+
+                                       {ingresso.sexo && (
+                                          <Animated.View
+                                             entering={FadeInDown}
+                                             exiting={FadeOutUp}
+                                          >
+                                             <InputSelecionar
+                                                editable={!ativo}
+                                                placeholder="Selecione o sexo"
+                                                label="Sexo"
+                                                name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.sexo`}
+                                                control={control}
+                                                option={[
+                                                   {
+                                                      label: 'Masculino',
+                                                      name: 'masculino',
+                                                   },
+                                                   {
+                                                      label: 'Feminino',
+                                                      name: 'feminino',
+                                                   },
+                                                   {
+                                                      label: 'Não informar',
+                                                      name: 'naoinformar',
+                                                   },
+                                                ]}
+                                                error={
+                                                   errors?.lotes?.[
+                                                      ingresso_indice
+                                                   ]?.donos?.[indice]
+                                                      ?.dono_ingresso?.sexo
+                                                      ?.message
+                                                }
+                                             />
+                                          </Animated.View>
+                                       )}
+                                    </Section.Root>
+                                 </VStack>
+                              </Animated.View>
+                           );
+                        });
                   })}
 
                   <Animated.View
@@ -338,33 +449,38 @@ export function CarrinhoUtilizador() {
                      exiting={FadeOutUp}
                      style={{ marginBottom: insets.bottom }}
                   >
-                     <Section.Root gap='lg'>
+                     <Section.Root gap="lg">
                         <VStack>
-                           <HStack alignItems='center' justifyContent='space-between'>
-                              <Section.SubTitle>Total em ingressos: </Section.SubTitle>
-                              <Text color='greenDark'>{Maskara.dinheiro(total)}
-                                 <Text color='greenDark' fontSize={12}>{' '}+ Taxas</Text>
+                           <HStack
+                              alignItems="center"
+                              justifyContent="space-between"
+                           >
+                              <Section.SubTitle>
+                                 Total em ingressos:{' '}
+                              </Section.SubTitle>
+                              <Text color="greenDark">
+                                 {Maskara.dinheiro(total)}
+                                 <Text color="greenDark" fontSize={12}>
+                                    {' '}
+                                    + Taxas
+                                 </Text>
                               </Text>
-
                            </HStack>
-
                         </VStack>
                         {carrinho.data && (
                            <Button
-                              onPress={handleSubmit((data) => {
+                              onPress={handleSubmit(data => {
                                  return handleAtribuirUtilizador.mutate(data);
                               })}
                            >
                               Continuar
                            </Button>
                         )}
-
                      </Section.Root>
                   </Animated.View>
-
                </VStack>
             </Layout.Scroll>
-         </Layout.Keyboard >
+         </Layout.Keyboard>
       </>
-   )
+   );
 }

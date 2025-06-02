@@ -18,6 +18,7 @@ export type EventosPayload = {
    data_inicio: string;
    latitude?: string;
    longitude?: string;
+   cep?: string;
 };
 
 export type TaxasCheckout = {
