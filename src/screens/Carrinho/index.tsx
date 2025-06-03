@@ -220,7 +220,7 @@ export function Carrinho() {
                onPress={() => {
                   if (!logado) {
                      return navigate('Login', {
-                        redirect: 'CarrinhoUtilizador',
+                        redirect: 'Carrinho',
                      });
                   }
                   if (!pedido) return;
