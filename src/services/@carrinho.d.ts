@@ -30,6 +30,7 @@ export type PayloadCarrinho = {
       cpf: string;
       sexo: string;
       data_nascimento: string;
+      telefone: string;
    };
    dados_adquirencia: {
       adquirencia: string;

@@ -10,7 +10,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Pressable, StatusBar } from 'react-native';
 
-import { Layout } from '../../components/Views/Layout';
 import { Section } from '../../components/Section';
 import VStack from '../../components/Views/Vstack';
 import { InputText } from '../../components/Inputs/Text';
@@ -20,7 +19,7 @@ import { atribuiUtilizador, obtemCarrinho } from '../../services/carrinho';
 import HStack from '../../components/Views/Hstack';
 import Circle from '../../components/Views/Circle';
 import Text from '../../components/Text';
-import { Maskara, cpfMask, dataMask } from '../../utils/Maskara';
+import { Maskara, cpfMask, dataMask, telefoneMask } from '../../utils/Maskara';
 import { Validacoes } from '../../utils/Validacoes';
 import { Icon } from '../../icons';
 import { Theme } from '../../theme/default';
@@ -33,6 +32,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { z } from 'zod';
 import { useTheme } from '@shopify/restyle';
+import { Layout } from '../../components/Views/Layout';
 
 export const schemaUtilizador = z.object({
    lotes: z.array(
@@ -49,6 +49,18 @@ export const schemaUtilizador = z.object({
                      .min(3, { message: 'Obrigatório!' }),
                   data_nascimento: z.string().optional(),
                   sexo: z.string().optional(),
+                  telefone: z
+                     .string({
+                        message: 'Obrigatório!',
+                     })
+                     .superRefine((val, ctx) => {
+                        if (!Validacoes.telefone(val)) {
+                           ctx.addIssue({
+                              code: 'custom',
+                              message: 'Telefone inválido',
+                           });
+                        }
+                     }),
                   email: z
                      .string()
                      .email({ message: 'Email inválido' })
@@ -87,7 +99,7 @@ export function CarrinhoUtilizador() {
    const {
       control,
       handleSubmit,
-      formState: { errors, isValid },
+      formState: { errors },
       setValue,
       resetField,
    } = useForm<FormUtilizador>({
@@ -95,8 +107,23 @@ export function CarrinhoUtilizador() {
    });
 
    const handleAtribuirUtilizador = useMutation({
-      mutationFn: (data: FormUtilizador) =>
-         atribuiUtilizador(carrinho.data?.id || '', data),
+      mutationFn: (data: FormUtilizador) => {
+         if (data.lotes) {
+            data.lotes.forEach(lote => {
+               lote.donos.forEach(dono => {
+                  if (dono.dono_ingresso && dono.dono_ingresso.telefone) {
+                     dono.dono_ingresso.telefone =
+                        dono.dono_ingresso.telefone.replace(/\D/g, '');
+                  }
+               });
+            });
+         }
+         if (carrinho.data?.id) {
+            return atribuiUtilizador(carrinho.data?.id || '', data);
+         }
+
+         return Promise.reject(new Error('Carrinho não encontrado.'));
+      },
       onSuccess: () => navigate('CarrinhoResumo'),
    });
 
@@ -144,13 +171,14 @@ export function CarrinhoUtilizador() {
 
    const ingresso = carrinho?.data?.eventos?.flatMap(ingre => ingre.ingressos);
    const usuario = carrinho?.data?.usuario;
+
+
    const atleticaFormulario =
       atleticas.data?.map(item => ({
          label: item.nome,
          name: item.slug,
       })) || [];
 
-   console.log('atribuiUser', atleticaFormulario?.length);
    return (
       <>
          <StatusBar barStyle="dark-content" />
@@ -231,6 +259,11 @@ export function CarrinhoUtilizador() {
                                                    '',
                                                 );
 
+                                                setValue(
+                                                   `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.telefone`,
+                                                   '',
+                                                );
+
                                                 return serAtribuiUser(
                                                    undefined,
                                                 );
@@ -261,6 +294,12 @@ export function CarrinhoUtilizador() {
                                                 `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`,
                                                 usuario?.email,
                                              );
+
+                                             setValue(
+                                                `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.telefone`,
+                                                usuario?.telefone,
+                                             );
+
                                              setValue(
                                                 `lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.data_nascimento`,
                                                 dataApp(
@@ -343,6 +382,9 @@ export function CarrinhoUtilizador() {
                                              label="E-mail"
                                              keyboardType="email-address"
                                              returnKeyType="done"
+                                             autoCapitalize="none"
+                                             autoComplete="email"
+                                             autoCorrect={false}
                                              control={control}
                                              name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.email`}
                                              placeholder="E-mail do utilizador"
@@ -350,6 +392,28 @@ export function CarrinhoUtilizador() {
                                                 errors?.lotes?.[ingresso_indice]
                                                    ?.donos?.[indice]
                                                    ?.dono_ingresso?.email
+                                                   ?.message
+                                             }
+                                          />
+                                       </Animated.View>
+
+                                       <Animated.View
+                                          entering={FadeInDown}
+                                          exiting={FadeOutUp}
+                                       >
+                                          <InputText
+                                             editable={!ativo}
+                                             label="Telefone"
+                                             keyboardType="phone-pad"
+                                             returnKeyType="done"
+                                             control={control}
+                                             mask={telefoneMask}
+                                             name={`lotes.${ingresso_indice}.donos.${indice}.dono_ingresso.telefone`}
+                                             placeholder="(xx) xxxxx-xxxx"
+                                             error={
+                                                errors?.lotes?.[ingresso_indice]
+                                                   ?.donos?.[indice]
+                                                   ?.dono_ingresso?.telefone
                                                    ?.message
                                              }
                                           />
