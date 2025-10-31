@@ -22,7 +22,7 @@
       "date-fns": "^3.6.0",
       "react": "18.3.1",
       "react-hook-form": "^7.51.4",
-      "react-native": "0.76.1",
+      "react-native": "0.76.9",
       "react-native-gesture-handler": "^2.25.0",
       "react-native-image-crop-picker": "^0.41.2",
       "react-native-linear-gradient": "^2.8.3",
@@ -42,13 +42,13 @@
       "@babel/core": "^7.25.2",
       "@babel/preset-env": "^7.25.3",
       "@babel/runtime": "^7.25.0",
-      "@react-native-community/cli": "15.0.0",
-      "@react-native-community/cli-platform-android": "15.0.0",
-      "@react-native-community/cli-platform-ios": "15.0.0",
-      "@react-native/babel-preset": "0.76.1",
-      "@react-native/eslint-config": "0.76.1",
-      "@react-native/metro-config": "0.76.1",
-      "@react-native/typescript-config": "0.76.1",
+      "@react-native-community/cli": "15.0.1",
+      "@react-native-community/cli-platform-android": "15.0.1",
+      "@react-native-community/cli-platform-ios": "15.0.1",
+      "@react-native/babel-preset": "0.76.9",
+      "@react-native/eslint-config": "0.76.9",
+      "@react-native/metro-config": "0.76.9",
+      "@react-native/typescript-config": "0.76.9",
       "@tanstack/eslint-plugin-query": "^5.35.6",
       "@tsconfig/react-native": "^3.0.5",
       "@types/jest": "^29.5.12",
@@ -65,5 +65,5 @@
    "engines": {
       "node": ">=18"
    },
-   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+   "packageManager": "yarn@3.6.4"
 }
