@@ -13,9 +13,7 @@ export const ButtonShare = ({ ...rest }: ButtonShareProps) => {
 
    const handleShare = useCallback(async () => {
       setLoading(true)
-      await Share.open(rest);
-
-      setLoading(false)
+      await Share.open(rest).finally(() => setLoading(false));
    }, [])
 
    return (

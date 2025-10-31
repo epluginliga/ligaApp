@@ -160,19 +160,19 @@ export const EventosDetalhe = () => {
                      height={10}
                      borderRadius={20}
                      backgroundColor="bege_200"
-                  ></VStack>
+                  />
                   <VStack
                      width={100}
                      height={10}
                      borderRadius={20}
                      backgroundColor="bege_200"
-                  ></VStack>
+                  />
                   <VStack
                      width={240}
                      height={10}
                      borderRadius={20}
                      backgroundColor="bege_200"
-                  ></VStack>
+                  />
                </Section.Root>
             </View>
          </VStack>
@@ -267,7 +267,7 @@ export const EventosDetalhe = () => {
                      {dataApp(eventoDetalhe?.data_evento).hora()}
                   </Section.SubTitle>
 
-                  <VStack gap="xs">
+                  <VStack gap="lg">
                      <NavigateMapaEvento eventoDetalhe={eventoDetalhe} />
                      <Html source={eventoDetalhe?.descricao || ''} />
                   </VStack>
