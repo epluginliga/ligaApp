@@ -63,6 +63,7 @@ export function Eventos() {
 
    const renderItem = useCallback(({ item }: ItemData) => {
       const diaEvento = dataApp(item.data_evento);
+
       return (
          <Card.Root
             marginHorizontal="sm"
@@ -81,11 +82,17 @@ export function Eventos() {
                <HStack justifyContent="space-around" alignItems="center">
                   <VStack flex={1}>
                      <Card.SubTitle>
-                        {item.nome_local} {'\n'}
+                        {item.nome_local && item.nome_local} {'\n'}
                         <Card.Span>
-                           <Icon.Pin size={16} />
-                           {item.cidade} | {item.estado} -{' '}
-                           {diaEvento.hora() || 'hora não definida'}
+                           {item.cidade && <Icon.Pin size={16} />}
+                           {item.cidade && `${item.cidade} | `}
+                           {item.estado && `${item.estado}`}
+                        </Card.Span>
+                     </Card.SubTitle>
+                     <Card.SubTitle>
+                        <Card.Span>
+                           <Icon.Clock size={12} />{' '}
+                           {diaEvento.hora() || ''}, {item.dia_semana}
                         </Card.Span>
                      </Card.SubTitle>
                   </VStack>

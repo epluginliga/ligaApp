@@ -9,6 +9,7 @@ export type EventosPayload = {
    complemento?: string;
    cidade?: string;
    estado?: string;
+   dia_semana: string;
    nome_local: string;
    descricao?: string;
    destaque?: number;

@@ -51,29 +51,9 @@ function NavigateMapaEvento({
       }
    };
 
-   const getLatLongFromGoogle = async () => {
-      try {
-         const apiKey = 'AIzaSyAHnvmUp5i5Uvk4dzbXtQmEE7e_LN5V46o';
-         const response = await fetch(
-            `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-               nome_local,
-            )}&key=${apiKey}`,
-         );
-
-         const data = await response.json();
-         if (data.status === 'OK' && data.results && data.results.length > 0) {
-            const location = data.results[0].geometry.location;
-            return {
-               latitude: location.lat,
-               longitude: location.lng,
-            };
-         }
-      } catch (error) {
-         console.error('Erro ao buscar latitude/longitude:', error);
-      }
-
-      return { latitude: 0, longitude: 0 };
-   };
+   if (!eventoDetalhe?.nome_local) {
+      return null;
+   }
 
    return (
       <Pressable onPress={handleRedirect}>
