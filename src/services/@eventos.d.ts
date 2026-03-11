@@ -41,6 +41,7 @@ export type IngressosPayload = {
    bilhete_id: string;
    evento_nome: string;
    evento_path_imagem: string;
+   lote_nome: string;
    evento_cidade: string;
    evento_estado: string;
    evento_data_evento: string;

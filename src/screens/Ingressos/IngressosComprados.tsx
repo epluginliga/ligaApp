@@ -16,6 +16,7 @@ import { fetchIngressoComprado } from '../../services/eventos';
 import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { format } from 'date-fns';
+import Text from '../../components/Text';
 
 function Item({ item }: { item: IngressosPayload }) {
    const dataISO = dataApp().converteDataBRtoISO(item.evento_data_evento)
@@ -37,9 +38,10 @@ function Item({ item }: { item: IngressosPayload }) {
             source={{ uri: item?.evento_path_imagem }}
          />
 
-         <VStack py='md' flex={2} justifyContent='space-around' pr='sm'>
-            <Card.Title fontSize={18} lineHeight={22.5} my='xs'>
-               {item.evento_nome}
+         <VStack py='md' gap='xs' flex={2} justifyContent='space-around' pr='sm'>
+            <Card.Title  fontSize={18} lineHeight={22.5} my='xs'>
+               {item.evento_nome} {'\n'}
+               <Text fontSize={12}>{item.lote_nome}</Text>
             </Card.Title>
 
             <VStack gap='sm'>
