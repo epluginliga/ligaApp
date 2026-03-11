@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-import { Section } from '../Section'
-import { dataApp } from '../../utils/utils'
-import { Icon } from '../../icons'
-import VStack from '../Views/Vstack'
-import { useCarrinho } from '../../hooks/carrinho'
+import { Section } from '../Section';
+import { dataApp } from '../../utils/utils';
+import { Icon } from '../../icons';
+import VStack from '../Views/Vstack';
+import { useCarrinho } from '../../hooks/carrinho';
 
 export function ResumoPedido() {
    const { evento } = useCarrinho();
@@ -23,14 +23,14 @@ export function ResumoPedido() {
             {dataApp(evento.data_evento).hora()}
          </Section.SubTitle>
 
-         <VStack gap="xs">
-            <Section.SubTitle iconLeft={<Icon.Pin />}>
-               {evento.nome_local + '\n'}
-               <Section.Span>
-                  {evento.logradouro}
-               </Section.Span>
-            </Section.SubTitle>
-         </VStack>
+         {evento?.nome_local && (
+            <VStack gap="xs">
+               <Section.SubTitle iconLeft={<Icon.Pin />}>
+                  {evento.nome_local + '\n'}
+                  <Section.Span>{evento.logradouro}</Section.Span>
+               </Section.SubTitle>
+            </VStack>
+         )}
       </Section.Root>
-   )
+   );
 }

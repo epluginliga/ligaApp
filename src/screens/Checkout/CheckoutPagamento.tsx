@@ -177,7 +177,8 @@ export function CheckoutPagamento() {
 
                <HStack backgroundColor='warning_secondary' justifyContent="space-between" p='sm' borderRadius={8} gap='xs'>
                   <Section.SubTitle iconLeft={<Icon.Warning />}>
-                  <Text fontSize={14} fontWeight="bold">Atenção</Text>{'\n'}você só garante seus ingressos após a conclusão da compra.
+                  <Text fontSize={14} fontWeight="bold">Atenção</Text>{'\n'}
+                  você só garante seus ingressos{'\n'}após a conclusão da compra.
                </Section.SubTitle>
                </HStack>
 
