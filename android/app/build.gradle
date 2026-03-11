@@ -85,8 +85,8 @@ android {
         applicationId "br.com.deualiga"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1205
-        versionName "1.2.5"
+        versionCode 1206
+        versionName "1.2.6"
     }
     signingConfigs {
         debug {
