@@ -352,7 +352,7 @@ export function CarrinhoUtilizador() {
                               <Animated.View
                                  entering={FadeIn}
                                  exiting={FadeOut}
-                                 key={indice}
+                                 key={`${ingresso_indice}-${indice}`}
                               >
                                  <VStack gap="md">
                                     <Section.Root tituloFechar={ingresso.nome}>

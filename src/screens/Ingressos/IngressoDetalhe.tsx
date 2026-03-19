@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StatusBar, View } from 'react-native';
-import Animated, { Extrapolation, interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
 import { RouteProp, useRoute } from '@react-navigation/native';
 
 import { Section } from '../../components/Section';
@@ -56,18 +56,13 @@ const enumeradoresPagaemnto: { [key: string]: string } = {
 export const IngressoDetalhe = () => {
    const insets = useSafeAreaInsets();
    const { params } = useRoute<EventoDetalheRouteProp>();
-   const scrollY = useSharedValue(0);
+   const scrollRef = useAnimatedRef<Animated.ScrollView>();
+   const scrollY = useScrollViewOffset(scrollRef);
 
    const { data } = useQuery({
       queryKey: ['IngressoEventosDetalhe', params],
       queryFn: () => fetchIngressoDetalhe(params),
       enabled: !!params
-   });
-
-   const scrollHandler = useAnimatedScrollHandler({
-      onScroll: (event) => {
-         scrollY.value = event.contentOffset.y;
-      },
    });
 
    const textStyles = useAnimatedStyle(() => {
@@ -98,9 +93,8 @@ export const IngressoDetalhe = () => {
          </Animated.View>
 
          <Animated.ScrollView
+            ref={scrollRef}
             showsVerticalScrollIndicator={false}
-            onScroll={scrollHandler}
-            scrollEventThrottle={16}
             automaticallyAdjustKeyboardInsets
             style={{ position: "relative" }}
          >
