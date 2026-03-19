@@ -9,6 +9,12 @@ const {
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const defaultConfig = getDefaultConfig(__dirname);
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), wrapWithReanimatedMetroConfig(config));
+const config = {
+   transformer: {
+      hermesParser: true,
+   },
+};
+
+module.exports = wrapWithReanimatedMetroConfig(mergeConfig(defaultConfig, config));

@@ -55,10 +55,16 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) precisa de acesso à sua câmera.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Precisamos acessar sua localização para fornecer recomendações personalizadas e melhorar sua experiência no aplicativo.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Este aplicativo deseja salvar imagens no seu dispositivo</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Este aplicativo deseja salvar imagens no seu dispositivo</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Regular.ttf</string>
@@ -89,10 +95,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) precisa de acesso à sua câmera.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Precisamos acessar sua localização para fornecer recomendações personalizadas e melhorar sua experiência no aplicativo.</string>
-
 </dict>
 </plist>
