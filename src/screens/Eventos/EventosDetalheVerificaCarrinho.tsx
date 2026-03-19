@@ -17,6 +17,7 @@ import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { IngressoCarrinho, PayloadCarrinho } from '../../services/@carrinho';
 import { useAuth } from '../../hooks/auth';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function verificaSeCarrinhoTemUtilizador(
    ingresso: IngressoCarrinho[],
@@ -42,6 +43,7 @@ export function ButtonComprarIngressos({
 }: ButtonComprarInfressosProps) {
    const [mostraModal, setMostraModal] = useState(false);
    const { logado } = useAuth();
+   const { bottom } = useSafeAreaInsets();
 
    const {
       adicionaEvento,
@@ -214,7 +216,7 @@ export function ButtonComprarIngressos({
             position="absolute"
             justifyContent="center"
             width="100%"
-            bottom={Platform.OS === 'android' ? 10 : 30}
+            bottom={bottom + 6}
          >
             <Button
                loading={handleVerificaSeExisteCarrinho.isPending}

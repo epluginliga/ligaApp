@@ -4,9 +4,9 @@ import { Linking, Platform, Pressable, StatusBar, View } from 'react-native';
 import Animated, {
    Extrapolation,
    interpolate,
-   useAnimatedScrollHandler,
+   useAnimatedRef,
    useAnimatedStyle,
-   useSharedValue,
+   useScrollOffset,
 } from 'react-native-reanimated';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
@@ -74,19 +74,14 @@ type EventoDetalheRouteProp = RouteProp<RouteApp, 'EventosDetalhe'>;
 export const EventosDetalhe = () => {
    const insets = useSafeAreaInsets();
    const { params } = useRoute<EventoDetalheRouteProp>();
-   const scrollY = useSharedValue(0);
+   const scrollRef = useAnimatedRef<Animated.ScrollView>();
+   const scrollY = useScrollOffset(scrollRef);
    const { goBack } = useNavigation();
 
    const { data: eventoDetalhe } = useQuery({
       queryKey: ['eventosDetalhe', params?.id],
       queryFn: () => fetchEventoDetalhe(params?.id),
       enabled: !!params?.id,
-   });
-
-   const scrollHandler = useAnimatedScrollHandler({
-      onScroll: event => {
-         scrollY.value = event.contentOffset.y;
-      },
    });
 
    const animatedStyles = useAnimatedStyle(() => {
@@ -181,8 +176,8 @@ export const EventosDetalhe = () => {
          </Animated.View>
 
          <Animated.ScrollView
+            ref={scrollRef}
             showsVerticalScrollIndicator={false}
-            onScroll={scrollHandler}
             style={{ position: 'relative' }}
             maximumZoomScale={0}
             minimumZoomScale={0}
