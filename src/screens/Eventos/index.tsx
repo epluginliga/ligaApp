@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { FlatList, RefreshControl } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,6 +20,7 @@ import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/default';
 import { Slide } from '../../components/Slide';
 import { Navigate } from '../../components/Navigate';
+import LinearGradient from 'react-native-linear-gradient';
 
 export type ItemData = {
    item: EventosPayload;
@@ -80,7 +81,7 @@ export function Eventos() {
                <Card.Title marginVertical="sm">{item.nome}</Card.Title>
 
                <HStack justifyContent="space-between" alignItems="center">
-                  <VStack flex={1.5}>
+                  <VStack flex={1}>
                      <Card.SubTitle>
                         {item.nome_local && item.nome_local} {'\n'}
                         <Card.Span>
@@ -97,29 +98,33 @@ export function Eventos() {
                      </Card.SubTitle>
                   </VStack>
 
-                  <VStack flex={1} justifyContent="center" mr='sm'>
-                     <Card.Widget>
-                        <VStack justifyContent='center' alignItems='center' gap='xs' p='xs'>
-                           <Text
-                           textAlign="center"
-                           color="white"
-                           fontWeight="700"
-                           fontSize={22}
-                        >
-                           {diaEvento.diaMes()}
-                        </Text>
-                        <Text
-                           color="white"
-                           textTransform="uppercase"
-                           fontWeight="500"
-                           fontSize={14}
-                           textAlign="center"
-                        >
-                           {diaEvento.nomeMes()}
-                        </Text>
-                        </VStack>
-                     </Card.Widget>
-                  </VStack>
+
+                  <LinearGradient
+                     start={{ x: 0, y: 0 }}
+                     end={{ x: 1, y: 0 }}
+                     colors={[colors.purple, colors.purple_200]}
+                     style={styles.cardWidget}
+                  >
+                     <Text
+                        textAlign="center"
+                        color="white"
+                        fontWeight="700"
+                        fontSize={22}
+                     >
+                        {diaEvento.diaMes()}
+                     </Text>
+                     <Text
+                        color="white"
+                        textTransform="uppercase"
+                        fontWeight="500"
+                        fontSize={14}
+                        textAlign="center"
+                     >
+                        {diaEvento.nomeMes()}
+                     </Text>
+                  </LinearGradient>
+
+
                </HStack>
             </VStack>
          </Card.Root>
@@ -187,3 +192,13 @@ export function Eventos() {
       />
    );
 }
+
+const styles = StyleSheet.create({
+   cardWidget: {
+      borderRadius: 12,
+     width: 64,
+     height: 72,
+      paddingVertical: 4,
+   },
+
+});
