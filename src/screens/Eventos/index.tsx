@@ -79,8 +79,8 @@ export function Eventos() {
             <VStack flex={2} justifyContent="space-evenly" pb="sm">
                <Card.Title marginVertical="sm">{item.nome}</Card.Title>
 
-               <HStack justifyContent="space-around" alignItems="center">
-                  <VStack flex={1}>
+               <HStack justifyContent="space-between" alignItems="center">
+                  <VStack flex={1.5}>
                      <Card.SubTitle>
                         {item.nome_local && item.nome_local} {'\n'}
                         <Card.Span>
@@ -97,9 +97,9 @@ export function Eventos() {
                      </Card.SubTitle>
                   </VStack>
 
-                  <VStack flex={1} justifyContent="center">
+                  <VStack flex={1} justifyContent="center" mr='sm'>
                      <Card.Widget>
-                        <VStack justifyContent='center' alignItems='center' gap='xs' p='sm'>
+                        <VStack justifyContent='center' alignItems='center' gap='xs' p='xs'>
                            <Text
                            textAlign="center"
                            color="white"
