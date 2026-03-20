@@ -98,8 +98,8 @@ export function Login() {
                         error={errors?.password?.message}
                      />
 
-                     <Button onPress={handleSubmit(handleLogin)}>
-                        {!loading ? 'ENTRAR' : 'autenticando...'}
+                     <Button loading={loading} onPress={handleSubmit(handleLogin)}>
+                        ENTRAR
                      </Button>
 
                      <Pressable onPress={() => navigate('EsqueciSenha')}>

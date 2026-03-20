@@ -97,9 +97,10 @@ export function Eventos() {
                      </Card.SubTitle>
                   </VStack>
 
-                  <VStack>
+                  <VStack flex={1} justifyContent="center">
                      <Card.Widget>
-                        <Text
+                        <VStack justifyContent='center' alignItems='center' gap='xs' p='sm'>
+                           <Text
                            textAlign="center"
                            color="white"
                            fontWeight="700"
@@ -112,10 +113,11 @@ export function Eventos() {
                            textTransform="uppercase"
                            fontWeight="500"
                            fontSize={14}
-                           style={{ marginTop: -8 }}
+                           textAlign="center"
                         >
                            {diaEvento.nomeMes()}
                         </Text>
+                        </VStack>
                      </Card.Widget>
                   </VStack>
                </HStack>

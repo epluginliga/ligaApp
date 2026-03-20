@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { RouteDesLogado } from './Stack.route.deslogado';
 import { RouteLogado } from './Stack.route.logado';
@@ -23,63 +23,77 @@ export function Routes() {
    const [erro, setErro] = useState("");
    const [sucesso, setSucesso] = useState("");
 
-   api.interceptors.request.use(
-      (config) => {
-         setLoadingReq(true);
-         return config;
-      },
-      (error) => {
-         return Promise.reject(error);
-      }
-   );
+   const pendingRequestsRef = useRef(0);
 
-   api.interceptors.response.use(
-      (response) => {
-         setLoadingReq(false);
-
-         if (response?.data?.mensagem !== "Usuário Logado com sucesso") {
-            setSucesso(response?.data?.mensagem || "");
-         }
-
-         return response;
-      },
-      (error: ErrorProps) => {
-
-         setLoadingReq(false);
-
-
-         if (error?.response?.data?.codigoretorno === 401) {
-            setErro(error.response.data.mensagem);
-            signOut();
+   useEffect(() => {
+      const onRequestId = api.interceptors.request.use(
+         (config) => {
+            pendingRequestsRef.current += 1;
+            setLoadingReq(true);
+            return config;
+         },
+         (error) => {
             return Promise.reject(error);
          }
+      );
 
-         if (error?.response?.data?.mensagenserro.length > 0) {
-            setErro(error?.response?.data?.mensagenserro?.join(", "));
-            return Promise.reject(error);
-         }
-
-         if (error?.response?.data?.errors) {
-            const erroMensagem = Object.keys(error.response.data.errors).map(key => error.response.data.errors[key]);
-            if (erroMensagem) {
-               setErro(erroMensagem.join('\n'));
+      const onResponseId = api.interceptors.response.use(
+         (response) => {
+            pendingRequestsRef.current = Math.max(0, pendingRequestsRef.current - 1);
+            if (pendingRequestsRef.current === 0) {
+               setLoadingReq(false);
             }
+
+            if (response?.data?.mensagem !== "Usuário Logado com sucesso") {
+               setSucesso(response?.data?.mensagem || "");
+            }
+
+            return response;
+         },
+         (error: ErrorProps) => {
+            pendingRequestsRef.current = Math.max(0, pendingRequestsRef.current - 1);
+            if (pendingRequestsRef.current === 0) {
+               setLoadingReq(false);
+            }
+
+            if (error?.response?.data?.codigoretorno === 401) {
+               setErro(error.response.data.mensagem);
+               signOut();
+               return Promise.reject(error);
+            }
+
+            if (error?.response?.data?.mensagenserro.length > 0) {
+               setErro(error?.response?.data?.mensagenserro?.join(", "));
+               return Promise.reject(error);
+            }
+
+            if (error?.response?.data?.errors) {
+               const erroMensagem = Object.keys(error.response.data.errors).map(key => error.response.data.errors[key]);
+               if (erroMensagem) {
+                  setErro(erroMensagem.join('\n'));
+               }
+               return Promise.reject(error);
+            }
+
+            if (error?.response?.data?.mensagem) {
+               setErro(error?.response?.data?.mensagem);
+               return Promise.reject(error);
+            }
+
+            if (error?.message) {
+               setErro(error.message);
+               return Promise.reject(error);
+            }
+
             return Promise.reject(error);
          }
+      );
 
-         if (error?.response?.data?.mensagem) {
-            setErro(error?.response?.data?.mensagem);
-            return Promise.reject(error);
-         }
-
-         if (error?.message) {
-            setErro(error.message);
-            return Promise.reject(error);
-         }
-
-         return Promise.reject(error);
-      }
-   );
+      return () => {
+         api.interceptors.request.eject(onRequestId);
+         api.interceptors.response.eject(onResponseId);
+      };
+   }, [signOut]);
 
    return (
       <AppProvider>
