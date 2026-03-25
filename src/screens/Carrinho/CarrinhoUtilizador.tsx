@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueries } from '@tanstack/react-query';
 
-import { Pressable, SectionList } from 'react-native';
+import { Pressable } from 'react-native';
 
 import { Section } from '../../components/Section';
 import VStack from '../../components/Views/Vstack';
@@ -454,14 +454,8 @@ export function CarrinhoUtilizador() {
       );
    }, [carrinho.data, handleAtribuirUtilizador, handleSubmit, total]);
 
-   const keyExtractor = useMemo(
-      () => (item: (typeof ingressoItens)[number]) =>
-         `${item.ingresso_indice}-${item.indice}-${item.ingresso.id}`,
-      [],
-   );
-
    if (carrinho.isFetching || atleticas.isFetching) {
-      return;
+      return null;
    }
 
    return (
@@ -470,16 +464,20 @@ export function CarrinhoUtilizador() {
             title="Utilizador"
             handleBack={() => navigate('Home')}
          />
-         <SectionList
-            sections={[{ title: 'ingressos', data: ingressoItens }]}
-            keyExtractor={keyExtractor}
+         <Layout.Scroll
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
-            ListHeaderComponent={listHeader}
-            renderItem={renderItem}
-            removeClippedSubviews={true}
-            ListFooterComponent={listFooter}
-         />
+         >
+            {listHeader}
+            {ingressoItens.map(item => (
+               <React.Fragment
+                  key={`${item.ingresso_indice}-${item.indice}-${item.ingresso.id}`}
+               >
+                  {renderItem({ item })}
+               </React.Fragment>
+            ))}
+            {listFooter}
+         </Layout.Scroll>
       </Layout.Keyboard>
    );
 }
