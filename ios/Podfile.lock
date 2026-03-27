@@ -1945,7 +1945,7 @@ PODS:
   - RNFBApp (20.5.0):
     - Firebase/CoreOnly (= 10.29.0)
     - React-Core
-  - RNGestureHandler (2.30.0):
+  - RNGestureHandler (2.30.1):
     - hermes-engine
     - RCTRequired
     - RCTTypeSafety
@@ -2649,7 +2649,7 @@ SPEC CHECKSUMS:
   ReactNativeDependencies: 735afb9400e5acd0020c56810e5c932e3eae7fd5
   RNCClipboard: fc456104340b49bdf812f68bd00e764abf360361
   RNFBApp: 4e6da65e29a144d20bcb5bf264fc8e2055831bab
-  RNGestureHandler: d9e942967ed2a9a555c41591c4ee9dfeabee1f01
+  RNGestureHandler: 2d9fbac3450b0317d1d599a1db9c5f230221370e
   RNImageCropPicker: ca0705cf455bc5e1601bbef08ced408ae7b5a348
   RNReanimated: e8365b1438aba0119ea2656b56e70b9a1708b930
   RNScreens: ca829379d20b0d1ff41a0b87bc37bdc50276cef5
