@@ -85,26 +85,22 @@ export const EventosDetalhe = () => {
    });
 
    const animatedStyles = useAnimatedStyle(() => {
-      if (scrollY.value < 0) {
-      }
-      const bottom = interpolate(
+      const translateY = interpolate(
          scrollY.value,
-         [0, 80],
-         [0, -20],
-         Extrapolation.EXTEND,
+         [-100, 0, 80],
+         [-50, 0, 10],
+         Extrapolation.CLAMP,
       );
-      const height = interpolate(
+      const scale = interpolate(
          scrollY.value,
-         [0, 80],
-         [250, 180],
-         Extrapolation.EXTEND,
+         [-100, 0, 80],
+         [1.4, 1, 0.72],
+         Extrapolation.CLAMP,
       );
-      return { bottom, height };
+      return { transform: [{ translateY }, { scale }] };
    });
 
    const textStyles = useAnimatedStyle(() => {
-      if (scrollY.value < 0) {
-      }
       const opacity = interpolate(
          scrollY.value,
          [0, 25],
@@ -155,7 +151,7 @@ export const EventosDetalhe = () => {
    }
 
    return (
-      <>
+      <View style={{flex:1}}>
          <StatusBar barStyle={'dark-content'} />
 
          <Animated.View
@@ -179,15 +175,12 @@ export const EventosDetalhe = () => {
             ref={scrollRef}
             showsVerticalScrollIndicator={false}
             style={{ position: 'relative' }}
-            maximumZoomScale={0}
-            minimumZoomScale={0}
          >
             <View
                style={{
                   position: 'relative',
                   height: 250,
                   width: '100%',
-                  zIndex: -9,
                }}
             >
                <Animated.Image
@@ -253,6 +246,6 @@ export const EventosDetalhe = () => {
          </Animated.ScrollView>
 
          <ButtonComprarIngressos evento={eventoDetalhe} />
-      </>
+      </View>
    );
 };
