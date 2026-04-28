@@ -48,10 +48,10 @@ react {
 
     /* Hermes Commands */
     //   The hermes compiler command to run. By default it is 'hermesc'
-    hermesCommand = "$projectDir/../../node_modules/react-native/sdks/hermesc/win64-bin/hermesc.bat"
+    // hermesCommand = "$rootDir/../node_modules/hermes-compiler/hermesc"
     //
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
-    hermesFlags = []
+    // hermesFlags = ["-O", "-output-source-map"]
 
     /* Autolinking */
     autolinkLibrariesWithApp()

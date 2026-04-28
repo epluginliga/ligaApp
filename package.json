@@ -65,5 +65,11 @@
    },
    "engines": {
       "node": ">= 22.11.0"
+   },
+   "overrides": {
+      "hermes-compiler": "250829098.0.9"
+   },
+   "resolutions": {
+      "hermes-compiler": "250829098.0.9"
    }
 }
