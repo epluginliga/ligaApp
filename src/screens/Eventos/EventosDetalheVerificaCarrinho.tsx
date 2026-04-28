@@ -9,7 +9,7 @@ import { ModalSmall } from '../../components/Modal/ModalSmall';
 import VStack from '../../components/Views/Vstack';
 import Text from '../../components/Text';
 import HStack from '../../components/Views/Hstack';
-import { Platform, Pressable } from 'react-native';
+import { Platform, Pressable, TouchableOpacity } from 'react-native';
 import { Icon } from '../../icons';
 import { useCarrinho } from '../../hooks/carrinho';
 import { Button } from '../../components/Button';
@@ -18,6 +18,7 @@ import { Theme } from '../../theme/default';
 import { IngressoCarrinho, PayloadCarrinho } from '../../services/@carrinho';
 import { useAuth } from '../../hooks/auth';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { IconArrowLeft } from '../../icons/IconArrow';
 
 function verificaSeCarrinhoTemUtilizador(
    ingresso: IngressoCarrinho[],
@@ -53,7 +54,7 @@ export function ButtonComprarIngressos({
       total,
       adicionaIngressoAoEvento,
    } = useCarrinho();
-   const { navigate } = useNavigation();
+   const { navigate, goBack } = useNavigation();
    const { updateStatus } = useCheckout();
    const { colors } = useTheme<Theme>();
 
@@ -217,7 +218,24 @@ export function ButtonComprarIngressos({
             justifyContent="center"
             width="100%"
             bottom={bottom + 6}
+            flexDirection="row"
+            alignItems="center"
          >
+            <TouchableOpacity
+               onPress={goBack}
+               style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  backgroundColor: colors.secondary,
+                  borderRadius: 9999,
+                  height: 40,
+                  width: 40,
+               }}
+            >
+               <IconArrowLeft color="#fff" />
+            </TouchableOpacity>
+
             <Button
                loading={handleVerificaSeExisteCarrinho.isPending}
                marginHorizontal="md"

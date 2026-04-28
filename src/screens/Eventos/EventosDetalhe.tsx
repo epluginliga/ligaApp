@@ -195,7 +195,7 @@ export const EventosDetalhe = () => {
             <VStack position="absolute" paddingHorizontal="md">
                <Pressable
                   style={{
-                     marginTop: Platform.OS === 'android' ? 10 : insets.top,
+                     marginTop:  insets.top + 12,
                   }}
                   onPress={goBack}
                >

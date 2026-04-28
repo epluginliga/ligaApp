@@ -462,6 +462,7 @@ export function CarrinhoUtilizador() {
       return null;
    }
 
+   console.log(errors)
    return (
       <Layout.Keyboard>
          <Layout.Header
