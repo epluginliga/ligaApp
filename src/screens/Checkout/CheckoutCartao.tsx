@@ -99,10 +99,10 @@ function FormCartaoCredito() {
             },
          }, carrinhoId)
       },
-      onSuccess(success: any) {
+      onSuccess(success) {
          return navigate(success?.status == "falha" ? "CheckoutFalha" : "CheckoutSucesso", {
-            codigo: success?.mensagem_adquirencia?.codigo,
-            mensagem: success?.mensagem_adquirencia?.mensagem
+            codigo: success?.status ?? "",
+            mensagem: success?.mensagens?.[0] ?? success?.mensagem_adquirencia ?? ""
          });
       },
       onError() {

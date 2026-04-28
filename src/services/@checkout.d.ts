@@ -42,29 +42,10 @@ export type CheckoutProps = {
    };
 }
 
-export type CodigoPagamento = {
-   tipo_pagamento: string;
-   cobranca_id: string;
-   codigo: string;
-   nosso_numero: null,
-   url_view: string;
-   url_pdf_view: null,
-   url_view_codigo_barra: null,
-   vencimento: string;
-   id: string;
-   updated_at: string;
-   created_at: string;
-}
-
 export type CheckoutPayload = {
-   status: "falha" | "pendente",
-   mensagens: [],
-   mensagem_adquirencia: {
-      codigo: string;
-      mensagem: string;
-      mensagemSolucao: string;
-   }
-   codigo_pagamento: CodigoPagamento;
-   mensagens: [];
+   status: "falha" | "pendente";
+   codigo_pagamento: string;
+   mensagens: string[];
+   mensagem_adquirencia: string;
 }
 

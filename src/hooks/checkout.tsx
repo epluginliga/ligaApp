@@ -1,12 +1,18 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { CodigoPagamento } from "../services/@checkout";
 import { MMKV } from "react-native-mmkv";
-import { subMinutes } from "date-fns";
+import { addMinutes, subMinutes } from "date-fns";
+import { TEMPO_PIX } from "@env";
 
 export type StatusPagamento = "pendente" | "expirado" | "concluido" | "aguardando_pagamento_pix" | "";
+
+type CodigoPagamentoStored = {
+   codigo: string;
+   vencimento: string;
+}
+
 type CheckoutContextProps = {
-   codigoPagamento: CodigoPagamento;
-   setCondigoPagamento: (data: CodigoPagamento) => void;
+   codigoPagamento: string;
+   setCondigoPagamento: (data: string) => void;
    statusPagamento: StatusPagamento;
    updateStatus: (status: StatusPagamento) => void
 }
@@ -18,19 +24,12 @@ const CheckoutContext = createContext<CheckoutContextProps>({} as CheckoutContex
 export const checkoutStorage = new MMKV();
 
 function CheckoutProvider({ children }: CheckoutProviderProps): React.ReactElement {
-   const [codigoPagamento, setCodigoPagamento] = useState<CodigoPagamento>({} as CodigoPagamento);
+   const [codigoPagamento, setCodigoPagamento] = useState<string>("");
    const [status, setStatus] = useState<StatusPagamento>("");
 
-   const handleCondigoPagamento = useCallback((data: CodigoPagamento) => {
-      setCodigoPagamento(data);
-      checkoutStorage.set("@checkout", JSON.stringify(data));
-
-      verificaValidadePix(data)
-   }, [setCodigoPagamento]);
-
-   const verificaValidadePix = useCallback((codigoPagamento: CodigoPagamento) => {
+   const verificaValidadePix = useCallback((stored: CodigoPagamentoStored) => {
       const horaAtual = subMinutes(new Date(), new Date().getTimezoneOffset());
-      const vencimento = new Date(codigoPagamento.vencimento);
+      const vencimento = new Date(stored.vencimento);
       const codigoExpirou = vencimento.getTime() >= new Date(horaAtual).getTime() ? "pendente" : "expirado";
 
       if (codigoExpirou == "pendente") {
@@ -41,21 +40,41 @@ function CheckoutProvider({ children }: CheckoutProviderProps): React.ReactEleme
       limpaCodigoPagamento();
    }, []);
 
+   const handleCondigoPagamento = useCallback((data: string) => {
+      const stored: CodigoPagamentoStored = {
+         codigo: data,
+         vencimento: addMinutes(new Date(), Number(TEMPO_PIX)).toISOString(),
+      };
+      setCodigoPagamento(data);
+      checkoutStorage.set("@checkout", JSON.stringify(stored));
+
+      verificaValidadePix(stored);
+   }, [setCodigoPagamento]);
+
    const handleMarcarStatus = useCallback((status: StatusPagamento) => {
       setStatus(status)
    }, []);
 
    const obtemTransacao = useCallback(() => {
       const store = checkoutStorage.getString("@checkout");
-      if (store) {
-         setCodigoPagamento(JSON.parse(store));
-         verificaValidadePix(JSON.parse(store));
+      if (!store) return;
+
+      try {
+         const stored: CodigoPagamentoStored = JSON.parse(store);
+         if (!stored?.codigo || !stored?.vencimento) {
+            limpaCodigoPagamento();
+            return;
+         }
+         setCodigoPagamento(stored.codigo);
+         verificaValidadePix(stored);
+      } catch {
+         limpaCodigoPagamento();
       }
    }, []);
 
    function limpaCodigoPagamento() {
       checkoutStorage.delete("@checkout");
-      setCodigoPagamento({} as CodigoPagamento);
+      setCodigoPagamento("");
    };
 
    useEffect(() => {

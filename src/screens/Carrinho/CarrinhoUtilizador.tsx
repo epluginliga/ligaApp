@@ -97,6 +97,9 @@ export function CarrinhoUtilizador() {
       resetField,
    } = useForm<FormUtilizador>({
       resolver: zodResolver(schemaUtilizador),
+      defaultValues: { 
+         atletica_slug: 'atletica-1'
+      }
    });
 
    const handleAtribuirUtilizador = useMutation({
@@ -145,9 +148,9 @@ export function CarrinhoUtilizador() {
       ],
    });
 
-   if (atleticas.data?.length === 0) {
-      setValue('atletica_slug', 'nenhuma');
-   }
+   // if (atleticas.data?.length === 0 ) {
+   //    setValue('atletica_slug', 'nenhuma');
+   // }
 
    carrinho.data?.eventos
       .flatMap(item => item.ingressos)
@@ -175,6 +178,7 @@ export function CarrinhoUtilizador() {
          name: item.slug,
       })) || [];
 
+
    const listHeader = useMemo(() => {
       return (
          <VStack gap="lg" marginBottom="md">
@@ -187,7 +191,7 @@ export function CarrinhoUtilizador() {
                </Section.Title>
             </Section.Root>
 
-            {atleticaFormulario?.length > 0 && (
+            {/* {atleticaFormulario?.length > 0 && (
                <Card.Root>
                   <InputSelecionar
                      name="atletica_slug"
@@ -196,7 +200,7 @@ export function CarrinhoUtilizador() {
                      error={errors?.atletica_slug?.message}
                   />
                </Card.Root>
-            )}
+            )} */}
          </VStack>
       );
    }, []);

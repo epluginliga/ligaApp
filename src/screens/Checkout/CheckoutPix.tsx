@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { ActivityIndicator, Image, View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import Clipboard from '@react-native-clipboard/clipboard';
+import QRCode from 'react-native-qrcode-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useQuery } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
@@ -48,7 +49,6 @@ function BotaoCopiarCodigoPix({ codigo }: { codigo: string }) {
 }
 
 type CodigoPixProps = {
-   uri: string;
    codigo: string;
 }
 
@@ -63,7 +63,7 @@ function cancelaCarrinhoStatusPagamento(data?: CarrinhoStatusPagamentoPayload) {
    return 1000;
 }
 
-function CodigoPix({ uri, codigo }: CodigoPixProps) {
+function CodigoPix({ codigo }: CodigoPixProps) {
    const { carrinhoId } = useCarrinho();
    const { token } = useAuth();
    const { navigate } = useNavigation();
@@ -83,11 +83,9 @@ function CodigoPix({ uri, codigo }: CodigoPixProps) {
 
    return (
       <>
-         <Image
-            height={185}
-            width={185}
-            source={{ uri }}
-         />
+         <View style={{ backgroundColor: '#fff', padding: 8, borderRadius: 8 }}>
+            <QRCode size={185} value={codigo} />
+         </View>
          <BotaoCopiarCodigoPix codigo={codigo} />
       </>
    )
@@ -120,8 +118,8 @@ export function CheckoutPix() {
 
                      <Section.Title>PIX COPIA E COLA</Section.Title>
 
-                     {codigoPagamento.url_view ? (
-                        <CodigoPix codigo={codigoPagamento.codigo} uri={codigoPagamento.url_view} />
+                     {codigoPagamento ? (
+                        <CodigoPix codigo={codigoPagamento} />
                      ) : (
                         <VStack
                            backgroundColor='white'
